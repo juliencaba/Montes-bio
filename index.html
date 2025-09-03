@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Montes Bio - Protocoles Intelligents pour la Recherche Pharmaceutique</title>
+    <meta name="description" content="Plateforme IA pour créer des protocoles de recherche pharmaceutique basés sur la littérature scientifique">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
+
+```
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #2d3748 100%);
+        color: #e2e8f0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        line-height: 1.6;
+    }
+
+    .header {
+        background: rgba(15, 20, 25, 0.95);
+        backdrop-filter: blur(15px);
+        padding: 1rem 2rem;
+        border-bottom: 1px solid rgba(74, 222, 128, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .logo {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #4ade80;
+        text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .logo:hover {
+        transform: scale(1.05);
+        text-shadow: 0 0 30px rgba(74, 222, 128, 0.8);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+    }
+
+    .nav-links a {
+        color: #cbd5e1;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        padding: 0.7rem 1.2rem;
+        border-radius: 10px;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nav-links a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .nav-links a:hover::before {
+        left: 100%;
+    }
+
+    .nav-links a:hover {
+        color: #4ade80;
+        background: rgba(74, 222, 128, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .main-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .hero-section {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+        border-radius: 25px;
+        margin-bottom: 4rem;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(74, 222, 128, 0.2);
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(74,222,128,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.4;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #4ade80, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        color: #94a3b8;
+        margin-bottom: 2.5rem;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: 400;
+    }
+
+    .cta-button {
+        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 10px 30px rgba(74, 222, 128, 0.3);
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(74, 222, 128, 0.4);
+        background: linear-gradient(135deg, #22c55e, #2563eb);
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 2.5rem;
+        margin: 4rem 0;
+    }
+
+    .feature-card {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(74, 222, 128, 0.2);
+        border-radius: 20px;
+        padding: 2.5rem;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #4ade80, #3b82f6, #8b5cf6);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px) rotateX(5deg);
+        border-color: rgba(74, 222, 128, 0.5);
+        box-shadow: 0 25px 50px rgba(74, 222, 128, 0.15);
+    }
+
+    .feature-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: rotateY(180deg);
+        background: linear-gradient(135deg, #22c55e, #2563eb);
+    }
+
+    .feature-title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #f1f5f9;
+        margin-bottom: 1rem;
+    }
+
+    .feature-description {
+        color: #94a3b8;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-btn {
+        background: rgba(74, 222, 128, 0.1);
+        color: #4ade80;
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .feature-btn:hover {
+        background: rgba(74, 222, 128, 0.2);
+        border-color: rgba(74, 222, 128, 0.6);
+        transform: scale(1.05);
+    }
+
+    .workspace-section {
+        background: rgba(30, 41, 59, 0.5);
+        border-radius: 25px;
+        padding: 3rem;
+        margin: 4rem 0;
+        border: 1px solid rgba(74, 222, 128, 0.2);
+        backdrop-filter: blur(10px);
+    }
+
+    .workspace-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .workspace-title {
+        font-size: 2.2rem;
+        font-weight: bold;
+        color: #f1f5f9;
+        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .upload-zone {
+        border: 3px dashed rgba(74, 222, 128, 0.4);
+        border-radius: 16px;
+        padding: 3rem;
+        text-align: center;
+        transition: all 0.4s ease;
+        cursor: pointer;
+        margin: 2rem 0;
+        background: rgba(15, 20, 25, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upload-zone::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: radial-gradient(circle, rgba(74, 222, 128, 0.1) 0%, transparent 70%);
+        transition: all 0.4s ease;
+        transform: translate(-50%, -50%);
+    }
+
+    .upload-zone:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .upload-zone:hover {
+        border-color: rgba(74, 222, 128, 0.7);
+        background: rgba(74, 222, 128, 0.05);
+        transform: scale(1.02);
+    }
+
+    .upload-icon {
+        font-size: 4rem;
+        color: #4ade80;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .upload-zone:hover .upload-icon {
+        transform: scale(1.2) rotateY(360deg);
+    }
+
+    .protocol-generator {
+        background: rgba(45, 55, 72, 0.7);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin: 2rem 0;
+        border: 1px solid rgba(74, 222, 128, 0.2);
+    }
+
+    .generator-title {
+        font-size: 1.8rem;
+        color: #f1f5f9;
+        margin-bottom: 2rem;
+        text-align: center;
+        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .input-group {
+        margin-bottom: 2rem;
+    }
+
+    .input-label {
+        display: block;
+        color: #cbd5e1;
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .input-field {
+        width: 100%;
+        background: rgba(15, 20, 25, 0.8);
+        border: 2px solid rgba(74, 222, 128, 0.3);
+        border-radius: 12px;
+        padding: 1.2rem;
+        color: #e2e8f0;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #4ade80;
+        box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1);
+        background: rgba(15, 20, 25, 0.9);
+    }
+
+    .textarea-field {
+        min-height: 140px;
+        resize: vertical;
+        font-family: inherit;
+    }
+
+    .generate-btn {
+        width: 100%;
+        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        color: white;
+        border: none;
+        padding: 1.2rem 2rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 1rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .generate-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        transition: all 0.6s ease;
+        transform: translate(-50%, -50%);
+    }
+
+    .generate-btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .generate-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(74, 222, 128, 0.4);
+    }
+
+    .generated-protocol {
+        background: rgba(15, 20, 25, 0.9);
+        border-left: 6px solid #4ade80;
+        padding: 2rem;
+        border-radius: 12px;
+        margin-top: 2rem;
+        font-family: 'Courier New', monospace;
+        line-height: 1.8;
+        animation: slideInUp 0.6s ease;
+        border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .protocol-actions {
+        margin-top: 2rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        background: rgba(74, 222, 128, 0.1);
+        color: #4ade80;
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-btn:hover {
+        background: rgba(74, 222, 128, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin: 3rem 0;
+    }
+
+    .stat-card {
+        background: rgba(45, 55, 72, 0.7);
+        padding: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        border: 1px solid rgba(74, 222, 128, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(74, 222, 128, 0.5);
+        box-shadow: 0 15px 30px rgba(74, 222, 128, 0.1);
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #4ade80;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+    }
+
+    .stat-label {
+        color: #94a3b8;
+        font-weight: 500;
+    }
+
+    .recent-protocols {
+        background: rgba(30, 41, 59, 0.5);
+        border-radius: 20px;
+        padding: 2.5rem;
+        margin: 3rem 0;
+        border: 1px solid rgba(74, 222, 128, 0.2);
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        color: #f1f5f9;
+        margin-bottom: 2rem;
+        text-align: center;
+        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .protocol-item {
+        background: rgba(45, 55, 72, 0.7);
+        border: 1px solid rgba(74, 222, 128, 0.2);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        transition: all 0.4s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .protocol-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.1), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .protocol-item:hover::before {
+        left: 100%;
+    }
+
+    .protocol-item:hover {
+        border-color: rgba(74, 222, 128, 0.5);
+        transform: translateX(10px);
+        box-shadow: 0 10px 25px rgba(74, 222, 128, 0.1);
+    }
+
+    .protocol-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .protocol-name {
+        font-weight: bold;
+        color: #f1f5f9;
+        font-size: 1.1rem;
+    }
+
+    .protocol-date {
+        color: #4ade80;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .protocol-description {
+        color: #94a3b8;
+        font-style: italic;
+    }
+
+    .floating-particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .particle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #4ade80;
+        border-radius: 50%;
+        animation: float 8s infinite ease-in-out;
+        opacity: 0.7;
+        box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+    }
+
+    @keyframes float {
+        0%, 100% { 
+            transform: translateY(0px) rotate(0deg); 
+            opacity: 0.7; 
+        }
+        25% { 
+            transform: translateY(-15px) rotate(90deg); 
+            opacity: 1; 
+        }
+        50% { 
+            transform: translateY(-30px) rotate(180deg); 
+            opacity: 0.8; 
+        }
+        75% { 
+            transform: translateY(-15px) rotate(270deg); 
+            opacity: 1; 
+        }
+    }
+
+    .loading-spinner {
+        display: none;
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(74, 222, 128, 0.3);
+        border-top: 3px solid #4ade80;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .success-message {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #22c55e;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .nav {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .nav-links {
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-section {
+            padding: 2rem 1rem;
+        }
+
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .workspace-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .protocol-meta {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    .footer {
+        background: rgba(15, 20, 25, 0.8);
+        padding: 2rem;
+        text-align: center;
+        margin-top: 4rem;
+        border-top: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        color: #94a3b8;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+
+```
+<header class="header">
+    <nav class="nav">
+        <div class="logo" onclick="scrollToTop()">🧬 Montes Bio</div>
+        <ul class="nav-links">
+            <li><a href="#accueil" onclick="scrollToTop()">Accueil</a></li>
+            <li><a href="#workspace" onclick="scrollToWorkspace()">Protocoles</a></li>
+            <li><a href="#recherche">Recherche</a></li>
+            <li><a href="#about">À Propos</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="main-container">
+    <section class="hero-section" id="accueil">
+        <div class="hero-content">
+            <h1 class="hero-title">Protocoles Intelligents</h1>
+            <p class="hero-subtitle">
+                Révolutionnez la création de protocoles pharmaceutiques avec l'IA. 
+                Analysez la littérature scientifique et générez des protocoles personnalisés 
+                pour accélérer vos découvertes.
+            </p>
+            <button class="cta-button" onclick="scrollToWorkspace()">
+                🚀 Commencer Maintenant
+            </button>
+        </div>
+    </section>
+
+    <div class="features-grid">
+        <div class="feature-card" onclick="highlightFeature(this)">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Analyse Scientifique IA</h3>
+            <p class="feature-description">
+                Notre intelligence artificielle analyse automatiquement les articles de recherche 
+                pour extraire les protocoles, méthodologies et bonnes pratiques pertinentes 
+                à vos objectifs de recherche.
+            </p>
+            <button class="feature-btn">Explorer</button>
+        </div>
+
+        <div class="feature-card" onclick="highlightFeature(this)">
+            <div class="feature-icon">🧬</div>
+            <h3 class="feature-title">Génération Personnalisée</h3>
+            <p class="feature-description">
+                Créez des protocoles sur mesure en combinant vos données existantes, 
+                contraintes spécifiques et les meilleures pratiques de la littérature 
+                internationale.
+            </p>
+            <button class="feature-btn">Générer</button>
+        </div>
+
+        <div class="feature-card" onclick="highlightFeature(this)">
+            <div class="feature-icon">📋</div>
+            <h3 class="feature-title">Bibliothèque Collaborative</h3>
+            <p class="feature-description">
+                Stockez, organisez et partagez vos protocoles avec votre équipe. 
+                Historique des versions, commentaires collaboratifs et validation 
+                par les pairs intégrés.
+            </p>
+            <button class="feature-btn">Parcourir</button>
+        </div>
+
+        <div class="feature-card" onclick="highlightFeature(this)">
+            <div class="feature-icon">🔬</div>
+            <h3 class="feature-title">Validation Réglementaire</h3>
+            <p class="feature-description">
+                Vérification automatique de la conformité avec les standards 
+                internationaux (ICH, FDA, EMA). Templates pré-validés pour 
+                différents types d'études.
+            </p>
+            <button class="feature-btn">Valider</button>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card" onclick="animateStats(this)">
+            <div class="stat-number" data-target="2847">0</div>
+            <div class="stat-label">Articles Analysés</div>
+        </div>
+        <div class="stat-card" onclick="animateStats(this)">
+            <div class="stat-number" data-target="456">0</div>
+            <div class="stat-label">Protocoles Générés</div>
+        </div>
+        <div class="stat-card" onclick="animateStats(this)">
+            <div class="stat-number" data-target="73">0</div>
+            <div class="stat-label">Instituts Partenaires</div>
+        </div>
+        <div class="stat-card" onclick="animateStats(this)">
+            <div class="stat-number" data-target="98">0</div>
+            <div class="stat-label">% Satisfaction</div>
+        </div>
+    </div>
+
+    <section class="workspace-section" id="workspace">
+        <div class="workspace-header">
+            <h2 class="workspace-title">🧪 Espace de Création</h2>
+            <button class="cta-button" onclick="newProject()">📁 Nouveau Projet</button>
+        </div>
+
+        <div class="upload-zone" onclick="simulateUpload()" id="uploadZone">
+            <div class="upload-icon">📁</div>
+            <h3 style="color: #f1f5f9; margin-bottom: 1rem;">Uploadez vos Documents</h3>
+            <p style="color: #94a3b8; margin-bottom: 1rem;">
+                Glissez-déposez vos articles PDF, protocoles existants ou données expérimentales
+            </p>
+            <small style="color: #64748b;">
+                Formats supportés: PDF, DOCX, CSV, XLSX • Taille max: 50MB
+            </small>
+        </div>
+
+        <div class="success-message" id="uploadSuccess">
+            ✅ <strong>Fichiers analysés avec succès!</strong> Vous pouvez maintenant générer votre protocole.
+        </div>
+
+        <div class="protocol-generator">
+            <h3 class="generator-title">🤖 Générateur de Protocole IA</h3>
+            
+            <div class="input-group">
+                <label class="input-label">🎯 Objectif de Recherche</label>
+                <input type="text" class="input-field" id="objectiveInput" 
+                       placeholder="Ex: Évaluation de l'efficacité antitumorale du compound XYZ-123 sur lignées cellulaires hépatiques">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">🔬 Type d'Étude</label>
+                <select class="input-field" id="studyTypeInput">
+                    <option value="in-vitro">In vitro - Études cellulaires</option>
+                    <option value="in-vivo">In vivo - Modèles animaux</option>
+                    <option value="phase1">Essai clinique Phase I</option>
+                    <option value="phase2">Essai clinique Phase II</option>
+                    <option value="phase3">Essai clinique Phase III</option>
+                    <option value="observational">Étude observationnelle</option>
+                    <option value="pharmacokinetic">Étude pharmacocinétique</option>
+                    <option value="toxicology">Étude de toxicologie</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">⚙️ Contraintes et Spécifications</label>
+                <textarea class="input-field textarea-field" id="constraintsInput" 
+                          placeholder="Décrivez vos contraintes: budget, timeline, équipement disponible, réglementations spécifiques, modèles cellulaires préférés, critères d'exclusion..."></textarea>
+            </div>
+
+            <button class="generate-btn" onclick="generateAdvancedProtocol()" id="generateBtn">
+                🚀 Générer le Protocole Intelligent
+            </button>
+
+            <div class="loading-spinner" id="loadingSpinner"></div>
+
+            <div id="protocolOutput" style="display: none;">
+                <div class="generated-protocol" id="protocolContent"></div>
+                <div class="protocol-actions">
+                    <button class="action-btn" onclick="saveProtocol()">
+                        💾 Sauvegarder
+                    </button>
+                    <button class="action-btn" onclick="exportPDF()">
+                        📄 Exporter PDF
+                    </button>
+                    <button class="action-btn" onclick="shareProtocol()">
+                        🔗 Partager
+                    </button>
+                    <button class="action-btn" onclick="editProtocol()">
+                        ✏️ Modifier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="recent-protocols">
+        <h3 class="section-title">📚 Protocoles Récents</h3>
+        
+        <div class="protocol-item" onclick="openProtocol(1)">
+            <div class="protocol-meta">
+                <span class="protocol-name">Protocole d'évaluation cytotoxique - Compound MBS-047</span>
+                <span class="protocol-date">28 Août 2025</span>
+            </div>
+            <p class="protocol-description">
+                Basé sur 12 articles de référence • Validé par Dr. Martinez • Approuvé par le comité d'éthique
+            </p>
+        </div>
+
+        <div class="protocol-item" onclick="openProtocol(2)">
+            <div class="protocol-meta">
+                <span class="protocol-name">Étude pharmacocinétique multi-doses - Phase I</span>
+                <span class="protocol-date">25 Août 2025</span>
+            </div>
+            <p class="protocol-description">
+                Adapté des guidelines FDA 2024 • 24 participants • En cours de recrutement
+            </p>
+        </div>
+
+        <div class="protocol-item" onclick="openProtocol(3)">
+            <div class="protocol-meta">
+                <span class="protocol-name">Biomarqueurs prédictifs - Oncologie personnalisée</span>
+                <span class="protocol-date">22 Août 2025</span>
+            </div>
+            <p class="protocol-description">
+                Synthèse de 34 études internationales • Validation NGS • Protocole approuvé
+            </p>
+        </div>
+    </section>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p><strong>Montes Bio</strong> - Intelligence Artificielle pour la Recherche Pharmaceutique</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            Accélérez vos découvertes • Optimisez vos protocoles • Respectez les standards internationaux
+        </p>
+    </div>
+</footer>
+
+<script>
+    // Configuration globale
+    let protocolDatabase = [];
+    let currentProject = null;
+    let uploadedFiles = [];
+
+    // Créer des particules flottantes améliorées
+    function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = window.innerWidth < 768 ? 20 : 40;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (Math.random() * 6 + 6) + 's';
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // Animation des statistiques
+    function animateStats(card) {
+        const numberElement = card.querySelector('.stat-number');
+        const target = parseInt(numberElement.getAttribute('data-target'));
+        const duration = 2000;
+        const startTime = performance.now();
+        
+        function updateNumber(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const current = Math.floor(easeOutQuart * target);
+            
+            numberElement.textContent = current;
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateNumber);
+            }
+        }
+        
+        requestAnimationFrame(updateNumber);
+    }
+
+    // Simulation d'upload avancée
+    function simulateUpload() {
+        const uploadZone = document.getElementById('uploadZone');
+        const successMessage = document.getElementById('uploadSuccess');
+        
+        // Phase 1: Upload en cours
+        uploadZone.style.background = 'rgba(74, 222, 128, 0.1)';
+        uploadZone.style.borderColor = 'rgba(74, 222, 128, 0.7)';
+        uploadZone.innerHTML = `
+            <div class="upload-icon">⬆️</div>
+            <h3 style="color: #4ade80;">Upload en cours...</h3>
+            <p style="color: #94a3b8;">Traitement des fichiers</p>
+            <div class="loading-spinner" style="display: block;"></div>
+        `;
+        
+        setTimeout(() => {
+            // Phase 2: Analyse IA
+            uploadZone.innerHTML = `
+                <div class="upload-icon">🤖</div>
+                <h3 style="color: #4ade80;">Analyse IA en cours</h3>
+                <p style="color: #94a3b8;">Extraction des protocoles et méthodologies...</p>
+                <div class="loading-spinner" style="display: block;"></div>
+            `;
+        }, 1500);
+        
+        setTimeout(() => {
+            // Phase 3: Succès
+            uploadZone.innerHTML = `
+                <div class="upload-icon">✅</div>
+                <h3 style="color: #22c55e;">Analyse Terminée!</h3>
+                <div style="color: #94a3b8; margin: 1rem 0;">
+                    <strong>📄 3 articles PDF analysés</strong><br>
+                    <strong>📋 2 protocoles existants intégrés</strong><br>
+                    <strong>📊 1 dataset expérimental</strong>
+                </div>
+                <small style="color: #4ade80;">
+                    ✨ 47 protocoles extraits • 23 méthodologies identifiées
+                </small>
+            `;
+            
+            successMessage.style.display = 'block';
+            uploadedFiles = ['article1.pdf', 'protocol_existing.docx', 'data.csv'];
+        }, 3500);
+    }
+
+    // Générateur de protocole avancé
+    function generateAdvancedProtocol() {
+        const objective = document.getElementById('objectiveInput').value;
+        const studyType = document.getElementById('studyTypeInput').value;
+        const constraints = document.getElementById('constraintsInput').value;
+        
+        if (!objective.trim()) {
+            alert('⚠️ Veuillez renseigner l\'objectif de recherche');
+            return;
+        }
+        
+        const output = document.getElementById('protocolOutput');
+        const content = document.getElementById('protocolContent');
+        const spinner = document.getElementById('loadingSpinner');
+        const btn = document.getElementById('generateBtn');
+        
+        // Animation de chargement
+        btn.disabled = true;
+        btn.innerHTML = '🤖 Génération IA en cours...';
+        spinner.style.display = 'block';
+        output.style.display = 'none';
+        
+        setTimeout(() => {
+            const protocol = generateIntelligentProtocol(objective, studyType, constraints);
+            
+            content.innerHTML = protocol;
+            output.style.display = 'block';
+            spinner.style.display = 'none';
+            btn.disabled = false;
+            btn.innerHTML = '🚀 Générer le Protocole Intelligent';
+            
+            // Sauvegarder automatiquement
+            protocolDatabase.push({
+                id: Date.now(),
+                title: objective.substring(0, 100),
+                content: protocol,
+                createdAt: new Date().toISOString(),
+                studyType: studyType
+            });
+            
+            output.scrollIntoView({ behavior: 'smooth' });
+        }, 2500);
+    }
+
+    // Générateur intelligent de protocoles
+    function generateIntelligentProtocol(objective, studyType, constraints) {
+        const templates = {
+            'in-vitro': generateInVitroProtocol,
+            'in-vivo': generateInVivoProtocol,
+            'phase1': generatePhase1Protocol,
+            'phase2': generatePhase2Protocol,
+            'phase3': generatePhase3Protocol,
+            'observational': generateObservationalProtocol,
+            'pharmacokinetic': generatePKProtocol,
+            'toxicology': generateToxProtocol
+        };
+        
+        const generator = templates[studyType] || templates['in-vitro'];
+        return generator(objective, constraints);
+    }
+
+    // Templates de protocoles intelligents
+    function generateInVitroProtocol(objective, constraints) {
+        const compound = extractCompoundName(objective);
+        const cellLines = suggestCellLines(objective);
+        
+        return `
+            <h4 style="color: #4ade80; font-size: 1.4rem; margin-bottom: 1.5rem;">
+                📊 PROTOCOLE EXPÉRIMENTAL IN VITRO
+            </h4>
+            
+            <div style="background: rgba(74, 222, 128, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <strong style="color: #4ade80;">OBJECTIF PRINCIPAL</strong><br>
+                ${objective}
+            </div>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">1. MATÉRIEL ET MÉTHODES</strong><br><br>
+            
+            <strong style="color: #4ade80;">Lignées Cellulaires Recommandées:</strong><br>
+            • ${cellLines.join('<br>• ')}<br>
+            • Contrôles: Lignée non-transformée (validation)<br><br>
+            
+            <strong style="color: #4ade80;">Conditions de Culture:</strong><br>
+            • Milieu: DMEM + 10% SVF + antibiotiques<br>
+            • Atmosphère: 5% CO₂, 37°C, humidité saturée<br>
+            • Densité ensemencement: 5×10³ cellules/puits (96-well)<br><br>
+            
+            <strong style="color: #4ade80;">Design Expérimental:</strong><br>
+            • Concentrations testées: 0.1, 1, 10, 100, 1000 μM<br>
+            • Points temporels: 24h, 48h, 72h<br>
+            • Triplicats biologiques + triplicats techniques<br>
+            • Contrôles: véhicule (DMSO <0.1%), contrôle positif<br><br>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">2. ÉVALUATIONS</strong><br><br>
+            
+            <strong style="color: #4ade80;">Viabilité Cellulaire:</strong><br>
+            • Test MTT (évaluation métabolique)<br>
+            • Test LDH (intégrité membranaire)<br>
+            • Comptage cellulaire au bleu trypan<br><br>
+            
+            <strong style="color: #4ade80;">Analyses Complémentaires:</strong><br>
+            • Apoptose: Annexine V / PI (cytométrie)<br>
+            • Cycle cellulaire: Marquage propidium iodide<br>
+            • Stress oxydatif: Sonde DCFDA<br><br>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">3. ANALYSES STATISTIQUES</strong><br><br>
+            • ANOVA à deux facteurs (concentration × temps)<br>
+            • Tests post-hoc: Tukey HSD<br>
+            • Calcul IC₅₀: Régression non-linéaire<br>
+            • Seuil significativité: p < 0.05<br>
+            • Logiciel: GraphPad Prism ou R<br><br>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">4. CONTRAINTES APPLIQUÉES</strong><br><br>
+            <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                ${constraints || 'Aucune contrainte spécifiée - protocole standard appliqué'}
+            </div><br>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">5. TIMELINE ESTIMÉE</strong><br><br>
+            • Préparation: 2 jours<br>
+            • Expérimentation: 5 jours<br>
+            • Analyses: 3 jours<br>
+            • <strong style="color: #4ade80;">Total: 10 jours ouvrés</strong><br><br>
+
+            <div style="background: rgba(34, 197, 94, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1.5rem; border: 1px solid rgba(34, 197, 94, 0.3);">
+                <strong style="color: #22c55e;">🎯 RECOMMANDATIONS IA</strong><br>
+                Ce protocole a été optimisé en analysant 127 études similaires publiées en 2023-2025. 
+                Taux de succès prédit: <strong>94%</strong>
+            </div>
+        `;
+    }
+
+    function generatePhase1Protocol(objective, constraints) {
+        return `
+            <h4 style="color: #4ade80; font-size: 1.4rem; margin-bottom: 1.5rem;">
+                🏥 PROTOCOLE ESSAI CLINIQUE PHASE I
+            </h4>
+            
+            <div style="background: rgba(74, 222, 128, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                <strong style="color: #4ade80;">OBJECTIF PRINCIPAL</strong><br>
+                ${objective}
+            </div>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">1. DESIGN DE L'ÉTUDE</strong><br><br>
+            
+            • <strong>Type:</strong> Essai de phase I, dose-escalade<br>
+            • <strong>Population:</strong> Volontaires sains ou patients<br>
+            • <strong>Nombre de participants:</strong> 24-48 (6-8 par cohorte)<br>
+            • <strong>Design:</strong> Ouvert, non-randomisé<br><br>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">2. CRITÈRES D'INCLUSION</strong><br><br>
+            • Âge: 18-65 ans<br>
+            • IMC: 18.5-30 kg/m²<br>
+            • Fonctions hépatiques et rénales normales<br>
+            • Consentement éclairé signé<br>
+            • Contraception efficace (si applicable)<br><br>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">3. ESCALADE DE DOSE</strong><br><br>
+            • <strong>Dose de départ:</strong> 1/10ème de la NOAEL<br>
+            • <strong>Facteur d'escalade:</strong> 100% (doublement)<br>
+            • <strong>Critères d'arrêt:</strong> DLT chez ≥2/6 participants<br>
+            • <strong>Période d'observation:</strong> 7 jours entre cohortes<br><br>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">4. ÉVALUATIONS SÉCURITAIRE</strong><br><br>
+            • <strong>Screening:</strong> J-14 à J-1<br>
+            • <strong>Administration:</strong> J1 (jeûne 10h)<br>
+            • <strong>Surveillance:</strong> 48h hospitalisées<br>
+            • <strong>Suivi:</strong> J3, J7, J14, J28<br><br>
+
+            <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid #3b82f6;">
+                <strong style="color: #3b82f6;">CONTRAINTES SPÉCIFIQUES</strong><br>
+                ${constraints || 'Protocol conforme ICH-GCP et réglementations EMA/FDA'}
+            </div>
+
+            <strong style="color: #f1f5f9; font-size: 1.2rem;">5. COMITÉ DE SURVEILLANCE</strong><br><br>
+            • <strong>DSMB:</strong> 1 clinicien, 1 pharmacologue, 1 biostatisticien<br>
+            • <strong>Réunions:</strong> Après chaque cohorte<br>
+            • <strong>Critères d'arrêt:</strong> Prédéfinis et validés<br><br>
+
+            <div style="background: rgba(34, 197, 94, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1.5rem; border: 1px solid rgba(34, 197, 94, 0.3);">
+                <strong style="color: #22c55e;">📋 CONFORMITÉ RÉGLEMENTAIRE</strong><br>
+                Protocole conforme ICH-GCP, FDA Guidance 2024, EMA Guidelines
+            </div>
+        `;
+    }
+
+    // Fonctions utilitaires intelligentes
+    function extractCompoundName(objective) {
+        const matches = objective.match(/compound\s+([A-Z0-9-]+)/i);
+        return matches ? matches[1] : 'Compound Expérimental';
+    }
+
+    function suggestCellLines(objective) {
+        const keywords = objective.toLowerCase();
+        
+        if (keywords.includes('cancer') || keywords.includes('tumoral') || keywords.includes('carcinome')) {
+            if (keywords.includes('hépatique') || keywords.includes('foie')) {
+                return ['HepG2 (carcinome hépatocellulaire)', 'Huh7 (hépatome)', 'PLC/PRF/5 (hépatome)'];
+            }
+            if (keywords.includes('sein') || keywords.includes('breast')) {
+                return ['MCF-7 (cancer du sein)', 'MDA-MB-231 (cancer du sein triple négatif)', 'T47D (cancer du sein)'];
+            }
+            return ['HeLa (cancer cervical)', 'A549 (cancer pulmonaire)', 'HCT116 (cancer colorectal)'];
+        }
+        
+        return ['HEK293 (rein embryonnaire)', 'CHO (ovaire de hamster)', 'NIH3T3 (fibroblastes de souris)'];
+    }
+
+    // Fonctions d'action
+    function saveProtocol() {
+        const title = document.getElementById('objectiveInput').value.substring(0, 50) + '...';
+        alert(`✅ Protocole "${title}" sauvegardé dans votre bibliothèque!`);
+    }
+
+    function exportPDF() {
+        alert('📄 Export PDF en cours... Le fichier sera téléchargé dans quelques secondes.');
+    }
+
+    function shareProtocol() {
+        const shareText = `Découvrez le protocole que j'ai créé avec Montes Bio: ${window.location.href}`;
+        if (navigator.share) {
+            navigator.share({
+                title: 'Protocole Montes Bio',
+                text: shareText,
+                url: window.location.href
+            });
+        } else {
+            navigator.clipboard.writeText(shareText);
+            alert('🔗 Lien copié dans le presse-papier!');
+        }
+    }
+
+    function editProtocol() {
+        alert('✏️ Éditeur de protocole ouvert! (Fonctionnalité en développement)');
+    }
+
+    function newProject() {
+        const projectName = prompt('📁 Nom du nouveau projet:');
+        if (projectName) {
+            alert(`✨ Projet "${projectName}" créé! Vous pouvez maintenant uploader vos fichiers.`);
+            currentProject = projectName;
+        }
+    }
+
+    function openProtocol(id) {
+        alert(`📋 Ouverture du protocole #${id}... (Fonctionnalité en développement)`);
+    }
+
+    function highlightFeature(card) {
+        card.style.background = 'rgba(74, 222, 128, 0.1)';
+        setTimeout(() => {
+            card.style.background = 'rgba(30, 41, 59, 0.7)';
+        }, 2000);
+    }
+
+    // Navigation fluide
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToWorkspace() {
+        document.getElementById('workspace').scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+
+    // Autres générateurs de protocoles (exemples)
+    function generateInVivoProtocol(objective, constraints) {
+        return `
+            <h4 style="color: #4ade80; font-size: 1.4rem; margin-bottom: 1.5rem;">
+                🐭 PROTOCOLE IN VIVO - MODÈLE ANIMAL
+            </h4>
+            
+            <strong style="color: #f1f5f9;">OBJECTIF:</strong> ${objective}<br><br>
+            
+            <strong style="color: #4ade80;">MODÈLE ANIMAL:</strong><br>
+            • Espèce: Souris C57BL/6J (femelles, 8-12 semaines)<br>
+            • Nombre: n=8 par groupe (80% puissance statistique)<br>
+            • Acclimatation: 7 jours minimum<br>
+            • Conditions: 12h/12h jour/nuit, 22±2°C, ad libitum<br><br>
+            
+            <strong style="color: #4ade80;">PROTOCOLE D'ADMINISTRATION:</strong><br>
+            • Voie: Gavage oral (volume 10mL/kg)<br>
+            • Fréquence: Une fois par jour<br>
+            • Durée: 14 jours consécutifs<br>
+            • Randomisation: Bloquée par poids corporel<br><br>
+            
+            <strong style="color: #4ade80;">ÉVALUATIONS:</strong><br>
+            • Poids corporel: Quotidien<br>
+            • Comportement: Échelle de scoring<br>
+            • Prélèvements sanguins: J0, J7, J14<br>
+            • Histopathologie: Organes cibles (J14)<br><br>
+            
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #ef4444;">
+                <strong style="color: #ef4444;">ÉTHIQUE ET RÉGLEMENTATION</strong><br>
+                ✅ Approbation comité d'éthique requise<br>
+                ✅ Conformité Directive 2010/63/EU<br>
+                ✅ Principe des 3R appliqué<br>
+            </div><br>
+            
+            <strong>Contraintes appliquées:</strong> ${constraints || 'Standards internationaux'}
+        `;
+    }
+
+    function generatePKProtocol(objective, constraints) {
+        return `
+            <h4 style="color: #4ade80; font-size: 1.4rem; margin-bottom: 1.5rem;">
+                ⚗️ ÉTUDE PHARMACOCINÉTIQUE
+            </h4>
+            
+            <strong style="color: #f1f5f9;">OBJECTIF:</strong> ${objective}<br><br>
+            
+            <strong style="color: #4ade80;">DESIGN:</strong><br>
+            • Étude ouverte, crossover ou parallèle<br>
+            • Participants: 12-16 volontaires sains<br>
+            • Administration: Dose unique ou doses multiples<br><br>
+            
+            <strong style="color: #4ade80;">ÉCHANTILLONNAGE:</strong><br>
+            • Points de prélèvement: 0, 0.5, 1, 2, 4, 6, 8, 12, 24h<br>
+            • Volume sanguin: 5mL par point<br>
+            • Matrices: Plasma + urine (0-24h)<br><br>
+            
+            <strong style="color: #4ade80;">ANALYSES LC-MS/MS:</strong><br>
+            • LLOQ: ≤ 1% Cmax attendue<br>
+            • Gamme de calibration: 6 points minimum<br>
+            • QC: 3 niveaux (bas, moyen, haut)<br>
+            • Stabilité: Validée selon ICH M10<br><br>
+            
+            <strong style="color: #4ade80;">PARAMÈTRES PK:</strong><br>
+            • Cmax, Tmax, AUC₀₋∞, T½, Cl/F, Vd/F<br>
+            • Analyse non-compartimentale (WinNonlin/Phoenix)<br><br>
+            
+            <div style="background: rgba(34, 197, 94, 0.1); padding: 1rem; border-radius: 8px;">
+                <strong style="color: #22c55e;">📊 ANALYSE PRÉDICTIVE</strong><br>
+                Basé sur les propriétés physico-chimiques et données précliniques disponibles
+            </div>
+        `;
+    }
+
+    // Initialisation au chargement
+    window.addEventListener('load', () => {
+        createParticles();
+        
+        // Animation d'entrée
+        const elements = document.querySelectorAll('.feature-card, .stat-card');
+        elements.forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                el.style.transition = 'all 0.6s ease';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+
+    // Effets de parallaxe pour tablettes
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector('.hero-section');
+        if (parallax) {
+            parallax.style.transform = `translateY(${scrolled * 0.1}px)`;
+        }
+    });
+
+    // Optimisation tactile pour iPad
+    document.addEventListener('touchstart', function() {}, { passive: true });
+</script>
+```
+
+</body>
+</html>
