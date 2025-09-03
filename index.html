@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Montes Bio - Protocoles Intelligents</title>
+    <title>Montes Bio - Protocoles Biotechnologiques Intelligents</title>
+    <meta name="description" content="Plateforme IA pour protocoles de production de biomolécules pharmaceutiques">
     <style>
         * {
             margin: 0;
@@ -14,15 +15,18 @@
 
 ```
     body {
-        font-family: 'Arial', sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #2d3748 100%);
         color: #e2e8f0;
         min-height: 100vh;
-        overflow-x: hidden;
+        line-height: 1.6;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
     }
 
     .header {
-        background: rgba(15, 20, 25, 0.9);
+        background: rgba(15, 20, 25, 0.95);
         backdrop-filter: blur(10px);
         padding: 1rem 2rem;
         border-bottom: 1px solid rgba(74, 222, 128, 0.3);
@@ -43,73 +47,56 @@
         font-size: 1.8rem;
         font-weight: bold;
         color: #4ade80;
-        text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+        text-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
+        cursor: pointer;
     }
 
     .nav-links {
         display: flex;
-        gap: 2rem;
+        gap: 1.5rem;
         list-style: none;
     }
 
     .nav-links a {
         color: #cbd5e1;
         text-decoration: none;
-        transition: all 0.3s ease;
         padding: 0.5rem 1rem;
         border-radius: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
     }
 
-    .nav-links a:hover {
+    .nav-links a:hover, .nav-links a:active {
         color: #4ade80;
         background: rgba(74, 222, 128, 0.1);
-        transform: translateY(-2px);
+        transform: translateY(-1px);
     }
 
-    .main-container {
+    .container {
         max-width: 1200px;
         margin: 0 auto;
         padding: 2rem;
     }
 
-    .hero-section {
+    .hero {
         text-align: center;
-        padding: 3rem 0;
-        background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        padding: 3rem 1rem;
+        background: rgba(74, 222, 128, 0.1);
         border-radius: 20px;
         margin-bottom: 3rem;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(74,222,128,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-        opacity: 0.3;
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 2;
+        border: 1px solid rgba(74, 222, 128, 0.2);
     }
 
     .hero-title {
-        font-size: 3rem;
+        font-size: clamp(2rem, 5vw, 3rem);
         font-weight: bold;
         margin-bottom: 1rem;
-        background: linear-gradient(135deg, #4ade80, #3b82f6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #4ade80;
+        text-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
     }
 
     .hero-subtitle {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: #94a3b8;
         margin-bottom: 2rem;
         max-width: 600px;
@@ -117,153 +104,131 @@
         margin-right: auto;
     }
 
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
-        margin: 3rem 0;
-    }
-
-    .feature-card {
-        background: rgba(30, 41, 59, 0.6);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(74, 222, 128, 0.2);
-        border-radius: 16px;
-        padding: 2rem;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .feature-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #4ade80, #3b82f6);
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-
-    .feature-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(74, 222, 128, 0.4);
-        box-shadow: 0 20px 40px rgba(74, 222, 128, 0.1);
-    }
-
-    .feature-card:hover::before {
-        transform: scaleX(1);
-    }
-
-    .feature-icon {
-        width: 60px;
-        height: 60px;
-        background: linear-gradient(135deg, #4ade80, #3b82f6);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-    }
-
-    .feature-title {
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: #f1f5f9;
-        margin-bottom: 1rem;
-    }
-
-    .feature-description {
-        color: #94a3b8;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
-    }
-
-    .action-btn {
+    .cta-btn {
         background: linear-gradient(135deg, #4ade80, #3b82f6);
         color: white;
         border: none;
-        padding: 0.8rem 1.5rem;
-        border-radius: 8px;
-        cursor: pointer;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-size: 1.1rem;
         font-weight: 600;
+        cursor: pointer;
         transition: all 0.3s ease;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        box-shadow: 0 8px 20px rgba(74, 222, 128, 0.3);
     }
 
-    .action-btn:hover {
+    .cta-btn:hover, .cta-btn:active {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+        box-shadow: 0 12px 25px rgba(74, 222, 128, 0.4);
     }
 
-    .workspace-section {
-        background: rgba(30, 41, 59, 0.4);
+    .workflow {
+        background: rgba(30, 41, 59, 0.5);
         border-radius: 20px;
-        padding: 2rem;
-        margin: 3rem 0;
+        padding: 2.5rem;
+        margin: 2rem 0;
         border: 1px solid rgba(74, 222, 128, 0.2);
     }
 
-    .workspace-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .workspace-title {
-        font-size: 1.8rem;
-        font-weight: bold;
-        color: #f1f5f9;
-    }
-
-    .upload-zone {
-        border: 2px dashed rgba(74, 222, 128, 0.3);
-        border-radius: 12px;
-        padding: 3rem;
-        text-align: center;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        margin: 1rem 0;
-    }
-
-    .upload-zone:hover {
-        border-color: rgba(74, 222, 128, 0.6);
-        background: rgba(74, 222, 128, 0.05);
-    }
-
-    .upload-icon {
-        font-size: 3rem;
+    .workflow-title {
+        font-size: 2rem;
         color: #4ade80;
-        margin-bottom: 1rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: bold;
     }
 
-    .protocol-generator {
-        background: rgba(45, 55, 72, 0.6);
-        border-radius: 16px;
-        padding: 2rem;
+    .step {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .step.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-header {
+        background: rgba(74, 222, 128, 0.1);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        text-align: center;
+        border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    .step-title {
+        font-size: 1.5rem;
+        color: #4ade80;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    .step-description {
+        color: #cbd5e1;
+    }
+
+    .choice-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
         margin: 2rem 0;
     }
 
-    .input-group {
+    .choice-card {
+        background: rgba(45, 55, 72, 0.7);
+        border: 2px solid rgba(74, 222, 128, 0.2);
+        border-radius: 12px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .choice-card:hover, .choice-card:active, .choice-card.selected {
+        border-color: #4ade80;
+        background: rgba(74, 222, 128, 0.1);
+        transform: translateY(-3px);
+    }
+
+    .choice-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .choice-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #f1f5f9;
+        margin-bottom: 0.5rem;
+    }
+
+    .choice-desc {
+        color: #94a3b8;
+        font-size: 0.9rem;
+    }
+
+    .form-group {
         margin-bottom: 1.5rem;
     }
 
-    .input-label {
+    .form-label {
         display: block;
         color: #cbd5e1;
         margin-bottom: 0.5rem;
         font-weight: 600;
     }
 
-    .input-field {
+    .form-input, .form-select, .form-textarea {
         width: 100%;
         background: rgba(15, 20, 25, 0.8);
-        border: 1px solid rgba(74, 222, 128, 0.3);
+        border: 2px solid rgba(74, 222, 128, 0.3);
         border-radius: 8px;
         padding: 1rem;
         color: #e2e8f0;
@@ -271,114 +236,145 @@
         transition: all 0.3s ease;
     }
 
-    .input-field:focus {
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
         outline: none;
         border-color: #4ade80;
         box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
     }
 
-    .textarea-field {
-        min-height: 120px;
+    .form-textarea {
+        min-height: 100px;
         resize: vertical;
+        font-family: inherit;
     }
 
-    .generated-protocol {
-        background: rgba(15, 20, 25, 0.8);
-        border-left: 4px solid #4ade80;
-        padding: 1.5rem;
-        border-radius: 8px;
-        margin-top: 1rem;
-        font-family: 'Courier New', monospace;
-        line-height: 1.6;
-    }
-
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin: 2rem 0;
-    }
-
-    .stat-card {
-        background: rgba(45, 55, 72, 0.6);
-        padding: 1.5rem;
-        border-radius: 12px;
-        text-align: center;
-        border: 1px solid rgba(74, 222, 128, 0.2);
-    }
-
-    .stat-number {
-        font-size: 2rem;
-        font-weight: bold;
+    .btn {
+        background: rgba(74, 222, 128, 0.1);
         color: #4ade80;
+        border: 2px solid rgba(74, 222, 128, 0.3);
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin: 0.5rem;
     }
 
-    .stat-label {
-        color: #94a3b8;
-        margin-top: 0.5rem;
+    .btn:hover, .btn:active {
+        background: rgba(74, 222, 128, 0.2);
+        border-color: #4ade80;
+        transform: translateY(-1px);
     }
 
-    .floating-particles {
-        position: fixed;
+    .btn-primary {
+        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        color: white;
+        border: none;
+        font-size: 1.1rem;
+        padding: 1rem 2rem;
+    }
+
+    .btn-primary:hover, .btn-primary:active {
+        background: linear-gradient(135deg, #22c55e, #2563eb);
+    }
+
+    .upload-zone {
+        border: 3px dashed rgba(74, 222, 128, 0.4);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .upload-zone:hover, .upload-zone:active {
+        border-color: #4ade80;
+        background: rgba(74, 222, 128, 0.05);
+    }
+
+    .upload-input {
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        pointer-events: none;
-        z-index: 1;
+        opacity: 0;
+        cursor: pointer;
     }
 
-    .particle {
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background: #4ade80;
-        border-radius: 50%;
-        animation: float 6s infinite ease-in-out;
-        opacity: 0.6;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-        50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-    }
-
-    .recent-protocols {
-        background: rgba(30, 41, 59, 0.4);
+    .protocol-output {
+        display: none;
+        background: rgba(15, 20, 25, 0.9);
         border-radius: 16px;
         padding: 2rem;
         margin: 2rem 0;
+        border: 1px solid rgba(74, 222, 128, 0.3);
     }
 
-    .protocol-item {
-        background: rgba(45, 55, 72, 0.6);
-        border: 1px solid rgba(74, 222, 128, 0.2);
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 1rem 0;
-        transition: all 0.3s ease;
-    }
-
-    .protocol-item:hover {
-        border-color: rgba(74, 222, 128, 0.4);
-        transform: translateX(5px);
-    }
-
-    .protocol-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-    }
-
-    .protocol-name {
+    .protocol-title {
+        font-size: 1.8rem;
+        color: #4ade80;
+        margin-bottom: 1rem;
         font-weight: bold;
-        color: #f1f5f9;
+        text-align: center;
     }
 
-    .protocol-date {
-        color: #94a3b8;
-        font-size: 0.9rem;
+    .protocol-section {
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: rgba(30, 41, 59, 0.3);
+        border-radius: 8px;
+        border-left: 4px solid #4ade80;
+    }
+
+    .protocol-section h3 {
+        color: #4ade80;
+        margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+        background: rgba(74, 222, 128, 0.2);
+        border-radius: 4px;
+        height: 8px;
+        overflow: hidden;
+        margin: 1rem 0;
+    }
+
+    .progress-fill {
+        background: linear-gradient(90deg, #4ade80, #3b82f6);
+        height: 100%;
+        transition: width 0.5s ease;
+    }
+
+    .status-message {
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        border: 1px solid;
+        text-align: center;
+        display: none;
+    }
+
+    .status-success {
+        background: rgba(34, 197, 94, 0.1);
+        border-color: rgba(34, 197, 94, 0.3);
+        color: #22c55e;
+    }
+
+    .status-info {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.3);
+        color: #3b82f6;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .navigation {
+        text-align: center;
+        margin: 2rem 0;
     }
 
     @media (max-width: 768px) {
@@ -391,12 +387,12 @@
             gap: 1rem;
         }
 
-        .hero-title {
-            font-size: 2rem;
+        .choice-grid {
+            grid-template-columns: 1fr;
         }
 
-        .features-grid {
-            grid-template-columns: 1fr;
+        .hero {
+            padding: 2rem 1rem;
         }
     }
 </style>
@@ -404,274 +400,124 @@
 
 </head>
 <body>
-    <div class="floating-particles" id="particles"></div>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo" onclick="resetApp()">🧬 Montes Bio</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showHome()">Accueil</a></li>
+                <li><a href="#" onclick="startWorkflow()">Créer Protocole</a></li>
+                <li><a href="#" onclick="showLibrary()">Bibliothèque</a></li>
+                <li><a href="#" onclick="showAbout()">À Propos</a></li>
+            </ul>
+        </nav>
+    </header>
 
 ```
-<header class="header">
-    <nav class="nav">
-        <div class="logo">Montes Bio</div>
-        <ul class="nav-links">
-            <li><a href="#accueil">Accueil</a></li>
-            <li><a href="#protocoles">Protocoles</a></li>
-            <li><a href="#recherche">Recherche</a></li>
-            <li><a href="#formation">Formation</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-</header>
-
-<div class="main-container">
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">Protocoles Intelligents</h1>
+<div class="container">
+    <!-- Page d'accueil -->
+    <div id="home" class="page">
+        <section class="hero">
+            <h1 class="hero-title">Protocoles Biotechnologiques Intelligents</h1>
             <p class="hero-subtitle">
-                Créez des protocoles de recherche personnalisés grâce à l'IA, basés sur la littérature scientifique 
-                et vos propres données. Accélérez vos découvertes pharmaceutiques.
+                Spécialisé dans la production et purification de biomolécules pharmaceutiques. 
+                Protéines, anticorps, vecteurs viraux - de la recherche à l'industrie.
             </p>
-            <button class="action-btn" onclick="scrollToWorkspace()">Commencer Maintenant</button>
-        </div>
-    </section>
-
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">📊</div>
-            <h3 class="feature-title">Analyse d'Articles Scientifiques</h3>
-            <p class="feature-description">
-                Notre IA analyse automatiquement les dernières publications pour extraire les protocoles 
-                et méthodologies pertinentes à votre recherche.
-            </p>
-            <button class="action-btn">Explorer</button>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">🧬</div>
-            <h3 class="feature-title">Génération de Protocoles</h3>
-            <p class="feature-description">
-                Créez des protocoles sur mesure en combinant vos données existantes avec les meilleures 
-                pratiques de la littérature scientifique.
-            </p>
-            <button class="action-btn">Générer</button>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">📋</div>
-            <h3 class="feature-title">Bibliothèque de Protocoles</h3>
-            <p class="feature-description">
-                Stockez, organisez et partagez vos protocoles avec votre équipe. Accès rapide à l'historique 
-                et aux versions antérieures.
-            </p>
-            <button class="action-btn">Parcourir</button>
-        </div>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-number">2,847</div>
-            <div class="stat-label">Articles Analysés</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">156</div>
-            <div class="stat-label">Protocoles Générés</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">43</div>
-            <div class="stat-label">Instituts Partenaires</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">98%</div>
-            <div class="stat-label">Satisfaction Client</div>
-        </div>
-    </div>
-
-    <section class="workspace-section" id="workspace">
-        <div class="workspace-header">
-            <h2 class="workspace-title">Espace de Travail</h2>
-            <button class="action-btn">Nouveau Projet</button>
-        </div>
-
-        <div class="upload-zone" onclick="simulateUpload()">
-            <div class="upload-icon">📁</div>
-            <h3>Uploadez vos fichiers</h3>
-            <p>Glissez-déposez vos articles PDF, protocoles existants ou données expérimentales</p>
-            <small style="color: #94a3b8;">Formats supportés: PDF, DOCX, CSV, XLSX</small>
-        </div>
-
-        <div class="protocol-generator">
-            <h3 style="color: #f1f5f9; margin-bottom: 1.5rem;">Générateur de Protocole IA</h3>
-            
-            <div class="input-group">
-                <label class="input-label">Objectif de Recherche</label>
-                <input type="text" class="input-field" placeholder="Ex: Étude d'efficacité d'un nouveau compound anticancéreux">
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Type d'Étude</label>
-                <select class="input-field">
-                    <option>In vitro</option>
-                    <option>In vivo</option>
-                    <option>Essai clinique Phase I</option>
-                    <option>Essai clinique Phase II</option>
-                    <option>Essai clinique Phase III</option>
-                    <option>Étude observationnelle</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Contraintes Spécifiques</label>
-                <textarea class="input-field textarea-field" placeholder="Décrivez les contraintes, limitations budgétaires, timeline, équipement disponible..."></textarea>
-            </div>
-
-            <button class="action-btn" onclick="generateProtocol()" style="width: 100%; margin-top: 1rem;">
-                🚀 Générer le Protocole
+            <button class="cta-btn" onclick="startWorkflow()">
+                🚀 Créer Mon Protocole
             </button>
+        </section>
 
-            <div id="protocolOutput" style="display: none;">
-                <div class="generated-protocol">
-                    <h4 style="color: #4ade80; margin-bottom: 1rem;">Protocole Généré</h4>
-                    <div id="protocolContent"></div>
-                    <div style="margin-top: 1rem;">
-                        <button class="action-btn" style="margin-right: 1rem;">💾 Sauvegarder</button>
-                        <button class="action-btn">📤 Exporter PDF</button>
+        <div class="choice-grid">
+            <div class="choice-card" onclick="showInfo('protein')">
+                <div class="choice-icon">🧪</div>
+                <div class="choice-title">Protéines Recombinantes</div>
+                <div class="choice-desc">Enzymes, facteurs de croissance, cytokines</div>
+            </div>
+            <div class="choice-card" onclick="showInfo('antibody')">
+                <div class="choice-icon">🛡️</div>
+                <div class="choice-title">Anticorps Monoclonaux</div>
+                <div class="choice-desc">mAbs thérapeutiques, immunothérapie</div>
+            </div>
+            <div class="choice-card" onclick="showInfo('viral')">
+                <div class="choice-icon">🦠</div>
+                <div class="choice-title">Vecteurs Viraux</div>
+                <div class="choice-desc">AAV, lentivirus, thérapie génique</div>
+            </div>
+            <div class="choice-card" onclick="showInfo('vlp')">
+                <div class="choice-icon">⚡</div>
+                <div class="choice-title">Virus-Like Particles</div>
+                <div class="choice-desc">VLP pour vaccins, delivery systems</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workflow de création -->
+    <div id="workflow" class="page hidden">
+        <div class="workflow">
+            <h2 class="workflow-title">🧪 Assistant Protocole</h2>
+
+            <!-- Étape 1: Documents -->
+            <div id="step1" class="step active">
+                <div class="step-header">
+                    <div class="step-title">📚 Documents de Référence</div>
+                    <div class="step-description">Avez-vous des documents à analyser ?</div>
+                </div>
+                
+                <div class="choice-grid">
+                    <div class="choice-card" onclick="selectDocumentOption('upload')">
+                        <div class="choice-icon">📄</div>
+                        <div class="choice-title">J'ai des Documents</div>
+                        <div class="choice-desc">Articles, protocoles, données expérimentales</div>
+                    </div>
+                    <div class="choice-card" onclick="selectDocumentOption('search')">
+                        <div class="choice-icon">🔍</div>
+                        <div class="choice-title">Recherche Automatique</div>
+                        <div class="choice-desc">L'IA trouve les références pertinentes</div>
+                    </div>
+                </div>
+
+                <!-- Zone upload -->
+                <div id="uploadZone" class="hidden">
+                    <div class="upload-zone" onclick="handleUploadClick()">
+                        <input type="file" id="fileInput" class="upload-input" accept=".pdf,.doc,.docx" multiple onchange="handleFileUpload(event)">
+                        <div style="font-size: 3rem; color: #4ade80; margin-bottom: 1rem;">📁</div>
+                        <h3 style="color: #f1f5f9; margin-bottom: 0.5rem;">Sélectionnez vos fichiers</h3>
+                        <p style="color: #94a3b8;">PDF, DOC, DOCX • Max 50MB</p>
+                    </div>
+                    <div id="uploadStatus" class="status-message"></div>
+                    <div id="uploadProgress" class="hidden">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <p id="progressText" style="text-align: center; color: #94a3b8;"></p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section class="recent-protocols">
-        <h3 style="color: #f1f5f9; margin-bottom: 1.5rem;">Protocoles Récents</h3>
-        
-        <div class="protocol-item">
-            <div class="protocol-meta">
-                <span class="protocol-name">Protocole d'évaluation cytotoxique - Compound MBS-047</span>
-                <span class="protocol-date">28 Août 2025</span>
-            </div>
-            <p style="color: #94a3b8;">Basé sur 12 articles de référence • Validé par Dr. Martinez</p>
-        </div>
-
-        <div class="protocol-item">
-            <div class="protocol-meta">
-                <span class="protocol-name">Étude pharmacocinétique - Voie intraveineuse</span>
-                <span class="protocol-date">25 Août 2025</span>
-            </div>
-            <p style="color: #94a3b8;">Adapté des guidelines FDA 2024 • En révision</p>
-        </div>
-
-        <div class="protocol-item">
-            <div class="protocol-meta">
-                <span class="protocol-name">Protocole de biomarqueurs - Oncologie</span>
-                <span class="protocol-date">22 Août 2025</span>
-            </div>
-            <p style="color: #94a3b8;">Synthèse de 28 études récentes • Approuvé</p>
-        </div>
-    </section>
-</div>
-
-<script>
-    // Créer des particules flottantes
-    function createParticles() {
-        const particlesContainer = document.getElementById('particles');
-        const particleCount = 50;
-
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 6 + 's';
-            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            particlesContainer.appendChild(particle);
-        }
-    }
-
-    // Simuler l'upload de fichier
-    function simulateUpload() {
-        const uploadZone = document.querySelector('.upload-zone');
-        uploadZone.style.background = 'rgba(74, 222, 128, 0.1)';
-        uploadZone.style.borderColor = 'rgba(74, 222, 128, 0.6)';
-        uploadZone.innerHTML = `
-            <div class="upload-icon">✅</div>
-            <h3>Fichiers uploadés avec succès!</h3>
-            <p>3 articles PDF • 2 protocoles existants • 1 dataset</p>
-            <small style="color: #4ade80;">Analyse en cours...</small>
-        `;
-        
-        setTimeout(() => {
-            uploadZone.innerHTML = `
-                <div class="upload-icon">🔍</div>
-                <h3>Analyse terminée</h3>
-                <p>Données extraites et prêtes pour la génération de protocole</p>
-                <small style="color: #4ade80;">Vous pouvez maintenant générer un nouveau protocole</small>
-            `;
-        }, 2000);
-    }
-
-    // Générer un protocole
-    function generateProtocol() {
-        const output = document.getElementById('protocolOutput');
-        const content = document.getElementById('protocolContent');
-        
-        output.style.display = 'block';
-        content.innerHTML = 'Génération en cours...';
-        
-        setTimeout(() => {
-            content.innerHTML = `
-                <strong>PROTOCOLE EXPÉRIMENTAL</strong><br><br>
+            <!-- Étape 2: Biomolécule -->
+            <div id="step2" class="step">
+                <div class="step-header">
+                    <div class="step-title">🧬 Type de Biomolécule</div>
+                    <div class="step-description">Que voulez-vous produire ?</div>
+                </div>
                 
-                <strong>1. OBJECTIF</strong><br>
-                Évaluation de l'efficacité et de la sécurité du compound MBS-047 
-                dans le traitement des carcinomes hépatocellulaires.<br><br>
-                
-                <strong>2. MATÉRIEL ET MÉTHODES</strong><br>
-                • Lignées cellulaires: HepG2, Huh7 (ATCC)<br>
-                • Concentrations testées: 0.1, 1, 10, 100 μM<br>
-                • Durée d'exposition: 24, 48, 72h<br>
-                • Tests de viabilité: MTT, LDH<br><br>
-                
-                <strong>3. PROCÉDURE</strong><br>
-                Basée sur les protocoles de Kim et al. (2024) et vos standards internes...<br><br>
-                
-                <strong>4. ANALYSES STATISTIQUES</strong><br>
-                ANOVA à deux facteurs, test post-hoc de Tukey (α = 0.05)<br><br>
-                
-                <em>Ce protocole a été généré en analysant 8 articles de référence 
-                et vos 3 protocoles existants.</em>
-            `;
-        }, 1500);
-    }
-
-    // Défilement vers l'espace de travail
-    function scrollToWorkspace() {
-        document.getElementById('workspace').scrollIntoView({ 
-            behavior: 'smooth' 
-        });
-    }
-
-    // Initialiser les particules au chargement
-    window.addEventListener('load', createParticles);
-
-    // Ajouter des effets de survol dynamiques
-    document.addEventListener('mousemove', (e) => {
-        const cards = document.querySelectorAll('.feature-card, .protocol-item');
-        cards.forEach(card => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const deltaX = (x - centerX) / centerX;
-                const deltaY = (y - centerY) / centerY;
-                
-                card.style.transform = `perspective(1000px) rotateY(${deltaX * 5}deg) rotateX(${-deltaY * 5}deg) translateZ(10px)`;
-            } else {
-                card.style.transform = '';
-            }
-        });
-    });
-</script>
+                <div class="choice-grid">
+                    <div class="choice-card" onclick="selectMolecule('protein')">
+                        <div class="choice-icon">🧪</div>
+                        <div class="choice-title">Protéines</div>
+                        <div class="choice-desc">Enzymes, facteurs de croissance</div>
+                    </div>
+                    <div class="choice-card" onclick="selectMolecule('antibody')">
+                        <div class="choice-icon">🛡️</div>
+                        <div class="choice-title">Anticorps</div>
+                        <div class="choice-desc">mAbs thérapeutiques</div>
+                    </div>
+                    <div class="choice-card" onclick="selectMolecule('viral-vector')">
+                        <div class="choice-icon">🦠</div>
+                        <div class="choice-title">Vecteurs Viraux</div>
+                        <div class="choice-desc">AAV, lentivirus</div>
+                    </div>
+                    <div class="choice-card" onclick="selectMolecule('vlp')">
+                        <div class="choice-icon">⚡</div>
+                        <div class="choice-title">VLP</div>
 ```
-
-</body>
-</html>
