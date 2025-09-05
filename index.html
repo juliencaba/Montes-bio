@@ -493,7 +493,7 @@
 ```
 <header class="header">
     <nav class="nav">
-        <div class="logo">Montes Bio</div>
+        <div class="logo">Montes BioPharma</div>
         <ul class="nav-links">
             <li><a href="#Main page">Accueil</a></li>
             <li><a href="#protocoles">Protocoles</a></li>
@@ -1135,8 +1135,8 @@
 
             // ÉTAPE 3: En-tête du document
             doc.setFontSize(20);
-            doc.setTextColor(74, 222, 128); // Couleur verte Montes Bio
-            doc.text('MONTES BIO', margin, yPosition);
+            doc.setTextColor(74, 222, 128); // Couleur verte Montes BioPharma
+            doc.text('MONTES BIOPHARMA', margin, yPosition);
             
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0); // Noir
@@ -1193,12 +1193,12 @@
                 doc.setPage(i);
                 doc.setFontSize(8);
                 doc.setTextColor(128, 128, 128);
-                doc.text('Généré par Montes Bio - ' + new Date().toLocaleDateString(), margin, pageHeight - 10);
+                doc.text('Généré par Montes BioPharma - ' + new Date().toLocaleDateString(), margin, pageHeight - 10);
                 doc.text('Page ' + i + ' sur ' + totalPages, pageWidth - margin - 20, pageHeight - 10);
             }
 
             // ÉTAPE 7: Télécharger le fichier
-            const fileName = 'Protocole_MontesBio_' + new Date().toISOString().slice(0,10) + '.pdf';
+            const fileName = 'Protocole_MontesBioPharma_' + new Date().toISOString().slice(0,10) + '.pdf';
             doc.save(fileName);
             
             // Confirmation
@@ -1226,7 +1226,7 @@
     // Initialisation
     window.addEventListener('load', function() {
         createParticles();
-        console.log('🧬 Montes Bio - Version Simple Initialisée');
+        console.log('🧬 Montes BioPharma - Version Simple Initialisée');
     });
 </script>
 ```
