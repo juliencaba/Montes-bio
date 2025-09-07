@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Montes BioPharma - Smart protocols </title>
-    <meta name="description" content="AI platform for pharmaceutical protocols generation in biomolecule production">
+    <title>Montes Bio - Protocoles Intelligents</title>
+    <meta name="description" content="Plateforme IA pour créer des protocoles de production de biomolécules pharmaceutiques">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
 
 ```
@@ -493,13 +493,13 @@
 ```
 <header class="header">
     <nav class="nav">
-        <div class="logo">Montes BioPharma</div>
+        <div class="logo">Montes Bio</div>
         <ul class="nav-links">
-            <li><a href="#Main page">Accueil</a></li>
+            <li><a href="#accueil">Accueil</a></li>
             <li><a href="#protocoles">Protocoles</a></li>
-            <li><a href="#Research">Recherche</a></li>
-            <li><a href="#Training">Formation</a></li>
-            <li><a href="#Contact">Contact</a></li>
+            <li><a href="#recherche">Recherche</a></li>
+            <li><a href="#formation">Formation</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 </header>
@@ -507,12 +507,12 @@
 <div class="main-container">
     <section class="hero-section">
         <div class="hero-content">
-            <h1 class="hero-title">Biotechnological protocols</h1>
+            <h1 class="hero-title">Protocoles Biotechnologiques</h1>
             <p class="hero-subtitle">
-                create production and purification protocols for reasearch and pharmaceuticals molecules
-                through AI. Proteins, Abs, Viral vectors - optimized for your purpose.
+                Créez des protocoles de production et purification de biomolécules pharmaceutiques 
+                grâce à l'IA. Protéines, anticorps, vecteurs viraux - optimisés pour votre recherche.
             </p>
-            <button class="action-btn" onclick="scrollToWorkspace()">Start now</button>
+            <button class="action-btn" onclick="scrollToWorkspace()">Commencer Maintenant</button>
         </div>
     </section>
 
@@ -521,7 +521,8 @@
             <div class="feature-icon">📊</div>
             <h3 class="feature-title">Analyse d'Articles Scientifiques</h3>
             <p class="feature-description">
-                Our AI automatically analyze the last publications and build up protocols for upstream/downstream operations that are custom made for your molecule.
+                Notre IA analyse automatiquement les dernières publications pour extraire les protocoles 
+                upstream/downstream et méthodologies pertinentes à votre biomolécule.
             </p>
             <button class="action-btn">Explorer</button>
         </div>
@@ -530,9 +531,10 @@
             <div class="feature-icon">🧬</div>
             <h3 class="feature-title">Production de Biomolécules</h3>
             <p class="feature-description">
-                Protocols specilized for recombinant proteins, antibodies, viral vectors, VLP, LNP. From E. coli to mammalian cells.
+                Protocoles spécialisés pour protéines recombinantes, anticorps, vecteurs viraux, 
+                VLP et LNP. De E.coli aux cellules mammaliennes.
             </p>
-            <button class="action-btn">Create</button>
+            <button class="action-btn">Générer</button>
         </div>
 
         <div class="feature-card">
@@ -812,8 +814,35 @@
     }
 
     // Simulation d'upload remplacée par vraie fonctionnalité
-    document.getElementById('uploadZone').addEventListener('click', function() {
+    const uploadZone = document.getElementById('uploadZone');
+    
+    // Clic pour sélectionner fichiers
+    uploadZone.addEventListener('click', function() {
         document.getElementById('fileInput').click();
+    });
+
+    // NOUVEAU: Support Drag & Drop
+    uploadZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#4ade80';
+        this.style.background = 'rgba(74, 222, 128, 0.1)';
+    });
+
+    uploadZone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.style.borderColor = 'rgba(74, 222, 128, 0.3)';
+        this.style.background = 'rgba(30, 41, 59, 0.4)';
+    });
+
+    uploadZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.borderColor = 'rgba(74, 222, 128, 0.3)';
+        this.style.background = 'rgba(30, 41, 59, 0.4)';
+        
+        const files = Array.from(e.dataTransfer.files);
+        if (files.length > 0) {
+            handleRealFileUpload({ target: { files: files } });
+        }
     });
 
     // NOUVELLE FONCTION: Gestion d'upload réel
@@ -1018,93 +1047,144 @@
 
     function createDetailedProtocol(molecule) {
         const protocols = {
-            'protein': `
-                <h4 style="color: #4ade80; margin-bottom: 1rem;">📊 PROTOCOLE DE PRODUCTION - PROTÉINE RECOMBINANTE</h4>
-                
-                <strong style="color: #f1f5f9;">1. UPSTREAM PROCESSING</strong><br>
-                • Expression E. coli BL21(DE3) + plasmide pET<br>
-                • Milieu: LB ou M9 défini + antibiotique sélection<br>
-                • Culture: 37°C jusqu'à DO₆₀₀ = 0.6-0.8<br>
-                • Induction: IPTG 0.1-1 mM, réduction température 25°C<br>
-                • Expression: 4-16h selon optimisation<br>
-                • Récolte: Centrifugation 4000g, 20 min, 4°C<br><br>
-                
-                <strong style="color: #f1f5f9;">2. DOWNSTREAM PROCESSING</strong><br>
-                • Lyse cellulaire: Sonication ou French Press + inhibiteurs protéases<br>
-                • Clarification: Centrifugation 15000g, 30 min, 4°C<br>
-                • Purification His-tag: Colonne Ni-NTA<br>
-                • Lavage: Imidazole 20mM<br>
-                • Élution: Gradient imidazole 20-500mM<br>
-                • Polissage: Chromatographie exclusion taille<br>
-                • Concentration: Colonnes Amicon 10K MWCO<br><br>
-                
-                <strong style="color: #f1f5f9;">3. CONTRÔLES QUALITÉ</strong><br>
-                • SDS-PAGE (pureté >95%)<br>
-                • Western Blot (identité)<br>
-                • Dosage Bradford (concentration)<br>
-                • Test activité biologique<br>
-                • Endotoxines LAL (<0.1 UE/mg)<br><br>
-                
-                <strong style="color: #4ade80;">Rendement attendu:</strong> 50-500 mg/L culture<br>
-                <strong style="color: #4ade80;">Timeline:</strong> 7-10 jours<br>
-                <strong style="color: #4ade80;">Budget estimé:</strong> €15,000-40,000
-            `,
-            'antibody': `
-                <h4 style="color: #4ade80; margin-bottom: 1rem;">🛡️ PROTOCOLE - ANTICORPS MONOCLONAL</h4>
-                
-                <strong style="color: #f1f5f9;">1. PRODUCTION</strong><br>
-                • Cellules CHO-S adaptées suspension<br>
-                • Milieu CD-CHO sans sérum<br>
-                • Fed-batch 10-14 jours, 37°C, 5% CO₂<br>
-                • Supplémentation glucose/glutamine<br>
-                • Récolte par centrifugation continue<br><br>
-                
-                <strong style="color: #f1f5f9;">2. PURIFICATION</strong><br>
-                • Capture: Chromatographie Protéine A<br>
-                • Liaison: PBS pH 7.4<br>
-                • Élution: Glycine-HCl pH 3.0<br>
-                • Neutralisation: Tris pH 8.5<br>
-                • Polissage: Échange ions + SEC<br><br>
-                
-                <strong style="color: #f1f5f9;">3. CARACTÉRISATION</strong><br>
-                • Pureté: SDS-PAGE >98%<br>
-                • Agrégats: SEC-HPLC <2%<br>
-                • Affinité: SPR/ELISA<br>
-                • Activité: Test neutralisation<br><br>
-                
-                <strong style="color: #4ade80;">Rendement:</strong> 1-5 g/L<br>
-                <strong style="color: #4ade80;">Timeline:</strong> 3-5 semaines<br>
-                <strong style="color: #4ade80;">Budget:</strong> €40,000-120,000
-            `,
-            'viral': `
-                <h4 style="color: #4ade80; margin-bottom: 1rem;">🦠 PROTOCOLE - VECTEUR VIRAL AAV</h4>
-                
-                <strong style="color: #f1f5f9;">1. PRODUCTION</strong><br>
-                • Cellules HEK293T en suspension<br>
-                • Transfection triple: Helper + Rep-Cap + Transgène<br>
-                • PEI ratio 1:3, incubation 48-72h<br>
-                • Récolte cellules + surnageant<br><br>
-                
-                <strong style="color: #f1f5f9;">2. PURIFICATION</strong><br>
-                • Lyse: 3 cycles freeze-thaw<br>
-                • Traitement Benzonase 30 min, 37°C<br>
-                • Gradient iodixanol 15-25-40-60%<br>
-                • Ultracentrifugation 350,000g, 1h<br>
-                • Dialyse PBS + 5% sorbitol<br><br>
-                
-                <strong style="color: #f1f5f9;">3. CONTRÔLES</strong><br>
-                • Titre: qPCR (vg/mL)<br>
-                • Pureté: SDS-PAGE VP1/2/3<br>
-                • Infectiosité: Transduction<br>
-                • Sécurité: Test helper virus<br><br>
-                
-                <strong style="color: #4ade80;">Titre cible:</strong> 1×10¹² vg/mL<br>
-                <strong style="color: #4ade80;">Timeline:</strong> 4-6 semaines<br>
-                <strong style="color: #4ade80;">Budget:</strong> €80,000-250,000
-            `
+            'protein': generateProteinProtocol(),
+            'antibody': generateAntibodyProtocol(),
+            'viral': generateViralProtocol()
         };
 
         return protocols[molecule] || protocols['protein'];
+    }
+
+    // MISE À JOUR: Intégration des documents analysés
+    function generateProteinProtocol() {
+        let documentInsights = '';
+        
+        // Utilisation des vrais documents analysés
+        if (currentState.analyzedDocuments.length > 0) {
+            documentInsights = `
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                    <strong style="color: #3b82f6;">📄 INSIGHTS DES DOCUMENTS ANALYSÉS</strong><br>
+                    • ${currentState.analyzedDocuments.length} document(s) analysé(s)<br>
+                    • ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.analysis.protocols.length, 0)} protocole(s) extrait(s)<br>
+                    • Méthodologies détectées: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.methodologies))].join(', ')}<br>
+                    • Mots-clés identifiés: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.molecules))].join(', ')}
+                </div>
+            `;
+        } else {
+            documentInsights = `
+                <div style="background: rgba(245, 158, 11, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #f59e0b;">
+                    <strong style="color: #f59e0b;">🔍 MODE RECHERCHE AUTOMATIQUE</strong><br>
+                    Protocole généré basé sur notre base de connaissances et recherche automatique dans les bases de données scientifiques.
+                </div>
+            `;
+        }
+        
+        return `
+            <h4 style="color: #4ade80; margin-bottom: 1rem;">📊 PROTOCOLE DE PRODUCTION - PROTÉINE RECOMBINANTE</h4>
+            
+            ${documentInsights}
+            
+            <strong style="color: #f1f5f9;">1. UPSTREAM PROCESSING</strong><br>
+            • Expression E. coli BL21(DE3) + plasmide pET<br>
+            • Milieu: LB ou M9 défini + antibiotique sélection<br>
+            • Culture: 37°C jusqu'à DO₆₀₀ = 0.6-0.8<br>
+            • Induction: IPTG 0.1-1 mM, réduction température 25°C<br>
+            • Expression: 4-16h selon optimisation<br>
+            • Récolte: Centrifugation 4000g, 20 min, 4°C<br><br>
+            
+            <strong style="color: #f1f5f9;">2. DOWNSTREAM PROCESSING</strong><br>
+            • Lyse cellulaire: Sonication ou French Press + inhibiteurs protéases<br>
+            • Clarification: Centrifugation 15000g, 30 min, 4°C<br>
+            • Purification His-tag: Colonne Ni-NTA<br>
+            • Lavage: Imidazole 20mM<br>
+            • Élution: Gradient imidazole 20-500mM<br>
+            • Polissage: Chromatographie exclusion taille<br>
+            • Concentration: Colonnes Amicon 10K MWCO<br><br>
+            
+            <strong style="color: #f1f5f9;">3. CONTRÔLES QUALITÉ</strong><br>
+            • SDS-PAGE (pureté >95%)<br>
+            • Western Blot (identité)<br>
+            • Dosage Bradford (concentration)<br>
+            • Test activité biologique<br>
+            • Endotoxines LAL (<0.1 UE/mg)<br><br>
+            
+            ${currentState.analyzedDocuments.length > 0 ? 
+                `<strong style="color: #4ade80;">📚 RÉFÉRENCES ANALYSÉES:</strong><br>
+                ${currentState.analyzedDocuments.map(doc => `• ${doc.filename} (${doc.wordCount} mots)`).join('<br>')}<br><br>` 
+                : ''
+            }
+            
+            <strong style="color: #4ade80;">Rendement attendu:</strong> 50-500 mg/L culture<br>
+            <strong style="color: #4ade80;">Timeline:</strong> 7-10 jours<br>
+            <strong style="color: #4ade80;">Budget estimé:</strong> €15,000-40,000
+        `;
+    }
+
+    function generateAntibodyProtocol() {
+        let documentInsights = currentState.analyzedDocuments.length > 0 ? 
+            `Protocole enrichi par l'analyse de ${currentState.analyzedDocuments.length} document(s)` : 
+            'Protocole basé sur recherche automatique';
+            
+        return `
+            <h4 style="color: #4ade80; margin-bottom: 1rem;">🛡️ PROTOCOLE - ANTICORPS MONOCLONAL</h4>
+            
+            <div style="background: rgba(74, 222, 128, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                <strong style="color: #4ade80;">📄 SOURCE:</strong> ${documentInsights}
+            </div>
+            
+            <strong style="color: #f1f5f9;">1. PRODUCTION</strong><br>
+            • Cellules CHO-S adaptées suspension<br>
+            • Milieu CD-CHO sans sérum<br>
+            • Fed-batch 10-14 jours, 37°C, 5% CO₂<br>
+            • Supplémentation glucose/glutamine<br>
+            • Récolte par centrifugation continue<br><br>
+            
+            <strong style="color: #f1f5f9;">2. PURIFICATION</strong><br>
+            • Capture: Chromatographie Protéine A<br>
+            • Liaison: PBS pH 7.4<br>
+            • Élution: Glycine-HCl pH 3.0<br>
+            • Neutralisation: Tris pH 8.5<br>
+            • Polissage: Échange ions + SEC<br><br>
+            
+            <strong style="color: #f1f5f9;">3. CARACTÉRISATION</strong><br>
+            • Pureté: SDS-PAGE >98%<br>
+            • Agrégats: SEC-HPLC <2%<br>
+            • Affinité: SPR/ELISA<br>
+            • Activité: Test neutralisation<br><br>
+            
+            <strong style="color: #4ade80;">Rendement:</strong> 1-5 g/L<br>
+            <strong style="color: #4ade80;">Timeline:</strong> 3-5 semaines<br>
+            <strong style="color: #4ade80;">Budget:</strong> €40,000-120,000
+        `;
+    }
+
+    function generateViralProtocol() {
+        return `
+            <h4 style="color: #4ade80; margin-bottom: 1rem;">🦠 PROTOCOLE - VECTEUR VIRAL AAV</h4>
+            
+            <strong style="color: #f1f5f9;">1. PRODUCTION</strong><br>
+            • Cellules HEK293T en suspension<br>
+            • Transfection triple: Helper + Rep-Cap + Transgène<br>
+            • PEI ratio 1:3, incubation 48-72h<br>
+            • Récolte cellules + surnageant<br><br>
+            
+            <strong style="color: #f1f5f9;">2. PURIFICATION</strong><br>
+            • Lyse: 3 cycles freeze-thaw<br>
+            • Traitement Benzonase 30 min, 37°C<br>
+            • Gradient iodixanol 15-25-40-60%<br>
+            • Ultracentrifugation 350,000g, 1h<br>
+            • Dialyse PBS + 5% sorbitol<br><br>
+            
+            <strong style="color: #f1f5f9;">3. CONTRÔLES</strong><br>
+            • Titre: qPCR (vg/mL)<br>
+            • Pureté: SDS-PAGE VP1/2/3<br>
+            • Infectiosité: Transduction<br>
+            • Sécurité: Test helper virus<br><br>
+            
+            <strong style="color: #4ade80;">Titre cible:</strong> 1×10¹² vg/mL<br>
+            <strong style="color: #4ade80;">Timeline:</strong> 4-6 semaines<br>
+            <strong style="color: #4ade80;">Budget:</strong> €80,000-250,000
+        `;
     }
 
     // Actions
@@ -1135,8 +1215,8 @@
 
             // ÉTAPE 3: En-tête du document
             doc.setFontSize(20);
-            doc.setTextColor(74, 222, 128); // Couleur verte Montes BioPharma
-            doc.text('MONTES BIOPHARMA', margin, yPosition);
+            doc.setTextColor(74, 222, 128); // Couleur verte Montes Bio
+            doc.text('MONTES BIO', margin, yPosition);
             
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0); // Noir
@@ -1155,8 +1235,23 @@
             yPosition += 7;
             doc.text('Molécule: ' + getMoleculeName(currentState.selectedMolecule), margin, yPosition);
             yPosition += 7;
-            doc.text('Documents analysés: ' + currentState.uploadedFiles.length, margin, yPosition);
-            yPosition += 15;
+            
+            // NOUVEAU: Informations sur les documents analysés
+            if (currentState.analyzedDocuments.length > 0) {
+                doc.text('Documents analysés: ' + currentState.analyzedDocuments.length, margin, yPosition);
+                yPosition += 5;
+                currentState.analyzedDocuments.forEach(docItem => {
+                    const fileName = docItem.filename.length > 40 ? docItem.filename.substring(0, 37) + '...' : docItem.filename;
+                    doc.text('  • ' + fileName + ' (' + docItem.wordCount + ' mots)', margin, yPosition);
+                    yPosition += 4;
+                });
+                yPosition += 3;
+            } else {
+                doc.text('Mode: Recherche automatique (aucun document uploadé)', margin, yPosition);
+                yPosition += 7;
+            }
+            
+            yPosition += 8;
 
             // ÉTAPE 5: Contenu du protocole (extraction du HTML)
             const tempDiv = document.createElement('div');
@@ -1193,12 +1288,12 @@
                 doc.setPage(i);
                 doc.setFontSize(8);
                 doc.setTextColor(128, 128, 128);
-                doc.text('Généré par Montes BioPharma - ' + new Date().toLocaleDateString(), margin, pageHeight - 10);
+                doc.text('Généré par Montes Bio - ' + new Date().toLocaleDateString(), margin, pageHeight - 10);
                 doc.text('Page ' + i + ' sur ' + totalPages, pageWidth - margin - 20, pageHeight - 10);
             }
 
             // ÉTAPE 7: Télécharger le fichier
-            const fileName = 'Protocole_MontesBioPharma_' + new Date().toISOString().slice(0,10) + '.pdf';
+            const fileName = 'Protocole_MontesBio_' + new Date().toISOString().slice(0,10) + '.pdf';
             doc.save(fileName);
             
             // Confirmation
@@ -1226,7 +1321,15 @@
     // Initialisation
     window.addEventListener('load', function() {
         createParticles();
-        console.log('🧬 Montes BioPharma - Version Simple Initialisée');
+        
+        // Vérifier disponibilité PDF.js
+        if (typeof pdfjsLib !== 'undefined') {
+            console.log('✅ PDF.js chargé et prêt');
+        } else {
+            console.warn('⚠️ PDF.js non disponible - fonctionnalité upload limitée');
+        }
+        
+        console.log('🧬 Montes Bio - Version avec Upload PDF Réel Initialisée');
     });
 </script>
 ```
