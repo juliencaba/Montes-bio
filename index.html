@@ -80,7 +80,6 @@
         transform: translateY(-2px);
     }
 
-    /* NOUVEAU: Sélecteur de langue simple */
     .language-selector {
         display: flex;
         background: rgba(30, 41, 59, 0.6);
@@ -211,6 +210,31 @@
         justify-content: center;
         margin-bottom: 1rem;
         font-size: 1.5rem;
+        position: relative;
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .feature-icon.search-icon::after {
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E") no-repeat center;
+        mask-size: contain;
+    }
+
+    .feature-icon.molecule-icon::after {
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/%3E%3C/svg%3E") no-repeat center;
+        mask-size: contain;
+    }
+
+    .feature-icon.protocol-icon::after {
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'/%3E%3C/svg%3E") no-repeat center;
+        mask-size: contain;
     }
 
     .feature-title {
@@ -242,6 +266,12 @@
     .action-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+    }
+
+    .action-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
     }
 
     .workspace-section {
@@ -321,6 +351,170 @@
         font-size: 3rem;
         color: #4ade80;
         margin-bottom: 1rem;
+    }
+
+    /* NOUVEAU: Styles pour la recherche automatique */
+    .auto-search-section {
+        background: rgba(15, 20, 25, 0.8);
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border: 2px solid rgba(168, 85, 247, 0.3);
+        display: none;
+    }
+
+    .search-progress {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        display: none;
+    }
+
+    .search-sources {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+
+    .search-source {
+        background: rgba(45, 55, 72, 0.6);
+        border: 1px solid rgba(168, 85, 247, 0.2);
+        border-radius: 8px;
+        padding: 1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .search-source.active {
+        border-color: #a855f7;
+        background: rgba(168, 85, 247, 0.1);
+    }
+
+    .search-source.completed {
+        border-color: #4ade80;
+        background: rgba(74, 222, 128, 0.1);
+    }
+
+    .search-results {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        display: none;
+    }
+
+    /* NOUVEAU: Styles pour les articles trouvés */
+    .article-item {
+        background: rgba(45, 55, 72, 0.7);
+        border: 1px solid rgba(74, 222, 128, 0.2);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .article-item:hover {
+        border-color: rgba(74, 222, 128, 0.4);
+        transform: translateX(5px);
+        background: rgba(74, 222, 128, 0.05);
+    }
+
+    .article-item.selected {
+        border-color: #4ade80;
+        background: rgba(74, 222, 128, 0.1);
+    }
+
+    .article-title {
+        font-weight: bold;
+        color: #f1f5f9;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        line-height: 1.4;
+    }
+
+    .article-authors {
+        color: #a855f7;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .article-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .article-journal {
+        color: #3b82f6;
+        font-size: 0.85rem;
+        font-style: italic;
+    }
+
+    .article-date {
+        color: #94a3b8;
+        font-size: 0.85rem;
+    }
+
+    .article-relevance {
+        background: rgba(74, 222, 128, 0.2);
+        color: #4ade80;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .article-abstract {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-top: 0.5rem;
+        display: none;
+    }
+
+    .article-item.expanded .article-abstract {
+        display: block;
+    }
+
+    .article-checkbox {
+        display: none;
+    }
+
+    .article-item.selectable {
+        position: relative;
+        padding-left: 3rem;
+    }
+
+    .article-item.selectable::before {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        top: 1.5rem;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(74, 222, 128, 0.3);
+        border-radius: 4px;
+        background: rgba(15, 20, 25, 0.8);
+        transition: all 0.3s ease;
+    }
+
+    .article-item.selectable.selected::before {
+        background: #4ade80;
+        border-color: #4ade80;
+    }
+
+    .article-item.selectable.selected::after {
+        content: '✓';
+        position: absolute;
+        left: 1.25rem;
+        top: 1.6rem;
+        color: white;
+        font-weight: bold;
+        font-size: 0.8rem;
     }
 
     .molecule-selection {
@@ -429,6 +623,94 @@
         margin-top: 0.5rem;
     }
 
+    /* NOUVEAU: Styles pour filtres avancés */
+    .filters-section {
+        background: rgba(30, 41, 59, 0.4);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border: 1px solid rgba(74, 222, 128, 0.2);
+    }
+
+    .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-label {
+        color: #cbd5e1;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .filter-select {
+        background: rgba(15, 20, 25, 0.8);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        border-radius: 6px;
+        padding: 0.5rem;
+        color: #e2e8f0;
+        font-size: 0.9rem;
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #4ade80;
+    }
+
+    .search-input {
+        background: rgba(15, 20, 25, 0.8);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        border-radius: 6px;
+        padding: 0.5rem;
+        color: #e2e8f0;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #4ade80;
+        box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.1);
+    }
+
+    .filter-toggle {
+        background: rgba(74, 222, 128, 0.1);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        color: #4ade80;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .filter-toggle:hover {
+        background: rgba(74, 222, 128, 0.2);
+        border-color: #4ade80;
+    }
+
+    .filter-toggle.active {
+        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        color: white;
+        border-color: #4ade80;
+    }
+
+    /* Icônes professionnelles SVG */
+    .icon-svg {
+        width: 24px;
+        height: 24px;
+        fill: currentColor;
+    }
+
     .floating-particles {
         position: fixed;
         top: 0;
@@ -447,11 +729,19 @@
         border-radius: 50%;
         animation: float 6s infinite ease-in-out;
         opacity: 0.6;
+        box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+    }
+
+    .particle:nth-child(even) {
+        background: #3b82f6;
+        box-shadow: 0 0 6px rgba(59, 130, 246, 0.8);
     }
 
     @keyframes float {
         0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-        50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        25% { transform: translateY(-15px) rotate(90deg); opacity: 0.8; }
+        50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
+        75% { transform: translateY(-15px) rotate(270deg); opacity: 0.8; }
     }
 
     .recent-protocols {
@@ -461,7 +751,6 @@
         margin: 2rem 0;
     }
 
-    /* NOUVEAU: Styles pour le questionnaire */
     .project-questionnaire {
         background: rgba(15, 20, 25, 0.8);
         border-radius: 16px;
@@ -592,7 +881,6 @@
                 <li><a href="#formation" data-text="nav-training">Formation</a></li>
                 <li><a href="#contact" data-text="nav-contact">Contact</a></li>
             </ul>
-            <!-- NOUVEAU: Sélecteur de langue -->
             <div class="language-selector">
                 <button class="lang-btn active" onclick="switchLanguage('fr')">FR</button>
                 <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
@@ -607,7 +895,7 @@
             <h1 class="hero-title" data-text="hero-title">Protocoles Biotechnologiques</h1>
             <p class="hero-subtitle" data-text="hero-subtitle">
                 Créez des protocoles de production et purification de biomolécules pharmaceutiques 
-                grâce à l'IA. Protéines, anticorps, vecteurs viraux - optimisés pour votre recherche.
+                grâce à l'IA et à la recherche automatique sur PubMed et sites fournisseurs.
             </p>
             <button class="action-btn" onclick="scrollToWorkspace()" data-text="start-now">Commencer Maintenant</button>
         </div>
@@ -615,11 +903,11 @@
 
     <div class="features-grid">
         <div class="feature-card">
-            <div class="feature-icon">📊</div>
-            <h3 class="feature-title" data-text="feature1-title">Analyse d'Articles Scientifiques</h3>
+            <div class="feature-icon">🔍</div>
+            <h3 class="feature-title" data-text="feature1-title">Recherche Automatique</h3>
             <p class="feature-description" data-text="feature1-desc">
-                Notre IA analyse automatiquement les dernières publications pour extraire les protocoles 
-                upstream/downstream et méthodologies pertinentes à votre biomolécule.
+                Recherche intelligente sur PubMed, Cytiva, Sartorius, Thermo Fisher et autres 
+                fournisseurs pour identifier les meilleurs protocoles et équipements.
             </p>
             <button class="action-btn" data-text="explore">Explorer</button>
         </div>
@@ -636,10 +924,10 @@
 
         <div class="feature-card">
             <div class="feature-icon">⚗️</div>
-            <h3 class="feature-title" data-text="feature3-title">Upstream & Downstream</h3>
+            <h3 class="feature-title" data-text="feature3-title">Protocoles Basés sur Données</h3>
             <p class="feature-description" data-text="feature3-desc">
-                Workflow complet de la fermentation à la formulation finale. 
-                Chromatographie, filtration, concentration - protocoles détaillés.
+                Recommandations d'équipements et de consommables basées sur les dernières 
+                publications et spécifications des fournisseurs.
             </p>
             <button class="action-btn" data-text="browse">Parcourir</button>
         </div>
@@ -648,7 +936,7 @@
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-number">2,847</div>
-            <div class="stat-label" data-text="stat1">Articles Biotech Analysés</div>
+            <div class="stat-label" data-text="stat1">Articles PubMed Analysés</div>
         </div>
         <div class="stat-card">
             <div class="stat-number">156</div>
@@ -656,7 +944,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-number">43</div>
-            <div class="stat-label" data-text="stat3">Pharma Partenaires</div>
+            <div class="stat-label" data-text="stat3">Fournisseurs Intégrés</div>
         </div>
         <div class="stat-card">
             <div class="stat-number">98</div>
@@ -672,18 +960,22 @@
 
         <!-- Choix initial -->
         <div class="document-choice" id="documentChoice">
-            <h3 style="color: #f1f5f9; margin-bottom: 2rem;" data-text="doc-choice-title">📚 Documents de Référence</h3>
+            <h3 style="color: #f1f5f9; margin-bottom: 2rem;" data-text="doc-choice-title">📚 Sources de Données</h3>
             <p style="color: #94a3b8; margin-bottom: 2rem;" data-text="doc-choice-desc">
-                Avez-vous des documents à analyser ou souhaitez-vous une recherche automatique ?
+                Choisissez vos sources de données pour créer le protocole optimal
             </p>
             <div class="choice-buttons">
                 <button class="choice-btn" onclick="selectDocumentOption('upload')">
-                    <span data-text="choice-upload">📄 J'ai des Documents</span><br>
-                    <small style="opacity: 0.7;" data-text="choice-upload-sub">Articles, protocoles existants</small>
+                    <span data-text="choice-upload">📄 Documents Existants</span><br>
+                    <small style="opacity: 0.7;" data-text="choice-upload-sub">Articles, protocoles que vous possédez</small>
                 </button>
                 <button class="choice-btn" onclick="selectDocumentOption('search')">
                     <span data-text="choice-search">🔍 Recherche Automatique</span><br>
-                    <small style="opacity: 0.7;" data-text="choice-search-sub">L'IA trouve les références</small>
+                    <small style="opacity: 0.7;" data-text="choice-search-sub">PubMed + Sites fournisseurs</small>
+                </button>
+                <button class="choice-btn" onclick="selectDocumentOption('hybrid')">
+                    <span data-text="choice-hybrid">🔗 Approche Hybride</span><br>
+                    <small style="opacity: 0.7;" data-text="choice-hybrid-sub">Documents + Recherche auto</small>
                 </button>
             </div>
         </div>
@@ -702,6 +994,184 @@
             <div id="filesList"></div>
         </div>
 
+        <!-- NOUVEAU: Confirmation recherche d'articles -->
+        <div class="auto-search-section" id="autoSearchSection">
+            <h3 style="color: #a855f7; margin-bottom: 2rem; text-align: center;" data-text="search-confirmation-title">📚 Recherche d'Articles Scientifiques</h3>
+            <p style="color: #94a3b8; text-align: center; margin-bottom: 2rem;" data-text="search-confirmation-desc">
+                Souhaitez-vous que je recherche dans les bases de données en ligne des articles contenant des informations pertinentes pour votre demande ?
+            </p>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <button class="action-btn" onclick="confirmArticleSearch(true)" style="margin-right: 1rem;" data-text="yes-search">
+                    ✅ Oui, rechercher des articles
+                </button>
+                <button class="choice-btn" onclick="confirmArticleSearch(false)" data-text="no-search">
+                    ❌ Non, passer cette étape
+                </button>
+            </div>
+        </div>
+
+        <!-- NOUVEAU: Interface de recherche d'articles -->
+        <div class="auto-search-section" id="articleSearchSection" style="display: none;">
+            <h3 style="color: #a855f7; margin-bottom: 2rem; text-align: center;" data-text="auto-search-title">🔍 Recherche dans les Bases de Données</h3>
+            <p style="color: #94a3b8; text-align: center; margin-bottom: 2rem;" data-text="auto-search-desc">
+                Recherche en cours dans PubMed et autres bases de données scientifiques
+            </p>
+            
+            <div class="search-sources" id="searchSources">
+                <div class="search-source" data-source="pubmed">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                    </div>
+                    <div style="font-weight: bold;">PubMed</div>
+                    <small style="opacity: 0.7;">Publications scientifiques</small>
+                </div>
+                <div class="search-source" data-source="nature">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div style="font-weight: bold;">Nature</div>
+                    <small style="opacity: 0.7;">Revues scientifiques</small>
+                </div>
+                <div class="search-source" data-source="sciencedirect">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                        </svg>
+                    </div>
+                    <div style="font-weight: bold;">ScienceDirect</div>
+                    <small style="opacity: 0.7;">Articles Elsevier</small>
+                </div>
+                <div class="search-source" data-source="merck">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19,7H22V9H19V7M17,7H14V9H17V7M12,7H9V9H12V7M7,7H4V9H7V7M5,3V5H19V3H5M19,11H5V21H19V11Z"/>
+                        </svg>
+                    </div>
+                    <div style="font-weight: bold;">Merck</div>
+                    <small style="opacity: 0.7;">Solutions biochimiques</small>
+                </div>
+                <div class="search-source" data-source="biorad">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 8.12,16.5 8.91,15.69L9.5,15.1L10.09,15.69C10.88,16.5 11.5,17.38 11.93,18.28C11.31,18.67 10.64,18.93 9.93,19.07C9.22,18.93 8.55,18.67 7.93,18.28H7.07Z"/>
+                        </svg>
+                    </div>
+                    <div style="font-weight: bold;">Bio-Rad</div>
+                    <small style="opacity: 0.7;">Instruments recherche</small>
+                </div>
+                <div class="search-source" data-source="pall">
+                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
+                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,6H13V9H16V11H13V14H11V11H8V9H11V6Z"/>
+                        </svg>
+                    </div>
+                    <div style="font-weight: bold;">Pall Corporation</div>
+                    <small style="opacity: 0.7;">Filtration bioprocess</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOUVEAU: Filtres avancés pour les articles -->
+        <div class="filters-section" id="articleFilters" style="display: none;">
+            <h4 style="color: #4ade80; margin-bottom: 1rem;">
+                <svg class="icon-svg" style="width: 20px; height: 20px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14,12V19.88C14.04,20.18 13.94,20.5 13.71,20.71C13.32,21.1 12.69,21.1 12.3,20.71L10.29,18.7C10.06,18.47 9.96,18.16 10,17.87V12H9.97L4.21,4.62C3.87,4.19 3.95,3.56 4.38,3.22C4.57,3.08 4.78,3 5,3V3H19V3C19.22,3 19.43,3.08 19.62,3.22C20.05,3.56 20.13,4.19 19.79,4.62L14.03,12H14Z"/>
+                </svg>
+                Filtres Avancés
+            </h4>
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Recherche en temps réel</label>
+                    <input type="text" class="search-input" id="realtimeSearch" placeholder="Rechercher dans les articles..." onkeyup="performRealtimeSearch(this.value)">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Trier par</label>
+                    <select class="filter-select" id="sortFilter" onchange="applySortFilter()">
+                        <option value="relevance">Pertinence</option>
+                        <option value="date">Date (récent)</option>
+                        <option value="date-old">Date (ancien)</option>
+                        <option value="authors">Auteurs (A-Z)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Source</label>
+                    <select class="filter-select" id="sourceFilter" onchange="applySourceFilter()">
+                        <option value="all">Toutes sources</option>
+                        <option value="PubMed">PubMed</option>
+                        <option value="Nature">Nature</option>
+                        <option value="ScienceDirect">ScienceDirect</option>
+                        <option value="Merck">Merck</option>
+                        <option value="Bio-Rad">Bio-Rad</option>
+                        <option value="Pall">Pall Corporation</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Année</label>
+                    <select class="filter-select" id="yearFilter" onchange="applyYearFilter()">
+                        <option value="all">Toutes années</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="older">Plus ancien</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Pertinence min.</label>
+                    <select class="filter-select" id="relevanceFilter" onchange="applyRelevanceFilter()">
+                        <option value="0">Toutes</option>
+                        <option value="70">≥ 70%</option>
+                        <option value="80">≥ 80%</option>
+                        <option value="90">≥ 90%</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Actions</label>
+                    <button class="filter-toggle" onclick="clearAllFilters()">
+                        <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+                        </svg>
+                        Effacer
+                    </button>
+                </div>
+            </div>
+        </div>
+            <h4 style="color: #4ade80; margin-bottom: 1rem;" data-text="articles-found-title">📊 Articles Trouvés</h4>
+            <p style="color: #94a3b8; margin-bottom: 1.5rem;" data-text="articles-found-desc">
+                Voici les articles pertinents trouvés dans les bases de données :
+            </p>
+            <div id="articlesContainer"></div>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <button class="action-btn" onclick="confirmArticleIntegration()" data-text="integrate-articles">
+                    📝 Intégrer ces articles dans mon protocole
+                </button>
+                <button class="choice-btn" onclick="skipArticleIntegration()" style="margin-left: 1rem;" data-text="skip-integration">
+                    ⏭️ Continuer sans intégration
+                </button>
+            </div>
+        </div>
+
+        <!-- Zone de progression de recherche -->
+        <div class="search-progress" id="searchProgress">
+            <h4 style="color: #a855f7; margin-bottom: 1rem;" data-text="search-progress">🔍 Recherche en cours...</h4>
+            <div style="background: rgba(168, 85, 247, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
+                <div id="searchProgressBar" style="background: linear-gradient(90deg, #a855f7, #3b82f6); height: 100%; width: 0%; transition: width 0.5s;"></div>
+            </div>
+            <p id="searchProgressText" style="color: #94a3b8; margin-top: 0.5rem;" data-text="search-init">Initialisation de la recherche...</p>
+        </div>
+
+        <!-- Résultats de recherche -->
+        <div class="search-results" id="searchResults">
+            <h4 style="color: #4ade80; margin-bottom: 1rem;" data-text="search-results-title">📊 Résultats de Recherche</h4>
+            <div id="resultsContainer"></div>
+        </div>
+
         <!-- Zone de progression d'analyse -->
         <div id="analysisProgress" style="display: none; background: rgba(30, 41, 59, 0.4); border-radius: 12px; padding: 1.5rem; margin: 1rem 0;">
             <h4 style="color: #4ade80; margin-bottom: 1rem;" data-text="analysis-progress">🤖 Analyse en cours...</h4>
@@ -711,18 +1181,18 @@
             <p id="progressText" style="color: #94a3b8; margin-top: 0.5rem;" data-text="analysis-init">Initialisation...</p>
         </div>
 
-        <!-- NOUVEAU: Questionnaire Projet -->
-        <div class="project-questionnaire" id="projectQuestionnaire" style="display: none; background: rgba(15, 20, 25, 0.8); border-radius: 16px; padding: 2rem; margin: 2rem 0; border: 2px solid rgba(139, 92, 246, 0.3);">
+        <!-- Questionnaire Projet -->
+        <div class="project-questionnaire" id="projectQuestionnaire" style="display: none;">
             <h3 style="color: #a78bfa; margin-bottom: 2rem; text-align: center;" data-text="questionnaire-title">🎯 Questionnaire Projet</h3>
             <p style="color: #94a3b8; text-align: center; margin-bottom: 2rem;" data-text="questionnaire-desc">
-                Quelques questions pour personnaliser votre protocole et optimiser les recommandations
+                Quelques questions pour personnaliser votre protocole et optimiser la recherche
             </p>
             
             <div id="questionnaireSteps">
                 <!-- Étape 1: Type de projet -->
                 <div class="questionnaire-step" id="step1" style="display: block;">
                     <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step1-title">1. Quel est le type de votre projet ?</h4>
-                    <div class="question-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="question-options">
                         <button class="question-option" onclick="selectProjectType('research')" data-value="research">
                             <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔬</div>
                             <span data-text="project-research">Recherche Académique</span>
@@ -746,48 +1216,44 @@
                     </div>
                 </div>
 
-                <!-- Étape 2: Concentration cible -->
+                <!-- Étape 2: Biomolécule cible -->
                 <div class="questionnaire-step" id="step2" style="display: none;">
-                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step2-title">2. Quelle concentration cible visez-vous ?</h4>
-                    <div class="question-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;">
-                        <button class="question-option" onclick="selectConcentration('low')" data-value="low">
-                            <span data-text="concentration-low">Recherche</span>
-                            <small style="display: block; opacity: 0.7;" data-text="concentration-low-desc">0.1-10 mg/mL | 10^8-10^11 vp/mL</small>
+                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step2-title">2. Quelle biomolécule souhaitez-vous produire ?</h4>
+                    <div class="question-options">
+                        <button class="question-option" onclick="selectMoleculeType('protein')" data-value="protein">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧪</div>
+                            <span data-text="mol-protein">Protéines Recombinantes</span>
                         </button>
-                        <button class="question-option" onclick="selectConcentration('medium')" data-value="medium">
-                            <span data-text="concentration-medium">Production Pilote</span>
-                            <small style="display: block; opacity: 0.7;" data-text="concentration-medium-desc">1-50 mg/mL | 10^11-10^12 vp/mL</small>
+                        <button class="question-option" onclick="selectMoleculeType('antibody')" data-value="antibody">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛡️</div>
+                            <span data-text="mol-antibody">Anticorps Monoclonaux</span>
                         </button>
-                        <button class="question-option" onclick="selectConcentration('high')" data-value="high">
-                            <span data-text="concentration-high">Production Thérapeutique</span>
-                            <small style="display: block; opacity: 0.7;" data-text="concentration-high-desc">10-150 mg/mL | 10^12-10^13 vp/mL</small>
+                        <button class="question-option" onclick="selectMoleculeType('viral')" data-value="viral">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🦠</div>
+                            <span data-text="mol-viral">Vecteurs Viraux</span>
                         </button>
-                        <button class="question-option" onclick="selectConcentration('industrial')" data-value="industrial">
-                            <span data-text="concentration-industrial">Production Industrielle</span>
-                            <small style="display: block; opacity: 0.7;" data-text="concentration-industrial-desc">> 100 mg/mL | > 10^13 vp/mL</small>
+                        <button class="question-option" onclick="selectMoleculeType('vlp')" data-value="vlp">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡</div>
+                            <span data-text="mol-vlp">Virus-Like Particles</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Étape 3: Délai -->
+                <!-- Étape 3: Échelle de production -->
                 <div class="questionnaire-step" id="step3" style="display: none;">
-                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step3-title">3. Dans quel délai souhaitez-vous obtenir votre produit ?</h4>
-                    <div class="question-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
-                        <button class="question-option" onclick="selectTimeline('urgent')" data-value="urgent">
-                            <span data-text="timeline-urgent">< 2 semaines</span>
-                            <small style="display: block; opacity: 0.7;" data-text="timeline-urgent-desc">Urgent</small>
+                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step3-title">3. Quelle échelle de production visez-vous ?</h4>
+                    <div class="question-options">
+                        <button class="question-option" onclick="selectScale('research')" data-value="research">
+                            <span data-text="scale-research">Recherche (mg)</span>
+                            <small style="display: block; opacity: 0.7;">Flasks, petits bioréacteurs</small>
                         </button>
-                        <button class="question-option" onclick="selectTimeline('normal')" data-value="normal">
-                            <span data-text="timeline-normal">2-8 semaines</span>
-                            <small style="display: block; opacity: 0.7;" data-text="timeline-normal-desc">Standard</small>
+                        <button class="question-option" onclick="selectScale('pilot')" data-value="pilot">
+                            <span data-text="scale-pilot">Pilote (g)</span>
+                            <small style="display: block; opacity: 0.7;">Bioréacteurs 1-50L</small>
                         </button>
-                        <button class="question-option" onclick="selectTimeline('flexible')" data-value="flexible">
-                            <span data-text="timeline-flexible">2-6 mois</span>
-                            <small style="display: block; opacity: 0.7;" data-text="timeline-flexible-desc">Flexible</small>
-                        </button>
-                        <button class="question-option" onclick="selectTimeline('long')" data-value="long">
-                            <span data-text="timeline-long">> 6 mois</span>
-                            <small style="display: block; opacity: 0.7;" data-text="timeline-long-desc">Long terme</small>
+                        <button class="question-option" onclick="selectScale('production')" data-value="production">
+                            <span data-text="scale-production">Production (kg)</span>
+                            <small style="display: block; opacity: 0.7;">Bioréacteurs 100L+</small>
                         </button>
                     </div>
                 </div>
@@ -795,22 +1261,22 @@
                 <!-- Étape 4: Budget -->
                 <div class="questionnaire-step" id="step4" style="display: none;">
                     <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step4-title">4. Quel est votre budget approximatif ?</h4>
-                    <div class="question-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                    <div class="question-options">
                         <button class="question-option" onclick="selectBudget('low')" data-value="low">
                             <span data-text="budget-low">< €10k</span>
-                            <small style="display: block; opacity: 0.7;" data-text="budget-low-desc">Budget serré</small>
+                            <small style="display: block; opacity: 0.7;">Budget serré</small>
                         </button>
                         <button class="question-option" onclick="selectBudget('medium')" data-value="medium">
                             <span data-text="budget-medium">€10k - €50k</span>
-                            <small style="display: block; opacity: 0.7;" data-text="budget-medium-desc">Budget modéré</small>
+                            <small style="display: block; opacity: 0.7;">Budget modéré</small>
                         </button>
                         <button class="question-option" onclick="selectBudget('high')" data-value="high">
                             <span data-text="budget-high">€50k - €200k</span>
-                            <small style="display: block; opacity: 0.7;" data-text="budget-high-desc">Budget confortable</small>
+                            <small style="display: block; opacity: 0.7;">Budget confortable</small>
                         </button>
                         <button class="question-option" onclick="selectBudget('unlimited')" data-value="unlimited">
                             <span data-text="budget-unlimited">> €200k</span>
-                            <small style="display: block; opacity: 0.7;" data-text="budget-unlimited-desc">Budget flexible</small>
+                            <small style="display: block; opacity: 0.7;">Budget flexible</small>
                         </button>
                     </div>
                 </div>
@@ -818,26 +1284,26 @@
                 <!-- Étape 5: Équipements -->
                 <div class="questionnaire-step" id="step5" style="display: none;">
                     <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step5-title">5. De quels équipements disposez-vous ?</h4>
-                    <div class="question-options" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="question-options">
                         <button class="question-option multi-select" onclick="toggleEquipment(this, 'basic')" data-value="basic">
                             <span data-text="equipment-basic">Équipement de base</span>
-                            <small style="display: block; opacity: 0.7;" data-text="equipment-basic-desc">Centrifugeuse, incubateurs</small>
+                            <small style="display: block; opacity: 0.7;">Centrifugeuse, incubateurs</small>
                         </button>
                         <button class="question-option multi-select" onclick="toggleEquipment(this, 'intermediate')" data-value="intermediate">
                             <span data-text="equipment-intermediate">FPLC/Chromatographie</span>
-                            <small style="display: block; opacity: 0.7;" data-text="equipment-intermediate-desc">Purification avancée</small>
+                            <small style="display: block; opacity: 0.7;">Purification avancée</small>
                         </button>
                         <button class="question-option multi-select" onclick="toggleEquipment(this, 'bioreactor')" data-value="bioreactor">
                             <span data-text="equipment-bioreactor">Bioréacteurs</span>
-                            <small style="display: block; opacity: 0.7;" data-text="equipment-bioreactor-desc">Culture à grande échelle</small>
+                            <small style="display: block; opacity: 0.7;">Culture à grande échelle</small>
                         </button>
                         <button class="question-option multi-select" onclick="toggleEquipment(this, 'analytical')" data-value="analytical">
                             <span data-text="equipment-analytical">Analytique avancé</span>
-                            <small style="display: block; opacity: 0.7;" data-text="equipment-analytical-desc">LC-MS, HPLC, etc.</small>
+                            <small style="display: block; opacity: 0.7;">LC-MS, HPLC, etc.</small>
                         </button>
                         <button class="question-option multi-select" onclick="toggleEquipment(this, 'none')" data-value="none">
                             <span data-text="equipment-none">Pas d'équipement</span>
-                            <small style="display: block; opacity: 0.7;" data-text="equipment-none-desc">Externalisation requise</small>
+                            <small style="display: block; opacity: 0.7;">Externalisation requise</small>
                         </button>
                     </div>
                     <div style="margin-top: 2rem; text-align: center;">
@@ -859,85 +1325,21 @@
             </div>
         </div>
 
-        <!-- Sélection biomolécule -->
-        <div class="molecule-selection" id="moleculeSelection">
-            <h3 style="color: #f1f5f9; margin-bottom: 2rem; text-align: center;" data-text="molecule-title">🧬 Type de Biomolécule</h3>
-            <div class="molecule-grid">
-                <div class="molecule-card" onclick="selectMolecule('protein')">
-                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧪</div>
-                    <div style="font-weight: bold; color: #f1f5f9;" data-text="mol-protein">Protéines Recombinantes</div>
-                    <div style="color: #94a3b8; font-size: 0.85rem;" data-text="mol-protein-desc">Enzymes, facteurs de croissance, cytokines</div>
-                </div>
-                <div class="molecule-card" onclick="selectMolecule('antibody')">
-                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛡️</div>
-                    <div style="font-weight: bold; color: #f1f5f9;" data-text="mol-antibody">Anticorps Monoclonaux</div>
-                    <div style="color: #94a3b8; font-size: 0.85rem;" data-text="mol-antibody-desc">mAbs thérapeutiques, fragments</div>
-                </div>
-                <div class="molecule-card" onclick="selectMolecule('viral')">
-                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🦠</div>
-                    <div style="font-weight: bold; color: #f1f5f9;" data-text="mol-viral">Vecteurs Viraux</div>
-                    <div style="color: #94a3b8; font-size: 0.85rem;" data-text="mol-viral-desc">AAV, lentivirus, thérapie génique</div>
-                </div>
-                <div class="molecule-card" onclick="selectMolecule('vlp')">
-                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
-                    <div style="font-weight: bold; color: #f1f5f9;" data-text="mol-vlp">Virus-Like Particles</div>
-                    <div style="color: #94a3b8; font-size: 0.85rem;" data-text="mol-vlp-desc">VLP pour vaccins</div>
-                </div>
-                <div class="molecule-card" onclick="selectMolecule('lnp')">
-                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">💊</div>
-                    <div style="font-weight: bold; color: #f1f5f9;" data-text="mol-lnp">Lipid Nanoparticles</div>
-                    <div style="color: #94a3b8; font-size: 0.85rem;" data-text="mol-lnp-desc">LNP pour ARNm, siRNA</div>
-                </div>
-                <div class="molecule-card" onclick="selectMolecule('enzyme')">
-                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚙️</div>
-                    <div style="font-weight: bold; color: #f1f5f9;" data-text="mol-enzyme">Enzymes Industrielles</div>
-                    <div style="color: #94a3b8; font-size: 0.85rem;" data-text="mol-enzyme-desc">Biocatalyse, applications</div>
-                </div>
-                <div class="molecule-card" onclick="selectMolecule('plasmid')" id="mol-plasmid">
-                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧲</div>
-                    <div style="font-weight: bold; color: #f1f5f9;" data-text="mol-plasmid">ADN Plasmidique</div>
-                    <div style="color: #94a3b8; font-size: 0.85rem;" data-text="mol-plasmid-desc">Vecteurs d'expression, CRISPR</div>
-                </div>
-            </div>
-        </div>
-
         <div class="protocol-generator" id="protocolGenerator">
             <h3 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="protocol-gen-title">🤖 Générateur de Protocole IA</h3>
             
             <div class="input-group">
                 <label class="input-label" data-text="production-goal">Objectif de Production</label>
-                <input type="text" class="input-field" data-placeholder="production-goal-placeholder" placeholder="Ex: Production 10g anticorps anti-PD1 pour essais précliniques">
-            </div>
-
-            <div class="input-group">
-                <label class="input-label" data-text="production-system">Système de Production</label>
-                <select class="input-field" id="productionSystem">
-                    <option data-text="system-ecoli">E. coli (BL21, Rosetta)</option>
-                    <option data-text="system-cho">Cellules CHO (CHO-S, CHO-K1)</option>
-                    <option data-text="system-yeast">Levure (Pichia pastoris)</option>
-                    <option data-text="system-baculo">Baculovirus/Sf9</option>
-                    <option data-text="system-plant">Expression plante</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label" data-text="purification-method">Méthode de Purification</label>
-                <select class="input-field" id="purificationMethod">
-                    <option data-text="purif-chromato">Chromatographie multi-étapes (FPLC)</option>
-                    <option data-text="purif-filtration">Filtration et ultrafiltration</option>
-                    <option data-text="purif-precipitation">Précipitation sélective</option>
-                    <option data-text="purif-extraction">Extraction liquide-liquide</option>
-                    <option data-text="purif-crystallization">Cristallisation</option>
-                </select>
+                <input type="text" class="input-field" id="productionGoal" data-placeholder="production-goal-placeholder" placeholder="Ex: Production 10g anticorps anti-PD1 pour essais précliniques">
             </div>
 
             <div class="input-group">
                 <label class="input-label" data-text="constraints">Contraintes Spécifiques</label>
-                <textarea class="input-field textarea-field" data-placeholder="constraints-placeholder" placeholder="Budget, timeline, équipement disponible, contraintes réglementaires GMP..."></textarea>
+                <textarea class="input-field textarea-field" id="constraints" data-placeholder="constraints-placeholder" placeholder="Timeline, contraintes réglementaires GMP, préférences fournisseurs..."></textarea>
             </div>
 
-            <button class="action-btn" onclick="generateProtocol()" style="width: 100%; margin-top: 1rem;" data-text="generate-protocol">
-                🚀 Générer le Protocole
+            <button class="action-btn" onclick="generateAdvancedProtocol()" style="width: 100%; margin-top: 1rem;" data-text="generate-protocol">
+                🚀 Générer le Protocole Avancé
             </button>
 
             <div id="protocolOutput">
@@ -955,50 +1357,238 @@
         
         <div class="protocol-item">
             <div class="protocol-meta">
-                <span class="protocol-name">Production mAb anti-PD1 - Système CHO-S</span>
-                <span class="protocol-date">28 Août 2025</span>
+                <span class="protocol-name">mAb anti-PD1 - CHO-S + Recherche Cytiva</span>
+                <span class="protocol-date">19 Sept 2025</span>
             </div>
-            <p style="color: #94a3b8;">Fed-batch 14 jours • Protéine A + CEX + SEC • Rendement: 2.5 g/L</p>
+            <p style="color: #94a3b8;">Basé sur 12 articles PubMed + recommandations Cytiva ÄKTA • Rendement: 3.2 g/L</p>
         </div>
 
         <div class="protocol-item">
             <div class="protocol-meta">
-                <span class="protocol-name">Vecteur AAV sérotype 9 - HEK293T</span>
-                <span class="protocol-date">25 Août 2025</span>
+                <span class="protocol-name">AAV9 - Recherche Thermo Fisher</span>
+                <span class="protocol-date">18 Sept 2025</span>
             </div>
-            <p style="color: #94a3b8;">Triple transfection • Gradient iodixanol • Titre: 1×10¹³ vg/mL</p>
+            <p style="color: #94a3b8;">Triple transfection + purification iodixanol • Équipements Thermo • Titre: 2×10¹³ vg/mL</p>
         </div>
 
         <div class="protocol-item">
             <div class="protocol-meta">
-                <span class="protocol-name">Enzyme recombinante - E.coli optimisé</span>
-                <span class="protocol-date">22 Août 2025</span>
+                <span class="protocol-name">Protéine recombinante - E.coli + Sartorius</span>
+                <span class="protocol-date">17 Sept 2025</span>
             </div>
-            <p style="color: #94a3b8;">BL21(DE3) • His-tag • Activité: 2500 U/mg • Stabilité 6 mois</p>
+            <p style="color: #94a3b8;">BL21(DE3) + Sartorius Stedim • Protocole optimisé • Activité: 3200 U/mg</p>
         </div>
     </section>
 </div>
 
 <script>
-    // Variables globales avec questionnaire
+    // Variables globales avec fonctionnalités de recherche d'articles et filtres
     let currentState = {
         language: 'fr',
         documentOption: null,
         selectedMolecule: null,
         uploadedFiles: [],
         analyzedDocuments: [],
-        // NOUVEAU: Données du questionnaire avec concentrations
+        searchResults: [], 
+        foundArticles: [], // Articles trouvés
+        filteredArticles: [], // Articles après filtrage
+        selectedArticles: [], // Articles sélectionnés pour intégration
+        articleIntegrationConfirmed: false,
         projectData: {
             type: null,
-            concentration: null,  // MODIFIÉ: quantité → concentration
-            timeline: null,
+            moleculeType: null,
+            scale: null,
             budget: null,
             equipment: []
         },
-        questionnaireStep: 1
+        questionnaireStep: 1,
+        // NOUVEAU: États des filtres
+        filters: {
+            search: '',
+            sort: 'relevance',
+            source: 'all',
+            year: 'all',
+            relevance: 0
+        }
     };
 
-    // NOUVEAU: Traductions simples
+    // NOUVEAU: Recherche en temps réel avec debouncing
+    let searchTimeout;
+    function performRealtimeSearch(query) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            currentState.filters.search = query.toLowerCase();
+            applyAllFilters();
+        }, 300); // Attendre 300ms après la dernière saisie
+    }
+
+    // NOUVEAU: Application de tous les filtres
+    function applyAllFilters() {
+        let filtered = [...currentState.foundArticles];
+        
+        // Filtre recherche textuelle
+        if (currentState.filters.search) {
+            filtered = filtered.filter(article => 
+                article.title.toLowerCase().includes(currentState.filters.search) ||
+                article.authors.toLowerCase().includes(currentState.filters.search) ||
+                article.journal.toLowerCase().includes(currentState.filters.search) ||
+                (article.abstract && article.abstract.toLowerCase().includes(currentState.filters.search))
+            );
+        }
+        
+        // Filtre par source
+        if (currentState.filters.source !== 'all') {
+            filtered = filtered.filter(article => article.source === currentState.filters.source);
+        }
+        
+        // Filtre par année
+        if (currentState.filters.year !== 'all') {
+            if (currentState.filters.year === 'older') {
+                filtered = filtered.filter(article => new Date(article.date).getFullYear() < 2021);
+            } else {
+                filtered = filtered.filter(article => 
+                    new Date(article.date).getFullYear().toString() === currentState.filters.year
+                );
+            }
+        }
+        
+        // Filtre par pertinence
+        filtered = filtered.filter(article => article.relevance >= currentState.filters.relevance);
+        
+        // Tri
+        switch (currentState.filters.sort) {
+            case 'relevance':
+                filtered.sort((a, b) => b.relevance - a.relevance);
+                break;
+            case 'date':
+                filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+                break;
+            case 'date-old':
+                filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+                break;
+            case 'authors':
+                filtered.sort((a, b) => a.authors.localeCompare(b.authors));
+                break;
+        }
+        
+        currentState.filteredArticles = filtered;
+        displayFilteredArticles();
+    }
+
+    // NOUVEAU: Fonctions de filtrage individuel
+    function applySortFilter() {
+        currentState.filters.sort = document.getElementById('sortFilter').value;
+        applyAllFilters();
+    }
+
+    function applySourceFilter() {
+        currentState.filters.source = document.getElementById('sourceFilter').value;
+        applyAllFilters();
+    }
+
+    function applyYearFilter() {
+        currentState.filters.year = document.getElementById('yearFilter').value;
+        applyAllFilters();
+    }
+
+    function applyRelevanceFilter() {
+        currentState.filters.relevance = parseInt(document.getElementById('relevanceFilter').value);
+        applyAllFilters();
+    }
+
+    // NOUVEAU: Effacer tous les filtres
+    function clearAllFilters() {
+        currentState.filters = {
+            search: '',
+            sort: 'relevance',
+            source: 'all',
+            year: 'all',
+            relevance: 0
+        };
+        
+        document.getElementById('realtimeSearch').value = '';
+        document.getElementById('sortFilter').value = 'relevance';
+        document.getElementById('sourceFilter').value = 'all';
+        document.getElementById('yearFilter').value = 'all';
+        document.getElementById('relevanceFilter').value = '0';
+        
+        applyAllFilters();
+    }
+
+    // MODIFIÉ: Affichage des articles filtrés
+    function displayFilteredArticles() {
+        const container = document.getElementById('articlesContainer');
+        container.innerHTML = '';
+        
+        if (currentState.filteredArticles.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: #94a3b8;">
+                    <svg class="icon-svg" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.5,14H20.5L22,15.5V20.5L20.5,22H15.5L14,20.5V15.5L15.5,14M16,18V20H20V18H16M16,15H20V17H16V15M13.09,20H2V18H13.09C13.04,18.33 13,18.66 13,19C13,19.34 13.04,19.67 13.09,20M2,16V14H14.1C14.27,14.58 14.5,15.13 14.79,15.65L14.89,15.82L16.2,17.13C16.07,17.41 16,17.7 16,18H2M2,12V10H15C17.67,10 20.33,11.33 22,13.5C21.67,13.67 21.33,13.83 21,14H2M2,8V6H22V8H2M2,4V2H22V4H2Z"/>
+                    </svg>
+                    <p>Aucun article ne correspond aux critères de filtrage</p>
+                    <button class="filter-toggle" onclick="clearAllFilters()" style="margin-top: 1rem;">Effacer les filtres</button>
+                </div>
+            `;
+            return;
+        }
+        
+        currentState.filteredArticles.forEach(article => {
+            const articleElement = document.createElement('div');
+            articleElement.className = 'article-item selectable';
+            articleElement.dataset.articleId = article.id;
+            
+            const abstractText = article.abstract ? article.abstract.substring(0, 200) + '...' : 'Résumé non disponible';
+            
+            articleElement.innerHTML = `
+                <div class="article-title">${highlightSearchTerm(article.title)}</div>
+                <div class="article-authors">
+                    <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16,4C16.88,4 17.67,4.11 18.37,4.34C17.14,5.14 16.18,6.27 15.5,7.58C14.95,7.04 14.27,6.72 13.5,6.72C11.55,6.72 9.95,8.36 9.95,10.32C9.95,12.28 11.55,13.92 13.5,13.92C14.92,13.92 16.12,12.91 16.5,11.5H18C17.91,14.09 15.8,16.2 13.21,16.29C11.16,16.36 9.4,15.04 8.8,13.14C8.69,12.83 8.63,12.5 8.63,12.16C8.63,11.82 8.69,11.49 8.8,11.18C9.4,9.28 11.16,7.96 13.21,8.03C13.5,8.04 13.79,8.07 14.06,8.12C14.66,7.08 15.5,6.2 16.5,5.5C16.17,5.33 15.84,5.18 15.5,5.04C15,4.88 14.5,4.8 14,4.72C13.5,4.64 13,4.6 12.5,4.6C10.85,4.6 9.31,5.1 8,6C6.69,6.9 5.7,8.15 5.1,9.63C4.5,11.11 4.34,12.73 4.63,14.31C4.92,15.89 5.64,17.35 6.72,18.54C7.8,19.73 9.2,20.58 10.75,21C12.3,21.42 13.92,21.39 15.46,20.91C17,20.43 18.38,19.52 19.46,18.29C20.54,17.06 21.27,15.56 21.58,13.96C21.89,12.36 21.77,10.71 21.23,9.17C20.69,7.63 19.75,6.26 18.5,5.18C17.91,4.72 17.26,4.33 16.58,4.05C16.39,4 16.19,4 16,4M12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14Z"/>
+                    </svg>
+                    ${highlightSearchTerm(article.authors)}
+                </div>
+                <div class="article-meta">
+                    <span class="article-journal">
+                        <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M5,19V5H9V19H5M19,19H11V5H19V19Z"/>
+                        </svg>
+                        ${highlightSearchTerm(article.journal)}
+                    </span>
+                    <span class="article-date">
+                        <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z"/>
+                        </svg>
+                        ${formatDate(article.date)}
+                    </span>
+                    <span class="article-relevance">
+                        <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.46,13.97L5.82,21L12,17.27Z"/>
+                        </svg>
+                        ${article.relevance}%
+                    </span>
+                </div>
+                <div class="article-abstract">${highlightSearchTerm(abstractText)}</div>
+            `;
+            
+            // Ajouter gestionnaire de clic pour sélection
+            articleElement.addEventListener('click', function() {
+                toggleArticleSelection(article.id);
+            });
+            
+            container.appendChild(articleElement);
+        });
+    }
+
+    // NOUVEAU: Surligner les termes de recherche
+    function highlightSearchTerm(text) {
+        if (!currentState.filters.search) return text;
+        
+        const regex = new RegExp(`(${currentState.filters.search})`, 'gi');
+        return text.replace(regex, '<span style="background: rgba(74, 222, 128, 0.3); padding: 0.1rem 0.2rem; border-radius: 3px;">$1</span>');
+    }
+
+    // Traductions avec nouvelles entrées
     const texts = {
         fr: {
             'nav-home': 'Accueil',
@@ -1007,75 +1597,56 @@
             'nav-training': 'Formation',
             'nav-contact': 'Contact',
             'hero-title': 'Protocoles Biotechnologiques',
-            'hero-subtitle': 'Créez des protocoles de production et purification de biomolécules pharmaceutiques grâce à l\'IA. Protéines, anticorps, vecteurs viraux - optimisés pour votre recherche.',
+            'hero-subtitle': 'Créez des protocoles de production et purification de biomolécules pharmaceutiques grâce à l\'IA et à la recherche automatique dans les bases de données scientifiques.',
             'start-now': 'Commencer Maintenant',
-            'feature1-title': 'Analyse d\'Articles Scientifiques',
-            'feature1-desc': 'Notre IA analyse automatiquement les dernières publications pour extraire les protocoles upstream/downstream et méthodologies pertinentes à votre biomolécule.',
+            'feature1-title': 'Recherche Articles Scientifiques',
+            'feature1-desc': 'Recherche intelligente dans PubMed, Nature, ScienceDirect et autres bases de données pour identifier les protocoles les plus récents et validés.',
             'feature2-title': 'Production de Biomolécules',
             'feature2-desc': 'Protocoles spécialisés pour protéines recombinantes, anticorps, vecteurs viraux, VLP et LNP. De E.coli aux cellules mammaliennes.',
-            'feature3-title': 'Upstream & Downstream',
-            'feature3-desc': 'Workflow complet de la fermentation à la formulation finale. Chromatographie, filtration, concentration - protocoles détaillés.',
+            'feature3-title': 'Protocoles Basés sur Publications',
+            'feature3-desc': 'Recommandations basées sur les dernières publications scientifiques et validées par la communauté recherche.',
             'explore': 'Explorer',
             'generate': 'Générer',
             'browse': 'Parcourir',
-            'stat1': 'Articles Biotech Analysés',
+            'stat1': 'Articles Scientifiques Analysés',
             'stat2': 'Protocoles Générés',
-            'stat3': 'Pharma Partenaires',
+            'stat3': 'Bases de Données Intégrées',
             'stat4': '% Satisfaction',
             'workspace-title': 'Espace de Création',
             'new-project': 'Nouveau Projet',
-            'doc-choice-title': '📚 Documents de Référence',
-            'doc-choice-desc': 'Avez-vous des documents à analyser ou souhaitez-vous une recherche automatique ?',
-            'choice-upload': '📄 J\'ai des Documents',
-            'choice-upload-sub': 'Articles, protocoles existants',
+            'doc-choice-title': '📚 Sources de Données',
+            'doc-choice-desc': 'Choisissez vos sources de données pour créer le protocole optimal',
+            'choice-upload': '📄 Documents Existants',
+            'choice-upload-sub': 'Articles, protocoles que vous possédez',
             'choice-search': '🔍 Recherche Automatique',
-            'choice-search-sub': 'L\'IA trouve les références',
+            'choice-search-sub': 'Bases de données scientifiques',
+            'choice-hybrid': '🔗 Approche Hybride',
+            'choice-hybrid-sub': 'Documents + Recherche auto',
+            'search-confirmation-title': '📚 Recherche d\'Articles Scientifiques',
+            'search-confirmation-desc': 'Souhaitez-vous que je recherche dans les bases de données en ligne des articles contenant des informations pertinentes pour votre demande ?',
+            'yes-search': '✅ Oui, rechercher des articles',
+            'no-search': '❌ Non, passer cette étape',
+            'auto-search-title': '🔍 Recherche dans les Bases de Données',
+            'auto-search-desc': 'Recherche en cours dans PubMed et autres bases de données scientifiques',
+            'articles-found-title': '📊 Articles Trouvés',
+            'articles-found-desc': 'Voici les articles pertinents trouvés dans les bases de données :',
+            'integrate-articles': '📝 Intégrer ces articles dans mon protocole',
+            'skip-integration': '⏭️ Continuer sans intégration',
+            'search-progress': '🔍 Recherche en cours...',
+            'search-init': 'Initialisation de la recherche...',
             'upload-title': 'Cliquez pour sélectionner vos fichiers PDF',
             'upload-subtitle': 'ou glissez-déposez ici',
             'upload-formats': 'Formats supportés: PDF • Taille max: 10MB par fichier',
             'files-analyzed': '📄 Fichiers Analysés:',
             'analysis-progress': '🤖 Analyse en cours...',
             'analysis-init': 'Initialisation...',
-            'molecule-title': '🧬 Type de Biomolécule',
-            'mol-protein': 'Protéines Recombinantes',
-            'mol-protein-desc': 'Enzymes, facteurs de croissance, cytokines',
-            'mol-antibody': 'Anticorps Monoclonaux',
-            'mol-antibody-desc': 'mAbs thérapeutiques, fragments',
-            'mol-viral': 'Vecteurs Viraux',
-            'mol-viral-desc': 'AAV, lentivirus, thérapie génique',
-            'mol-vlp': 'Virus-Like Particles',
-            'mol-vlp-desc': 'VLP pour vaccins',
-            'mol-lnp': 'Lipid Nanoparticles',
-            'mol-lnp-desc': 'LNP pour ARNm, siRNA',
-            'mol-enzyme': 'Enzymes Industrielles',
-            'mol-enzyme-desc': 'Biocatalyse, applications',
-            'mol-plasmid': 'ADN Plasmidique',
-            'mol-plasmid-desc': 'Vecteurs d\'expression, CRISPR',
-            'protocol-gen-title': '🤖 Générateur de Protocole IA',
-            'production-goal': 'Objectif de Production',
-            'production-goal-placeholder': 'Ex: Production 10g anticorps anti-PD1 pour essais précliniques',
-            'production-system': 'Système de Production',
-            'system-ecoli': 'E. coli (BL21, Rosetta)',
-            'system-cho': 'Cellules CHO (CHO-S, CHO-K1)',
-            'system-yeast': 'Levure (Pichia pastoris)',
-            'system-baculo': 'Baculovirus/Sf9',
-            'system-plant': 'Expression plante',
-            'purification-method': 'Méthode de Purification',
-            'purif-chromato': 'Chromatographie multi-étapes (FPLC)',
-            'purif-filtration': 'Filtration et ultrafiltration',
-            'purif-precipitation': 'Précipitation sélective',
-            'purif-extraction': 'Extraction liquide-liquide',
-            'purif-crystallization': 'Cristallisation',
-            'constraints': 'Contraintes Spécifiques',
-            'constraints-placeholder': 'Budget, timeline, équipement disponible, contraintes réglementaires GMP...',
-            'generate-protocol': '🚀 Générer le Protocole',
-            'save-protocol': '💾 Sauvegarder',
-            'export-pdf': '📄 Télécharger PDF',
-            'recent-protocols': '📚 Protocoles Récents',
-            // NOUVEAU: Traductions questionnaire
             'questionnaire-title': '🎯 Questionnaire Projet',
-            'questionnaire-desc': 'Quelques questions pour personnaliser votre protocole et optimiser les recommandations',
+            'questionnaire-desc': 'Quelques questions pour personnaliser votre protocole et optimiser la recherche',
             'step1-title': '1. Quel est le type de votre projet ?',
+            'step2-title': '2. Quelle biomolécule souhaitez-vous produire ?',
+            'step3-title': '3. Quelle échelle de production visez-vous ?',
+            'step4-title': '4. Quel est votre budget approximatif ?',
+            'step5-title': '5. De quels équipements disposez-vous ?',
             'project-research': 'Recherche Académique',
             'project-research-desc': 'Publications, études fondamentales',
             'project-preclinical': 'Développement Préclinique',
@@ -1084,46 +1655,33 @@
             'project-clinical-desc': 'Phases I/II/III',
             'project-commercial': 'Production Commerciale',
             'project-commercial-desc': 'Manufacturing, distribution',
-            'step2-title': '2. Quelle concentration cible visez-vous ?',
-            'concentration-low': 'Recherche',
-            'concentration-low-desc': '0.1-10 mg/mL | 10^8-10^11 vp/mL',
-            'concentration-medium': 'Production Pilote',
-            'concentration-medium-desc': '1-50 mg/mL | 10^11-10^12 vp/mL',
-            'concentration-high': 'Production Thérapeutique',
-            'concentration-high-desc': '10-150 mg/mL | 10^12-10^13 vp/mL',
-            'concentration-industrial': 'Production Industrielle',
-            'concentration-industrial-desc': '> 100 mg/mL | > 10^13 vp/mL',
-            'step3-title': '3. Dans quel délai souhaitez-vous obtenir votre produit ?',
-            'timeline-urgent': '< 2 semaines',
-            'timeline-urgent-desc': 'Urgent',
-            'timeline-normal': '2-8 semaines',
-            'timeline-normal-desc': 'Standard',
-            'timeline-flexible': '2-6 mois',
-            'timeline-flexible-desc': 'Flexible',
-            'timeline-long': '> 6 mois',
-            'timeline-long-desc': 'Long terme',
-            'step4-title': '4. Quel est votre budget approximatif ?',
+            'mol-protein': 'Protéines Recombinantes',
+            'mol-antibody': 'Anticorps Monoclonaux',
+            'mol-viral': 'Vecteurs Viraux',
+            'mol-vlp': 'Virus-Like Particles',
+            'scale-research': 'Recherche (mg)',
+            'scale-pilot': 'Pilote (g)',
+            'scale-production': 'Production (kg)',
             'budget-low': '< €10k',
-            'budget-low-desc': 'Budget serré',
             'budget-medium': '€10k - €50k',
-            'budget-medium-desc': 'Budget modéré',
             'budget-high': '€50k - €200k',
-            'budget-high-desc': 'Budget confortable',
             'budget-unlimited': '> €200k',
-            'budget-unlimited-desc': 'Budget flexible',
-            'step5-title': '5. De quels équipements disposez-vous ?',
             'equipment-basic': 'Équipement de base',
-            'equipment-basic-desc': 'Centrifugeuse, incubateurs',
             'equipment-intermediate': 'FPLC/Chromatographie',
-            'equipment-intermediate-desc': 'Purification avancée',
             'equipment-bioreactor': 'Bioréacteurs',
-            'equipment-bioreactor-desc': 'Culture à grande échelle',
             'equipment-analytical': 'Analytique avancé',
-            'equipment-analytical-desc': 'LC-MS, HPLC, etc.',
             'equipment-none': 'Pas d\'équipement',
-            'equipment-none-desc': 'Externalisation requise',
             'finish-questionnaire': 'Terminer le Questionnaire →',
-            'progress-text': 'Étape <span id="currentStep">1</span> sur 5'
+            'progress-text': 'Étape <span id="currentStep">1</span> sur 5',
+            'protocol-gen-title': '🤖 Générateur de Protocole IA',
+            'production-goal': 'Objectif de Production',
+            'production-goal-placeholder': 'Ex: Production 10g anticorps anti-PD1 pour essais précliniques',
+            'constraints': 'Contraintes Spécifiques',
+            'constraints-placeholder': 'Timeline, contraintes réglementaires GMP, préférences fournisseurs...',
+            'generate-protocol': '🚀 Générer le Protocole Avancé',
+            'save-protocol': '💾 Sauvegarder',
+            'export-pdf': '📄 Télécharger PDF',
+            'recent-protocols': '📚 Protocoles Récents'
         },
         en: {
             'nav-home': 'Home',
@@ -1132,75 +1690,56 @@
             'nav-training': 'Training',
             'nav-contact': 'Contact',
             'hero-title': 'Biotechnology Protocols',
-            'hero-subtitle': 'Create production and purification protocols for pharmaceutical biomolecules using AI. Proteins, antibodies, viral vectors - optimized for your research.',
+            'hero-subtitle': 'Create production and purification protocols for pharmaceutical biomolecules using AI and automatic search in scientific databases.',
             'start-now': 'Start Now',
-            'feature1-title': 'Scientific Article Analysis',
-            'feature1-desc': 'Our AI automatically analyzes the latest publications to extract upstream/downstream protocols and methodologies relevant to your biomolecule.',
+            'feature1-title': 'Scientific Article Search',
+            'feature1-desc': 'Intelligent search in PubMed, Nature, ScienceDirect and other databases to identify the most recent and validated protocols.',
             'feature2-title': 'Biomolecule Production',
             'feature2-desc': 'Specialized protocols for recombinant proteins, antibodies, viral vectors, VLPs and LNPs. From E.coli to mammalian cells.',
-            'feature3-title': 'Upstream & Downstream',
-            'feature3-desc': 'Complete workflow from fermentation to final formulation. Chromatography, filtration, concentration - detailed protocols.',
+            'feature3-title': 'Publication-Based Protocols',
+            'feature3-desc': 'Recommendations based on latest scientific publications and validated by the research community.',
             'explore': 'Explore',
             'generate': 'Generate',
             'browse': 'Browse',
-            'stat1': 'Biotech Articles Analyzed',
+            'stat1': 'Scientific Articles Analyzed',
             'stat2': 'Protocols Generated',
-            'stat3': 'Pharma Partners',
+            'stat3': 'Databases Integrated',
             'stat4': '% Satisfaction',
             'workspace-title': 'Creation Workspace',
             'new-project': 'New Project',
-            'doc-choice-title': '📚 Reference Documents',
-            'doc-choice-desc': 'Do you have documents to analyze or would you like automatic search?',
-            'choice-upload': '📄 I Have Documents',
-            'choice-upload-sub': 'Articles, existing protocols',
+            'doc-choice-title': '📚 Data Sources',
+            'doc-choice-desc': 'Choose your data sources to create the optimal protocol',
+            'choice-upload': '📄 Existing Documents',
+            'choice-upload-sub': 'Articles, protocols you own',
             'choice-search': '🔍 Automatic Search',
-            'choice-search-sub': 'AI finds references',
+            'choice-search-sub': 'Scientific databases',
+            'choice-hybrid': '🔗 Hybrid Approach',
+            'choice-hybrid-sub': 'Documents + Auto search',
+            'search-confirmation-title': '📚 Scientific Article Search',
+            'search-confirmation-desc': 'Would you like me to search online databases for articles containing information relevant to your request?',
+            'yes-search': '✅ Yes, search for articles',
+            'no-search': '❌ No, skip this step',
+            'auto-search-title': '🔍 Database Search',
+            'auto-search-desc': 'Searching PubMed and other scientific databases',
+            'articles-found-title': '📊 Articles Found',
+            'articles-found-desc': 'Here are the relevant articles found in the databases:',
+            'integrate-articles': '📝 Integrate these articles into my protocol',
+            'skip-integration': '⏭️ Continue without integration',
+            'search-progress': '🔍 Search in progress...',
+            'search-init': 'Search initialization...',
             'upload-title': 'Click to select your PDF files',
             'upload-subtitle': 'or drag and drop here',
             'upload-formats': 'Supported formats: PDF • Max size: 10MB per file',
             'files-analyzed': '📄 Files Analyzed:',
             'analysis-progress': '🤖 Analysis in progress...',
             'analysis-init': 'Initialization...',
-            'molecule-title': '🧬 Biomolecule Type',
-            'mol-protein': 'Recombinant Proteins',
-            'mol-protein-desc': 'Enzymes, growth factors, cytokines',
-            'mol-antibody': 'Monoclonal Antibodies',
-            'mol-antibody-desc': 'Therapeutic mAbs, fragments',
-            'mol-viral': 'Viral Vectors',
-            'mol-viral-desc': 'AAV, lentivirus, gene therapy',
-            'mol-vlp': 'Virus-Like Particles',
-            'mol-vlp-desc': 'VLPs for vaccines',
-            'mol-lnp': 'Lipid Nanoparticles',
-            'mol-lnp-desc': 'LNPs for mRNA, siRNA',
-            'mol-enzyme': 'Industrial Enzymes',
-            'mol-enzyme-desc': 'Biocatalysis, applications',
-            'mol-plasmid': 'Plasmid DNA',
-            'mol-plasmid-desc': 'Expression vectors, CRISPR',
-            'protocol-gen-title': '🤖 AI Protocol Generator',
-            'production-goal': 'Production Goal',
-            'production-goal-placeholder': 'Ex: Produce 10g anti-PD1 antibody for preclinical trials',
-            'production-system': 'Production System',
-            'system-ecoli': 'E. coli (BL21, Rosetta)',
-            'system-cho': 'CHO Cells (CHO-S, CHO-K1)',
-            'system-yeast': 'Yeast (Pichia pastoris)',
-            'system-baculo': 'Baculovirus/Sf9',
-            'system-plant': 'Plant expression',
-            'purification-method': 'Purification Method',
-            'purif-chromato': 'Multi-step chromatography (FPLC)',
-            'purif-filtration': 'Filtration and ultrafiltration',
-            'purif-precipitation': 'Selective precipitation',
-            'purif-extraction': 'Liquid-liquid extraction',
-            'purif-crystallization': 'Crystallization',
-            'constraints': 'Specific Constraints',
-            'constraints-placeholder': 'Budget, timeline, available equipment, GMP regulatory constraints...',
-            'generate-protocol': '🚀 Generate Protocol',
-            'save-protocol': '💾 Save',
-            'export-pdf': '📄 Download PDF',
-            'recent-protocols': '📚 Recent Protocols',
-            // NOUVEAU: Traductions questionnaire anglais
             'questionnaire-title': '🎯 Project Questionnaire',
-            'questionnaire-desc': 'A few questions to personalize your protocol and optimize recommendations',
+            'questionnaire-desc': 'A few questions to personalize your protocol and optimize search',
             'step1-title': '1. What type of project is this?',
+            'step2-title': '2. Which biomolecule do you want to produce?',
+            'step3-title': '3. What production scale are you targeting?',
+            'step4-title': '4. What is your approximate budget?',
+            'step5-title': '5. What equipment do you have access to?',
             'project-research': 'Academic Research',
             'project-research-desc': 'Publications, fundamental studies',
             'project-preclinical': 'Preclinical Development',
@@ -1209,85 +1748,71 @@
             'project-clinical-desc': 'Phase I/II/III',
             'project-commercial': 'Commercial Production',
             'project-commercial-desc': 'Manufacturing, distribution',
-            'step2-title': '2. What is your target concentration?',
-            'concentration-low': 'Research',
-            'concentration-low-desc': '0.1-10 mg/mL | 10^8-10^11 vp/mL',
-            'concentration-medium': 'Pilot Production',
-            'concentration-medium-desc': '1-50 mg/mL | 10^11-10^12 vp/mL',
-            'concentration-high': 'Therapeutic Production',
-            'concentration-high-desc': '10-150 mg/mL | 10^12-10^13 vp/mL',
-            'concentration-industrial': 'Industrial Production',
-            'concentration-industrial-desc': '> 100 mg/mL | > 10^13 vp/mL',
-            'step3-title': '3. What is your desired timeline?',
-            'timeline-urgent': '< 2 weeks',
-            'timeline-urgent-desc': 'Urgent',
-            'timeline-normal': '2-8 weeks',
-            'timeline-normal-desc': 'Standard',
-            'timeline-flexible': '2-6 months',
-            'timeline-flexible-desc': 'Flexible',
-            'timeline-long': '> 6 months',
-            'timeline-long-desc': 'Long term',
-            'step4-title': '4. What is your approximate budget?',
+            'mol-protein': 'Recombinant Proteins',
+            'mol-antibody': 'Monoclonal Antibodies',
+            'mol-viral': 'Viral Vectors',
+            'mol-vlp': 'Virus-Like Particles',
+            'scale-research': 'Research (mg)',
+            'scale-pilot': 'Pilot (g)',
+            'scale-production': 'Production (kg)',
             'budget-low': '< €10k',
-            'budget-low-desc': 'Tight budget',
             'budget-medium': '€10k - €50k',
-            'budget-medium-desc': 'Moderate budget',
             'budget-high': '€50k - €200k',
-            'budget-high-desc': 'Comfortable budget',
             'budget-unlimited': '> €200k',
-            'budget-unlimited-desc': 'Flexible budget',
-            'step5-title': '5. What equipment do you have access to?',
             'equipment-basic': 'Basic Equipment',
-            'equipment-basic-desc': 'Centrifuge, incubators',
             'equipment-intermediate': 'FPLC/Chromatography',
-            'equipment-intermediate-desc': 'Advanced purification',
             'equipment-bioreactor': 'Bioreactors',
-            'equipment-bioreactor-desc': 'Large-scale culture',
             'equipment-analytical': 'Advanced Analytics',
-            'equipment-analytical-desc': 'LC-MS, HPLC, etc.',
             'equipment-none': 'No Equipment',
-            'equipment-none-desc': 'Outsourcing required',
             'finish-questionnaire': 'Finish Questionnaire →',
-            'progress-text': 'Step <span id="currentStep">1</span> of 5'
+            'progress-text': 'Step <span id="currentStep">1</span> of 5',
+            'protocol-gen-title': '🤖 AI Protocol Generator',
+            'production-goal': 'Production Goal',
+            'production-goal-placeholder': 'Ex: Produce 10g anti-PD1 antibody for preclinical trials',
+            'constraints': 'Specific Constraints',
+            'constraints-placeholder': 'Timeline, GMP regulatory constraints, supplier preferences...',
+            'generate-protocol': '🚀 Generate Advanced Protocol',
+            'save-protocol': '💾 Save',
+            'export-pdf': '📄 Download PDF',
+            'recent-protocols': '📚 Recent Protocols'
         }
     };
 
-    // NOUVEAU: Fonction de changement de langue
+    // Configuration PDF.js
+    if (typeof pdfjsLib !== 'undefined') {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    // Fonction de changement de langue
     function switchLanguage(lang) {
         currentState.language = lang;
         
-        // Mettre à jour les boutons de langue
         document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
         
-        // Mettre à jour tous les textes
         updateTexts();
     }
 
-    // NOUVEAU: Fonction de mise à jour des textes
     function updateTexts() {
         const lang = currentState.language;
         
-        // Mettre à jour les éléments avec data-text
         document.querySelectorAll('[data-text]').forEach(element => {
             const key = element.getAttribute('data-text');
             if (texts[lang] && texts[lang][key]) {
-                element.textContent = texts[lang][key];
+                if (key === 'progress-text') {
+                    element.innerHTML = texts[lang][key];
+                } else {
+                    element.textContent = texts[lang][key];
+                }
             }
         });
         
-        // Mettre à jour les placeholders
         document.querySelectorAll('[data-placeholder]').forEach(element => {
             const key = element.getAttribute('data-placeholder');
             if (texts[lang] && texts[lang][key]) {
                 element.placeholder = texts[lang][key];
             }
         });
-    }
-
-    // Configuration PDF.js
-    if (typeof pdfjsLib !== 'undefined') {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
     // Créer des particules flottantes
@@ -1306,18 +1831,16 @@
         }
     }
 
-    // Navigation
     function scrollToWorkspace() {
         document.getElementById('workspace').scrollIntoView({ 
             behavior: 'smooth' 
         });
     }
 
-    // Workflow
+    // NOUVEAU: Workflow de sélection des sources avec confirmation recherche
     function selectDocumentOption(option) {
         currentState.documentOption = option;
         
-        // Mise à jour visuelle
         document.querySelectorAll('.choice-btn').forEach(btn => btn.classList.remove('selected'));
         event.target.classList.add('selected');
         
@@ -1326,31 +1849,575 @@
             setTimeout(() => {
                 document.getElementById('uploadZone').scrollIntoView({ behavior: 'smooth' });
             }, 300);
+        } else if (option === 'search') {
+            document.getElementById('autoSearchSection').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('autoSearchSection').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        } else if (option === 'hybrid') {
+            document.getElementById('uploadZone').style.display = 'block';
+            document.getElementById('autoSearchSection').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('uploadZone').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+    }
+
+    // NOUVEAU: Confirmation de recherche d'articles
+    function confirmArticleSearch(wantSearch) {
+        if (wantSearch) {
+            // L'utilisateur veut rechercher des articles
+            document.getElementById('autoSearchSection').style.display = 'none';
+            document.getElementById('articleSearchSection').style.display = 'block';
+            document.getElementById('articleSearchSection').scrollIntoView({ behavior: 'smooth' });
+            
+            // Lancer automatiquement la recherche
+            setTimeout(() => {
+                startArticleSearch();
+            }, 1000);
         } else {
-            // MODIFIÉ: Aller au questionnaire au lieu de directement aux molécules
+            // L'utilisateur ne veut pas de recherche, passer au questionnaire
+            document.getElementById('autoSearchSection').style.display = 'none';
+            document.getElementById('projectQuestionnaire').style.display = 'block';
+            document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // NOUVEAU: Recherche d'articles scientifiques
+    async function startArticleSearch() {
+        const progressDiv = document.getElementById('searchProgress');
+        const progressBar = document.getElementById('searchProgressBar');
+        const progressText = document.getElementById('searchProgressText');
+        
+        progressDiv.style.display = 'block';
+        
+        const sources = ['pubmed', 'nature', 'sciencedirect', 'biotechforum'];
+        currentState.foundArticles = [];
+        
+        try {
+            for (let i = 0; i < sources.length; i++) {
+                const source = sources[i];
+                const progress = ((i + 1) / sources.length) * 100;
+                
+                // Mettre à jour l'interface
+                progressBar.style.width = `${progress}%`;
+                
+                const searchingText = currentState.language === 'fr' ? 
+                    `Recherche sur ${getSourceName(source)}... (${i + 1}/${sources.length})` :
+                    `Searching ${getSourceName(source)}... (${i + 1}/${sources.length})`;
+                progressText.textContent = searchingText;
+                
+                // Marquer la source comme active
+                document.querySelectorAll('.search-source').forEach(s => s.classList.remove('active'));
+                document.querySelector(`[data-source="${source}"]`).classList.add('active');
+                
+                // Simuler la recherche d'articles
+                const articles = await searchArticles(source);
+                currentState.foundArticles.push(...articles);
+                
+                // Marquer comme terminé
+                document.querySelector(`[data-source="${source}"]`).classList.remove('active');
+                document.querySelector(`[data-source="${source}"]`).classList.add('completed');
+                
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            }
+            
+            // Afficher les articles trouvés
+            displayFoundArticles();
+            document.getElementById('articlesFoundSection').style.display = 'block';
+            document.getElementById('articleSearchSection').style.display = 'none';
+            progressDiv.style.display = 'none';
+            
+            document.getElementById('articlesFoundSection').scrollIntoView({ behavior: 'smooth' });
+            
+            const completedText = currentState.language === 'fr' ? 
+                `📚 Recherche terminée! ${currentState.foundArticles.length} articles trouvés` :
+                `📚 Search completed! ${currentState.foundArticles.length} articles found`;
+            alert(completedText);
+            
+        } catch (error) {
+            console.error('Erreur recherche articles:', error);
+            const errorText = currentState.language === 'fr' ? 
+                '❌ Erreur lors de la recherche d\'articles' : '❌ Article search error';
+            progressText.textContent = errorText;
+        }
+    }
+
+    // NOUVEAU: Recherche d'articles par source (simulation) avec nouveaux fournisseurs
+    async function searchArticles(source) {
+        // Dans une vraie implémentation, ici on ferait des appels API réels
+        const mockArticles = {
+            'pubmed': [
+                {
+                    id: 'pm1',
+                    title: 'High-yield production of monoclonal antibodies in CHO cells using optimized fed-batch culture',
+                    authors: 'Smith J.A., Johnson K.L., Williams M.R.',
+                    journal: 'Biotechnology and Bioengineering',
+                    date: '2024-08-15',
+                    pmid: '38456789',
+                    abstract: 'We developed an optimized fed-batch culture system for CHO cells that increased mAb production by 40% compared to standard batch culture. The protocol involves controlled glucose feeding and pH monitoring.',
+                    relevance: 95,
+                    source: 'PubMed'
+                },
+                {
+                    id: 'pm2',
+                    title: 'Downstream processing optimization for recombinant protein purification using multi-column chromatography',
+                    authors: 'Brown A.B., Davis C.D., Miller E.F.',
+                    journal: 'Journal of Chromatography B',
+                    date: '2024-07-22',
+                    pmid: '38445123',
+                    abstract: 'A systematic approach to optimize downstream processing using protein A capture followed by cation exchange and size exclusion chromatography. Achieved 99% purity with 85% recovery.',
+                    relevance: 92,
+                    source: 'PubMed'
+                },
+                {
+                    id: 'pm3',
+                    title: 'Viral vector production in HEK293 cells: Scale-up strategies and quality considerations',
+                    authors: 'Garcia L.M., Thompson R.S., Anderson P.K.',
+                    journal: 'Gene Therapy',
+                    date: '2024-06-10',
+                    pmid: '38423456',
+                    abstract: 'Comprehensive study on scaling AAV production from laboratory to pilot scale using suspension HEK293 cells. Includes protocols for transfection, harvest, and purification.',
+                    relevance: 88,
+                    source: 'PubMed'
+                }
+            ],
+            'nature': [
+                {
+                    id: 'nat1',
+                    title: 'Advanced bioprocessing techniques for next-generation therapeutics',
+                    authors: 'Kumar S., Zhang W., O\'Connor M.',
+                    journal: 'Nature Biotechnology',
+                    date: '2024-09-05',
+                    abstract: 'Review of cutting-edge bioprocessing methods including continuous manufacturing and real-time analytics for biopharmaceutical production.',
+                    relevance: 87,
+                    source: 'Nature'
+                }
+            ],
+            'sciencedirect': [
+                {
+                    id: 'sd1',
+                    title: 'Process analytical technology (PAT) implementation in biopharmaceutical manufacturing',
+                    authors: 'Rodriguez M.A., Kim H.J., Patel N.K.',
+                    journal: 'Biotechnology Advances',
+                    date: '2024-08-30',
+                    abstract: 'Implementation guide for PAT tools in bioprocessing including NIR spectroscopy, HPLC monitoring, and real-time release testing.',
+                    relevance: 83,
+                    source: 'ScienceDirect'
+                }
+            ],
+            'merck': [
+                {
+                    id: 'mer1',
+                    title: 'EMPROVE Expert Buffer Solutions for Biopharmaceutical Applications',
+                    authors: 'Merck Technical Team',
+                    journal: 'Merck Application Note',
+                    date: '2024-09-12',
+                    abstract: 'Comprehensive guide to buffer optimization for protein purification using Merck EMPROVE solutions. Includes pH stability data and ionic strength considerations.',
+                    relevance: 85,
+                    source: 'Merck'
+                },
+                {
+                    id: 'mer2',
+                    title: 'Single-use bioreactor systems: Performance comparison study',
+                    authors: 'Weber K.M., Schultz H.P.',
+                    journal: 'Merck Bioprocessing',
+                    date: '2024-07-18',
+                    abstract: 'Evaluation of single-use bioreactor performance for CHO cell culture with focus on mass transfer and mixing characteristics.',
+                    relevance: 82,
+                    source: 'Merck'
+                }
+            ],
+            'biorad': [
+                {
+                    id: 'br1',
+                    title: 'CHO HCP ELISA Kit: Improved detection sensitivity for host cell proteins',
+                    authors: 'Bio-Rad Research Team',
+                    journal: 'Bio-Rad Technical Bulletin',
+                    date: '2024-08-25',
+                    abstract: 'New ELISA kit provides enhanced sensitivity for detecting CHO host cell proteins in purified mAb samples. Includes validation data and protocol optimization.',
+                    relevance: 79,
+                    source: 'Bio-Rad'
+                },
+                {
+                    id: 'br2',
+                    title: 'NGC Scout System: Automated method development for protein purification',
+                    authors: 'Johnson P.R., Martinez L.C.',
+                    journal: 'Bio-Rad Application Guide',
+                    date: '2024-06-30',
+                    abstract: 'Automated screening approach for chromatographic method development using NGC Scout system. Reduces development time by 60%.',
+                    relevance: 81,
+                    source: 'Bio-Rad'
+                }
+            ],
+            'pall': [
+                {
+                    id: 'pal1',
+                    title: 'Allegro STR Single-Use Bioreactor: Performance validation for mAb production',
+                    authors: 'Chen R.W., Davies M.K.',
+                    journal: 'Pall Biotech Application Note',
+                    date: '2024-09-08',
+                    abstract: 'Validation study of Allegro STR bioreactor for monoclonal antibody production. Demonstrates equivalent performance to stainless steel systems.',
+                    relevance: 86,
+                    source: 'Pall'
+                },
+                {
+                    id: 'pal2',
+                    title: 'Ultrafiltration membrane selection guide for protein concentration',
+                    authors: 'Pall Filtration Experts',
+                    journal: 'Pall Technical Report',
+                    date: '2024-07-14',
+                    abstract: 'Comprehensive guide for selecting optimal ultrafiltration membranes based on protein characteristics and process requirements.',
+                    relevance: 78,
+                    source: 'Pall'
+                }
+            ]
+        };
+        
+        return mockArticles[source] || [];
+    }
+
+    // MODIFIÉ: Affichage des articles trouvés avec filtres
+    function displayFoundArticles() {
+        currentState.filteredArticles = [...currentState.foundArticles];
+        displayFilteredArticles();
+        
+        // Afficher les filtres
+        document.getElementById('articleFilters').style.display = 'block';
+    }
+
+    // MODIFIÉ: Recherche d'articles scientifiques avec nouveaux fournisseurs
+    async function startArticleSearch() {
+        const progressDiv = document.getElementById('searchProgress');
+        const progressBar = document.getElementById('searchProgressBar');
+        const progressText = document.getElementById('searchProgressText');
+        
+        progressDiv.style.display = 'block';
+        
+        const sources = ['pubmed', 'nature', 'sciencedirect', 'merck', 'biorad', 'pall'];
+        currentState.foundArticles = [];
+        
+        try {
+            for (let i = 0; i < sources.length; i++) {
+                const source = sources[i];
+                const progress = ((i + 1) / sources.length) * 100;
+                
+                // Mettre à jour l'interface
+                progressBar.style.width = `${progress}%`;
+                
+                const searchingText = currentState.language === 'fr' ? 
+                    `Recherche sur ${getSourceName(source)}... (${i + 1}/${sources.length})` :
+                    `Searching ${getSourceName(source)}... (${i + 1}/${sources.length})`;
+                progressText.textContent = searchingText;
+                
+                // Marquer la source comme active
+                document.querySelectorAll('.search-source').forEach(s => s.classList.remove('active'));
+                const sourceElement = document.querySelector(`[data-source="${source}"]`);
+                if (sourceElement) {
+                    sourceElement.classList.add('active');
+                }
+                
+                // Simuler la recherche d'articles
+                const articles = await searchArticles(source);
+                currentState.foundArticles.push(...articles);
+                
+                // Marquer comme terminé
+                if (sourceElement) {
+                    sourceElement.classList.remove('active');
+                    sourceElement.classList.add('completed');
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            }
+            
+            // Afficher les articles trouvés
+            displayFoundArticles();
+            document.getElementById('articlesFoundSection').style.display = 'block';
+            document.getElementById('articleSearchSection').style.display = 'none';
+            progressDiv.style.display = 'none';
+            
+            document.getElementById('articlesFoundSection').scrollIntoView({ behavior: 'smooth' });
+            
+            const completedText = currentState.language === 'fr' ? 
+                `🔬 Recherche terminée! ${currentState.foundArticles.length} articles trouvés` :
+                `🔬 Search completed! ${currentState.foundArticles.length} articles found`;
+            alert(completedText);
+            
+        } catch (error) {
+            console.error('Erreur recherche articles:', error);
+            const errorText = currentState.language === 'fr' ? 
+                'Erreur lors de la recherche d\'articles' : 'Article search error';
+            progressText.textContent = errorText;
+        }
+    }
+
+    function getSourceName(source) {
+        const names = {
+            'pubmed': 'PubMed',
+            'nature': 'Nature',
+            'sciencedirect': 'ScienceDirect',
+            'merck': 'Merck',
+            'biorad': 'Bio-Rad',
+            'pall': 'Pall Corporation'
+        };
+        return names[source] || source;
+    }
+
+    // NOUVEAU: Sélection/désélection d'articles
+    function toggleArticleSelection(articleId) {
+        const articleElement = document.querySelector(`[data-article-id="${articleId}"]`);
+        const isSelected = currentState.selectedArticles.includes(articleId);
+        
+        if (isSelected) {
+            // Désélectionner
+            currentState.selectedArticles = currentState.selectedArticles.filter(id => id !== articleId);
+            articleElement.classList.remove('selected');
+        } else {
+            // Sélectionner
+            currentState.selectedArticles.push(articleId);
+            articleElement.classList.add('selected');
+        }
+        
+        // Mettre à jour le bouton d'intégration
+        updateIntegrationButton();
+    }
+
+    // NOUVEAU: Mise à jour du bouton d'intégration
+    function updateIntegrationButton() {
+        const button = document.querySelector('[data-text="integrate-articles"]');
+        const selectedCount = currentState.selectedArticles.length;
+        
+        if (selectedCount > 0) {
+            const text = currentState.language === 'fr' ? 
+                `📝 Intégrer ${selectedCount} article(s) sélectionné(s)` :
+                `📝 Integrate ${selectedCount} selected article(s)`;
+            button.textContent = text;
+            button.style.opacity = '1';
+        } else {
+            const text = currentState.language === 'fr' ? 
+                '📝 Intégrer ces articles dans mon protocole' :
+                '📝 Integrate these articles into my protocol';
+            button.textContent = text;
+            button.style.opacity = '0.7';
+        }
+    }
+
+    // NOUVEAU: Confirmation d'intégration des articles
+    function confirmArticleIntegration() {
+        if (currentState.selectedArticles.length === 0) {
+            // Sélectionner automatiquement les 3 premiers articles si aucun n'est sélectionné
+            currentState.selectedArticles = currentState.foundArticles.slice(0, 3).map(a => a.id);
+        }
+        
+        currentState.articleIntegrationConfirmed = true;
+        
+        // Aller au questionnaire
+        document.getElementById('articlesFoundSection').style.display = 'none';
+        document.getElementById('projectQuestionnaire').style.display = 'block';
+        document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
+        
+        const selectedCount = currentState.selectedArticles.length;
+        const confirmMessage = currentState.language === 'fr' ? 
+            `✅ ${selectedCount} article(s) sélectionné(s) pour intégration dans le protocole !` :
+            `✅ ${selectedCount} article(s) selected for protocol integration!`;
+        alert(confirmMessage);
+    }
+
+    // NOUVEAU: Passer l'intégration d'articles
+    function skipArticleIntegration() {
+        currentState.articleIntegrationConfirmed = false;
+        currentState.selectedArticles = [];
+        
+        // Aller au questionnaire
+        document.getElementById('articlesFoundSection').style.display = 'none';
+        document.getElementById('projectQuestionnaire').style.display = 'block';
+        document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
+        
+        const skipMessage = currentState.language === 'fr' ? 
+            'Intégration d\'articles ignorée. Passage au questionnaire.' :
+            'Article integration skipped. Proceeding to questionnaire.';
+        alert(skipMessage);
+    }
+
+    // NOUVEAU: Formater les dates
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return currentState.language === 'fr' ? 
+            date.toLocaleDateString('fr-FR', options) :
+            date.toLocaleDateString('en-US', options);
+    }
+
+    // NOUVEAU: Recherche automatique intelligente
+    async function startAutoSearch() {
+        const startBtn = document.getElementById('startSearchBtn');
+        const progressDiv = document.getElementById('searchProgress');
+        const progressBar = document.getElementById('searchProgressBar');
+        const progressText = document.getElementById('searchProgressText');
+        const resultsDiv = document.getElementById('searchResults');
+        const resultsContainer = document.getElementById('resultsContainer');
+        
+        startBtn.disabled = true;
+        startBtn.textContent = currentState.language === 'fr' ? 'Recherche en cours...' : 'Searching...';
+        progressDiv.style.display = 'block';
+        
+        const sources = ['pubmed', 'cytiva', 'sartorius', 'thermofisher'];
+        currentState.searchResults = [];
+        
+        try {
+            for (let i = 0; i < sources.length; i++) {
+                const source = sources[i];
+                const progress = ((i + 1) / sources.length) * 100;
+                
+                // Mettre à jour l'interface
+                progressBar.style.width = `${progress}%`;
+                
+                const searchingText = currentState.language === 'fr' ? 
+                    `Recherche sur ${getSourceName(source)}... (${i + 1}/${sources.length})` :
+                    `Searching ${getSourceName(source)}... (${i + 1}/${sources.length})`;
+                progressText.textContent = searchingText;
+                
+                // Marquer la source comme active
+                document.querySelectorAll('.search-source').forEach(s => s.classList.remove('active'));
+                document.querySelector(`[data-source="${source}"]`).classList.add('active');
+                
+                // Simuler la recherche (ici on ferait une vraie recherche)
+                const results = await performSearch(source);
+                currentState.searchResults.push(...results);
+                
+                // Marquer comme terminé
+                document.querySelector(`[data-source="${source}"]`).classList.remove('active');
+                document.querySelector(`[data-source="${source}"]`).classList.add('completed');
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            
+            // Afficher les résultats
+            displaySearchResults();
+            resultsDiv.style.display = 'block';
+            progressDiv.style.display = 'none';
+            
+            // Passer au questionnaire
             setTimeout(() => {
                 document.getElementById('projectQuestionnaire').style.display = 'block';
                 document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
             }, 1000);
+            
+            const completedText = currentState.language === 'fr' ? 
+                `✅ Recherche terminée! ${currentState.searchResults.length} résultats trouvés` :
+                `✅ Search completed! ${currentState.searchResults.length} results found`;
+            alert(completedText);
+            
+        } catch (error) {
+            console.error('Erreur recherche:', error);
+            const errorText = currentState.language === 'fr' ? 
+                '❌ Erreur lors de la recherche' : '❌ Search error';
+            progressText.textContent = errorText;
         }
+        
+        startBtn.disabled = false;
+        startBtn.textContent = currentState.language === 'fr' ? 
+            '🚀 Lancer la Recherche Automatique' : '🚀 Start Automatic Search';
     }
 
-    // NOUVEAU: Fonctions du questionnaire
+    function getSourceName(source) {
+        const names = {
+            'pubmed': 'PubMed',
+            'cytiva': 'Cytiva',
+            'sartorius': 'Sartorius',
+            'thermofisher': 'Thermo Fisher'
+        };
+        return names[source] || source;
+    }
+
+    // NOUVEAU: Simulation de recherche (à remplacer par vraies API calls)
+    async function performSearch(source) {
+        // Ici on intégrerait les vraies APIs de recherche
+        const mockResults = {
+            'pubmed': [
+                {
+                    title: 'Optimized CHO cell culture for monoclonal antibody production',
+                    source: 'PubMed',
+                    summary: 'Fed-batch culture strategies yielding 3.5 g/L mAb with improved quality attributes.',
+                    url: 'https://pubmed.ncbi.nlm.nih.gov/example1',
+                    relevance: 95
+                },
+                {
+                    title: 'Downstream processing of recombinant proteins: Latest trends',
+                    source: 'PubMed', 
+                    summary: 'Multi-column chromatography approaches for enhanced purification efficiency.',
+                    url: 'https://pubmed.ncbi.nlm.nih.gov/example2',
+                    relevance: 88
+                }
+            ],
+            'cytiva': [
+                {
+                    title: 'ÄKTA pure 25M - Protein purification system',
+                    source: 'Cytiva',
+                    summary: 'Advanced FPLC system with fraction collection and real-time monitoring.',
+                    url: 'https://cytiva.com/products/akta-pure',
+                    relevance: 92
+                }
+            ],
+            'sartorius': [
+                {
+                    title: 'Ambr 250 high throughput bioreactor',
+                    source: 'Sartorius',
+                    summary: 'Parallel bioreactor system for cell culture optimization.',
+                    url: 'https://sartorius.com/products/ambr-250',
+                    relevance: 89
+                }
+            ],
+            'thermofisher': [
+                {
+                    title: 'Gibco CHO-S-SFM II Medium',
+                    source: 'Thermo Fisher',
+                    summary: 'Serum-free medium optimized for CHO cell growth and productivity.',
+                    url: 'https://thermofisher.com/cho-s-sfm-ii',
+                    relevance: 91
+                }
+            ]
+        };
+        
+        return mockResults[source] || [];
+    }
+
+    function displaySearchResults() {
+        const container = document.getElementById('resultsContainer');
+        container.innerHTML = '';
+        
+        // Trier par pertinence
+        const sortedResults = currentState.searchResults.sort((a, b) => b.relevance - a.relevance);
+        
+        sortedResults.forEach(result => {
+            const resultElement = document.createElement('div');
+            resultElement.className = 'result-item';
+            resultElement.innerHTML = `
+                <div class="result-title">${result.title}</div>
+                <div class="result-source">${result.source} • Pertinence: ${result.relevance}%</div>
+                <div class="result-summary">${result.summary}</div>
+            `;
+            container.appendChild(resultElement);
+        });
+    }
+
+    // Fonctions du questionnaire
     function selectProjectType(type) {
         currentState.projectData.type = type;
         selectOption('step1', type);
         nextStep();
     }
 
-    function selectConcentration(concentration) {
-        currentState.projectData.concentration = concentration;
-        selectOption('step2', concentration);
+    function selectMoleculeType(moleculeType) {
+        currentState.projectData.moleculeType = moleculeType;
+        currentState.selectedMolecule = moleculeType; // Pour compatibilité
+        selectOption('step2', moleculeType);
         nextStep();
     }
 
-    function selectTimeline(timeline) {
-        currentState.projectData.timeline = timeline;
-        selectOption('step3', timeline);
+    function selectScale(scale) {
+        currentState.projectData.scale = scale;
+        selectOption('step3', scale);
         nextStep();
     }
 
@@ -1362,49 +2429,39 @@
 
     function toggleEquipment(element, equipment) {
         if (equipment === 'none') {
-            // Si "Pas d'équipement" est sélectionné, désélectionner tout le reste
             currentState.projectData.equipment = ['none'];
             document.querySelectorAll('#step5 .question-option').forEach(btn => btn.classList.remove('selected'));
             element.classList.add('selected');
         } else {
-            // Retirer "none" si autre équipement sélectionné
             currentState.projectData.equipment = currentState.projectData.equipment.filter(eq => eq !== 'none');
             
             if (currentState.projectData.equipment.includes(equipment)) {
-                // Désélectionner
                 currentState.projectData.equipment = currentState.projectData.equipment.filter(eq => eq !== equipment);
                 element.classList.remove('selected');
             } else {
-                // Sélectionner
                 currentState.projectData.equipment.push(equipment);
                 element.classList.add('selected');
                 
-                // Retirer "none" des sélections visuelles
                 document.querySelector('#step5 .question-option[data-value="none"]').classList.remove('selected');
             }
         }
     }
 
     function selectOption(stepId, value) {
-        // Désélectionner toutes les options de cette étape
         document.querySelectorAll(`#${stepId} .question-option`).forEach(btn => {
             btn.classList.remove('selected');
         });
         
-        // Sélectionner l'option choisie
         document.querySelector(`#${stepId} .question-option[data-value="${value}"]`).classList.add('selected');
     }
 
     function nextStep() {
         if (currentState.questionnaireStep < 5) {
-            // Cacher l'étape actuelle
             document.getElementById(`step${currentState.questionnaireStep}`).style.display = 'none';
             
-            // Passer à l'étape suivante
             currentState.questionnaireStep++;
             document.getElementById(`step${currentState.questionnaireStep}`).style.display = 'block';
             
-            // Mettre à jour la progression
             updateProgress();
         }
     }
@@ -1416,107 +2473,14 @@
     }
 
     function finishQuestionnaire() {
-        // Analyser les réponses et générer des recommandations
-        analyzeProjectData();
-        
-        // Cacher le questionnaire et montrer la sélection de molécules
         document.getElementById('projectQuestionnaire').style.display = 'none';
-        document.getElementById('moleculeSelection').style.display = 'block';
-        document.getElementById('moleculeSelection').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('protocolGenerator').style.display = 'block';
+        document.getElementById('protocolGenerator').scrollIntoView({ behavior: 'smooth' });
         
-        // Message de confirmation avec insights
-        const insights = generateProjectInsights();
-        const message = currentState.language === 'fr' ? 
-            `✅ Questionnaire terminé !\n\n💡 Insights de votre projet :\n${insights}` :
-            `✅ Questionnaire completed!\n\n💡 Project insights:\n${insights}`;
-        alert(message);
-    }
-
-    function analyzeProjectData() {
-        const data = currentState.projectData;
-        
-        // Calculer le score de complexité
-        let complexityScore = 0;
-        
-        if (data.type === 'commercial') complexityScore += 3;
-        else if (data.type === 'clinical') complexityScore += 2;
-        else if (data.type === 'preclinical') complexityScore += 1;
-        
-        if (data.concentration === 'industrial') complexityScore += 3;
-        else if (data.concentration === 'high') complexityScore += 2;
-        else if (data.concentration === 'medium') complexityScore += 1;
-        
-        if (data.timeline === 'urgent') complexityScore += 2;
-        else if (data.timeline === 'normal') complexityScore += 1;
-        
-        if (data.budget === 'low') complexityScore += 2;
-        
-        if (data.equipment.includes('none')) complexityScore += 2;
-        
-        currentState.projectData.complexityScore = complexityScore;
-        currentState.projectData.complexity = complexityScore >= 6 ? 'high' : complexityScore >= 3 ? 'medium' : 'low';
-    }
-
-    function generateProjectInsights() {
-        const data = currentState.projectData;
-        const lang = currentState.language;
-        
-        let insights = [];
-        
-        // Insights basés sur le type de projet
-        if (data.type === 'research') {
-            insights.push(lang === 'fr' ? '• Focus sur la preuve de concept et la reproductibilité' : '• Focus on proof of concept and reproducibility');
-        } else if (data.type === 'commercial') {
-            insights.push(lang === 'fr' ? '• Contraintes GMP et scalabilité critiques' : '• GMP constraints and scalability critical');
-        }
-        
-        // Insights basés sur la concentration
-        if (data.concentration === 'low') {
-            insights.push(lang === 'fr' ? '• Protocoles laboratoire optimisés' : '• Laboratory-optimized protocols');
-        } else if (data.concentration === 'industrial') {
-            insights.push(lang === 'fr' ? '• Nécessité d\'équipements industriels' : '• Industrial equipment required');
-        }
-        
-        // Insights basés sur le délai
-        if (data.timeline === 'urgent') {
-            insights.push(lang === 'fr' ? '• Protocoles rapides et prêts-à-utiliser' : '• Fast, ready-to-use protocols');
-        }
-        
-        // Insights basés sur l'équipement
-        if (data.equipment.includes('none')) {
-            insights.push(lang === 'fr' ? '• Recommandations de prestataires externes' : '• External service provider recommendations');
-        }
-        
-        return insights.slice(0, 3).join('\n');
-    }
-
-    function selectMolecule(moleculeType) {
-        currentState.selectedMolecule = moleculeType;
-        
-        // Mise à jour visuelle
-        document.querySelectorAll('.molecule-card').forEach(card => card.classList.remove('selected'));
-        event.target.classList.add('selected');
-        
-        const moleculeNames = {
-            'protein': currentState.language === 'fr' ? 'Protéines Recombinantes' : 'Recombinant Proteins',
-            'antibody': currentState.language === 'fr' ? 'Anticorps Monoclonaux' : 'Monoclonal Antibodies', 
-            'viral': currentState.language === 'fr' ? 'Vecteurs Viraux' : 'Viral Vectors',
-            'vlp': 'Virus-Like Particles',
-            'lnp': 'Lipid Nanoparticles',
-            'enzyme': currentState.language === 'fr' ? 'Enzymes Industrielles' : 'Industrial Enzymes',
-            'plasmid': currentState.language === 'fr' ? 'ADN Plasmidique' : 'Plasmid DNA'
-        };
-        
-        setTimeout(() => {
-            document.getElementById('protocolGenerator').style.display = 'block';
-            document.getElementById('protocolGenerator').scrollIntoView({ behavior: 'smooth' });
-            
-            // Message dans la langue appropriée
-            const message = currentState.language === 'fr' ? 
-                `✅ ${moleculeNames[moleculeType]} sélectionné ! Vous pouvez maintenant générer votre protocole.` :
-                `✅ ${moleculeNames[moleculeType]} selected! You can now generate your protocol.`;
-            alert(message);
-        }, 500);
+        const completedText = currentState.language === 'fr' ? 
+            '✅ Questionnaire terminé! Vous pouvez maintenant générer votre protocole personnalisé.' :
+            '✅ Questionnaire completed! You can now generate your personalized protocol.';
+        alert(completedText);
     }
 
     // Gestion des fichiers (conservée de l'original)
@@ -1642,14 +2606,12 @@
             
             setTimeout(() => {
                 progressDiv.style.display = 'none';
-                // MODIFIÉ: Aller au questionnaire après l'upload
-                document.getElementById('projectQuestionnaire').style.display = 'block';
-                document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
                 
-                const statsMessage = currentState.language === 'fr' ? 
-                    `🎉 Analyse terminée!\n\n📊 Statistiques:\n• ${files.length} fichier(s) analysés\n• ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.wordCount, 0)} mots extraits\n• Protocoles détectés dans ${currentState.analyzedDocuments.length} documents` :
-                    `🎉 Analysis completed!\n\n📊 Statistics:\n• ${files.length} file(s) analyzed\n• ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.wordCount, 0)} words extracted\n• Protocols detected in ${currentState.analyzedDocuments.length} documents`;
-                alert(statsMessage);
+                // Si pas de recherche auto, aller au questionnaire
+                if (currentState.documentOption !== 'hybrid' && currentState.documentOption !== 'search') {
+                    document.getElementById('projectQuestionnaire').style.display = 'block';
+                    document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
+                }
             }, 1000);
             
         } catch (error) {
@@ -1724,101 +2686,343 @@
         return analysis;
     }
 
-    // Générateur de protocole
-    function generateProtocol() {
+    // NOUVEAU: Générateur de protocole avancé avec recherche
+    function generateAdvancedProtocol() {
         const protocolContent = document.getElementById('protocolContent');
         const protocolActions = document.getElementById('protocolActions');
+        const productionGoal = document.getElementById('productionGoal').value;
+        const constraints = document.getElementById('constraints').value;
         
-        if (!currentState.selectedMolecule) {
+        if (!currentState.projectData.moleculeType) {
             const message = currentState.language === 'fr' ? 
-                '⚠️ Veuillez d\'abord sélectionner un type de biomolécule' :
-                '⚠️ Please first select a biomolecule type';
+                '⚠️ Veuillez d\'abord compléter le questionnaire' :
+                '⚠️ Please complete the questionnaire first';
             alert(message);
             return;
         }
         
         protocolContent.style.display = 'block';
-        const generating = currentState.language === 'fr' ? 'Génération en cours...' : 'Generating...';
+        const generating = currentState.language === 'fr' ? 'Génération du protocole avancé...' : 'Generating advanced protocol...';
         protocolContent.innerHTML = generating;
         
         setTimeout(() => {
-            const protocol = createDetailedProtocol(currentState.selectedMolecule);
+            const protocol = createAdvancedProtocol();
             protocolContent.innerHTML = protocol;
             protocolActions.style.display = 'block';
             
             document.getElementById('protocolOutput').scrollIntoView({ behavior: 'smooth' });
-        }, 2000);
+        }, 3000);
     }
 
-    function createDetailedProtocol(molecule) {
-        const protocols = {
-            'protein': generateProteinProtocol(),
-            'antibody': generateAntibodyProtocol(),
-            'viral': generateViralProtocol()
-        };
-
-        return protocols[molecule] || protocols['protein'];
-    }
-
-    function generateProteinProtocol() {
+    function createAdvancedProtocol() {
         const lang = currentState.language;
-        let documentInsights = '';
+        const data = currentState.projectData;
         
-        if (currentState.analyzedDocuments.length > 0) {
-            documentInsights = lang === 'fr' ? `
+        // Construire insights basés sur articles intégrés
+        let articleInsights = '';
+        if (currentState.articleIntegrationConfirmed && currentState.selectedArticles.length > 0) {
+            const selectedArticleData = currentState.foundArticles.filter(article => 
+                currentState.selectedArticles.includes(article.id)
+            );
+            
+            articleInsights = lang === 'fr' ? `
                 <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
-                    <strong style="color: #3b82f6;">📄 INSIGHTS DES DOCUMENTS ANALYSÉS</strong><br>
-                    • ${currentState.analyzedDocuments.length} document(s) analysé(s)<br>
-                    • ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.analysis.protocols.length, 0)} protocole(s) extrait(s)<br>
-                    • Méthodologies détectées: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.methodologies))].join(', ')}<br>
-                    • Mots-clés identifiés: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.molecules))].join(', ')}
+                    <strong style="color: #3b82f6;">📚 ARTICLES SCIENTIFIQUES INTÉGRÉS</strong><br>
+                    • ${selectedArticleData.length} article(s) de haute qualité sélectionné(s)<br>
+                    • Sources: ${[...new Set(selectedArticleData.map(a => a.source))].join(', ')}<br>
+                    • Pertinence moyenne: ${Math.round(selectedArticleData.reduce((acc, a) => acc + a.relevance, 0) / selectedArticleData.length)}%<br>
+                    • Articles récents: ${selectedArticleData.filter(a => new Date(a.date) > new Date('2024-01-01')).length} publiés en 2024
                 </div>
             ` : `
                 <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
-                    <strong style="color: #3b82f6;">📄 ANALYZED DOCUMENTS INSIGHTS</strong><br>
-                    • ${currentState.analyzedDocuments.length} document(s) analyzed<br>
-                    • ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.analysis.protocols.length, 0)} protocol(s) extracted<br>
-                    • Detected methodologies: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.methodologies))].join(', ')}<br>
-                    • Identified keywords: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.molecules))].join(', ')}
+                    <strong style="color: #3b82f6;">📚 INTEGRATED SCIENTIFIC ARTICLES</strong><br>
+                    • ${selectedArticleData.length} high-quality article(s) selected<br>
+                    • Sources: ${[...new Set(selectedArticleData.map(a => a.source))].join(', ')}<br>
+                    • Average relevance: ${Math.round(selectedArticleData.reduce((acc, a) => acc + a.relevance, 0) / selectedArticleData.length)}%<br>
+                    • Recent articles: ${selectedArticleData.filter(a => new Date(a.date) > new Date('2024-01-01')).length} published in 2024
                 </div>
             `;
         }
         
-        const title = lang === 'fr' ? 'PROTOCOLE DE PRODUCTION - PROTÉINE RECOMBINANTE' : 'PRODUCTION PROTOCOL - RECOMBINANT PROTEIN';
+        // Construire insights basés sur recherche
+        let searchInsights = '';
+        if (currentState.searchResults.length > 0) {
+            const pubmedResults = currentState.searchResults.filter(r => r.source === 'PubMed').length;
+            const supplierResults = currentState.searchResults.filter(r => r.source !== 'PubMed').length;
+            
+            searchInsights = lang === 'fr' ? `
+                <div style="background: rgba(168, 85, 247, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #a855f7;">
+                    <strong style="color: #a855f7;">🔍 RECHERCHE ÉQUIPEMENTS - INSIGHTS</strong><br>
+                    • ${currentState.searchResults.length} résultats de recherche analysés<br>
+                    • ${pubmedResults} publications PubMed intégrées<br>
+                    • ${supplierResults} références fournisseurs consultées<br>
+                    • Recommandations optimisées pour ${getScaleText(data.scale)} et budget ${getBudgetText(data.budget)}
+                </div>
+            ` : `
+                <div style="background: rgba(168, 85, 247, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #a855f7;">
+                    <strong style="color: #a855f7;">🔍 EQUIPMENT SEARCH - INSIGHTS</strong><br>
+                    • ${currentState.searchResults.length} search results analyzed<br>
+                    • ${pubmedResults} PubMed publications integrated<br>
+                    • ${supplierResults} supplier references consulted<br>
+                    • Recommendations optimized for ${getScaleText(data.scale)} and ${getBudgetText(data.budget)} budget
+                </div>
+            `;
+        }
+        
+        // Insights documents uploadés
+        let documentInsights = '';
+        if (currentState.analyzedDocuments.length > 0) {
+            documentInsights = lang === 'fr' ? `
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                    <strong style="color: #3b82f6;">📄 DOCUMENTS ANALYSÉS - INSIGHTS</strong><br>
+                    • ${currentState.analyzedDocuments.length} document(s) traité(s)<br>
+                    • ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.analysis.protocols.length, 0)} protocole(s) extrait(s)<br>
+                    • Méthodologies: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.methodologies))].slice(0,3).join(', ')}<br>
+                    • Mots-clés: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.molecules))].slice(0,3).join(', ')}
+                </div>
+            ` : `
+                <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
+                    <strong style="color: #3b82f6;">📄 ANALYZED DOCUMENTS - INSIGHTS</strong><br>
+                    • ${currentState.analyzedDocuments.length} document(s) processed<br>
+                    • ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.analysis.protocols.length, 0)} protocol(s) extracted<br>
+                    • Methodologies: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.methodologies))].slice(0,3).join(', ')}<br>
+                    • Keywords: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.molecules))].slice(0,3).join(', ')}
+                </div>
+            `;
+        }
+        
+        const title = lang === 'fr' ? 
+            `PROTOCOLE AVANCÉ - ${getMoleculeText(data.moleculeType).toUpperCase()}` :
+            `ADVANCED PROTOCOL - ${getMoleculeText(data.moleculeType).toUpperCase()}`;
         
         return `
             <h4 style="color: #4ade80; margin-bottom: 1rem;">📊 ${title}</h4>
             
+            ${articleInsights}
+            ${searchInsights}
             ${documentInsights}
             
-            <strong style="color: #f1f5f9;">${lang === 'fr' ? '1. UPSTREAM PROCESSING' : '1. UPSTREAM PROCESSING'}</strong><br>
-            • Expression E. coli BL21(DE3) + plasmide pET<br>
-            • Milieu: LB ou M9 défini + antibiotique sélection<br>
-            • Culture: 37°C jusqu'à DO₆₀₀ = 0.6-0.8<br>
-            • Induction: IPTG 0.1-1 mM, réduction température 25°C<br>
-            • Expression: 4-16h selon optimisation<br>
-            • Récolte: Centrifugation 4000g, 20 min, 4°C<br><br>
+            <strong style="color: #f1f5f9;">${lang === 'fr' ? '1. CONFIGURATION PROJET' : '1. PROJECT CONFIGURATION'}</strong><br>
+            • Type: ${getProjectTypeText(data.type)}<br>
+            • Biomolécule: ${getMoleculeText(data.moleculeType)}<br>
+            • Échelle: ${getScaleText(data.scale)}<br>
+            • Budget: ${getBudgetText(data.budget)}<br>
+            • Équipements: ${data.equipment.join(', ')}<br><br>
             
-            <strong style="color: #f1f5f9;">${lang === 'fr' ? '2. DOWNSTREAM PROCESSING' : '2. DOWNSTREAM PROCESSING'}</strong><br>
-            • Lyse cellulaire: Sonication ou French Press + inhibiteurs protéases<br>
-            • Clarification: Centrifugation 15000g, 30 min, 4°C<br>
-            • Purification His-tag: Colonne Ni-NTA<br>
-            • Lavage: Imidazole 20mM<br>
-            • Élution: Gradient imidazole 20-500mM<br>
-            • Polissage: Chromatographie exclusion taille<br>
-            • Concentration: Colonnes Amicon 10K MWCO<br><br>
+            ${getSelectedArticlesReferences()}
             
-            <strong style="color: #4ade80;">${lang === 'fr' ? 'Rendement attendu:' : 'Expected yield:'}</strong> 50-500 mg/L culture<br>
-            <strong style="color: #4ade80;">Timeline:</strong> 7-10 ${lang === 'fr' ? 'jours' : 'days'}
+            <strong style="color: #f1f5f9;">${lang === 'fr' ? '2. UPSTREAM PROCESSING' : '2. UPSTREAM PROCESSING'}</strong><br>
+            ${getUpstreamProtocol(data.moleculeType, data.scale)}<br><br>
+            
+            <strong style="color: #f1f5f9;">${lang === 'fr' ? '3. DOWNSTREAM PROCESSING' : '3. DOWNSTREAM PROCESSING'}</strong><br>
+            ${getDownstreamProtocol(data.moleculeType, data.scale)}<br><br>
+            
+            <strong style="color: #f1f5f9;">${lang === 'fr' ? '4. ÉQUIPEMENTS RECOMMANDÉS' : '4. RECOMMENDED EQUIPMENT'}</strong><br>
+            ${getEquipmentRecommendations(data.moleculeType, data.scale, data.budget)}<br><br>
+            
+            <strong style="color: #f1f5f9;">${lang === 'fr' ? '5. FOURNISSEURS SUGGÉRÉS' : '5. SUGGESTED SUPPLIERS'}</strong><br>
+            ${getSupplierRecommendations(data.budget)}<br><br>
+            
+            <strong style="color: #4ade80;">${lang === 'fr' ? 'Rendement attendu:' : 'Expected yield:'}</strong> ${getExpectedYield(data.moleculeType, data.scale)}<br>
+            <strong style="color: #4ade80;">Timeline:</strong> ${getTimeline(data.scale)}<br>
+            <strong style="color: #4ade80;">${lang === 'fr' ? 'Coût estimé:' : 'Estimated cost:'}</strong> ${getEstimatedCost(data.scale, data.budget)}
         `;
     }
 
-    function generateAntibodyProtocol() {
-        return generateProteinProtocol(); // Simplifié pour l'exemple
+    // NOUVEAU: Références des articles sélectionnés
+    function getSelectedArticlesReferences() {
+        if (!currentState.articleIntegrationConfirmed || currentState.selectedArticles.length === 0) {
+            return '';
+        }
+        
+        const lang = currentState.language;
+        const selectedArticleData = currentState.foundArticles.filter(article => 
+            currentState.selectedArticles.includes(article.id)
+        );
+        
+        let references = lang === 'fr' ? 
+            '<strong style="color: #f1f5f9;">📚 RÉFÉRENCES SCIENTIFIQUES INTÉGRÉES</strong><br>' :
+            '<strong style="color: #f1f5f9;">📚 INTEGRATED SCIENTIFIC REFERENCES</strong><br>';
+        
+        selectedArticleData.forEach((article, index) => {
+            references += `• [${index + 1}] ${article.authors} (${article.date.split('-')[0]}). ${article.title}. ${article.journal}.<br>`;
+        });
+        
+        return references + '<br>';
+    }
     }
 
-    function generateViralProtocol() {
-        return generateProteinProtocol(); // Simplifié pour l'exemple
+    // Fonctions utilitaires pour le protocole
+    function getProjectTypeText(type) {
+        const texts = {
+            'research': currentState.language === 'fr' ? 'Recherche Académique' : 'Academic Research',
+            'preclinical': currentState.language === 'fr' ? 'Développement Préclinique' : 'Preclinical Development',
+            'clinical': currentState.language === 'fr' ? 'Développement Clinique' : 'Clinical Development',
+            'commercial': currentState.language === 'fr' ? 'Production Commerciale' : 'Commercial Production'
+        };
+        return texts[type] || type;
+    }
+
+    function getMoleculeText(molecule) {
+        const texts = {
+            'protein': currentState.language === 'fr' ? 'Protéines Recombinantes' : 'Recombinant Proteins',
+            'antibody': currentState.language === 'fr' ? 'Anticorps Monoclonaux' : 'Monoclonal Antibodies',
+            'viral': currentState.language === 'fr' ? 'Vecteurs Viraux' : 'Viral Vectors',
+            'vlp': 'Virus-Like Particles'
+        };
+        return texts[molecule] || molecule;
+    }
+
+    function getScaleText(scale) {
+        const texts = {
+            'research': currentState.language === 'fr' ? 'Recherche (mg)' : 'Research (mg)',
+            'pilot': currentState.language === 'fr' ? 'Pilote (g)' : 'Pilot (g)',
+            'production': currentState.language === 'fr' ? 'Production (kg)' : 'Production (kg)'
+        };
+        return texts[scale] || scale;
+    }
+
+    function getBudgetText(budget) {
+        const texts = {
+            'low': '< €10k',
+            'medium': '€10k - €50k',
+            'high': '€50k - €200k',
+            'unlimited': '> €200k'
+        };
+        return texts[budget] || budget;
+    }
+
+    function getUpstreamProtocol(molecule, scale) {
+        const protocols = {
+            'protein': {
+                'research': '• Expression: E. coli BL21(DE3) en flasks 250mL\n• Milieu: LB + antibiotique\n• Induction: IPTG 0.5mM à DO600=0.6\n• Température: 25°C, 16h',
+                'pilot': '• Expression: E. coli BL21(DE3) en bioréacteur 5-10L\n• Milieu: M9 défini + glucose\n• Fed-batch avec alimentation contrôlée\n• Monitoring pH, DO, glucose',
+                'production': '• Expression: E. coli BL21(DE3) en bioréacteur 100L+\n• Milieu: M9 optimisé + alimentation complexe\n• Contrôle avancé des paramètres\n• Système PAT intégré'
+            },
+            'antibody': {
+                'research': '• Cellules: CHO-S en flasks T175\n• Milieu: CHO-S-SFM II\n• Transfection transitoire\n• Récolte J7-J10',
+                'pilot': '• Cellules: CHO-S en bioréacteur 10-50L\n• Fed-batch 14 jours\n• Contrôle glucose, lactate, ammoniaque\n• Alimentation quotidienne',
+                'production': '• Cellules: CHO-S lignée stable\n• Bioréacteur 200L+ avec perfusion\n• Contrôle automatisé des nutriments\n• Système de monitoring avancé'
+            },
+            'viral': {
+                'research': '• Cellules: HEK293T en plaques 6-puits\n• Transfection triple plasmide\n• Récolte 72h post-transfection\n• Clarification par centrifugation',
+                'pilot': '• Cellules: HEK293T en bioréacteur 10L\n• Transfection à grande échelle\n• Monitoring viabilité cellulaire\n• Récolte optimisée',
+                'production': '• Cellules: HEK293 lignée productrice\n• Bioréacteur 100L+ en batch\n• Contrôle température et pH strict\n• Récolte et inactivation sécurisées'
+            }
+        };
+        return protocols[molecule]?.[scale] || protocols['protein']['research'];
+    }
+
+    function getDownstreamProtocol(molecule, scale) {
+        const protocols = {
+            'protein': {
+                'research': '• Lyse: Sonication + inhibiteurs protéases\n• Clarification: 15000g, 30min, 4°C\n• Purification: Ni-NTA His-tag\n• Polissage: SEC Superdex 200',
+                'pilot': '• Lyse: Microfluidizer\n• Clarification: Centrifugation continue\n• Capture: Ni-NTA en colonne FPLC\n• Polissage: CEX + SEC',
+                'production': '• Lyse: Homogénéisateur haute pression\n• Clarification: Centrifugation + filtration\n• Capture: Chromatographie Ni-NTA\n• Polissage: Multi-colonnes FPLC'
+            },
+            'antibody': {
+                'research': '• Clarification: Centrifugation 4000g\n• Capture: Protéine A Sepharose\n• CEX: SP Sepharose pH 5.0\n• SEC: Superdex 200 finale',
+                'pilot': '• Clarification: Filtration profondeur\n• Capture: Protéine A FPLC\n• CEX: Gradient salin optimisé\n• Polissage: AEX + SEC',
+                'production': '• Clarification: Filtration en continu\n• Capture: Protéine A industrielle\n• Polissage: CEX/AEX platform\n• Ultrafiltration/diafiltration finale'
+            },
+            'viral': {
+                'research': '• Clarification: Filtration 0.45µm\n• Concentration: Ultracentrifugation\n• Purification: Gradient iodixanol\n• Dialyse: Tampon final PBS',
+                'pilot': '• Clarification: Filtration tangentielle\n• Concentration: Ultrafiltration\n• Purification: Chromatographie échange d\'ions\n• Formulation: Tampon optimisé',
+                'production': '• Clarification: Système de filtration\n• Concentration: TFF multi-étapes\n• Purification: Chromatographie platform\n• Formulation: Conditions GMP'
+            }
+        };
+        return protocols[molecule]?.[scale] || protocols['protein']['research'];
+    }
+
+    function getEquipmentRecommendations(molecule, scale, budget) {
+        const recommendations = {
+            'research': {
+                'low': '• Centrifugeuse de paillasse\n• FPLC ÄKTA Start (Cytiva)\n• Spectrophotomètre NanoDrop',
+                'medium': '• FPLC ÄKTA pure 25 (Cytiva)\n• Centrifugeuse réfrigérée\n• Système ultrafiltration Amicon',
+                'high': '• FPLC ÄKTA avant 25 (Cytiva)\n• Lyophilisateur FreeZone (Labconco)\n• HPLC analytique Waters'
+            },
+            'pilot': {
+                'medium': '• Bioréacteur Sartorius BIOSTAT B-DCU\n• FPLC ÄKTA pilot (Cytiva)\n• Système TFF Sartorius Sartocon',
+                'high': '• Bioréacteur Sartorius BIOSTAT STR\n• Chromatographie ÄKTA process (Cytiva)\n• Homogénéisateur Microfluidics',
+                'unlimited': '• Bioréacteur Cytiva Xcellerex XDR-50\n• Système chromatographie ReadyToProcess\n• Analyseur PAT AppliedBiosystems'
+            },
+            'production': {
+                'high': '• Bioréacteur Sartorius BIOSTAT STR 200L\n• Système chromatographie ÄKTA process\n• Ultrafiltration Sartorius Sartocon',
+                'unlimited': '• Bioréacteur Cytiva Xcellerex XDR-200\n• Système chromatographie BioProcess\n• Suite analytique complète Waters'
+            }
+        };
+        
+        const budgetKey = budget === 'low' ? 'low' : budget === 'unlimited' ? 'unlimited' : 
+                         budget === 'high' ? 'high' : 'medium';
+        
+        return recommendations[scale]?.[budgetKey] || recommendations['research']['medium'];
+    }
+
+    function getSupplierRecommendations(budget) {
+        const lang = currentState.language;
+        if (budget === 'low') {
+            return lang === 'fr' ? 
+                '• Bio-Rad: Équipements d\'occasion reconditionnés\n• VWR: Consommables génériques\n• Sigma-Aldrich: Réactifs standards' :
+                '• Bio-Rad: Refurbished equipment\n• VWR: Generic consumables\n• Sigma-Aldrich: Standard reagents';
+        } else if (budget === 'unlimited') {
+            return lang === 'fr' ?
+                '• Cytiva: Solutions complètes bioprocess\n• Sartorius: Équipements premium\n• Thermo Fisher: Suite analytique complète\n• Waters: HPLC/LC-MS de pointe' :
+                '• Cytiva: Complete bioprocess solutions\n• Sartorius: Premium equipment\n• Thermo Fisher: Complete analytical suite\n• Waters: State-of-the-art HPLC/LC-MS';
+        } else {
+            return lang === 'fr' ?
+                '• Cytiva: FPLC et colonnes\n• Sartorius: Bioréacteurs et filtration\n• Thermo Fisher: Milieux et réactifs\n• Merck: Colonnes chromatographie' :
+                '• Cytiva: FPLC and columns\n• Sartorius: Bioreactors and filtration\n• Thermo Fisher: Media and reagents\n• Merck: Chromatography columns';
+        }
+    }
+
+    function getExpectedYield(molecule, scale) {
+        const yields = {
+            'protein': {
+                'research': '50-200 mg/L',
+                'pilot': '200-800 mg/L',
+                'production': '1-3 g/L'
+            },
+            'antibody': {
+                'research': '10-50 mg/L',
+                'pilot': '0.5-2 g/L',
+                'production': '2-5 g/L'
+            },
+            'viral': {
+                'research': '10^10-10^11 vp/mL',
+                'pilot': '10^11-10^12 vp/mL',
+                'production': '10^12-10^13 vp/mL'
+            }
+        };
+        return yields[molecule]?.[scale] || yields['protein']['research'];
+    }
+
+    function getTimeline(scale) {
+        const timelines = {
+            'research': '3-7 jours',
+            'pilot': '2-4 semaines',
+            'production': '4-8 semaines'
+        };
+        return timelines[scale] || timelines['research'];
+    }
+
+    function getEstimatedCost(scale, budget) {
+        const costs = {
+            'research': {
+                'low': '€500-2k',
+                'medium': '€2k-8k',
+                'high': '€8k-20k'
+            },
+            'pilot': {
+                'medium': '€10k-30k',
+                'high': '€30k-80k',
+                'unlimited': '€80k-200k'
+            },
+            'production': {
+                'high': '€100k-300k',
+                'unlimited': '€300k-1M+'
+            }
+        };
+        return costs[scale]?.[budget] || costs['research']['medium'];
     }
 
     // Actions
@@ -1855,7 +3059,7 @@
             doc.setTextColor(0, 0, 0);
             yPosition += 10;
             const protocolTitle = currentState.language === 'fr' ? 
-                'Protocole Biotechnologique' : 'Biotechnology Protocol';
+                'Protocole Biotechnologique Avancé' : 'Advanced Biotechnology Protocol';
             doc.text(protocolTitle, margin, yPosition);
             
             yPosition += 10;
@@ -1891,7 +3095,7 @@
                 yPosition += 2;
             });
 
-            const fileName = 'Protocole_MontesBio_' + new Date().toISOString().slice(0,10) + '.pdf';
+            const fileName = 'Protocole_MontesBio_Avancé_' + new Date().toISOString().slice(0,10) + '.pdf';
             doc.save(fileName);
             
             const confirmMessage = currentState.language === 'fr' ? 
@@ -1918,7 +3122,7 @@
             console.warn('⚠️ PDF.js non disponible - fonctionnalité upload limitée');
         }
         
-        console.log('🧬 Montes Bio - Version Multilingue Initialisée');
+        console.log('🧬 Montes Bio - Version Recherche Automatique Initialisée');
     });
 </script>
 ```
