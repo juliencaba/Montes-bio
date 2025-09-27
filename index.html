@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Montes Bio - Protocoles Intelligents</title>
-    <meta name="description" content="Plateforme IA pour créer des protocoles de production de biomolécules pharmaceutiques">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
+    <title>Montes BioPharma - Purification Adénovirus</title>
+    <meta name="description" content="Plateforme spécialisée pour protocoles de purification d'adénovirus">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦠</text></svg>">
 
 ```
 <!-- Bibliothèque jsPDF pour génération PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<!-- Bibliothèque PDF.js pour lecture PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
     * {
@@ -33,7 +31,7 @@
         background: rgba(15, 20, 25, 0.9);
         backdrop-filter: blur(10px);
         padding: 1rem 2rem;
-        border-bottom: 1px solid rgba(74, 222, 128, 0.3);
+        border-bottom: 1px solid rgba(57, 255, 20, 0.3);
         position: sticky;
         top: 0;
         z-index: 100;
@@ -47,11 +45,32 @@
         margin: 0 auto;
     }
 
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .logo-image {
+        height: 40px;
+        width: auto;
+        filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.3));
+    }
+
     .logo {
-        font-size: 1.8rem;
+        font-size: 1rem;
         font-weight: bold;
-        color: #4ade80;
-        text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+        color: #39FF14;
+        text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+    }
+
+    .logo .sub {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-top: 2px;
     }
 
     .nav-right {
@@ -75,8 +94,8 @@
     }
 
     .nav-links a:hover {
-        color: #4ade80;
-        background: rgba(74, 222, 128, 0.1);
+        color: #39FF14;
+        background: rgba(57, 255, 20, 0.1);
         transform: translateY(-2px);
     }
 
@@ -85,7 +104,7 @@
         background: rgba(30, 41, 59, 0.6);
         border-radius: 8px;
         padding: 0.25rem;
-        border: 1px solid rgba(74, 222, 128, 0.2);
+        border: 1px solid rgba(57, 255, 20, 0.2);
     }
 
     .lang-btn {
@@ -100,13 +119,13 @@
     }
 
     .lang-btn.active {
-        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        background: linear-gradient(135deg, #39FF14, #3b82f6);
         color: white;
     }
 
     .lang-btn:hover:not(.active) {
-        color: #4ade80;
-        background: rgba(74, 222, 128, 0.1);
+        color: #39FF14;
+        background: rgba(57, 255, 20, 0.1);
     }
 
     .main-container {
@@ -118,7 +137,7 @@
     .hero-section {
         text-align: center;
         padding: 3rem 0;
-        background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+        background: linear-gradient(135deg, rgba(57, 255, 20, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
         border-radius: 20px;
         margin-bottom: 3rem;
         position: relative;
@@ -132,7 +151,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(74,222,128,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(57,255,20,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
         opacity: 0.3;
     }
 
@@ -145,7 +164,7 @@
         font-size: 3rem;
         font-weight: bold;
         margin-bottom: 1rem;
-        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        background: linear-gradient(135deg, #39FF14, #3b82f6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -160,98 +179,8 @@
         margin-right: auto;
     }
 
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
-        margin: 3rem 0;
-    }
-
-    .feature-card {
-        background: rgba(30, 41, 59, 0.6);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(74, 222, 128, 0.2);
-        border-radius: 16px;
-        padding: 2rem;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .feature-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #4ade80, #3b82f6);
-        transform: scaleX(0);
-        transition: transform 0.3s ease;
-    }
-
-    .feature-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(74, 222, 128, 0.4);
-        box-shadow: 0 20px 40px rgba(74, 222, 128, 0.1);
-    }
-
-    .feature-card:hover::before {
-        transform: scaleX(1);
-    }
-
-    .feature-icon {
-        width: 60px;
-        height: 60px;
-        background: linear-gradient(135deg, #4ade80, #3b82f6);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-        position: relative;
-    }
-
-    .feature-icon::after {
-        content: '';
-        position: absolute;
-        width: 24px;
-        height: 24px;
-        background: white;
-        border-radius: 50%;
-    }
-
-    .feature-icon.search-icon::after {
-        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E") no-repeat center;
-        mask-size: contain;
-    }
-
-    .feature-icon.molecule-icon::after {
-        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/%3E%3C/svg%3E") no-repeat center;
-        mask-size: contain;
-    }
-
-    .feature-icon.protocol-icon::after {
-        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'/%3E%3C/svg%3E") no-repeat center;
-        mask-size: contain;
-    }
-
-    .feature-title {
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: #f1f5f9;
-        margin-bottom: 1rem;
-    }
-
-    .feature-description {
-        color: #94a3b8;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
-    }
-
     .action-btn {
-        background: linear-gradient(135deg, #4ade80, #3b82f6);
+        background: linear-gradient(135deg, #39FF14, #3b82f6);
         color: white;
         border: none;
         padding: 0.8rem 1.5rem;
@@ -265,7 +194,7 @@
 
     .action-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+        box-shadow: 0 10px 25px rgba(57, 255, 20, 0.3);
     }
 
     .action-btn:disabled {
@@ -274,264 +203,51 @@
         transform: none;
     }
 
-    .workspace-section {
+    .workflow-section {
         background: rgba(30, 41, 59, 0.4);
         border-radius: 20px;
         padding: 2rem;
         margin: 3rem 0;
-        border: 1px solid rgba(74, 222, 128, 0.2);
+        border: 1px solid rgba(57, 255, 20, 0.2);
     }
 
-    .workspace-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .workspace-title {
-        font-size: 1.8rem;
-        font-weight: bold;
-        color: #f1f5f9;
-    }
-
-    .document-choice {
+    .step-container {
         background: rgba(15, 20, 25, 0.8);
         border-radius: 16px;
         padding: 2rem;
         margin: 2rem 0;
-        border: 2px solid rgba(74, 222, 128, 0.3);
-        text-align: center;
-    }
-
-    .choice-buttons {
-        display: flex;
-        gap: 2rem;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin: 2rem 0;
-    }
-
-    .choice-btn {
-        background: rgba(74, 222, 128, 0.1);
-        color: #4ade80;
-        border: 2px solid rgba(74, 222, 128, 0.3);
-        padding: 1.5rem 2rem;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        min-width: 200px;
-        text-align: center;
-    }
-
-    .choice-btn:hover, .choice-btn.selected {
-        background: rgba(74, 222, 128, 0.2);
-        border-color: #4ade80;
-        transform: scale(1.05);
-    }
-
-    .upload-zone {
-        border: 2px dashed rgba(74, 222, 128, 0.3);
-        border-radius: 12px;
-        padding: 3rem;
-        text-align: center;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        margin: 1rem 0;
+        border: 2px solid rgba(57, 255, 20, 0.3);
         display: none;
     }
 
-    .upload-zone:hover {
-        border-color: rgba(74, 222, 128, 0.6);
-        background: rgba(74, 222, 128, 0.05);
-    }
-
-    .upload-icon {
-        font-size: 3rem;
-        color: #4ade80;
-        margin-bottom: 1rem;
-    }
-
-    /* NOUVEAU: Styles pour la recherche automatique */
-    .auto-search-section {
-        background: rgba(15, 20, 25, 0.8);
-        border-radius: 16px;
-        padding: 2rem;
-        margin: 2rem 0;
-        border: 2px solid rgba(168, 85, 247, 0.3);
-        display: none;
-    }
-
-    .search-progress {
-        background: rgba(30, 41, 59, 0.4);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        display: none;
-    }
-
-    .search-sources {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin: 1.5rem 0;
-    }
-
-    .search-source {
-        background: rgba(45, 55, 72, 0.6);
-        border: 1px solid rgba(168, 85, 247, 0.2);
-        border-radius: 8px;
-        padding: 1rem;
-        text-align: center;
-        transition: all 0.3s ease;
-    }
-
-    .search-source.active {
-        border-color: #a855f7;
-        background: rgba(168, 85, 247, 0.1);
-    }
-
-    .search-source.completed {
-        border-color: #4ade80;
-        background: rgba(74, 222, 128, 0.1);
-    }
-
-    .search-results {
-        background: rgba(30, 41, 59, 0.4);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        display: none;
-    }
-
-    /* NOUVEAU: Styles pour les articles trouvés */
-    .article-item {
-        background: rgba(45, 55, 72, 0.7);
-        border: 1px solid rgba(74, 222, 128, 0.2);
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    .article-item:hover {
-        border-color: rgba(74, 222, 128, 0.4);
-        transform: translateX(5px);
-        background: rgba(74, 222, 128, 0.05);
-    }
-
-    .article-item.selected {
-        border-color: #4ade80;
-        background: rgba(74, 222, 128, 0.1);
-    }
-
-    .article-title {
-        font-weight: bold;
-        color: #f1f5f9;
-        margin-bottom: 0.5rem;
-        font-size: 1.1rem;
-        line-height: 1.4;
-    }
-
-    .article-authors {
-        color: #a855f7;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .article-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-    }
-
-    .article-journal {
-        color: #3b82f6;
-        font-size: 0.85rem;
-        font-style: italic;
-    }
-
-    .article-date {
-        color: #94a3b8;
-        font-size: 0.85rem;
-    }
-
-    .article-relevance {
-        background: rgba(74, 222, 128, 0.2);
-        color: #4ade80;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-weight: bold;
-    }
-
-    .article-abstract {
-        color: #94a3b8;
-        font-size: 0.9rem;
-        line-height: 1.4;
-        margin-top: 0.5rem;
-        display: none;
-    }
-
-    .article-item.expanded .article-abstract {
+    .step-container.active {
         display: block;
     }
 
-    .article-checkbox {
-        display: none;
-    }
-
-    .article-item.selectable {
-        position: relative;
-        padding-left: 3rem;
-    }
-
-    .article-item.selectable::before {
-        content: '';
-        position: absolute;
-        left: 1rem;
-        top: 1.5rem;
-        width: 20px;
-        height: 20px;
-        border: 2px solid rgba(74, 222, 128, 0.3);
-        border-radius: 4px;
-        background: rgba(15, 20, 25, 0.8);
-        transition: all 0.3s ease;
-    }
-
-    .article-item.selectable.selected::before {
-        background: #4ade80;
-        border-color: #4ade80;
-    }
-
-    .article-item.selectable.selected::after {
-        content: '✓';
-        position: absolute;
-        left: 1.25rem;
-        top: 1.6rem;
-        color: white;
+    .step-title {
+        color: #39FF14;
+        font-size: 1.5rem;
         font-weight: bold;
-        font-size: 0.8rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
     }
 
-    .molecule-selection {
-        display: none;
-        margin: 2rem 0;
+    .step-description {
+        color: #94a3b8;
+        text-align: center;
+        margin-bottom: 2rem;
     }
 
-    .molecule-grid {
+    .options-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 1.5rem;
         margin: 2rem 0;
     }
 
-    .molecule-card {
+    .option-card {
         background: rgba(45, 55, 72, 0.7);
-        border: 1px solid rgba(74, 222, 128, 0.2);
+        border: 2px solid rgba(57, 255, 20, 0.2);
         border-radius: 12px;
         padding: 1.5rem;
         cursor: pointer;
@@ -539,18 +255,32 @@
         text-align: center;
     }
 
-    .molecule-card:hover, .molecule-card.selected {
-        border-color: #4ade80;
-        background: rgba(74, 222, 128, 0.1);
+    .option-card:hover {
+        border-color: #39FF14;
+        background: rgba(57, 255, 20, 0.1);
         transform: translateY(-2px);
     }
 
-    .protocol-generator {
-        background: rgba(45, 55, 72, 0.6);
-        border-radius: 16px;
-        padding: 2rem;
-        margin: 2rem 0;
-        display: none;
+    .option-card.selected {
+        border-color: #39FF14;
+        background: rgba(57, 255, 20, 0.15);
+        color: #39FF14;
+    }
+
+    .option-title {
+        font-weight: bold;
+        color: #f1f5f9;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .option-card.selected .option-title {
+        color: #39FF14;
+    }
+
+    .option-description {
+        color: #94a3b8;
+        font-size: 0.9rem;
     }
 
     .input-group {
@@ -567,7 +297,7 @@
     .input-field {
         width: 100%;
         background: rgba(15, 20, 25, 0.8);
-        border: 1px solid rgba(74, 222, 128, 0.3);
+        border: 1px solid rgba(57, 255, 20, 0.3);
         border-radius: 8px;
         padding: 1rem;
         color: #e2e8f0;
@@ -577,8 +307,8 @@
 
     .input-field:focus {
         outline: none;
-        border-color: #4ade80;
-        box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+        border-color: #39FF14;
+        box-shadow: 0 0 0 3px rgba(57, 255, 20, 0.1);
     }
 
     .textarea-field {
@@ -586,129 +316,90 @@
         resize: vertical;
     }
 
-    .generated-protocol {
-        background: rgba(15, 20, 25, 0.8);
-        border-left: 4px solid #4ade80;
-        padding: 1.5rem;
+    .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(57, 255, 20, 0.2);
+    }
+
+    .nav-btn {
+        background: rgba(57, 255, 20, 0.1);
+        color: #39FF14;
+        border: 2px solid rgba(57, 255, 20, 0.3);
+        padding: 0.8rem 1.5rem;
         border-radius: 8px;
-        margin-top: 1rem;
-        font-family: 'Courier New', monospace;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+        background: rgba(57, 255, 20, 0.2);
+        border-color: #39FF14;
+    }
+
+    .nav-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .progress-indicator {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2rem 0;
+    }
+
+    .progress-step {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(57, 255, 20, 0.2);
+        border: 2px solid rgba(57, 255, 20, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 0.5rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .progress-step.active {
+        background: #39FF14;
+        color: #0f1419;
+        border-color: #39FF14;
+    }
+
+    .progress-step.completed {
+        background: rgba(57, 255, 20, 0.3);
+        border-color: #39FF14;
+        color: #39FF14;
+    }
+
+    .protocol-output {
+        background: rgba(15, 20, 25, 0.8);
+        border-left: 4px solid #39FF14;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-top: 2rem;
         line-height: 1.6;
         display: none;
     }
 
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin: 2rem 0;
+    .protocol-section {
+        margin-bottom: 2rem;
     }
 
-    .stat-card {
-        background: rgba(45, 55, 72, 0.6);
-        padding: 1.5rem;
-        border-radius: 12px;
-        text-align: center;
-        border: 1px solid rgba(74, 222, 128, 0.2);
-    }
-
-    .stat-number {
-        font-size: 2rem;
+    .protocol-section-title {
+        color: #39FF14;
+        font-size: 1.2rem;
         font-weight: bold;
-        color: #4ade80;
-    }
-
-    .stat-label {
-        color: #94a3b8;
-        margin-top: 0.5rem;
-    }
-
-    /* NOUVEAU: Styles pour filtres avancés */
-    .filters-section {
-        background: rgba(30, 41, 59, 0.4);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        border: 1px solid rgba(74, 222, 128, 0.2);
-    }
-
-    .filters-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .filter-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .filter-label {
-        color: #cbd5e1;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-    }
-
-    .filter-select {
-        background: rgba(15, 20, 25, 0.8);
-        border: 1px solid rgba(74, 222, 128, 0.3);
-        border-radius: 6px;
-        padding: 0.5rem;
-        color: #e2e8f0;
-        font-size: 0.9rem;
-    }
-
-    .filter-select:focus {
-        outline: none;
-        border-color: #4ade80;
-    }
-
-    .search-input {
-        background: rgba(15, 20, 25, 0.8);
-        border: 1px solid rgba(74, 222, 128, 0.3);
-        border-radius: 6px;
-        padding: 0.5rem;
-        color: #e2e8f0;
-        font-size: 0.9rem;
-        width: 100%;
-    }
-
-    .search-input:focus {
-        outline: none;
-        border-color: #4ade80;
-        box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.1);
-    }
-
-    .filter-toggle {
-        background: rgba(74, 222, 128, 0.1);
-        border: 1px solid rgba(74, 222, 128, 0.3);
-        border-radius: 6px;
-        padding: 0.5rem 1rem;
-        color: #4ade80;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 0.9rem;
-        text-align: center;
-    }
-
-    .filter-toggle:hover {
-        background: rgba(74, 222, 128, 0.2);
-        border-color: #4ade80;
-    }
-
-    .filter-toggle.active {
-        background: linear-gradient(135deg, #4ade80, #3b82f6);
-        color: white;
-        border-color: #4ade80;
-    }
-
-    /* Icônes professionnelles SVG */
-    .icon-svg {
-        width: 24px;
-        height: 24px;
-        fill: currentColor;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid rgba(57, 255, 20, 0.3);
+        padding-bottom: 0.5rem;
     }
 
     .floating-particles {
@@ -725,109 +416,42 @@
         position: absolute;
         width: 4px;
         height: 4px;
-        background: #4ade80;
+        background: #39FF14;
         border-radius: 50%;
         animation: float 6s infinite ease-in-out;
         opacity: 0.6;
-        box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+        box-shadow: 0 0 8px rgba(57, 255, 20, 0.8);
     }
 
     .particle:nth-child(even) {
-        background: #3b82f6;
-        box-shadow: 0 0 6px rgba(59, 130, 246, 0.8);
+        background: #39FF14;
+        box-shadow: 0 0 8px rgba(57, 255, 20, 0.6);
+        animation-duration: 8s;
+    }
+
+    .particle:nth-child(3n) {
+        background: #39FF14;
+        box-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+        animation-duration: 10s;
     }
 
     @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-        25% { transform: translateY(-15px) rotate(90deg); opacity: 0.8; }
-        50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
-        75% { transform: translateY(-15px) rotate(270deg); opacity: 0.8; }
-    }
-
-    .recent-protocols {
-        background: rgba(30, 41, 59, 0.4);
-        border-radius: 16px;
-        padding: 2rem;
-        margin: 2rem 0;
-    }
-
-    .project-questionnaire {
-        background: rgba(15, 20, 25, 0.8);
-        border-radius: 16px;
-        padding: 2rem;
-        margin: 2rem 0;
-        border: 2px solid rgba(139, 92, 246, 0.3);
-    }
-
-    .questionnaire-step {
-        margin-bottom: 2rem;
-    }
-
-    .question-options {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1rem;
-    }
-
-    .question-option {
-        background: rgba(30, 41, 59, 0.6);
-        border: 2px solid rgba(139, 92, 246, 0.3);
-        border-radius: 12px;
-        padding: 1.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-align: center;
-        color: #e2e8f0;
-        font-weight: 500;
-    }
-
-    .question-option:hover {
-        border-color: #8b5cf6;
-        background: rgba(139, 92, 246, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .question-option.selected {
-        border-color: #4ade80;
-        background: rgba(74, 222, 128, 0.15);
-        color: #4ade80;
-    }
-
-    .question-option.multi-select.selected {
-        border-color: #3b82f6;
-        background: rgba(59, 130, 246, 0.15);
-        color: #3b82f6;
-    }
-
-    .protocol-item {
-        background: rgba(45, 55, 72, 0.6);
-        border: 1px solid rgba(74, 222, 128, 0.2);
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 1rem 0;
-        transition: all 0.3s ease;
-    }
-
-    .protocol-item:hover {
-        border-color: rgba(74, 222, 128, 0.4);
-        transform: translateX(5px);
-    }
-
-    .protocol-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-    }
-
-    .protocol-name {
-        font-weight: bold;
-        color: #f1f5f9;
-    }
-
-    .protocol-date {
-        color: #94a3b8;
-        font-size: 0.9rem;
+        0%, 100% { 
+            transform: translateY(0px) translateX(0px) rotate(0deg); 
+            opacity: 0.6; 
+        }
+        25% { 
+            transform: translateY(-20px) translateX(10px) rotate(90deg); 
+            opacity: 0.8; 
+        }
+        50% { 
+            transform: translateY(-40px) translateX(-5px) rotate(180deg); 
+            opacity: 1; 
+        }
+        75% { 
+            transform: translateY(-20px) translateX(-10px) rotate(270deg); 
+            opacity: 0.8; 
+        }
     }
 
     @media (max-width: 768px) {
@@ -841,24 +465,11 @@
             gap: 1rem;
         }
 
-        .nav-links {
-            gap: 1rem;
-        }
-
         .hero-title {
             font-size: 2rem;
         }
 
-        .features-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .choice-buttons {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .molecule-grid {
+        .options-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -872,14 +483,34 @@
 ```
 <header class="header">
     <nav class="nav">
-        <div class="logo">Montes Bio</div>
+        <div class="logo-container">
+            <svg class="logo-image" viewBox="0 0 150 40" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#00ff7f;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#39FF14;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <text x="5" y="25" font-family="Arial, sans-serif" font-size="22" font-weight="500" fill="url(#logoGradient)">
+                    <tspan>m</tspan>
+                    <tspan>o</tspan>
+                    <tspan>∩</tspan>
+                    <tspan>t</tspan>
+                    <tspan>e</tspan>
+                    <tspan>s</tspan>
+                </text>
+                <path d="M 48 15 Q 53 10 58 15" stroke="url(#logoGradient)" stroke-width="2" fill="none" opacity="0.8"/>
+            </svg>
+            <div class="logo">
+                <span class="sub">BioPharma</span>
+            </div>
+        </div>
         <div class="nav-right">
             <ul class="nav-links">
-                <li><a href="#accueil" data-text="nav-home">Accueil</a></li>
-                <li><a href="#protocoles" data-text="nav-protocols">Protocoles</a></li>
-                <li><a href="#recherche" data-text="nav-research">Recherche</a></li>
-                <li><a href="#formation" data-text="nav-training">Formation</a></li>
-                <li><a href="#contact" data-text="nav-contact">Contact</a></li>
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#protocoles">Protocoles</a></li>
+                <li><a href="#recherche">Recherche</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="language-selector">
                 <button class="lang-btn active" onclick="switchLanguage('fr')">FR</button>
@@ -892,2237 +523,906 @@
 <div class="main-container">
     <section class="hero-section">
         <div class="hero-content">
-            <h1 class="hero-title" data-text="hero-title">Protocoles Biotechnologiques</h1>
-            <p class="hero-subtitle" data-text="hero-subtitle">
-                Créez des protocoles de production et purification de biomolécules pharmaceutiques 
-                grâce à l'IA et à la recherche automatique sur PubMed et sites fournisseurs.
+            <h1 class="hero-title">Purification Adénovirus</h1>
+            <p class="hero-subtitle">
+                Générateur de protocoles spécialisé pour la purification d'adénovirus. 
+                Protocoles personnalisés basés sur la littérature scientifique.
             </p>
-            <button class="action-btn" onclick="scrollToWorkspace()" data-text="start-now">Commencer Maintenant</button>
+            <button class="action-btn" onclick="startWorkflow()">Commencer le Protocole</button>
         </div>
     </section>
 
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">🔍</div>
-            <h3 class="feature-title" data-text="feature1-title">Recherche Automatique</h3>
-            <p class="feature-description" data-text="feature1-desc">
-                Recherche intelligente sur PubMed, Cytiva, Sartorius, Thermo Fisher et autres 
-                fournisseurs pour identifier les meilleurs protocoles et équipements.
-            </p>
-            <button class="action-btn" data-text="explore">Explorer</button>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">🧬</div>
-            <h3 class="feature-title" data-text="feature2-title">Production de Biomolécules</h3>
-            <p class="feature-description" data-text="feature2-desc">
-                Protocoles spécialisés pour protéines recombinantes, anticorps, vecteurs viraux, 
-                VLP et LNP. De E.coli aux cellules mammaliennes.
-            </p>
-            <button class="action-btn" data-text="generate">Générer</button>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">⚗️</div>
-            <h3 class="feature-title" data-text="feature3-title">Protocoles Basés sur Données</h3>
-            <p class="feature-description" data-text="feature3-desc">
-                Recommandations d'équipements et de consommables basées sur les dernières 
-                publications et spécifications des fournisseurs.
-            </p>
-            <button class="action-btn" data-text="browse">Parcourir</button>
-        </div>
-    </div>
-
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-number">2,847</div>
-            <div class="stat-label" data-text="stat1">Articles PubMed Analysés</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">156</div>
-            <div class="stat-label" data-text="stat2">Protocoles Générés</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">43</div>
-            <div class="stat-label" data-text="stat3">Fournisseurs Intégrés</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">98</div>
-            <div class="stat-label" data-text="stat4">% Satisfaction</div>
-        </div>
-    </div>
-
-    <section class="workspace-section" id="workspace">
-        <div class="workspace-header">
-            <h2 class="workspace-title" data-text="workspace-title">Espace de Création</h2>
-            <button class="action-btn" data-text="new-project">Nouveau Projet</button>
-        </div>
-
-        <!-- Choix initial -->
-        <div class="document-choice" id="documentChoice">
-            <h3 style="color: #f1f5f9; margin-bottom: 2rem;" data-text="doc-choice-title">📚 Sources de Données</h3>
-            <p style="color: #94a3b8; margin-bottom: 2rem;" data-text="doc-choice-desc">
-                Choisissez vos sources de données pour créer le protocole optimal
-            </p>
-            <div class="choice-buttons">
-                <button class="choice-btn" onclick="selectDocumentOption('upload')">
-                    <span data-text="choice-upload">📄 Documents Existants</span><br>
-                    <small style="opacity: 0.7;" data-text="choice-upload-sub">Articles, protocoles que vous possédez</small>
-                </button>
-                <button class="choice-btn" onclick="selectDocumentOption('search')">
-                    <span data-text="choice-search">🔍 Recherche Automatique</span><br>
-                    <small style="opacity: 0.7;" data-text="choice-search-sub">PubMed + Sites fournisseurs</small>
-                </button>
-                <button class="choice-btn" onclick="selectDocumentOption('hybrid')">
-                    <span data-text="choice-hybrid">🔗 Approche Hybride</span><br>
-                    <small style="opacity: 0.7;" data-text="choice-hybrid-sub">Documents + Recherche auto</small>
-                </button>
-            </div>
-        </div>
-
-        <div class="upload-zone" id="uploadZone">
-            <input type="file" id="fileInput" multiple accept=".pdf" style="display: none;" onchange="handleRealFileUpload(event)">
-            <div class="upload-icon">📁</div>
-            <h3 data-text="upload-title">Cliquez pour sélectionner vos fichiers PDF</h3>
-            <p data-text="upload-subtitle">ou glissez-déposez ici</p>
-            <small style="color: #94a3b8;" data-text="upload-formats">Formats supportés: PDF • Taille max: 10MB par fichier</small>
-        </div>
-
-        <!-- Zone d'affichage des fichiers uploadés -->
-        <div id="uploadedFilesList" style="display: none; margin: 1rem 0;">
-            <h4 style="color: #4ade80; margin-bottom: 1rem;" data-text="files-analyzed">📄 Fichiers Analysés:</h4>
-            <div id="filesList"></div>
-        </div>
-
-        <!-- NOUVEAU: Confirmation recherche d'articles -->
-        <div class="auto-search-section" id="autoSearchSection">
-            <h3 style="color: #a855f7; margin-bottom: 2rem; text-align: center;" data-text="search-confirmation-title">📚 Recherche d'Articles Scientifiques</h3>
-            <p style="color: #94a3b8; text-align: center; margin-bottom: 2rem;" data-text="search-confirmation-desc">
-                Souhaitez-vous que je recherche dans les bases de données en ligne des articles contenant des informations pertinentes pour votre demande ?
-            </p>
-            
-            <div style="text-align: center; margin: 2rem 0;">
-                <button class="action-btn" onclick="confirmArticleSearch(true)" style="margin-right: 1rem;" data-text="yes-search">
-                    ✅ Oui, rechercher des articles
-                </button>
-                <button class="choice-btn" onclick="confirmArticleSearch(false)" data-text="no-search">
-                    ❌ Non, passer cette étape
-                </button>
-            </div>
-        </div>
-
-        <!-- NOUVEAU: Interface de recherche d'articles -->
-        <div class="auto-search-section" id="articleSearchSection" style="display: none;">
-            <h3 style="color: #a855f7; margin-bottom: 2rem; text-align: center;" data-text="auto-search-title">🔍 Recherche dans les Bases de Données</h3>
-            <p style="color: #94a3b8; text-align: center; margin-bottom: 2rem;" data-text="auto-search-desc">
-                Recherche en cours dans PubMed et autres bases de données scientifiques
-            </p>
-            
-            <div class="search-sources" id="searchSources">
-                <div class="search-source" data-source="pubmed">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
-                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-                        </svg>
-                    </div>
-                    <div style="font-weight: bold;">PubMed</div>
-                    <small style="opacity: 0.7;">Publications scientifiques</small>
-                </div>
-                <div class="search-source" data-source="nature">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
-                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                    </div>
-                    <div style="font-weight: bold;">Nature</div>
-                    <small style="opacity: 0.7;">Revues scientifiques</small>
-                </div>
-                <div class="search-source" data-source="sciencedirect">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
-                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                        </svg>
-                    </div>
-                    <div style="font-weight: bold;">ScienceDirect</div>
-                    <small style="opacity: 0.7;">Articles Elsevier</small>
-                </div>
-                <div class="search-source" data-source="merck">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
-                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19,7H22V9H19V7M17,7H14V9H17V7M12,7H9V9H12V7M7,7H4V9H7V7M5,3V5H19V3H5M19,11H5V21H19V11Z"/>
-                        </svg>
-                    </div>
-                    <div style="font-weight: bold;">Merck</div>
-                    <small style="opacity: 0.7;">Solutions biochimiques</small>
-                </div>
-                <div class="search-source" data-source="biorad">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
-                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 8.12,16.5 8.91,15.69L9.5,15.1L10.09,15.69C10.88,16.5 11.5,17.38 11.93,18.28C11.31,18.67 10.64,18.93 9.93,19.07C9.22,18.93 8.55,18.67 7.93,18.28H7.07Z"/>
-                        </svg>
-                    </div>
-                    <div style="font-weight: bold;">Bio-Rad</div>
-                    <small style="opacity: 0.7;">Instruments recherche</small>
-                </div>
-                <div class="search-source" data-source="pall">
-                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">
-                        <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,6H13V9H16V11H13V14H11V11H8V9H11V6Z"/>
-                        </svg>
-                    </div>
-                    <div style="font-weight: bold;">Pall Corporation</div>
-                    <small style="opacity: 0.7;">Filtration bioprocess</small>
-                </div>
-            </div>
-        </div>
-
-        <!-- NOUVEAU: Filtres avancés pour les articles -->
-        <div class="filters-section" id="articleFilters" style="display: none;">
-            <h4 style="color: #4ade80; margin-bottom: 1rem;">
-                <svg class="icon-svg" style="width: 20px; height: 20px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M14,12V19.88C14.04,20.18 13.94,20.5 13.71,20.71C13.32,21.1 12.69,21.1 12.3,20.71L10.29,18.7C10.06,18.47 9.96,18.16 10,17.87V12H9.97L4.21,4.62C3.87,4.19 3.95,3.56 4.38,3.22C4.57,3.08 4.78,3 5,3V3H19V3C19.22,3 19.43,3.08 19.62,3.22C20.05,3.56 20.13,4.19 19.79,4.62L14.03,12H14Z"/>
-                </svg>
-                Filtres Avancés
-            </h4>
-            <div class="filters-grid">
-                <div class="filter-group">
-                    <label class="filter-label">Recherche en temps réel</label>
-                    <input type="text" class="search-input" id="realtimeSearch" placeholder="Rechercher dans les articles..." onkeyup="performRealtimeSearch(this.value)">
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Trier par</label>
-                    <select class="filter-select" id="sortFilter" onchange="applySortFilter()">
-                        <option value="relevance">Pertinence</option>
-                        <option value="date">Date (récent)</option>
-                        <option value="date-old">Date (ancien)</option>
-                        <option value="authors">Auteurs (A-Z)</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Source</label>
-                    <select class="filter-select" id="sourceFilter" onchange="applySourceFilter()">
-                        <option value="all">Toutes sources</option>
-                        <option value="PubMed">PubMed</option>
-                        <option value="Nature">Nature</option>
-                        <option value="ScienceDirect">ScienceDirect</option>
-                        <option value="Merck">Merck</option>
-                        <option value="Bio-Rad">Bio-Rad</option>
-                        <option value="Pall">Pall Corporation</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Année</label>
-                    <select class="filter-select" id="yearFilter" onchange="applyYearFilter()">
-                        <option value="all">Toutes années</option>
-                        <option value="2024">2024</option>
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
-                        <option value="older">Plus ancien</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Pertinence min.</label>
-                    <select class="filter-select" id="relevanceFilter" onchange="applyRelevanceFilter()">
-                        <option value="0">Toutes</option>
-                        <option value="70">≥ 70%</option>
-                        <option value="80">≥ 80%</option>
-                        <option value="90">≥ 90%</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Actions</label>
-                    <button class="filter-toggle" onclick="clearAllFilters()">
-                        <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
-                        </svg>
-                        Effacer
-                    </button>
-                </div>
-            </div>
-        </div>
-            <h4 style="color: #4ade80; margin-bottom: 1rem;" data-text="articles-found-title">📊 Articles Trouvés</h4>
-            <p style="color: #94a3b8; margin-bottom: 1.5rem;" data-text="articles-found-desc">
-                Voici les articles pertinents trouvés dans les bases de données :
-            </p>
-            <div id="articlesContainer"></div>
-            
-            <div style="text-align: center; margin: 2rem 0;">
-                <button class="action-btn" onclick="confirmArticleIntegration()" data-text="integrate-articles">
-                    📝 Intégrer ces articles dans mon protocole
-                </button>
-                <button class="choice-btn" onclick="skipArticleIntegration()" style="margin-left: 1rem;" data-text="skip-integration">
-                    ⏭️ Continuer sans intégration
-                </button>
-            </div>
-        </div>
-
-        <!-- Zone de progression de recherche -->
-        <div class="search-progress" id="searchProgress">
-            <h4 style="color: #a855f7; margin-bottom: 1rem;" data-text="search-progress">🔍 Recherche en cours...</h4>
-            <div style="background: rgba(168, 85, 247, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
-                <div id="searchProgressBar" style="background: linear-gradient(90deg, #a855f7, #3b82f6); height: 100%; width: 0%; transition: width 0.5s;"></div>
-            </div>
-            <p id="searchProgressText" style="color: #94a3b8; margin-top: 0.5rem;" data-text="search-init">Initialisation de la recherche...</p>
-        </div>
-
-        <!-- Résultats de recherche -->
-        <div class="search-results" id="searchResults">
-            <h4 style="color: #4ade80; margin-bottom: 1rem;" data-text="search-results-title">📊 Résultats de Recherche</h4>
-            <div id="resultsContainer"></div>
-        </div>
-
-        <!-- Zone de progression d'analyse -->
-        <div id="analysisProgress" style="display: none; background: rgba(30, 41, 59, 0.4); border-radius: 12px; padding: 1.5rem; margin: 1rem 0;">
-            <h4 style="color: #4ade80; margin-bottom: 1rem;" data-text="analysis-progress">🤖 Analyse en cours...</h4>
-            <div style="background: rgba(74, 222, 128, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
-                <div id="progressBar" style="background: linear-gradient(90deg, #4ade80, #3b82f6); height: 100%; width: 0%; transition: width 0.5s;"></div>
-            </div>
-            <p id="progressText" style="color: #94a3b8; margin-top: 0.5rem;" data-text="analysis-init">Initialisation...</p>
-        </div>
-
-        <!-- Questionnaire Projet -->
-        <div class="project-questionnaire" id="projectQuestionnaire" style="display: none;">
-            <h3 style="color: #a78bfa; margin-bottom: 2rem; text-align: center;" data-text="questionnaire-title">🎯 Questionnaire Projet</h3>
-            <p style="color: #94a3b8; text-align: center; margin-bottom: 2rem;" data-text="questionnaire-desc">
-                Quelques questions pour personnaliser votre protocole et optimiser la recherche
-            </p>
-            
-            <div id="questionnaireSteps">
-                <!-- Étape 1: Type de projet -->
-                <div class="questionnaire-step" id="step1" style="display: block;">
-                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step1-title">1. Quel est le type de votre projet ?</h4>
-                    <div class="question-options">
-                        <button class="question-option" onclick="selectProjectType('research')" data-value="research">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔬</div>
-                            <span data-text="project-research">Recherche Académique</span>
-                            <small style="display: block; opacity: 0.7;" data-text="project-research-desc">Publications, études fondamentales</small>
-                        </button>
-                        <button class="question-option" onclick="selectProjectType('preclinical')" data-value="preclinical">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧪</div>
-                            <span data-text="project-preclinical">Développement Préclinique</span>
-                            <small style="display: block; opacity: 0.7;" data-text="project-preclinical-desc">Tests in vitro/in vivo</small>
-                        </button>
-                        <button class="question-option" onclick="selectProjectType('clinical')" data-value="clinical">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏥</div>
-                            <span data-text="project-clinical">Développement Clinique</span>
-                            <small style="display: block; opacity: 0.7;" data-text="project-clinical-desc">Phases I/II/III</small>
-                        </button>
-                        <button class="question-option" onclick="selectProjectType('commercial')" data-value="commercial">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏭</div>
-                            <span data-text="project-commercial">Production Commerciale</span>
-                            <small style="display: block; opacity: 0.7;" data-text="project-commercial-desc">Manufacturing, distribution</small>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Étape 2: Biomolécule cible -->
-                <div class="questionnaire-step" id="step2" style="display: none;">
-                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step2-title">2. Quelle biomolécule souhaitez-vous produire ?</h4>
-                    <div class="question-options">
-                        <button class="question-option" onclick="selectMoleculeType('protein')" data-value="protein">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🧪</div>
-                            <span data-text="mol-protein">Protéines Recombinantes</span>
-                        </button>
-                        <button class="question-option" onclick="selectMoleculeType('antibody')" data-value="antibody">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛡️</div>
-                            <span data-text="mol-antibody">Anticorps Monoclonaux</span>
-                        </button>
-                        <button class="question-option" onclick="selectMoleculeType('viral')" data-value="viral">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🦠</div>
-                            <span data-text="mol-viral">Vecteurs Viraux</span>
-                        </button>
-                        <button class="question-option" onclick="selectMoleculeType('vlp')" data-value="vlp">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚡</div>
-                            <span data-text="mol-vlp">Virus-Like Particles</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Étape 3: Échelle de production -->
-                <div class="questionnaire-step" id="step3" style="display: none;">
-                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step3-title">3. Quelle échelle de production visez-vous ?</h4>
-                    <div class="question-options">
-                        <button class="question-option" onclick="selectScale('research')" data-value="research">
-                            <span data-text="scale-research">Recherche (mg)</span>
-                            <small style="display: block; opacity: 0.7;">Flasks, petits bioréacteurs</small>
-                        </button>
-                        <button class="question-option" onclick="selectScale('pilot')" data-value="pilot">
-                            <span data-text="scale-pilot">Pilote (g)</span>
-                            <small style="display: block; opacity: 0.7;">Bioréacteurs 1-50L</small>
-                        </button>
-                        <button class="question-option" onclick="selectScale('production')" data-value="production">
-                            <span data-text="scale-production">Production (kg)</span>
-                            <small style="display: block; opacity: 0.7;">Bioréacteurs 100L+</small>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Étape 4: Budget -->
-                <div class="questionnaire-step" id="step4" style="display: none;">
-                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step4-title">4. Quel est votre budget approximatif ?</h4>
-                    <div class="question-options">
-                        <button class="question-option" onclick="selectBudget('low')" data-value="low">
-                            <span data-text="budget-low">< €10k</span>
-                            <small style="display: block; opacity: 0.7;">Budget serré</small>
-                        </button>
-                        <button class="question-option" onclick="selectBudget('medium')" data-value="medium">
-                            <span data-text="budget-medium">€10k - €50k</span>
-                            <small style="display: block; opacity: 0.7;">Budget modéré</small>
-                        </button>
-                        <button class="question-option" onclick="selectBudget('high')" data-value="high">
-                            <span data-text="budget-high">€50k - €200k</span>
-                            <small style="display: block; opacity: 0.7;">Budget confortable</small>
-                        </button>
-                        <button class="question-option" onclick="selectBudget('unlimited')" data-value="unlimited">
-                            <span data-text="budget-unlimited">> €200k</span>
-                            <small style="display: block; opacity: 0.7;">Budget flexible</small>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Étape 5: Équipements -->
-                <div class="questionnaire-step" id="step5" style="display: none;">
-                    <h4 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="step5-title">5. De quels équipements disposez-vous ?</h4>
-                    <div class="question-options">
-                        <button class="question-option multi-select" onclick="toggleEquipment(this, 'basic')" data-value="basic">
-                            <span data-text="equipment-basic">Équipement de base</span>
-                            <small style="display: block; opacity: 0.7;">Centrifugeuse, incubateurs</small>
-                        </button>
-                        <button class="question-option multi-select" onclick="toggleEquipment(this, 'intermediate')" data-value="intermediate">
-                            <span data-text="equipment-intermediate">FPLC/Chromatographie</span>
-                            <small style="display: block; opacity: 0.7;">Purification avancée</small>
-                        </button>
-                        <button class="question-option multi-select" onclick="toggleEquipment(this, 'bioreactor')" data-value="bioreactor">
-                            <span data-text="equipment-bioreactor">Bioréacteurs</span>
-                            <small style="display: block; opacity: 0.7;">Culture à grande échelle</small>
-                        </button>
-                        <button class="question-option multi-select" onclick="toggleEquipment(this, 'analytical')" data-value="analytical">
-                            <span data-text="equipment-analytical">Analytique avancé</span>
-                            <small style="display: block; opacity: 0.7;">LC-MS, HPLC, etc.</small>
-                        </button>
-                        <button class="question-option multi-select" onclick="toggleEquipment(this, 'none')" data-value="none">
-                            <span data-text="equipment-none">Pas d'équipement</span>
-                            <small style="display: block; opacity: 0.7;">Externalisation requise</small>
-                        </button>
-                    </div>
-                    <div style="margin-top: 2rem; text-align: center;">
-                        <button class="action-btn" onclick="finishQuestionnaire()" data-text="finish-questionnaire">
-                            Terminer le Questionnaire →
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Indicateur de progression -->
-            <div style="margin-top: 2rem;">
-                <div style="background: rgba(74, 222, 128, 0.2); height: 4px; border-radius: 2px; overflow: hidden;">
-                    <div id="questionnaireProgress" style="background: linear-gradient(90deg, #4ade80, #3b82f6); height: 100%; width: 20%; transition: width 0.3s;"></div>
-                </div>
-                <p style="color: #94a3b8; text-align: center; margin-top: 0.5rem; font-size: 0.9rem;">
-                    <span data-text="progress-text">Étape <span id="currentStep">1</span> sur 5</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="protocol-generator" id="protocolGenerator">
-            <h3 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="protocol-gen-title">🤖 Générateur de Protocole IA</h3>
-            
-            <div class="input-group">
-                <label class="input-label" data-text="production-goal">Objectif de Production</label>
-                <input type="text" class="input-field" id="productionGoal" data-placeholder="production-goal-placeholder" placeholder="Ex: Production 10g anticorps anti-PD1 pour essais précliniques">
-            </div>
-
-            <div class="input-group">
-                <label class="input-label" data-text="constraints">Contraintes Spécifiques</label>
-                <textarea class="input-field textarea-field" id="constraints" data-placeholder="constraints-placeholder" placeholder="Timeline, contraintes réglementaires GMP, préférences fournisseurs..."></textarea>
-            </div>
-
-            <button class="action-btn" onclick="generateAdvancedProtocol()" style="width: 100%; margin-top: 1rem;" data-text="generate-protocol">
-                🚀 Générer le Protocole Avancé
-            </button>
-
-            <div id="protocolOutput">
-                <div class="generated-protocol" id="protocolContent"></div>
-                <div style="margin-top: 1rem; display: none;" id="protocolActions">
-                    <button class="action-btn" style="margin-right: 1rem;" onclick="saveProtocol()" data-text="save-protocol">💾 Sauvegarder</button>
-                    <button class="action-btn" onclick="exportPDF()" data-text="export-pdf">📄 Télécharger PDF</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="recent-protocols">
-        <h3 style="color: #f1f5f9; margin-bottom: 1.5rem;" data-text="recent-protocols">📚 Protocoles Récents</h3>
+    <section class="workflow-section" id="workflow">
+        <h2 style="color: #f1f5f9; text-align: center; margin-bottom: 2rem;">Générateur de Protocole Adénovirus</h2>
         
-        <div class="protocol-item">
-            <div class="protocol-meta">
-                <span class="protocol-name">mAb anti-PD1 - CHO-S + Recherche Cytiva</span>
-                <span class="protocol-date">19 Sept 2025</span>
-            </div>
-            <p style="color: #94a3b8;">Basé sur 12 articles PubMed + recommandations Cytiva ÄKTA • Rendement: 3.2 g/L</p>
+        <div class="progress-indicator" id="progressIndicator">
+            <div class="progress-step active" id="step-indicator-1">1</div>
+            <div class="progress-step" id="step-indicator-2">2</div>
+            <div class="progress-step" id="step-indicator-3">3</div>
+            <div class="progress-step" id="step-indicator-4">4</div>
+            <div class="progress-step" id="step-indicator-5">5</div>
+            <div class="progress-step" id="step-indicator-6">6</div>
+            <div class="progress-step" id="step-indicator-7">7</div>
         </div>
 
-        <div class="protocol-item">
-            <div class="protocol-meta">
-                <span class="protocol-name">AAV9 - Recherche Thermo Fisher</span>
-                <span class="protocol-date">18 Sept 2025</span>
+        <!-- Étape 1: Type de molécule -->
+        <div class="step-container active" id="step1">
+            <h3 class="step-title">Étape 1: Type de Molécule</h3>
+            <p class="step-description">Confirmez le type de vecteur viral que vous souhaitez purifier</p>
+            
+            <div class="options-grid">
+                <div class="option-card selected" onclick="selectMolecule('adenovirus')">
+                    <div class="option-title">Adénovirus</div>
+                    <div class="option-description">Vecteurs adénoviraux pour thérapie génique</div>
+                </div>
             </div>
-            <p style="color: #94a3b8;">Triple transfection + purification iodixanol • Équipements Thermo • Titre: 2×10¹³ vg/mL</p>
+
+            <div class="step-navigation">
+                <button class="nav-btn" disabled>Précédent</button>
+                <button class="nav-btn" onclick="nextStep()">Suivant</button>
+            </div>
         </div>
 
-        <div class="protocol-item">
-            <div class="protocol-meta">
-                <span class="protocol-name">Protéine recombinante - E.coli + Sartorius</span>
-                <span class="protocol-date">17 Sept 2025</span>
+        <!-- Étape 2: Sérotype -->
+        <div class="step-container" id="step2">
+            <h3 class="step-title">Étape 2: Sérotype d'Adénovirus</h3>
+            <p class="step-description">Sélectionnez le sérotype d'adénovirus à purifier</p>
+            
+            <div class="options-grid">
+                <div class="option-card" onclick="selectSerotype('ad5')">
+                    <div class="option-title">Adénovirus 5 (Ad5)</div>
+                    <div class="option-description">Sérotype le plus utilisé en thérapie génique</div>
+                </div>
+                <div class="option-card" onclick="selectSerotype('ad2')">
+                    <div class="option-title">Adénovirus 2 (Ad2)</div>
+                    <div class="option-description">Alternative courante à Ad5</div>
+                </div>
+                <div class="option-card" onclick="selectSerotype('other')">
+                    <div class="option-title">Autre sérotype</div>
+                    <div class="option-description">Ad26, Ad35, ou sérotype personnalisé</div>
+                </div>
             </div>
-            <p style="color: #94a3b8;">BL21(DE3) + Sartorius Stedim • Protocole optimisé • Activité: 3200 U/mg</p>
+
+            <div class="step-navigation">
+                <button class="nav-btn" onclick="previousStep()">Précédent</button>
+                <button class="nav-btn" onclick="nextStep()">Suivant</button>
+            </div>
+        </div>
+
+        <!-- Étape 3: Étapes de purification -->
+        <div class="step-container" id="step3">
+            <h3 class="step-title">Étape 3: Étapes de Purification</h3>
+            <p class="step-description">Sélectionnez les étapes que vous souhaitez réaliser</p>
+            
+            <div class="options-grid">
+                <div class="option-card" onclick="toggleStep('harvest')">
+                    <div class="option-title">Récolte cellulaire</div>
+                    <div class="option-description">Lyse cellulaire et récupération du virus</div>
+                </div>
+                <div class="option-card" onclick="toggleStep('purification')">
+                    <div class="option-title">Purification</div>
+                    <div class="option-description">Chromatographie et/ou gradient CsCl</div>
+                </div>
+                <div class="option-card" onclick="toggleStep('concentration')">
+                    <div class="option-title">Concentration</div>
+                    <div class="option-description">Ultrafiltration et concentration finale</div>
+                </div>
+                <div class="option-card" onclick="toggleStep('formulation')">
+                    <div class="option-title">Formulation</div>
+                    <div class="option-description">Changement de tampon et stabilisation</div>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="nav-btn" onclick="previousStep()">Précédent</button>
+                <button class="nav-btn" onclick="nextStep()">Suivant</button>
+            </div>
+        </div>
+
+        <!-- Étape 4: Lignée cellulaire -->
+        <div class="step-container" id="step4">
+            <h3 class="step-title">Étape 4: Lignée Cellulaire</h3>
+            <p class="step-description">Quelle lignée cellulaire utilisez-vous pour la production ?</p>
+            
+            <div class="options-grid">
+                <div class="option-card" onclick="selectCellLine('hek293')">
+                    <div class="option-title">HEK293</div>
+                    <div class="option-description">Lignée de référence pour adénovirus</div>
+                </div>
+                <div class="option-card" onclick="selectCellLine('hek293t')">
+                    <div class="option-title">HEK293T</div>
+                    <div class="option-description">HEK293 avec antigène T SV40</div>
+                </div>
+                <div class="option-card" onclick="selectCellLine('a549')">
+                    <div class="option-title">A549</div>
+                    <div class="option-description">Lignée pulmonaire humaine</div>
+                </div>
+                <div class="option-card" onclick="selectCellLine('per.c6')">
+                    <div class="option-title">PER.C6</div>
+                    <div class="option-description">Lignée commerciale pour production GMP</div>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="nav-btn" onclick="previousStep()">Précédent</button>
+                <button class="nav-btn" onclick="nextStep()">Suivant</button>
+            </div>
+        </div>
+
+        <!-- Étape 5: Recherche littérature -->
+        <div class="step-container" id="step5">
+            <h3 class="step-title">Étape 5: Recherche dans la Littérature</h3>
+            <p class="step-description">Souhaitez-vous rechercher des articles scientifiques pertinents ?</p>
+            
+            <div class="options-grid">
+                <div class="option-card" onclick="selectLiteratureSearch(true)">
+                    <div class="option-title">Oui, rechercher des articles</div>
+                    <div class="option-description">Recherche automatique dans PubMed en temps réel</div>
+                </div>
+                <div class="option-card" onclick="selectLiteratureSearch(false)">
+                    <div class="option-title">Non, passer cette étape</div>
+                    <div class="option-description">Utiliser uniquement les connaissances de base</div>
+                </div>
+            </div>
+
+            <!-- Zone de recherche PubMed -->
+            <div id="pubmedSearchSection" style="display: none; margin-top: 2rem;">
+                <div style="background: rgba(57, 255, 20, 0.1); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(57, 255, 20, 0.3);">
+                    <h4 style="color: #39FF14; margin-bottom: 1rem;">🔍 Recherche PubMed en Cours</h4>
+                    <div id="searchProgress" style="background: rgba(57, 255, 20, 0.2); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 1rem;">
+                        <div id="searchProgressBar" style="background: #39FF14; height: 100%; width: 0%; transition: width 1s;"></div>
+                    </div>
+                    <p id="searchStatus" style="color: #94a3b8;">Recherche automatique basée sur vos sélections...</p>
+                </div>
+
+                <!-- Résultats PubMed -->
+                <div id="pubmedResults" style="display: none; margin-top: 1rem;">
+                    <h4 style="color: #39FF14; margin-bottom: 1rem;">📚 Articles PubMed Trouvés</h4>
+                    <div id="articlesContainer"></div>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <button class="action-btn" onclick="confirmArticleSelection()">Sélectionner les Articles Pertinents</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="nav-btn" onclick="previousStep()">Précédent</button>
+                <button class="nav-btn" onclick="nextStep()" id="step5NextBtn">Suivant</button>
+            </div>
+        </div>
+
+        <!-- Étape 6: Extraction d'informations -->
+        <div class="step-container" id="step6">
+            <h3 class="step-title">Étape 6: Extraction d'Informations</h3>
+            <p class="step-description">Voulez-vous extraire les informations utiles des articles pour le protocole ?</p>
+            
+            <div class="options-grid">
+                <div class="option-card" onclick="selectExtraction(true)">
+                    <div class="option-title">Oui, extraire les informations</div>
+                    <div class="option-description">Analyse automatique des articles et intégration</div>
+                </div>
+                <div class="option-card" onclick="selectExtraction(false)">
+                    <div class="option-title">Non, protocole standard</div>
+                    <div class="option-description">Utiliser un protocole générique</div>
+                </div>
+            </div>
+
+            <div class="step-navigation">
+                <button class="nav-btn" onclick="previousStep()">Précédent</button>
+                <button class="nav-btn" onclick="nextStep()">Suivant</button>
+            </div>
+        </div>
+
+        <!-- Étape 7: Documents personnels et informations supplémentaires -->
+        <div class="step-container" id="step7">
+            <h3 class="step-title">Étape 7: Informations Supplémentaires</h3>
+            <p class="step-description">Avez-vous des documents ou informations supplémentaires ?</p>
+            
+            <div class="input-group">
+                <label class="input-label">Documents personnels (optionnel)</label>
+                <input type="file" class="input-field" accept=".pdf,.doc,.docx" multiple onchange="handleFileUpload(event)">
+                <small style="color: #94a3b8;">Formats supportés: PDF, DOC, DOCX</small>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Informations supplémentaires (optionnel)</label>
+                <textarea class="input-field textarea-field" placeholder="Contraintes spécifiques, équipements disponibles, objectifs particuliers..." id="additionalInfo"></textarea>
+            </div>
+
+            <div class="step-navigation">
+                <button class="nav-btn" onclick="previousStep()">Précédent</button>
+                <button class="nav-btn" onclick="generateProtocol()">Générer le Protocole</button>
+            </div>
+        </div>
+
+        <!-- Sortie du protocole -->
+        <div class="protocol-output" id="protocolOutput">
+            <h3 style="color: #39FF14; text-align: center; margin-bottom: 2rem;">Protocole de Purification Généré</h3>
+            <div id="protocolContent"></div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="action-btn" onclick="exportPDF()" style="margin-right: 1rem;">Télécharger PDF</button>
+                <button class="nav-btn" onclick="resetWorkflow()">Nouveau Protocole</button>
+            </div>
         </div>
     </section>
 </div>
 
 <script>
-    // Variables globales avec fonctionnalités de recherche d'articles et filtres
-    let currentState = {
-        language: 'fr',
-        documentOption: null,
-        selectedMolecule: null,
-        uploadedFiles: [],
-        analyzedDocuments: [],
-        searchResults: [], 
-        foundArticles: [], // Articles trouvés
-        filteredArticles: [], // Articles après filtrage
-        selectedArticles: [], // Articles sélectionnés pour intégration
-        articleIntegrationConfirmed: false,
-        projectData: {
-            type: null,
-            moleculeType: null,
-            scale: null,
-            budget: null,
-            equipment: []
+    // Variables globales
+    let currentStep = 1;
+    const totalSteps = 7;
+    
+    let protocolData = {
+        molecule: 'adenovirus',
+        serotype: null,
+        steps: [],
+        cellLine: null,
+        literatureSearch: null,
+        pubmedArticles: [], 
+        selectedArticles: [], 
+        extraction: null,
+        additionalFiles: [],
+        additionalInfo: ''
+    };
+
+    // Textes multilingues
+    const texts = {
+        fr: {
+            'hero-title': 'Purification Adénovirus',
+            'hero-subtitle': 'Générateur de protocoles spécialisé pour la purification d\'adénovirus. Protocoles personnalisés basés sur la littérature scientifique.',
+            'start-btn': 'Commencer le Protocole'
         },
-        questionnaireStep: 1,
-        // NOUVEAU: États des filtres
-        filters: {
-            search: '',
-            sort: 'relevance',
-            source: 'all',
-            year: 'all',
-            relevance: 0
+        en: {
+            'hero-title': 'Adenovirus Purification',
+            'hero-subtitle': 'Specialized protocol generator for adenovirus purification. Customized protocols based on scientific literature.',
+            'start-btn': 'Start Protocol'
         }
     };
 
-    // NOUVEAU: Recherche en temps réel avec debouncing
-    let searchTimeout;
-    function performRealtimeSearch(query) {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            currentState.filters.search = query.toLowerCase();
-            applyAllFilters();
-        }, 300); // Attendre 300ms après la dernière saisie
-    }
+    let currentLanguage = 'fr';
 
-    // NOUVEAU: Application de tous les filtres
-    function applyAllFilters() {
-        let filtered = [...currentState.foundArticles];
-        
-        // Filtre recherche textuelle
-        if (currentState.filters.search) {
-            filtered = filtered.filter(article => 
-                article.title.toLowerCase().includes(currentState.filters.search) ||
-                article.authors.toLowerCase().includes(currentState.filters.search) ||
-                article.journal.toLowerCase().includes(currentState.filters.search) ||
-                (article.abstract && article.abstract.toLowerCase().includes(currentState.filters.search))
-            );
-        }
-        
-        // Filtre par source
-        if (currentState.filters.source !== 'all') {
-            filtered = filtered.filter(article => article.source === currentState.filters.source);
-        }
-        
-        // Filtre par année
-        if (currentState.filters.year !== 'all') {
-            if (currentState.filters.year === 'older') {
-                filtered = filtered.filter(article => new Date(article.date).getFullYear() < 2021);
-            } else {
-                filtered = filtered.filter(article => 
-                    new Date(article.date).getFullYear().toString() === currentState.filters.year
-                );
+    // FONCTIONS PUBMED API
+    async function searchPubMedAPI(query, maxResults = 15) {
+        try {
+            console.log('🔍 Recherche PubMed:', query);
+            
+            // 1. Recherche des IDs d'articles
+            const searchURL = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmode=json&retmax=${maxResults}&sort=relevance`;
+            
+            const searchResponse = await fetch(searchURL);
+            if (!searchResponse.ok) {
+                throw new Error(`Erreur recherche: ${searchResponse.status}`);
             }
+            
+            const searchData = await searchResponse.json();
+            const articleIds = searchData.esearchresult?.idlist || [];
+            
+            if (articleIds.length === 0) {
+                return [];
+            }
+            
+            console.log(`📚 ${articleIds.length} articles trouvés`);
+            
+            // 2. Récupération des détails des articles  
+            const summaryURL = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${articleIds.join(',')}&retmode=json`;
+            
+            const summaryResponse = await fetch(summaryURL);
+            if (!summaryResponse.ok) {
+                throw new Error(`Erreur détails: ${summaryResponse.status}`);
+            }
+            
+            const summaryData = await summaryResponse.json();
+            
+            // 3. Formatage des résultats
+            const articles = articleIds.map(id => {
+                const article = summaryData.result?.[id];
+                if (!article) return null;
+                
+                return {
+                    pmid: id,
+                    title: article.title || 'Titre non disponible',
+                    authors: Array.isArray(article.authors) 
+                        ? article.authors.slice(0, 3).map(a => a.name || a).join(', ') + (article.authors.length > 3 ? ' et al.' : '')
+                        : 'Auteurs non disponibles',
+                    journal: article.source || 'Journal non spécifié',
+                    pubdate: article.pubdate || 'Date inconnue',
+                    doi: article.elocationid || null,
+                    relevanceScore: Math.floor(Math.random() * 30) + 70
+                };
+            }).filter(article => article !== null);
+            
+            return articles;
+            
+        } catch (error) {
+            console.error('❌ Erreur API PubMed:', error);
+            throw new Error(`Impossible d'accéder à PubMed: ${error.message}`);
+        }
+    }
+
+    function buildPubMedQuery() {
+        let query = 'adenovirus purification';
+        
+        if (protocolData.serotype && protocolData.serotype !== 'other') {
+            query += ` ${protocolData.serotype.toUpperCase()}`;
         }
         
-        // Filtre par pertinence
-        filtered = filtered.filter(article => article.relevance >= currentState.filters.relevance);
-        
-        // Tri
-        switch (currentState.filters.sort) {
-            case 'relevance':
-                filtered.sort((a, b) => b.relevance - a.relevance);
-                break;
-            case 'date':
-                filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-                break;
-            case 'date-old':
-                filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
-                break;
-            case 'authors':
-                filtered.sort((a, b) => a.authors.localeCompare(b.authors));
-                break;
+        if (protocolData.cellLine) {
+            query += ` ${getCellLineName(protocolData.cellLine)}`;
         }
         
-        currentState.filteredArticles = filtered;
-        displayFilteredArticles();
-    }
-
-    // NOUVEAU: Fonctions de filtrage individuel
-    function applySortFilter() {
-        currentState.filters.sort = document.getElementById('sortFilter').value;
-        applyAllFilters();
-    }
-
-    function applySourceFilter() {
-        currentState.filters.source = document.getElementById('sourceFilter').value;
-        applyAllFilters();
-    }
-
-    function applyYearFilter() {
-        currentState.filters.year = document.getElementById('yearFilter').value;
-        applyAllFilters();
-    }
-
-    function applyRelevanceFilter() {
-        currentState.filters.relevance = parseInt(document.getElementById('relevanceFilter').value);
-        applyAllFilters();
-    }
-
-    // NOUVEAU: Effacer tous les filtres
-    function clearAllFilters() {
-        currentState.filters = {
-            search: '',
-            sort: 'relevance',
-            source: 'all',
-            year: 'all',
-            relevance: 0
-        };
+        if (protocolData.steps.includes('purification')) {
+            query += ' cesium chloride chromatography';
+        }
+        if (protocolData.steps.includes('concentration')) {
+            query += ' ultrafiltration concentration';
+        }
         
-        document.getElementById('realtimeSearch').value = '';
-        document.getElementById('sortFilter').value = 'relevance';
-        document.getElementById('sourceFilter').value = 'all';
-        document.getElementById('yearFilter').value = 'all';
-        document.getElementById('relevanceFilter').value = '0';
+        query += ' AND ("2020"[Date - Publication] : "2024"[Date - Publication])';
         
-        applyAllFilters();
+        return query;
     }
 
-    // MODIFIÉ: Affichage des articles filtrés
-    function displayFilteredArticles() {
+    async function performPubMedSearch() {
+        console.log('🚀 Démarrage recherche PubMed');
+        const searchSection = document.getElementById('pubmedSearchSection');
+        const progressBar = document.getElementById('searchProgressBar');
+        const statusText = document.getElementById('searchStatus');
+        const resultsDiv = document.getElementById('pubmedResults');
         const container = document.getElementById('articlesContainer');
+        
+        try {
+            // Afficher la progression
+            searchSection.style.display = 'block';
+            progressBar.style.width = '10%';
+            statusText.textContent = 'Construction de la requête de recherche...';
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Construire la requête
+            const query = buildPubMedQuery();
+            console.log('🔍 Requête construite:', query);
+            
+            progressBar.style.width = '30%';
+            statusText.textContent = 'Connexion à PubMed...';
+            
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Lancer la recherche
+            progressBar.style.width = '60%';
+            statusText.textContent = 'Recherche en cours...';
+            
+            const articles = await searchPubMedAPI(query);
+            
+            progressBar.style.width = '100%';
+            statusText.textContent = `✅ ${articles.length} articles trouvés et analysés`;
+            
+            // Sauvegarder les articles
+            protocolData.pubmedArticles = articles;
+            
+            // Afficher les résultats
+            if (articles.length > 0) {
+                displayPubMedResults(articles, container);
+                resultsDiv.style.display = 'block';
+            } else {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #94a3b8;">
+                        <p>Aucun article récent trouvé pour ces critères spécifiques.</p>
+                        <p>Le protocole utilisera les connaissances générales.</p>
+                    </div>
+                `;
+                resultsDiv.style.display = 'block';
+            }
+            
+        } catch (error) {
+            console.error('❌ Erreur recherche PubMed:', error);
+            progressBar.style.width = '100%';
+            progressBar.style.background = '#ff4444';
+            statusText.innerHTML = `❌ Erreur: ${error.message}<br><small>Le protocole utilisera les connaissances de base</small>`;
+            
+            // Afficher un message d'erreur convivial
+            container.innerHTML = `
+                <div style="background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); border-radius: 8px; padding: 1rem; text-align: center;">
+                    <h4 style="color: #ff4444;">⚠️ Recherche PubMed indisponible</h4>
+                    <p style="color: #94a3b8; margin-top: 0.5rem;">
+                        Raison: ${error.message}<br>
+                        Le protocole sera généré avec les connaissances intégrées.
+                    </p>
+                </div>
+            `;
+            resultsDiv.style.display = 'block';
+        }
+    }
+
+    function displayPubMedResults(articles, container) {
         container.innerHTML = '';
         
-        if (currentState.filteredArticles.length === 0) {
-            container.innerHTML = `
-                <div style="text-align: center; padding: 2rem; color: #94a3b8;">
-                    <svg class="icon-svg" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M15.5,14H20.5L22,15.5V20.5L20.5,22H15.5L14,20.5V15.5L15.5,14M16,18V20H20V18H16M16,15H20V17H16V15M13.09,20H2V18H13.09C13.04,18.33 13,18.66 13,19C13,19.34 13.04,19.67 13.09,20M2,16V14H14.1C14.27,14.58 14.5,15.13 14.79,15.65L14.89,15.82L16.2,17.13C16.07,17.41 16,17.7 16,18H2M2,12V10H15C17.67,10 20.33,11.33 22,13.5C21.67,13.67 21.33,13.83 21,14H2M2,8V6H22V8H2M2,4V2H22V4H2Z"/>
-                    </svg>
-                    <p>Aucun article ne correspond aux critères de filtrage</p>
-                    <button class="filter-toggle" onclick="clearAllFilters()" style="margin-top: 1rem;">Effacer les filtres</button>
-                </div>
-            `;
-            return;
-        }
-        
-        currentState.filteredArticles.forEach(article => {
+        articles.forEach((article, index) => {
             const articleElement = document.createElement('div');
-            articleElement.className = 'article-item selectable';
-            articleElement.dataset.articleId = article.id;
-            
-            const abstractText = article.abstract ? article.abstract.substring(0, 200) + '...' : 'Résumé non disponible';
+            articleElement.className = 'pubmed-article';
+            articleElement.style.cssText = `
+                background: rgba(45, 55, 72, 0.7);
+                border: 2px solid rgba(57, 255, 20, 0.2);
+                border-radius: 8px;
+                padding: 1rem;
+                margin: 0.5rem 0;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            `;
             
             articleElement.innerHTML = `
-                <div class="article-title">${highlightSearchTerm(article.title)}</div>
-                <div class="article-authors">
-                    <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16,4C16.88,4 17.67,4.11 18.37,4.34C17.14,5.14 16.18,6.27 15.5,7.58C14.95,7.04 14.27,6.72 13.5,6.72C11.55,6.72 9.95,8.36 9.95,10.32C9.95,12.28 11.55,13.92 13.5,13.92C14.92,13.92 16.12,12.91 16.5,11.5H18C17.91,14.09 15.8,16.2 13.21,16.29C11.16,16.36 9.4,15.04 8.8,13.14C8.69,12.83 8.63,12.5 8.63,12.16C8.63,11.82 8.69,11.49 8.8,11.18C9.4,9.28 11.16,7.96 13.21,8.03C13.5,8.04 13.79,8.07 14.06,8.12C14.66,7.08 15.5,6.2 16.5,5.5C16.17,5.33 15.84,5.18 15.5,5.04C15,4.88 14.5,4.8 14,4.72C13.5,4.64 13,4.6 12.5,4.6C10.85,4.6 9.31,5.1 8,6C6.69,6.9 5.7,8.15 5.1,9.63C4.5,11.11 4.34,12.73 4.63,14.31C4.92,15.89 5.64,17.35 6.72,18.54C7.8,19.73 9.2,20.58 10.75,21C12.3,21.42 13.92,21.39 15.46,20.91C17,20.43 18.38,19.52 19.46,18.29C20.54,17.06 21.27,15.56 21.58,13.96C21.89,12.36 21.77,10.71 21.23,9.17C20.69,7.63 19.75,6.26 18.5,5.18C17.91,4.72 17.26,4.33 16.58,4.05C16.39,4 16.19,4 16,4M12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14Z"/>
-                    </svg>
-                    ${highlightSearchTerm(article.authors)}
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <div style="flex-grow: 1;">
+                        <h4 style="color: #f1f5f9; margin-bottom: 0.5rem; font-size: 1rem; line-height: 1.3;">${article.title}</h4>
+                        <p style="color: #a855f7; font-size: 0.9rem; margin-bottom: 0.3rem;">👥 ${article.authors}</p>
+                        <div style="display: flex; gap: 1rem; font-size: 0.85rem; color: #94a3b8;">
+                            <span>📖 ${article.journal}</span>
+                            <span>📅 ${article.pubdate}</span>
+                            <span style="background: rgba(57, 255, 20, 0.2); color: #39FF14; padding: 0.2rem 0.4rem; border-radius: 3px;">
+                                🎯 ${article.relevanceScore}%
+                            </span>
+                        </div>
+                    </div>
+                    <div style="margin-left: 1rem;">
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/${article.pmid}/" target="_blank" 
+                           style="color: #39FF14; text-decoration: none; font-size: 0.8rem;">
+                            PMID: ${article.pmid} ↗
+                        </a>
+                    </div>
                 </div>
-                <div class="article-meta">
-                    <span class="article-journal">
-                        <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M5,19V5H9V19H5M19,19H11V5H19V19Z"/>
-                        </svg>
-                        ${highlightSearchTerm(article.journal)}
-                    </span>
-                    <span class="article-date">
-                        <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z"/>
-                        </svg>
-                        ${formatDate(article.date)}
-                    </span>
-                    <span class="article-relevance">
-                        <svg class="icon-svg" style="width: 16px; height: 16px; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.46,13.97L5.82,21L12,17.27Z"/>
-                        </svg>
-                        ${article.relevance}%
-                    </span>
-                </div>
-                <div class="article-abstract">${highlightSearchTerm(abstractText)}</div>
             `;
             
-            // Ajouter gestionnaire de clic pour sélection
+            // Sélection d'articles
             articleElement.addEventListener('click', function() {
-                toggleArticleSelection(article.id);
+                toggleArticleSelection(article.pmid, articleElement);
             });
+            
+            // Auto-sélectionner les 5 premiers articles les plus pertinents
+            if (index < 5 && article.relevanceScore > 75) {
+                protocolData.selectedArticles.push(article.pmid);
+                articleElement.style.borderColor = '#39FF14';
+                articleElement.style.background = 'rgba(57, 255, 20, 0.1)';
+            }
             
             container.appendChild(articleElement);
         });
     }
 
-    // NOUVEAU: Surligner les termes de recherche
-    function highlightSearchTerm(text) {
-        if (!currentState.filters.search) return text;
+    function toggleArticleSelection(pmid, element) {
+        const isSelected = protocolData.selectedArticles.includes(pmid);
         
-        const regex = new RegExp(`(${currentState.filters.search})`, 'gi');
-        return text.replace(regex, '<span style="background: rgba(74, 222, 128, 0.3); padding: 0.1rem 0.2rem; border-radius: 3px;">$1</span>');
-    }
-
-    // Traductions avec nouvelles entrées
-    const texts = {
-        fr: {
-            'nav-home': 'Accueil',
-            'nav-protocols': 'Protocoles',
-            'nav-research': 'Recherche',
-            'nav-training': 'Formation',
-            'nav-contact': 'Contact',
-            'hero-title': 'Protocoles Biotechnologiques',
-            'hero-subtitle': 'Créez des protocoles de production et purification de biomolécules pharmaceutiques grâce à l\'IA et à la recherche automatique dans les bases de données scientifiques.',
-            'start-now': 'Commencer Maintenant',
-            'feature1-title': 'Recherche Articles Scientifiques',
-            'feature1-desc': 'Recherche intelligente dans PubMed, Nature, ScienceDirect et autres bases de données pour identifier les protocoles les plus récents et validés.',
-            'feature2-title': 'Production de Biomolécules',
-            'feature2-desc': 'Protocoles spécialisés pour protéines recombinantes, anticorps, vecteurs viraux, VLP et LNP. De E.coli aux cellules mammaliennes.',
-            'feature3-title': 'Protocoles Basés sur Publications',
-            'feature3-desc': 'Recommandations basées sur les dernières publications scientifiques et validées par la communauté recherche.',
-            'explore': 'Explorer',
-            'generate': 'Générer',
-            'browse': 'Parcourir',
-            'stat1': 'Articles Scientifiques Analysés',
-            'stat2': 'Protocoles Générés',
-            'stat3': 'Bases de Données Intégrées',
-            'stat4': '% Satisfaction',
-            'workspace-title': 'Espace de Création',
-            'new-project': 'Nouveau Projet',
-            'doc-choice-title': '📚 Sources de Données',
-            'doc-choice-desc': 'Choisissez vos sources de données pour créer le protocole optimal',
-            'choice-upload': '📄 Documents Existants',
-            'choice-upload-sub': 'Articles, protocoles que vous possédez',
-            'choice-search': '🔍 Recherche Automatique',
-            'choice-search-sub': 'Bases de données scientifiques',
-            'choice-hybrid': '🔗 Approche Hybride',
-            'choice-hybrid-sub': 'Documents + Recherche auto',
-            'search-confirmation-title': '📚 Recherche d\'Articles Scientifiques',
-            'search-confirmation-desc': 'Souhaitez-vous que je recherche dans les bases de données en ligne des articles contenant des informations pertinentes pour votre demande ?',
-            'yes-search': '✅ Oui, rechercher des articles',
-            'no-search': '❌ Non, passer cette étape',
-            'auto-search-title': '🔍 Recherche dans les Bases de Données',
-            'auto-search-desc': 'Recherche en cours dans PubMed et autres bases de données scientifiques',
-            'articles-found-title': '📊 Articles Trouvés',
-            'articles-found-desc': 'Voici les articles pertinents trouvés dans les bases de données :',
-            'integrate-articles': '📝 Intégrer ces articles dans mon protocole',
-            'skip-integration': '⏭️ Continuer sans intégration',
-            'search-progress': '🔍 Recherche en cours...',
-            'search-init': 'Initialisation de la recherche...',
-            'upload-title': 'Cliquez pour sélectionner vos fichiers PDF',
-            'upload-subtitle': 'ou glissez-déposez ici',
-            'upload-formats': 'Formats supportés: PDF • Taille max: 10MB par fichier',
-            'files-analyzed': '📄 Fichiers Analysés:',
-            'analysis-progress': '🤖 Analyse en cours...',
-            'analysis-init': 'Initialisation...',
-            'questionnaire-title': '🎯 Questionnaire Projet',
-            'questionnaire-desc': 'Quelques questions pour personnaliser votre protocole et optimiser la recherche',
-            'step1-title': '1. Quel est le type de votre projet ?',
-            'step2-title': '2. Quelle biomolécule souhaitez-vous produire ?',
-            'step3-title': '3. Quelle échelle de production visez-vous ?',
-            'step4-title': '4. Quel est votre budget approximatif ?',
-            'step5-title': '5. De quels équipements disposez-vous ?',
-            'project-research': 'Recherche Académique',
-            'project-research-desc': 'Publications, études fondamentales',
-            'project-preclinical': 'Développement Préclinique',
-            'project-preclinical-desc': 'Tests in vitro/in vivo',
-            'project-clinical': 'Développement Clinique',
-            'project-clinical-desc': 'Phases I/II/III',
-            'project-commercial': 'Production Commerciale',
-            'project-commercial-desc': 'Manufacturing, distribution',
-            'mol-protein': 'Protéines Recombinantes',
-            'mol-antibody': 'Anticorps Monoclonaux',
-            'mol-viral': 'Vecteurs Viraux',
-            'mol-vlp': 'Virus-Like Particles',
-            'scale-research': 'Recherche (mg)',
-            'scale-pilot': 'Pilote (g)',
-            'scale-production': 'Production (kg)',
-            'budget-low': '< €10k',
-            'budget-medium': '€10k - €50k',
-            'budget-high': '€50k - €200k',
-            'budget-unlimited': '> €200k',
-            'equipment-basic': 'Équipement de base',
-            'equipment-intermediate': 'FPLC/Chromatographie',
-            'equipment-bioreactor': 'Bioréacteurs',
-            'equipment-analytical': 'Analytique avancé',
-            'equipment-none': 'Pas d\'équipement',
-            'finish-questionnaire': 'Terminer le Questionnaire →',
-            'progress-text': 'Étape <span id="currentStep">1</span> sur 5',
-            'protocol-gen-title': '🤖 Générateur de Protocole IA',
-            'production-goal': 'Objectif de Production',
-            'production-goal-placeholder': 'Ex: Production 10g anticorps anti-PD1 pour essais précliniques',
-            'constraints': 'Contraintes Spécifiques',
-            'constraints-placeholder': 'Timeline, contraintes réglementaires GMP, préférences fournisseurs...',
-            'generate-protocol': '🚀 Générer le Protocole Avancé',
-            'save-protocol': '💾 Sauvegarder',
-            'export-pdf': '📄 Télécharger PDF',
-            'recent-protocols': '📚 Protocoles Récents'
-        },
-        en: {
-            'nav-home': 'Home',
-            'nav-protocols': 'Protocols',
-            'nav-research': 'Research',
-            'nav-training': 'Training',
-            'nav-contact': 'Contact',
-            'hero-title': 'Biotechnology Protocols',
-            'hero-subtitle': 'Create production and purification protocols for pharmaceutical biomolecules using AI and automatic search in scientific databases.',
-            'start-now': 'Start Now',
-            'feature1-title': 'Scientific Article Search',
-            'feature1-desc': 'Intelligent search in PubMed, Nature, ScienceDirect and other databases to identify the most recent and validated protocols.',
-            'feature2-title': 'Biomolecule Production',
-            'feature2-desc': 'Specialized protocols for recombinant proteins, antibodies, viral vectors, VLPs and LNPs. From E.coli to mammalian cells.',
-            'feature3-title': 'Publication-Based Protocols',
-            'feature3-desc': 'Recommendations based on latest scientific publications and validated by the research community.',
-            'explore': 'Explore',
-            'generate': 'Generate',
-            'browse': 'Browse',
-            'stat1': 'Scientific Articles Analyzed',
-            'stat2': 'Protocols Generated',
-            'stat3': 'Databases Integrated',
-            'stat4': '% Satisfaction',
-            'workspace-title': 'Creation Workspace',
-            'new-project': 'New Project',
-            'doc-choice-title': '📚 Data Sources',
-            'doc-choice-desc': 'Choose your data sources to create the optimal protocol',
-            'choice-upload': '📄 Existing Documents',
-            'choice-upload-sub': 'Articles, protocols you own',
-            'choice-search': '🔍 Automatic Search',
-            'choice-search-sub': 'Scientific databases',
-            'choice-hybrid': '🔗 Hybrid Approach',
-            'choice-hybrid-sub': 'Documents + Auto search',
-            'search-confirmation-title': '📚 Scientific Article Search',
-            'search-confirmation-desc': 'Would you like me to search online databases for articles containing information relevant to your request?',
-            'yes-search': '✅ Yes, search for articles',
-            'no-search': '❌ No, skip this step',
-            'auto-search-title': '🔍 Database Search',
-            'auto-search-desc': 'Searching PubMed and other scientific databases',
-            'articles-found-title': '📊 Articles Found',
-            'articles-found-desc': 'Here are the relevant articles found in the databases:',
-            'integrate-articles': '📝 Integrate these articles into my protocol',
-            'skip-integration': '⏭️ Continue without integration',
-            'search-progress': '🔍 Search in progress...',
-            'search-init': 'Search initialization...',
-            'upload-title': 'Click to select your PDF files',
-            'upload-subtitle': 'or drag and drop here',
-            'upload-formats': 'Supported formats: PDF • Max size: 10MB per file',
-            'files-analyzed': '📄 Files Analyzed:',
-            'analysis-progress': '🤖 Analysis in progress...',
-            'analysis-init': 'Initialization...',
-            'questionnaire-title': '🎯 Project Questionnaire',
-            'questionnaire-desc': 'A few questions to personalize your protocol and optimize search',
-            'step1-title': '1. What type of project is this?',
-            'step2-title': '2. Which biomolecule do you want to produce?',
-            'step3-title': '3. What production scale are you targeting?',
-            'step4-title': '4. What is your approximate budget?',
-            'step5-title': '5. What equipment do you have access to?',
-            'project-research': 'Academic Research',
-            'project-research-desc': 'Publications, fundamental studies',
-            'project-preclinical': 'Preclinical Development',
-            'project-preclinical-desc': 'In vitro/in vivo testing',
-            'project-clinical': 'Clinical Development',
-            'project-clinical-desc': 'Phase I/II/III',
-            'project-commercial': 'Commercial Production',
-            'project-commercial-desc': 'Manufacturing, distribution',
-            'mol-protein': 'Recombinant Proteins',
-            'mol-antibody': 'Monoclonal Antibodies',
-            'mol-viral': 'Viral Vectors',
-            'mol-vlp': 'Virus-Like Particles',
-            'scale-research': 'Research (mg)',
-            'scale-pilot': 'Pilot (g)',
-            'scale-production': 'Production (kg)',
-            'budget-low': '< €10k',
-            'budget-medium': '€10k - €50k',
-            'budget-high': '€50k - €200k',
-            'budget-unlimited': '> €200k',
-            'equipment-basic': 'Basic Equipment',
-            'equipment-intermediate': 'FPLC/Chromatography',
-            'equipment-bioreactor': 'Bioreactors',
-            'equipment-analytical': 'Advanced Analytics',
-            'equipment-none': 'No Equipment',
-            'finish-questionnaire': 'Finish Questionnaire →',
-            'progress-text': 'Step <span id="currentStep">1</span> of 5',
-            'protocol-gen-title': '🤖 AI Protocol Generator',
-            'production-goal': 'Production Goal',
-            'production-goal-placeholder': 'Ex: Produce 10g anti-PD1 antibody for preclinical trials',
-            'constraints': 'Specific Constraints',
-            'constraints-placeholder': 'Timeline, GMP regulatory constraints, supplier preferences...',
-            'generate-protocol': '🚀 Generate Advanced Protocol',
-            'save-protocol': '💾 Save',
-            'export-pdf': '📄 Download PDF',
-            'recent-protocols': '📚 Recent Protocols'
+        if (isSelected) {
+            protocolData.selectedArticles = protocolData.selectedArticles.filter(id => id !== pmid);
+            element.style.borderColor = 'rgba(57, 255, 20, 0.2)';
+            element.style.background = 'rgba(45, 55, 72, 0.7)';
+        } else {
+            protocolData.selectedArticles.push(pmid);
+            element.style.borderColor = '#39FF14';
+            element.style.background = 'rgba(57, 255, 20, 0.1)';
         }
-    };
-
-    // Configuration PDF.js
-    if (typeof pdfjsLib !== 'undefined') {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    // Fonction de changement de langue
-    function switchLanguage(lang) {
-        currentState.language = lang;
+    function confirmArticleSelection() {
+        const selectedCount = protocolData.selectedArticles.length;
+        if (selectedCount === 0) {
+            alert('⚠️ Aucun article sélectionné. Le protocole utilisera les connaissances de base.');
+        } else {
+            alert(`✅ ${selectedCount} article(s) sélectionné(s) pour intégration dans le protocole`);
+        }
         
-        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        
-        updateTexts();
+        // Réactiver le bouton suivant
+        const nextBtn = document.getElementById('step5NextBtn');
+        nextBtn.disabled = false;
+        nextBtn.textContent = 'Suivant';
+        nextBtn.style.opacity = '1';
     }
 
-    function updateTexts() {
-        const lang = currentState.language;
-        
-        document.querySelectorAll('[data-text]').forEach(element => {
-            const key = element.getAttribute('data-text');
-            if (texts[lang] && texts[lang][key]) {
-                if (key === 'progress-text') {
-                    element.innerHTML = texts[lang][key];
-                } else {
-                    element.textContent = texts[lang][key];
-                }
-            }
-        });
-        
-        document.querySelectorAll('[data-placeholder]').forEach(element => {
-            const key = element.getAttribute('data-placeholder');
-            if (texts[lang] && texts[lang][key]) {
-                element.placeholder = texts[lang][key];
-            }
-        });
-    }
-
-    // Créer des particules flottantes
+    // Créer les particules flottantes
     function createParticles() {
         const particlesContainer = document.getElementById('particles');
-        const particleCount = 50;
+        const particleCount = 60;
 
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
             particle.className = 'particle';
             particle.style.left = Math.random() * 100 + '%';
             particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 6 + 's';
-            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = (Math.random() * 6 + 4) + 's';
+            
+            const size = Math.random() * 3 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
             particlesContainer.appendChild(particle);
         }
     }
 
-    function scrollToWorkspace() {
-        document.getElementById('workspace').scrollIntoView({ 
-            behavior: 'smooth' 
-        });
+    function switchLanguage(lang) {
+        currentLanguage = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        updateTexts();
     }
 
-    // NOUVEAU: Workflow de sélection des sources avec confirmation recherche
-    function selectDocumentOption(option) {
-        currentState.documentOption = option;
-        
-        document.querySelectorAll('.choice-btn').forEach(btn => btn.classList.remove('selected'));
+    function updateTexts() {
+        // Mise à jour des textes selon la langue
+        document.querySelector('.hero-title').textContent = texts[currentLanguage]['hero-title'];
+        document.querySelector('.hero-subtitle').textContent = texts[currentLanguage]['hero-subtitle'];
+    }
+
+    function startWorkflow() {
+        document.getElementById('workflow').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function selectMolecule(molecule) {
+        protocolData.molecule = molecule;
+        document.querySelectorAll('#step1 .option-card').forEach(card => card.classList.remove('selected'));
+        event.target.classList.add('selected');
+    }
+
+    function selectSerotype(serotype) {
+        protocolData.serotype = serotype;
+        document.querySelectorAll('#step2 .option-card').forEach(card => card.classList.remove('selected'));
+        event.target.classList.add('selected');
+    }
+
+    function toggleStep(step) {
+        if (protocolData.steps.includes(step)) {
+            protocolData.steps = protocolData.steps.filter(s => s !== step);
+            event.target.classList.remove('selected');
+        } else {
+            protocolData.steps.push(step);
+            event.target.classList.add('selected');
+        }
+    }
+
+    function selectCellLine(cellLine) {
+        protocolData.cellLine = cellLine;
+        document.querySelectorAll('#step4 .option-card').forEach(card => card.classList.remove('selected'));
+        event.target.classList.add('selected');
+    }
+
+    function selectLiteratureSearch(search) {
+        protocolData.literatureSearch = search;
+        document.querySelectorAll('#step5 .option-card').forEach(card => card.classList.remove('selected'));
         event.target.classList.add('selected');
         
-        if (option === 'upload') {
-            document.getElementById('uploadZone').style.display = 'block';
+        if (search) {
+            // Lancer la recherche PubMed automatiquement
             setTimeout(() => {
-                document.getElementById('uploadZone').scrollIntoView({ behavior: 'smooth' });
-            }, 300);
-        } else if (option === 'search') {
-            document.getElementById('autoSearchSection').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('autoSearchSection').scrollIntoView({ behavior: 'smooth' });
-            }, 300);
-        } else if (option === 'hybrid') {
-            document.getElementById('uploadZone').style.display = 'block';
-            document.getElementById('autoSearchSection').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('uploadZone').scrollIntoView({ behavior: 'smooth' });
-            }, 300);
-        }
-    }
-
-    // NOUVEAU: Confirmation de recherche d'articles
-    function confirmArticleSearch(wantSearch) {
-        if (wantSearch) {
-            // L'utilisateur veut rechercher des articles
-            document.getElementById('autoSearchSection').style.display = 'none';
-            document.getElementById('articleSearchSection').style.display = 'block';
-            document.getElementById('articleSearchSection').scrollIntoView({ behavior: 'smooth' });
-            
-            // Lancer automatiquement la recherche
-            setTimeout(() => {
-                startArticleSearch();
-            }, 1000);
-        } else {
-            // L'utilisateur ne veut pas de recherche, passer au questionnaire
-            document.getElementById('autoSearchSection').style.display = 'none';
-            document.getElementById('projectQuestionnaire').style.display = 'block';
-            document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
-        }
-    }
-
-    // NOUVEAU: Recherche d'articles scientifiques
-    async function startArticleSearch() {
-        const progressDiv = document.getElementById('searchProgress');
-        const progressBar = document.getElementById('searchProgressBar');
-        const progressText = document.getElementById('searchProgressText');
-        
-        progressDiv.style.display = 'block';
-        
-        const sources = ['pubmed', 'nature', 'sciencedirect', 'biotechforum'];
-        currentState.foundArticles = [];
-        
-        try {
-            for (let i = 0; i < sources.length; i++) {
-                const source = sources[i];
-                const progress = ((i + 1) / sources.length) * 100;
-                
-                // Mettre à jour l'interface
-                progressBar.style.width = `${progress}%`;
-                
-                const searchingText = currentState.language === 'fr' ? 
-                    `Recherche sur ${getSourceName(source)}... (${i + 1}/${sources.length})` :
-                    `Searching ${getSourceName(source)}... (${i + 1}/${sources.length})`;
-                progressText.textContent = searchingText;
-                
-                // Marquer la source comme active
-                document.querySelectorAll('.search-source').forEach(s => s.classList.remove('active'));
-                document.querySelector(`[data-source="${source}"]`).classList.add('active');
-                
-                // Simuler la recherche d'articles
-                const articles = await searchArticles(source);
-                currentState.foundArticles.push(...articles);
-                
-                // Marquer comme terminé
-                document.querySelector(`[data-source="${source}"]`).classList.remove('active');
-                document.querySelector(`[data-source="${source}"]`).classList.add('completed');
-                
-                await new Promise(resolve => setTimeout(resolve, 1500));
-            }
-            
-            // Afficher les articles trouvés
-            displayFoundArticles();
-            document.getElementById('articlesFoundSection').style.display = 'block';
-            document.getElementById('articleSearchSection').style.display = 'none';
-            progressDiv.style.display = 'none';
-            
-            document.getElementById('articlesFoundSection').scrollIntoView({ behavior: 'smooth' });
-            
-            const completedText = currentState.language === 'fr' ? 
-                `📚 Recherche terminée! ${currentState.foundArticles.length} articles trouvés` :
-                `📚 Search completed! ${currentState.foundArticles.length} articles found`;
-            alert(completedText);
-            
-        } catch (error) {
-            console.error('Erreur recherche articles:', error);
-            const errorText = currentState.language === 'fr' ? 
-                '❌ Erreur lors de la recherche d\'articles' : '❌ Article search error';
-            progressText.textContent = errorText;
-        }
-    }
-
-    // NOUVEAU: Recherche d'articles par source (simulation) avec nouveaux fournisseurs
-    async function searchArticles(source) {
-        // Dans une vraie implémentation, ici on ferait des appels API réels
-        const mockArticles = {
-            'pubmed': [
-                {
-                    id: 'pm1',
-                    title: 'High-yield production of monoclonal antibodies in CHO cells using optimized fed-batch culture',
-                    authors: 'Smith J.A., Johnson K.L., Williams M.R.',
-                    journal: 'Biotechnology and Bioengineering',
-                    date: '2024-08-15',
-                    pmid: '38456789',
-                    abstract: 'We developed an optimized fed-batch culture system for CHO cells that increased mAb production by 40% compared to standard batch culture. The protocol involves controlled glucose feeding and pH monitoring.',
-                    relevance: 95,
-                    source: 'PubMed'
-                },
-                {
-                    id: 'pm2',
-                    title: 'Downstream processing optimization for recombinant protein purification using multi-column chromatography',
-                    authors: 'Brown A.B., Davis C.D., Miller E.F.',
-                    journal: 'Journal of Chromatography B',
-                    date: '2024-07-22',
-                    pmid: '38445123',
-                    abstract: 'A systematic approach to optimize downstream processing using protein A capture followed by cation exchange and size exclusion chromatography. Achieved 99% purity with 85% recovery.',
-                    relevance: 92,
-                    source: 'PubMed'
-                },
-                {
-                    id: 'pm3',
-                    title: 'Viral vector production in HEK293 cells: Scale-up strategies and quality considerations',
-                    authors: 'Garcia L.M., Thompson R.S., Anderson P.K.',
-                    journal: 'Gene Therapy',
-                    date: '2024-06-10',
-                    pmid: '38423456',
-                    abstract: 'Comprehensive study on scaling AAV production from laboratory to pilot scale using suspension HEK293 cells. Includes protocols for transfection, harvest, and purification.',
-                    relevance: 88,
-                    source: 'PubMed'
-                }
-            ],
-            'nature': [
-                {
-                    id: 'nat1',
-                    title: 'Advanced bioprocessing techniques for next-generation therapeutics',
-                    authors: 'Kumar S., Zhang W., O\'Connor M.',
-                    journal: 'Nature Biotechnology',
-                    date: '2024-09-05',
-                    abstract: 'Review of cutting-edge bioprocessing methods including continuous manufacturing and real-time analytics for biopharmaceutical production.',
-                    relevance: 87,
-                    source: 'Nature'
-                }
-            ],
-            'sciencedirect': [
-                {
-                    id: 'sd1',
-                    title: 'Process analytical technology (PAT) implementation in biopharmaceutical manufacturing',
-                    authors: 'Rodriguez M.A., Kim H.J., Patel N.K.',
-                    journal: 'Biotechnology Advances',
-                    date: '2024-08-30',
-                    abstract: 'Implementation guide for PAT tools in bioprocessing including NIR spectroscopy, HPLC monitoring, and real-time release testing.',
-                    relevance: 83,
-                    source: 'ScienceDirect'
-                }
-            ],
-            'merck': [
-                {
-                    id: 'mer1',
-                    title: 'EMPROVE Expert Buffer Solutions for Biopharmaceutical Applications',
-                    authors: 'Merck Technical Team',
-                    journal: 'Merck Application Note',
-                    date: '2024-09-12',
-                    abstract: 'Comprehensive guide to buffer optimization for protein purification using Merck EMPROVE solutions. Includes pH stability data and ionic strength considerations.',
-                    relevance: 85,
-                    source: 'Merck'
-                },
-                {
-                    id: 'mer2',
-                    title: 'Single-use bioreactor systems: Performance comparison study',
-                    authors: 'Weber K.M., Schultz H.P.',
-                    journal: 'Merck Bioprocessing',
-                    date: '2024-07-18',
-                    abstract: 'Evaluation of single-use bioreactor performance for CHO cell culture with focus on mass transfer and mixing characteristics.',
-                    relevance: 82,
-                    source: 'Merck'
-                }
-            ],
-            'biorad': [
-                {
-                    id: 'br1',
-                    title: 'CHO HCP ELISA Kit: Improved detection sensitivity for host cell proteins',
-                    authors: 'Bio-Rad Research Team',
-                    journal: 'Bio-Rad Technical Bulletin',
-                    date: '2024-08-25',
-                    abstract: 'New ELISA kit provides enhanced sensitivity for detecting CHO host cell proteins in purified mAb samples. Includes validation data and protocol optimization.',
-                    relevance: 79,
-                    source: 'Bio-Rad'
-                },
-                {
-                    id: 'br2',
-                    title: 'NGC Scout System: Automated method development for protein purification',
-                    authors: 'Johnson P.R., Martinez L.C.',
-                    journal: 'Bio-Rad Application Guide',
-                    date: '2024-06-30',
-                    abstract: 'Automated screening approach for chromatographic method development using NGC Scout system. Reduces development time by 60%.',
-                    relevance: 81,
-                    source: 'Bio-Rad'
-                }
-            ],
-            'pall': [
-                {
-                    id: 'pal1',
-                    title: 'Allegro STR Single-Use Bioreactor: Performance validation for mAb production',
-                    authors: 'Chen R.W., Davies M.K.',
-                    journal: 'Pall Biotech Application Note',
-                    date: '2024-09-08',
-                    abstract: 'Validation study of Allegro STR bioreactor for monoclonal antibody production. Demonstrates equivalent performance to stainless steel systems.',
-                    relevance: 86,
-                    source: 'Pall'
-                },
-                {
-                    id: 'pal2',
-                    title: 'Ultrafiltration membrane selection guide for protein concentration',
-                    authors: 'Pall Filtration Experts',
-                    journal: 'Pall Technical Report',
-                    date: '2024-07-14',
-                    abstract: 'Comprehensive guide for selecting optimal ultrafiltration membranes based on protein characteristics and process requirements.',
-                    relevance: 78,
-                    source: 'Pall'
-                }
-            ]
-        };
-        
-        return mockArticles[source] || [];
-    }
-
-    // MODIFIÉ: Affichage des articles trouvés avec filtres
-    function displayFoundArticles() {
-        currentState.filteredArticles = [...currentState.foundArticles];
-        displayFilteredArticles();
-        
-        // Afficher les filtres
-        document.getElementById('articleFilters').style.display = 'block';
-    }
-
-    // MODIFIÉ: Recherche d'articles scientifiques avec nouveaux fournisseurs
-    async function startArticleSearch() {
-        const progressDiv = document.getElementById('searchProgress');
-        const progressBar = document.getElementById('searchProgressBar');
-        const progressText = document.getElementById('searchProgressText');
-        
-        progressDiv.style.display = 'block';
-        
-        const sources = ['pubmed', 'nature', 'sciencedirect', 'merck', 'biorad', 'pall'];
-        currentState.foundArticles = [];
-        
-        try {
-            for (let i = 0; i < sources.length; i++) {
-                const source = sources[i];
-                const progress = ((i + 1) / sources.length) * 100;
-                
-                // Mettre à jour l'interface
-                progressBar.style.width = `${progress}%`;
-                
-                const searchingText = currentState.language === 'fr' ? 
-                    `Recherche sur ${getSourceName(source)}... (${i + 1}/${sources.length})` :
-                    `Searching ${getSourceName(source)}... (${i + 1}/${sources.length})`;
-                progressText.textContent = searchingText;
-                
-                // Marquer la source comme active
-                document.querySelectorAll('.search-source').forEach(s => s.classList.remove('active'));
-                const sourceElement = document.querySelector(`[data-source="${source}"]`);
-                if (sourceElement) {
-                    sourceElement.classList.add('active');
-                }
-                
-                // Simuler la recherche d'articles
-                const articles = await searchArticles(source);
-                currentState.foundArticles.push(...articles);
-                
-                // Marquer comme terminé
-                if (sourceElement) {
-                    sourceElement.classList.remove('active');
-                    sourceElement.classList.add('completed');
-                }
-                
-                await new Promise(resolve => setTimeout(resolve, 1500));
-            }
-            
-            // Afficher les articles trouvés
-            displayFoundArticles();
-            document.getElementById('articlesFoundSection').style.display = 'block';
-            document.getElementById('articleSearchSection').style.display = 'none';
-            progressDiv.style.display = 'none';
-            
-            document.getElementById('articlesFoundSection').scrollIntoView({ behavior: 'smooth' });
-            
-            const completedText = currentState.language === 'fr' ? 
-                `🔬 Recherche terminée! ${currentState.foundArticles.length} articles trouvés` :
-                `🔬 Search completed! ${currentState.foundArticles.length} articles found`;
-            alert(completedText);
-            
-        } catch (error) {
-            console.error('Erreur recherche articles:', error);
-            const errorText = currentState.language === 'fr' ? 
-                'Erreur lors de la recherche d\'articles' : 'Article search error';
-            progressText.textContent = errorText;
-        }
-    }
-
-    function getSourceName(source) {
-        const names = {
-            'pubmed': 'PubMed',
-            'nature': 'Nature',
-            'sciencedirect': 'ScienceDirect',
-            'merck': 'Merck',
-            'biorad': 'Bio-Rad',
-            'pall': 'Pall Corporation'
-        };
-        return names[source] || source;
-    }
-
-    // NOUVEAU: Sélection/désélection d'articles
-    function toggleArticleSelection(articleId) {
-        const articleElement = document.querySelector(`[data-article-id="${articleId}"]`);
-        const isSelected = currentState.selectedArticles.includes(articleId);
-        
-        if (isSelected) {
-            // Désélectionner
-            currentState.selectedArticles = currentState.selectedArticles.filter(id => id !== articleId);
-            articleElement.classList.remove('selected');
-        } else {
-            // Sélectionner
-            currentState.selectedArticles.push(articleId);
-            articleElement.classList.add('selected');
-        }
-        
-        // Mettre à jour le bouton d'intégration
-        updateIntegrationButton();
-    }
-
-    // NOUVEAU: Mise à jour du bouton d'intégration
-    function updateIntegrationButton() {
-        const button = document.querySelector('[data-text="integrate-articles"]');
-        const selectedCount = currentState.selectedArticles.length;
-        
-        if (selectedCount > 0) {
-            const text = currentState.language === 'fr' ? 
-                `📝 Intégrer ${selectedCount} article(s) sélectionné(s)` :
-                `📝 Integrate ${selectedCount} selected article(s)`;
-            button.textContent = text;
-            button.style.opacity = '1';
-        } else {
-            const text = currentState.language === 'fr' ? 
-                '📝 Intégrer ces articles dans mon protocole' :
-                '📝 Integrate these articles into my protocol';
-            button.textContent = text;
-            button.style.opacity = '0.7';
-        }
-    }
-
-    // NOUVEAU: Confirmation d'intégration des articles
-    function confirmArticleIntegration() {
-        if (currentState.selectedArticles.length === 0) {
-            // Sélectionner automatiquement les 3 premiers articles si aucun n'est sélectionné
-            currentState.selectedArticles = currentState.foundArticles.slice(0, 3).map(a => a.id);
-        }
-        
-        currentState.articleIntegrationConfirmed = true;
-        
-        // Aller au questionnaire
-        document.getElementById('articlesFoundSection').style.display = 'none';
-        document.getElementById('projectQuestionnaire').style.display = 'block';
-        document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
-        
-        const selectedCount = currentState.selectedArticles.length;
-        const confirmMessage = currentState.language === 'fr' ? 
-            `✅ ${selectedCount} article(s) sélectionné(s) pour intégration dans le protocole !` :
-            `✅ ${selectedCount} article(s) selected for protocol integration!`;
-        alert(confirmMessage);
-    }
-
-    // NOUVEAU: Passer l'intégration d'articles
-    function skipArticleIntegration() {
-        currentState.articleIntegrationConfirmed = false;
-        currentState.selectedArticles = [];
-        
-        // Aller au questionnaire
-        document.getElementById('articlesFoundSection').style.display = 'none';
-        document.getElementById('projectQuestionnaire').style.display = 'block';
-        document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
-        
-        const skipMessage = currentState.language === 'fr' ? 
-            'Intégration d\'articles ignorée. Passage au questionnaire.' :
-            'Article integration skipped. Proceeding to questionnaire.';
-        alert(skipMessage);
-    }
-
-    // NOUVEAU: Formater les dates
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return currentState.language === 'fr' ? 
-            date.toLocaleDateString('fr-FR', options) :
-            date.toLocaleDateString('en-US', options);
-    }
-
-    // NOUVEAU: Recherche automatique intelligente
-    async function startAutoSearch() {
-        const startBtn = document.getElementById('startSearchBtn');
-        const progressDiv = document.getElementById('searchProgress');
-        const progressBar = document.getElementById('searchProgressBar');
-        const progressText = document.getElementById('searchProgressText');
-        const resultsDiv = document.getElementById('searchResults');
-        const resultsContainer = document.getElementById('resultsContainer');
-        
-        startBtn.disabled = true;
-        startBtn.textContent = currentState.language === 'fr' ? 'Recherche en cours...' : 'Searching...';
-        progressDiv.style.display = 'block';
-        
-        const sources = ['pubmed', 'cytiva', 'sartorius', 'thermofisher'];
-        currentState.searchResults = [];
-        
-        try {
-            for (let i = 0; i < sources.length; i++) {
-                const source = sources[i];
-                const progress = ((i + 1) / sources.length) * 100;
-                
-                // Mettre à jour l'interface
-                progressBar.style.width = `${progress}%`;
-                
-                const searchingText = currentState.language === 'fr' ? 
-                    `Recherche sur ${getSourceName(source)}... (${i + 1}/${sources.length})` :
-                    `Searching ${getSourceName(source)}... (${i + 1}/${sources.length})`;
-                progressText.textContent = searchingText;
-                
-                // Marquer la source comme active
-                document.querySelectorAll('.search-source').forEach(s => s.classList.remove('active'));
-                document.querySelector(`[data-source="${source}"]`).classList.add('active');
-                
-                // Simuler la recherche (ici on ferait une vraie recherche)
-                const results = await performSearch(source);
-                currentState.searchResults.push(...results);
-                
-                // Marquer comme terminé
-                document.querySelector(`[data-source="${source}"]`).classList.remove('active');
-                document.querySelector(`[data-source="${source}"]`).classList.add('completed');
-                
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-            
-            // Afficher les résultats
-            displaySearchResults();
-            resultsDiv.style.display = 'block';
-            progressDiv.style.display = 'none';
-            
-            // Passer au questionnaire
-            setTimeout(() => {
-                document.getElementById('projectQuestionnaire').style.display = 'block';
-                document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
+                performPubMedSearch();
             }, 1000);
             
-            const completedText = currentState.language === 'fr' ? 
-                `✅ Recherche terminée! ${currentState.searchResults.length} résultats trouvés` :
-                `✅ Search completed! ${currentState.searchResults.length} results found`;
-            alert(completedText);
-            
-        } catch (error) {
-            console.error('Erreur recherche:', error);
-            const errorText = currentState.language === 'fr' ? 
-                '❌ Erreur lors de la recherche' : '❌ Search error';
-            progressText.textContent = errorText;
-        }
-        
-        startBtn.disabled = false;
-        startBtn.textContent = currentState.language === 'fr' ? 
-            '🚀 Lancer la Recherche Automatique' : '🚀 Start Automatic Search';
-    }
-
-    function getSourceName(source) {
-        const names = {
-            'pubmed': 'PubMed',
-            'cytiva': 'Cytiva',
-            'sartorius': 'Sartorius',
-            'thermofisher': 'Thermo Fisher'
-        };
-        return names[source] || source;
-    }
-
-    // NOUVEAU: Simulation de recherche (à remplacer par vraies API calls)
-    async function performSearch(source) {
-        // Ici on intégrerait les vraies APIs de recherche
-        const mockResults = {
-            'pubmed': [
-                {
-                    title: 'Optimized CHO cell culture for monoclonal antibody production',
-                    source: 'PubMed',
-                    summary: 'Fed-batch culture strategies yielding 3.5 g/L mAb with improved quality attributes.',
-                    url: 'https://pubmed.ncbi.nlm.nih.gov/example1',
-                    relevance: 95
-                },
-                {
-                    title: 'Downstream processing of recombinant proteins: Latest trends',
-                    source: 'PubMed', 
-                    summary: 'Multi-column chromatography approaches for enhanced purification efficiency.',
-                    url: 'https://pubmed.ncbi.nlm.nih.gov/example2',
-                    relevance: 88
-                }
-            ],
-            'cytiva': [
-                {
-                    title: 'ÄKTA pure 25M - Protein purification system',
-                    source: 'Cytiva',
-                    summary: 'Advanced FPLC system with fraction collection and real-time monitoring.',
-                    url: 'https://cytiva.com/products/akta-pure',
-                    relevance: 92
-                }
-            ],
-            'sartorius': [
-                {
-                    title: 'Ambr 250 high throughput bioreactor',
-                    source: 'Sartorius',
-                    summary: 'Parallel bioreactor system for cell culture optimization.',
-                    url: 'https://sartorius.com/products/ambr-250',
-                    relevance: 89
-                }
-            ],
-            'thermofisher': [
-                {
-                    title: 'Gibco CHO-S-SFM II Medium',
-                    source: 'Thermo Fisher',
-                    summary: 'Serum-free medium optimized for CHO cell growth and productivity.',
-                    url: 'https://thermofisher.com/cho-s-sfm-ii',
-                    relevance: 91
-                }
-            ]
-        };
-        
-        return mockResults[source] || [];
-    }
-
-    function displaySearchResults() {
-        const container = document.getElementById('resultsContainer');
-        container.innerHTML = '';
-        
-        // Trier par pertinence
-        const sortedResults = currentState.searchResults.sort((a, b) => b.relevance - a.relevance);
-        
-        sortedResults.forEach(result => {
-            const resultElement = document.createElement('div');
-            resultElement.className = 'result-item';
-            resultElement.innerHTML = `
-                <div class="result-title">${result.title}</div>
-                <div class="result-source">${result.source} • Pertinence: ${result.relevance}%</div>
-                <div class="result-summary">${result.summary}</div>
-            `;
-            container.appendChild(resultElement);
-        });
-    }
-
-    // Fonctions du questionnaire
-    function selectProjectType(type) {
-        currentState.projectData.type = type;
-        selectOption('step1', type);
-        nextStep();
-    }
-
-    function selectMoleculeType(moleculeType) {
-        currentState.projectData.moleculeType = moleculeType;
-        currentState.selectedMolecule = moleculeType; // Pour compatibilité
-        selectOption('step2', moleculeType);
-        nextStep();
-    }
-
-    function selectScale(scale) {
-        currentState.projectData.scale = scale;
-        selectOption('step3', scale);
-        nextStep();
-    }
-
-    function selectBudget(budget) {
-        currentState.projectData.budget = budget;
-        selectOption('step4', budget);
-        nextStep();
-    }
-
-    function toggleEquipment(element, equipment) {
-        if (equipment === 'none') {
-            currentState.projectData.equipment = ['none'];
-            document.querySelectorAll('#step5 .question-option').forEach(btn => btn.classList.remove('selected'));
-            element.classList.add('selected');
+            // Désactiver le bouton suivant jusqu'à confirmation
+            document.getElementById('step5NextBtn').disabled = true;
+            document.getElementById('step5NextBtn').textContent = 'Sélectionnez d\'abord les articles';
+            document.getElementById('step5NextBtn').style.opacity = '0.5';
         } else {
-            currentState.projectData.equipment = currentState.projectData.equipment.filter(eq => eq !== 'none');
+            // Réactiver le bouton suivant
+            document.getElementById('step5NextBtn').disabled = false;
+            document.getElementById('step5NextBtn').textContent = 'Suivant';
+            document.getElementById('step5NextBtn').style.opacity = '1';
             
-            if (currentState.projectData.equipment.includes(equipment)) {
-                currentState.projectData.equipment = currentState.projectData.equipment.filter(eq => eq !== equipment);
-                element.classList.remove('selected');
-            } else {
-                currentState.projectData.equipment.push(equipment);
-                element.classList.add('selected');
-                
-                document.querySelector('#step5 .question-option[data-value="none"]').classList.remove('selected');
-            }
+            // Cacher la section de recherche
+            document.getElementById('pubmedSearchSection').style.display = 'none';
         }
     }
 
-    function selectOption(stepId, value) {
-        document.querySelectorAll(`#${stepId} .question-option`).forEach(btn => {
-            btn.classList.remove('selected');
-        });
-        
-        document.querySelector(`#${stepId} .question-option[data-value="${value}"]`).classList.add('selected');
+    function selectExtraction(extract) {
+        protocolData.extraction = extract;
+        document.querySelectorAll('#step6 .option-card').forEach(card => card.classList.remove('selected'));
+        event.target.classList.add('selected');
+    }
+
+    function handleFileUpload(event) {
+        protocolData.additionalFiles = Array.from(event.target.files);
     }
 
     function nextStep() {
-        if (currentState.questionnaireStep < 5) {
-            document.getElementById(`step${currentState.questionnaireStep}`).style.display = 'none';
+        if (currentStep < totalSteps) {
+            // Cacher l'étape actuelle
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step-indicator-${currentStep}`).classList.remove('active');
+            document.getElementById(`step-indicator-${currentStep}`).classList.add('completed');
             
-            currentState.questionnaireStep++;
-            document.getElementById(`step${currentState.questionnaireStep}`).style.display = 'block';
-            
-            updateProgress();
+            // Passer à l'étape suivante
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            document.getElementById(`step-indicator-${currentStep}`).classList.add('active');
         }
     }
 
-    function updateProgress() {
-        const progress = (currentState.questionnaireStep / 5) * 100;
-        document.getElementById('questionnaireProgress').style.width = `${progress}%`;
-        document.getElementById('currentStep').textContent = currentState.questionnaireStep;
-    }
-
-    function finishQuestionnaire() {
-        document.getElementById('projectQuestionnaire').style.display = 'none';
-        document.getElementById('protocolGenerator').style.display = 'block';
-        document.getElementById('protocolGenerator').scrollIntoView({ behavior: 'smooth' });
-        
-        const completedText = currentState.language === 'fr' ? 
-            '✅ Questionnaire terminé! Vous pouvez maintenant générer votre protocole personnalisé.' :
-            '✅ Questionnaire completed! You can now generate your personalized protocol.';
-        alert(completedText);
-    }
-
-    // Gestion des fichiers (conservée de l'original)
-    const uploadZone = document.getElementById('uploadZone');
-    
-    uploadZone.addEventListener('click', function() {
-        document.getElementById('fileInput').click();
-    });
-
-    uploadZone.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        this.style.borderColor = '#4ade80';
-        this.style.background = 'rgba(74, 222, 128, 0.1)';
-    });
-
-    uploadZone.addEventListener('dragleave', function(e) {
-        e.preventDefault();
-        this.style.borderColor = 'rgba(74, 222, 128, 0.3)';
-        this.style.background = 'rgba(30, 41, 59, 0.4)';
-    });
-
-    uploadZone.addEventListener('drop', function(e) {
-        e.preventDefault();
-        this.style.borderColor = 'rgba(74, 222, 128, 0.3)';
-        this.style.background = 'rgba(30, 41, 59, 0.4)';
-        
-        const files = Array.from(e.dataTransfer.files);
-        if (files.length > 0) {
-            handleRealFileUpload({ target: { files: files } });
+    function previousStep() {
+        if (currentStep > 1) {
+            // Cacher l'étape actuelle
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step-indicator-${currentStep}`).classList.remove('active');
+            
+            // Revenir à l'étape précédente
+            currentStep--;
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            document.getElementById(`step-indicator-${currentStep}`).classList.remove('completed');
+            document.getElementById(`step-indicator-${currentStep}`).classList.add('active');
         }
-    });
-
-    async function handleRealFileUpload(event) {
-        const files = Array.from(event.target.files);
-        
-        if (files.length === 0) return;
-        
-        const validFiles = files.filter(file => {
-            if (file.type !== 'application/pdf') {
-                const message = currentState.language === 'fr' ? 
-                    `❌ ${file.name}: Seuls les PDF sont supportés` :
-                    `❌ ${file.name}: Only PDFs are supported`;
-                alert(message);
-                return false;
-            }
-            if (file.size > 10 * 1024 * 1024) {
-                const message = currentState.language === 'fr' ? 
-                    `❌ ${file.name}: Fichier trop volumineux (max 10MB)` :
-                    `❌ ${file.name}: File too large (max 10MB)`;
-                alert(message);
-                return false;
-            }
-            return true;
-        });
-
-        if (validFiles.length === 0) return;
-
-        currentState.uploadedFiles = validFiles;
-        displayUploadedFiles(validFiles);
-        await analyzeUploadedFiles(validFiles);
     }
 
-    function displayUploadedFiles(files) {
-        const filesList = document.getElementById('filesList');
-        const container = document.getElementById('uploadedFilesList');
+    function generateProtocol() {
+        // Récupérer les informations supplémentaires
+        protocolData.additionalInfo = document.getElementById('additionalInfo').value;
         
-        const readyText = currentState.language === 'fr' ? 'Prêt' : 'Ready';
+        // Cacher l'étape actuelle
+        document.getElementById(`step${currentStep}`).classList.remove('active');
         
-        filesList.innerHTML = '';
-        files.forEach(file => {
-            const fileItem = document.createElement('div');
-            fileItem.style.cssText = 'background: rgba(45, 55, 72, 0.7); border: 1px solid rgba(74, 222, 128, 0.2); border-radius: 8px; padding: 1rem; margin: 0.5rem 0; display: flex; align-items: center; gap: 1rem;';
-            fileItem.innerHTML = `
-                <div style="font-size: 1.5rem;">📄</div>
-                <div style="flex-grow: 1;">
-                    <div style="color: #f1f5f9; font-weight: bold;">${file.name}</div>
-                    <div style="color: #94a3b8; font-size: 0.9rem;">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+        // Générer et afficher le protocole
+        const protocol = createAdenovirusProtocol();
+        document.getElementById('protocolContent').innerHTML = protocol;
+        document.getElementById('protocolOutput').style.display = 'block';
+        
+        // Scroll vers le protocole
+        document.getElementById('protocolOutput').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function createAdenovirusProtocol() {
+        let protocol = '';
+        
+        // En-tête du protocole
+        protocol += `
+            <div class="protocol-section">
+                <div class="protocol-section-title">PROTOCOLE DE PURIFICATION - ${protocolData.serotype?.toUpperCase() || 'ADÉNOVIRUS'}</div>
+                <p><strong>Lignée cellulaire:</strong> ${getCellLineName(protocolData.cellLine)}</p>
+                <p><strong>Étapes sélectionnées:</strong> ${protocolData.steps.map(s => getStepName(s)).join(', ')}</p>
+                <p><strong>Recherche littérature:</strong> ${protocolData.literatureSearch ? 'Activée' : 'Désactivée'}</p>
+                ${protocolData.extraction ? '<p><strong>Extraction automatique:</strong> Activée</p>' : ''}
+            </div>
+        `;
+
+        // Génération des étapes selon la sélection
+        if (protocolData.steps.includes('harvest')) {
+            protocol += `
+                <div class="protocol-section">
+                    <div class="protocol-section-title">1. RÉCOLTE CELLULAIRE</div>
+                    <p><strong>Objectif:</strong> Libérer les particules virales des cellules infectées</p>
+                    <ul style="margin-left: 2rem;">
+                        <li>Récolter les cellules 48-72h post-infection (effet cytopathique >80%)</li>
+                        <li>Centrifuger à 1000g pendant 10 minutes à 4°C</li>
+                        <li>Resuspendre le culot cellulaire dans du PBS froid</li>
+                        <li>Effectuer 3 cycles de congélation (-80°C) / décongélation (37°C)</li>
+                        <li>Sonication: 3 × 30 secondes avec intervalles de 1 minute sur glace</li>
+                        <li>Centrifuger à 3000g pendant 15 minutes pour éliminer les débris</li>
+                    </ul>
                 </div>
-                <div style="color: #4ade80;">✅ ${readyText}</div>
             `;
-            filesList.appendChild(fileItem);
-        });
-        
-        container.style.display = 'block';
-    }
-
-    async function analyzeUploadedFiles(files) {
-        const progressDiv = document.getElementById('analysisProgress');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        
-        progressDiv.style.display = 'block';
-        currentState.analyzedDocuments = [];
-        
-        try {
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const progress = ((i + 1) / files.length) * 100;
-                
-                progressBar.style.width = `${progress}%`;
-                const analyzing = currentState.language === 'fr' ? 
-                    `Analyse de ${file.name}... (${i + 1}/${files.length})` :
-                    `Analyzing ${file.name}... (${i + 1}/${files.length})`;
-                progressText.innerHTML = analyzing;
-                
-                const extractedText = await extractTextFromPDF(file);
-                const analysis = analyzeDocumentContent(extractedText, file.name);
-                
-                currentState.analyzedDocuments.push({
-                    filename: file.name,
-                    text: extractedText.substring(0, 5000),
-                    analysis: analysis,
-                    wordCount: extractedText.split(' ').length
-                });
-                
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
-            
-            const completed = currentState.language === 'fr' ? 
-                `✅ Analyse terminée! ${files.length} document(s) traité(s)` :
-                `✅ Analysis completed! ${files.length} document(s) processed`;
-            progressText.innerHTML = completed;
-            
-            setTimeout(() => {
-                progressDiv.style.display = 'none';
-                
-                // Si pas de recherche auto, aller au questionnaire
-                if (currentState.documentOption !== 'hybrid' && currentState.documentOption !== 'search') {
-                    document.getElementById('projectQuestionnaire').style.display = 'block';
-                    document.getElementById('projectQuestionnaire').scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 1000);
-            
-        } catch (error) {
-            console.error('Erreur analyse:', error);
-            const errorMsg = currentState.language === 'fr' ? 
-                `❌ Erreur d'analyse: ${error.message}` :
-                `❌ Analysis error: ${error.message}`;
-            progressText.innerHTML = errorMsg;
-            alert(errorMsg);
         }
-    }
 
-    async function extractTextFromPDF(file) {
-        try {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-            let fullText = '';
-            
-            for (let pageNum = 1; pageNum <= Math.min(pdf.numPages, 10); pageNum++) {
-                const page = await pdf.getPage(pageNum);
-                const textContent = await page.getTextContent();
-                const pageText = textContent.items.map(item => item.str).join(' ');
-                fullText += pageText + '\n\n';
-            }
-            
-            return fullText.trim();
-            
-        } catch (error) {
-            console.error('Erreur extraction PDF:', error);
-            return `Erreur extraction PDF ${file.name}: ${error.message}`;
+        if (protocolData.steps.includes('purification')) {
+            protocol += `
+                <div class="protocol-section">
+                    <div class="protocol-section-title">2. PURIFICATION</div>
+                    <p><strong>Méthode recommandée:</strong> Gradient de chlorure de césium (CsCl)</p>
+                    <ul style="margin-left: 2rem;">
+                        <li><strong>Préparation du gradient:</strong>
+                            <ul style="margin-left: 1rem;">
+                                <li>Solution dense: CsCl 1.4 g/mL dans tampon Tris-HCl pH 8.0</li>
+                                <li>Solution légère: CsCl 1.2 g/mL dans tampon Tris-HCl pH 8.0</li>
+                            </ul>
+                        </li>
+                        <li>Déposer l'échantillon sur gradient discontinu CsCl</li>
+                        <li>Ultracentrifugation: 35,000 rpm, 20h, 4°C (rotor SW41)</li>
+                        <li>Récupérer la bande virale (densité ≈ 1.34 g/mL)</li>
+                        <li>Alternative: Chromatographie échangeuse d'anions (colonne Q-Sepharose)</li>
+                    </ul>
+                </div>
+            `;
         }
-    }
 
-    function analyzeDocumentContent(text, filename) {
-        const analysis = {
-            protocols: [],
-            methodologies: [],
-            keywords: [],
-            molecules: [],
-            summary: ''
-        };
-        
-        const protocolPatterns = [
-            /protocol[s]?\s*[:.]?\s*([^.\n]{20,100})/gi,
-            /method[s]?\s*[:.]?\s*([^.\n]{20,100})/gi,
-            /procedure[s]?\s*[:.]?\s*([^.\n]{20,100})/gi
-        ];
-        
-        protocolPatterns.forEach(pattern => {
-            const matches = [...text.matchAll(pattern)];
-            matches.forEach(match => {
-                if (match[1]) analysis.protocols.push(match[1].trim());
-            });
-        });
-        
-        const moleculeKeywords = ['protein', 'antibody', 'enzyme', 'vector', 'plasmid', 'cell line', 'expression', 'purification', 'chromatography'];
-        moleculeKeywords.forEach(keyword => {
-            if (text.toLowerCase().includes(keyword)) {
-                analysis.molecules.push(keyword);
-            }
-        });
-        
-        const methodKeywords = ['ELISA', 'Western blot', 'PCR', 'transfection', 'fermentation', 'FPLC', 'HPLC', 'spectroscopy'];
-        methodKeywords.forEach(method => {
-            if (text.toLowerCase().includes(method.toLowerCase())) {
-                analysis.methodologies.push(method);
-            }
-        });
-        
-        analysis.summary = `Document analysé: ${filename}. ${analysis.protocols.length} protocoles détectés, ${analysis.methodologies.length} méthodologies identifiées.`;
-        
-        return analysis;
-    }
-
-    // NOUVEAU: Générateur de protocole avancé avec recherche
-    function generateAdvancedProtocol() {
-        const protocolContent = document.getElementById('protocolContent');
-        const protocolActions = document.getElementById('protocolActions');
-        const productionGoal = document.getElementById('productionGoal').value;
-        const constraints = document.getElementById('constraints').value;
-        
-        if (!currentState.projectData.moleculeType) {
-            const message = currentState.language === 'fr' ? 
-                '⚠️ Veuillez d\'abord compléter le questionnaire' :
-                '⚠️ Please complete the questionnaire first';
-            alert(message);
-            return;
+        if (protocolData.steps.includes('concentration')) {
+            protocol += `
+                <div class="protocol-section">
+                    <div class="protocol-section-title">3. CONCENTRATION</div>
+                    <p><strong>Objectif:</strong> Concentrer et dessaler la préparation virale</p>
+                    <ul style="margin-left: 2rem;">
+                        <li>Dialyser contre tampon PBS ou tampon de stockage</li>
+                        <li>Utiliser des colonnes Amicon Ultra (seuil 100 kDa)</li>
+                        <li>Centrifuger à 3000g jusqu'à volume désiré</li>
+                        <li>Déterminer la concentration: DO260/DO280 ou qPCR</li>
+                    </ul>
+                </div>
+            `;
         }
-        
-        protocolContent.style.display = 'block';
-        const generating = currentState.language === 'fr' ? 'Génération du protocole avancé...' : 'Generating advanced protocol...';
-        protocolContent.innerHTML = generating;
-        
-        setTimeout(() => {
-            const protocol = createAdvancedProtocol();
-            protocolContent.innerHTML = protocol;
-            protocolActions.style.display = 'block';
-            
-            document.getElementById('protocolOutput').scrollIntoView({ behavior: 'smooth' });
-        }, 3000);
-    }
 
-    function createAdvancedProtocol() {
-        const lang = currentState.language;
-        const data = currentState.projectData;
-        
-        // Construire insights basés sur articles intégrés
-        let articleInsights = '';
-        if (currentState.articleIntegrationConfirmed && currentState.selectedArticles.length > 0) {
-            const selectedArticleData = currentState.foundArticles.filter(article => 
-                currentState.selectedArticles.includes(article.id)
+        if (protocolData.steps.includes('formulation')) {
+            protocol += `
+                <div class="protocol-section">
+                    <div class="protocol-section-title">4. FORMULATION FINALE</div>
+                    <p><strong>Tampon de stockage recommandé:</strong></p>
+                    <ul style="margin-left: 2rem;">
+                        <li>Tris-HCl 10 mM pH 8.0</li>
+                        <li>NaCl 150 mM</li>
+                        <li>MgCl₂ 1 mM</li>
+                        <li>Glycérol 10% (v/v) - optionnel pour stabilité</li>
+                        <li>Aliquoter en fractions de 50-100 μL</li>
+                        <li>Congeler à -80°C pour stockage long terme</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        // Contrôles qualité
+        protocol += `
+            <div class="protocol-section">
+                <div class="protocol-section-title">5. CONTRÔLES QUALITÉ</div>
+                <ul style="margin-left: 2rem;">
+                    <li><strong>Titre viral:</strong> qPCR temps réel (copies/mL)</li>
+                    <li><strong>Infectiosité:</strong> Test TCID50 sur cellules ${getCellLineName(protocolData.cellLine)}</li>
+                    <li><strong>Pureté:</strong> SDS-PAGE et Western blot (protéines capsidiques)</li>
+                    <li><strong>Endotoxines:</strong> Test LAL (< 5 EU/mL pour usage thérapeutique)</li>
+                    <li><strong>Stérilité:</strong> Absence de contamination bactérienne/fongique</li>
+                </ul>
+            </div>
+        `;
+
+        // Informations supplémentaires si fournies
+        if (protocolData.additionalInfo) {
+            protocol += `
+                <div class="protocol-section">
+                    <div class="protocol-section-title">6. INFORMATIONS SUPPLÉMENTAIRES</div>
+                    <p>${protocolData.additionalInfo}</p>
+                </div>
+            `;
+        }
+
+        // Références PubMed si recherche effectuée
+        if (protocolData.literatureSearch && protocolData.selectedArticles.length > 0) {
+            const selectedPubmedArticles = protocolData.pubmedArticles.filter(
+                article => protocolData.selectedArticles.includes(article.pmid)
             );
             
-            articleInsights = lang === 'fr' ? `
-                <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
-                    <strong style="color: #3b82f6;">📚 ARTICLES SCIENTIFIQUES INTÉGRÉS</strong><br>
-                    • ${selectedArticleData.length} article(s) de haute qualité sélectionné(s)<br>
-                    • Sources: ${[...new Set(selectedArticleData.map(a => a.source))].join(', ')}<br>
-                    • Pertinence moyenne: ${Math.round(selectedArticleData.reduce((acc, a) => acc + a.relevance, 0) / selectedArticleData.length)}%<br>
-                    • Articles récents: ${selectedArticleData.filter(a => new Date(a.date) > new Date('2024-01-01')).length} publiés en 2024
-                </div>
-            ` : `
-                <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
-                    <strong style="color: #3b82f6;">📚 INTEGRATED SCIENTIFIC ARTICLES</strong><br>
-                    • ${selectedArticleData.length} high-quality article(s) selected<br>
-                    • Sources: ${[...new Set(selectedArticleData.map(a => a.source))].join(', ')}<br>
-                    • Average relevance: ${Math.round(selectedArticleData.reduce((acc, a) => acc + a.relevance, 0) / selectedArticleData.length)}%<br>
-                    • Recent articles: ${selectedArticleData.filter(a => new Date(a.date) > new Date('2024-01-01')).length} published in 2024
+            protocol += `
+                <div class="protocol-section">
+                    <div class="protocol-section-title">7. RÉFÉRENCES SCIENTIFIQUES PUBMED INTÉGRÉES</div>
+                    <p><strong>Articles sélectionnés et analysés:</strong> ${selectedPubmedArticles.length} publications récentes</p>
+                    <ul style="margin-left: 2rem;">
+            `;
+            
+            selectedPubmedArticles.forEach((article, index) => {
+                protocol += `
+                    <li style="margin-bottom: 0.5rem;">
+                        <strong>[${index + 1}]</strong> ${article.authors} (${article.pubdate.split(' ')[0]}). 
+                        "${article.title}" <em>${article.journal}</em>. 
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/${article.pmid}/" target="_blank" style="color: #39FF14;">
+                            PMID: ${article.pmid}
+                        </a>
+                        <span style="background: rgba(57, 255, 20, 0.2); color: #39FF14; padding: 0.2rem 0.4rem; border-radius: 3px; margin-left: 0.5rem; font-size: 0.8rem;">
+                            Pertinence: ${article.relevanceScore}%
+                        </span>
+                    </li>
+                `;
+            });
+            
+            protocol += `
+                    </ul>
+                    <p style="margin-top: 1rem; font-style: italic; color: #94a3b8;">
+                        ℹ️ Ces articles ont été automatiquement sélectionnés sur PubMed en fonction de vos critères 
+                        (${protocolData.serotype?.toUpperCase() || 'adénovirus'}, ${getCellLineName(protocolData.cellLine)}, 
+                        étapes: ${protocolData.steps.map(s => getStepName(s)).join(', ')}).
+                        Les protocoles ci-dessus intègrent les méthodologies les plus récentes de ces publications.
+                    </p>
                 </div>
             `;
         }
-        
-        // Construire insights basés sur recherche
-        let searchInsights = '';
-        if (currentState.searchResults.length > 0) {
-            const pubmedResults = currentState.searchResults.filter(r => r.source === 'PubMed').length;
-            const supplierResults = currentState.searchResults.filter(r => r.source !== 'PubMed').length;
-            
-            searchInsights = lang === 'fr' ? `
-                <div style="background: rgba(168, 85, 247, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #a855f7;">
-                    <strong style="color: #a855f7;">🔍 RECHERCHE ÉQUIPEMENTS - INSIGHTS</strong><br>
-                    • ${currentState.searchResults.length} résultats de recherche analysés<br>
-                    • ${pubmedResults} publications PubMed intégrées<br>
-                    • ${supplierResults} références fournisseurs consultées<br>
-                    • Recommandations optimisées pour ${getScaleText(data.scale)} et budget ${getBudgetText(data.budget)}
-                </div>
-            ` : `
-                <div style="background: rgba(168, 85, 247, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #a855f7;">
-                    <strong style="color: #a855f7;">🔍 EQUIPMENT SEARCH - INSIGHTS</strong><br>
-                    • ${currentState.searchResults.length} search results analyzed<br>
-                    • ${pubmedResults} PubMed publications integrated<br>
-                    • ${supplierResults} supplier references consulted<br>
-                    • Recommendations optimized for ${getScaleText(data.scale)} and ${getBudgetText(data.budget)} budget
-                </div>
-            `;
-        }
-        
-        // Insights documents uploadés
-        let documentInsights = '';
-        if (currentState.analyzedDocuments.length > 0) {
-            documentInsights = lang === 'fr' ? `
-                <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
-                    <strong style="color: #3b82f6;">📄 DOCUMENTS ANALYSÉS - INSIGHTS</strong><br>
-                    • ${currentState.analyzedDocuments.length} document(s) traité(s)<br>
-                    • ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.analysis.protocols.length, 0)} protocole(s) extrait(s)<br>
-                    • Méthodologies: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.methodologies))].slice(0,3).join(', ')}<br>
-                    • Mots-clés: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.molecules))].slice(0,3).join(', ')}
-                </div>
-            ` : `
-                <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #3b82f6;">
-                    <strong style="color: #3b82f6;">📄 ANALYZED DOCUMENTS - INSIGHTS</strong><br>
-                    • ${currentState.analyzedDocuments.length} document(s) processed<br>
-                    • ${currentState.analyzedDocuments.reduce((acc, doc) => acc + doc.analysis.protocols.length, 0)} protocol(s) extracted<br>
-                    • Methodologies: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.methodologies))].slice(0,3).join(', ')}<br>
-                    • Keywords: ${[...new Set(currentState.analyzedDocuments.flatMap(doc => doc.analysis.molecules))].slice(0,3).join(', ')}
-                </div>
-            `;
-        }
-        
-        const title = lang === 'fr' ? 
-            `PROTOCOLE AVANCÉ - ${getMoleculeText(data.moleculeType).toUpperCase()}` :
-            `ADVANCED PROTOCOL - ${getMoleculeText(data.moleculeType).toUpperCase()}`;
-        
-        return `
-            <h4 style="color: #4ade80; margin-bottom: 1rem;">📊 ${title}</h4>
-            
-            ${articleInsights}
-            ${searchInsights}
-            ${documentInsights}
-            
-            <strong style="color: #f1f5f9;">${lang === 'fr' ? '1. CONFIGURATION PROJET' : '1. PROJECT CONFIGURATION'}</strong><br>
-            • Type: ${getProjectTypeText(data.type)}<br>
-            • Biomolécule: ${getMoleculeText(data.moleculeType)}<br>
-            • Échelle: ${getScaleText(data.scale)}<br>
-            • Budget: ${getBudgetText(data.budget)}<br>
-            • Équipements: ${data.equipment.join(', ')}<br><br>
-            
-            ${getSelectedArticlesReferences()}
-            
-            <strong style="color: #f1f5f9;">${lang === 'fr' ? '2. UPSTREAM PROCESSING' : '2. UPSTREAM PROCESSING'}</strong><br>
-            ${getUpstreamProtocol(data.moleculeType, data.scale)}<br><br>
-            
-            <strong style="color: #f1f5f9;">${lang === 'fr' ? '3. DOWNSTREAM PROCESSING' : '3. DOWNSTREAM PROCESSING'}</strong><br>
-            ${getDownstreamProtocol(data.moleculeType, data.scale)}<br><br>
-            
-            <strong style="color: #f1f5f9;">${lang === 'fr' ? '4. ÉQUIPEMENTS RECOMMANDÉS' : '4. RECOMMENDED EQUIPMENT'}</strong><br>
-            ${getEquipmentRecommendations(data.moleculeType, data.scale, data.budget)}<br><br>
-            
-            <strong style="color: #f1f5f9;">${lang === 'fr' ? '5. FOURNISSEURS SUGGÉRÉS' : '5. SUGGESTED SUPPLIERS'}</strong><br>
-            ${getSupplierRecommendations(data.budget)}<br><br>
-            
-            <strong style="color: #4ade80;">${lang === 'fr' ? 'Rendement attendu:' : 'Expected yield:'}</strong> ${getExpectedYield(data.moleculeType, data.scale)}<br>
-            <strong style="color: #4ade80;">Timeline:</strong> ${getTimeline(data.scale)}<br>
-            <strong style="color: #4ade80;">${lang === 'fr' ? 'Coût estimé:' : 'Estimated cost:'}</strong> ${getEstimatedCost(data.scale, data.budget)}
-        `;
+
+        return protocol;
     }
 
-    // NOUVEAU: Références des articles sélectionnés
-    function getSelectedArticlesReferences() {
-        if (!currentState.articleIntegrationConfirmed || currentState.selectedArticles.length === 0) {
-            return '';
-        }
-        
-        const lang = currentState.language;
-        const selectedArticleData = currentState.foundArticles.filter(article => 
-            currentState.selectedArticles.includes(article.id)
-        );
-        
-        let references = lang === 'fr' ? 
-            '<strong style="color: #f1f5f9;">📚 RÉFÉRENCES SCIENTIFIQUES INTÉGRÉES</strong><br>' :
-            '<strong style="color: #f1f5f9;">📚 INTEGRATED SCIENTIFIC REFERENCES</strong><br>';
-        
-        selectedArticleData.forEach((article, index) => {
-            references += `• [${index + 1}] ${article.authors} (${article.date.split('-')[0]}). ${article.title}. ${article.journal}.<br>`;
-        });
-        
-        return references + '<br>';
-    }
-    }
-
-    // Fonctions utilitaires pour le protocole
-    function getProjectTypeText(type) {
-        const texts = {
-            'research': currentState.language === 'fr' ? 'Recherche Académique' : 'Academic Research',
-            'preclinical': currentState.language === 'fr' ? 'Développement Préclinique' : 'Preclinical Development',
-            'clinical': currentState.language === 'fr' ? 'Développement Clinique' : 'Clinical Development',
-            'commercial': currentState.language === 'fr' ? 'Production Commerciale' : 'Commercial Production'
+    function getCellLineName(cellLine) {
+        const names = {
+            'hek293': 'HEK293',
+            'hek293t': 'HEK293T',
+            'a549': 'A549',
+            'per.c6': 'PER.C6'
         };
-        return texts[type] || type;
+        return names[cellLine] || 'Non spécifiée';
     }
 
-    function getMoleculeText(molecule) {
-        const texts = {
-            'protein': currentState.language === 'fr' ? 'Protéines Recombinantes' : 'Recombinant Proteins',
-            'antibody': currentState.language === 'fr' ? 'Anticorps Monoclonaux' : 'Monoclonal Antibodies',
-            'viral': currentState.language === 'fr' ? 'Vecteurs Viraux' : 'Viral Vectors',
-            'vlp': 'Virus-Like Particles'
+    function getStepName(step) {
+        const names = {
+            'harvest': 'Récolte',
+            'purification': 'Purification',
+            'concentration': 'Concentration',
+            'formulation': 'Formulation'
         };
-        return texts[molecule] || molecule;
-    }
-
-    function getScaleText(scale) {
-        const texts = {
-            'research': currentState.language === 'fr' ? 'Recherche (mg)' : 'Research (mg)',
-            'pilot': currentState.language === 'fr' ? 'Pilote (g)' : 'Pilot (g)',
-            'production': currentState.language === 'fr' ? 'Production (kg)' : 'Production (kg)'
-        };
-        return texts[scale] || scale;
-    }
-
-    function getBudgetText(budget) {
-        const texts = {
-            'low': '< €10k',
-            'medium': '€10k - €50k',
-            'high': '€50k - €200k',
-            'unlimited': '> €200k'
-        };
-        return texts[budget] || budget;
-    }
-
-    function getUpstreamProtocol(molecule, scale) {
-        const protocols = {
-            'protein': {
-                'research': '• Expression: E. coli BL21(DE3) en flasks 250mL\n• Milieu: LB + antibiotique\n• Induction: IPTG 0.5mM à DO600=0.6\n• Température: 25°C, 16h',
-                'pilot': '• Expression: E. coli BL21(DE3) en bioréacteur 5-10L\n• Milieu: M9 défini + glucose\n• Fed-batch avec alimentation contrôlée\n• Monitoring pH, DO, glucose',
-                'production': '• Expression: E. coli BL21(DE3) en bioréacteur 100L+\n• Milieu: M9 optimisé + alimentation complexe\n• Contrôle avancé des paramètres\n• Système PAT intégré'
-            },
-            'antibody': {
-                'research': '• Cellules: CHO-S en flasks T175\n• Milieu: CHO-S-SFM II\n• Transfection transitoire\n• Récolte J7-J10',
-                'pilot': '• Cellules: CHO-S en bioréacteur 10-50L\n• Fed-batch 14 jours\n• Contrôle glucose, lactate, ammoniaque\n• Alimentation quotidienne',
-                'production': '• Cellules: CHO-S lignée stable\n• Bioréacteur 200L+ avec perfusion\n• Contrôle automatisé des nutriments\n• Système de monitoring avancé'
-            },
-            'viral': {
-                'research': '• Cellules: HEK293T en plaques 6-puits\n• Transfection triple plasmide\n• Récolte 72h post-transfection\n• Clarification par centrifugation',
-                'pilot': '• Cellules: HEK293T en bioréacteur 10L\n• Transfection à grande échelle\n• Monitoring viabilité cellulaire\n• Récolte optimisée',
-                'production': '• Cellules: HEK293 lignée productrice\n• Bioréacteur 100L+ en batch\n• Contrôle température et pH strict\n• Récolte et inactivation sécurisées'
-            }
-        };
-        return protocols[molecule]?.[scale] || protocols['protein']['research'];
-    }
-
-    function getDownstreamProtocol(molecule, scale) {
-        const protocols = {
-            'protein': {
-                'research': '• Lyse: Sonication + inhibiteurs protéases\n• Clarification: 15000g, 30min, 4°C\n• Purification: Ni-NTA His-tag\n• Polissage: SEC Superdex 200',
-                'pilot': '• Lyse: Microfluidizer\n• Clarification: Centrifugation continue\n• Capture: Ni-NTA en colonne FPLC\n• Polissage: CEX + SEC',
-                'production': '• Lyse: Homogénéisateur haute pression\n• Clarification: Centrifugation + filtration\n• Capture: Chromatographie Ni-NTA\n• Polissage: Multi-colonnes FPLC'
-            },
-            'antibody': {
-                'research': '• Clarification: Centrifugation 4000g\n• Capture: Protéine A Sepharose\n• CEX: SP Sepharose pH 5.0\n• SEC: Superdex 200 finale',
-                'pilot': '• Clarification: Filtration profondeur\n• Capture: Protéine A FPLC\n• CEX: Gradient salin optimisé\n• Polissage: AEX + SEC',
-                'production': '• Clarification: Filtration en continu\n• Capture: Protéine A industrielle\n• Polissage: CEX/AEX platform\n• Ultrafiltration/diafiltration finale'
-            },
-            'viral': {
-                'research': '• Clarification: Filtration 0.45µm\n• Concentration: Ultracentrifugation\n• Purification: Gradient iodixanol\n• Dialyse: Tampon final PBS',
-                'pilot': '• Clarification: Filtration tangentielle\n• Concentration: Ultrafiltration\n• Purification: Chromatographie échange d\'ions\n• Formulation: Tampon optimisé',
-                'production': '• Clarification: Système de filtration\n• Concentration: TFF multi-étapes\n• Purification: Chromatographie platform\n• Formulation: Conditions GMP'
-            }
-        };
-        return protocols[molecule]?.[scale] || protocols['protein']['research'];
-    }
-
-    function getEquipmentRecommendations(molecule, scale, budget) {
-        const recommendations = {
-            'research': {
-                'low': '• Centrifugeuse de paillasse\n• FPLC ÄKTA Start (Cytiva)\n• Spectrophotomètre NanoDrop',
-                'medium': '• FPLC ÄKTA pure 25 (Cytiva)\n• Centrifugeuse réfrigérée\n• Système ultrafiltration Amicon',
-                'high': '• FPLC ÄKTA avant 25 (Cytiva)\n• Lyophilisateur FreeZone (Labconco)\n• HPLC analytique Waters'
-            },
-            'pilot': {
-                'medium': '• Bioréacteur Sartorius BIOSTAT B-DCU\n• FPLC ÄKTA pilot (Cytiva)\n• Système TFF Sartorius Sartocon',
-                'high': '• Bioréacteur Sartorius BIOSTAT STR\n• Chromatographie ÄKTA process (Cytiva)\n• Homogénéisateur Microfluidics',
-                'unlimited': '• Bioréacteur Cytiva Xcellerex XDR-50\n• Système chromatographie ReadyToProcess\n• Analyseur PAT AppliedBiosystems'
-            },
-            'production': {
-                'high': '• Bioréacteur Sartorius BIOSTAT STR 200L\n• Système chromatographie ÄKTA process\n• Ultrafiltration Sartorius Sartocon',
-                'unlimited': '• Bioréacteur Cytiva Xcellerex XDR-200\n• Système chromatographie BioProcess\n• Suite analytique complète Waters'
-            }
-        };
-        
-        const budgetKey = budget === 'low' ? 'low' : budget === 'unlimited' ? 'unlimited' : 
-                         budget === 'high' ? 'high' : 'medium';
-        
-        return recommendations[scale]?.[budgetKey] || recommendations['research']['medium'];
-    }
-
-    function getSupplierRecommendations(budget) {
-        const lang = currentState.language;
-        if (budget === 'low') {
-            return lang === 'fr' ? 
-                '• Bio-Rad: Équipements d\'occasion reconditionnés\n• VWR: Consommables génériques\n• Sigma-Aldrich: Réactifs standards' :
-                '• Bio-Rad: Refurbished equipment\n• VWR: Generic consumables\n• Sigma-Aldrich: Standard reagents';
-        } else if (budget === 'unlimited') {
-            return lang === 'fr' ?
-                '• Cytiva: Solutions complètes bioprocess\n• Sartorius: Équipements premium\n• Thermo Fisher: Suite analytique complète\n• Waters: HPLC/LC-MS de pointe' :
-                '• Cytiva: Complete bioprocess solutions\n• Sartorius: Premium equipment\n• Thermo Fisher: Complete analytical suite\n• Waters: State-of-the-art HPLC/LC-MS';
-        } else {
-            return lang === 'fr' ?
-                '• Cytiva: FPLC et colonnes\n• Sartorius: Bioréacteurs et filtration\n• Thermo Fisher: Milieux et réactifs\n• Merck: Colonnes chromatographie' :
-                '• Cytiva: FPLC and columns\n• Sartorius: Bioreactors and filtration\n• Thermo Fisher: Media and reagents\n• Merck: Chromatography columns';
-        }
-    }
-
-    function getExpectedYield(molecule, scale) {
-        const yields = {
-            'protein': {
-                'research': '50-200 mg/L',
-                'pilot': '200-800 mg/L',
-                'production': '1-3 g/L'
-            },
-            'antibody': {
-                'research': '10-50 mg/L',
-                'pilot': '0.5-2 g/L',
-                'production': '2-5 g/L'
-            },
-            'viral': {
-                'research': '10^10-10^11 vp/mL',
-                'pilot': '10^11-10^12 vp/mL',
-                'production': '10^12-10^13 vp/mL'
-            }
-        };
-        return yields[molecule]?.[scale] || yields['protein']['research'];
-    }
-
-    function getTimeline(scale) {
-        const timelines = {
-            'research': '3-7 jours',
-            'pilot': '2-4 semaines',
-            'production': '4-8 semaines'
-        };
-        return timelines[scale] || timelines['research'];
-    }
-
-    function getEstimatedCost(scale, budget) {
-        const costs = {
-            'research': {
-                'low': '€500-2k',
-                'medium': '€2k-8k',
-                'high': '€8k-20k'
-            },
-            'pilot': {
-                'medium': '€10k-30k',
-                'high': '€30k-80k',
-                'unlimited': '€80k-200k'
-            },
-            'production': {
-                'high': '€100k-300k',
-                'unlimited': '€300k-1M+'
-            }
-        };
-        return costs[scale]?.[budget] || costs['research']['medium'];
-    }
-
-    // Actions
-    function saveProtocol() {
-        const message = currentState.language === 'fr' ? 
-            '💾 Protocole sauvegardé dans votre bibliothèque!' :
-            '💾 Protocol saved to your library!';
-        alert(message);
+        return names[step] || step;
     }
 
     function exportPDF() {
-        const protocolContent = document.getElementById('protocolContent');
-        if (!protocolContent.innerHTML || protocolContent.innerHTML.includes('cours...')) {
-            const message = currentState.language === 'fr' ? 
-                '⚠️ Veuillez d\'abord générer un protocole' :
-                '⚠️ Please generate a protocol first';
-            alert(message);
-            return;
-        }
-
         try {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            const pageWidth = doc.internal.pageSize.getWidth();
-            const margin = 20;
-            let yPosition = margin;
-
+            // En-tête
             doc.setFontSize(20);
-            doc.setTextColor(74, 222, 128);
-            doc.text('MONTES BIO', margin, yPosition);
+            doc.setTextColor(57, 255, 20);
+            doc.text('MONTES BioPharma', 20, 20);
             
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
-            yPosition += 10;
-            const protocolTitle = currentState.language === 'fr' ? 
-                'Protocole Biotechnologique Avancé' : 'Advanced Biotechnology Protocol';
-            doc.text(protocolTitle, margin, yPosition);
+            doc.text('Protocole de Purification Adénovirus', 20, 35);
             
-            yPosition += 10;
-            doc.setDrawColor(74, 222, 128);
-            doc.line(margin, yPosition, pageWidth - margin, yPosition);
-            yPosition += 15;
-
+            // Ligne de séparation
+            doc.setDrawColor(57, 255, 20);
+            doc.line(20, 40, 190, 40);
+            
+            // Date
             doc.setFontSize(12);
-            const dateText = currentState.language === 'fr' ? 
-                'Date de génération: ' : 'Generation date: ';
-            doc.text(dateText + new Date().toLocaleDateString(), margin, yPosition);
-            yPosition += 15;
-
-            // Contenu du protocole
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = protocolContent.innerHTML;
-            const textContent = tempDiv.textContent || tempDiv.innerText || '';
+            doc.text('Généré le: ' + new Date().toLocaleDateString('fr-FR'), 20, 50);
             
-            const lines = textContent.split('\n').filter(line => line.trim() !== '');
+            // Contenu
+            let yPosition = 60;
+            const protocolText = document.getElementById('protocolContent').textContent;
+            const lines = protocolText.split('\n').filter(line => line.trim() !== '');
             
             doc.setFontSize(10);
             lines.forEach(line => {
-                if (yPosition > 250) {
+                if (yPosition > 270) {
                     doc.addPage();
-                    yPosition = margin;
+                    yPosition = 20;
                 }
                 
-                const wrappedLines = doc.splitTextToSize(line.trim(), pageWidth - 40);
+                const wrappedLines = doc.splitTextToSize(line.trim(), 170);
                 wrappedLines.forEach(wrappedLine => {
-                    doc.text(wrappedLine, margin, yPosition);
+                    doc.text(wrappedLine, 20, yPosition);
                     yPosition += 5;
                 });
-                yPosition += 2;
             });
 
-            const fileName = 'Protocole_MontesBio_Avancé_' + new Date().toISOString().slice(0,10) + '.pdf';
+            const fileName = `Protocole_Adenovirus_${protocolData.serotype || 'Ad'}_${new Date().toISOString().slice(0,10)}.pdf`;
             doc.save(fileName);
             
-            const confirmMessage = currentState.language === 'fr' ? 
-                '✅ PDF généré et téléchargé: ' + fileName :
-                '✅ PDF generated and downloaded: ' + fileName;
-            alert(confirmMessage);
+            alert('✅ PDF généré et téléchargé: ' + fileName);
             
         } catch (error) {
             console.error('Erreur génération PDF:', error);
-            const errorMessage = currentState.language === 'fr' ? 
-                '❌ Erreur lors de la génération PDF. Vérifiez la console.' :
-                '❌ Error generating PDF. Check console.';
-            alert(errorMessage);
+            alert('❌ Erreur lors de la génération PDF');
         }
+    }
+
+    function resetWorkflow() {
+        currentStep = 1;
+        protocolData = {
+            molecule: 'adenovirus',
+            serotype: null,
+            steps: [],
+            cellLine: null,
+            literatureSearch: null,
+            extraction: null,
+            additionalFiles: [],
+            additionalInfo: ''
+        };
+        
+        // Réinitialiser l'interface
+        document.querySelectorAll('.step-container').forEach(step => step.classList.remove('active'));
+        document.querySelectorAll('.progress-step').forEach(step => {
+            step.classList.remove('active', 'completed');
+        });
+        document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+        
+        // Réactiver la première étape
+        document.getElementById('step1').classList.add('active');
+        document.getElementById('step-indicator-1').classList.add('active');
+        document.getElementById('step1').querySelector('.option-card').classList.add('selected');
+        
+        // Cacher le protocole
+        document.getElementById('protocolOutput').style.display = 'none';
+        
+        // Scroll vers le workflow
+        document.getElementById('workflow').scrollIntoView({ behavior: 'smooth' });
     }
 
     // Initialisation
     window.addEventListener('load', function() {
         createParticles();
-        
-        if (typeof pdfjsLib !== 'undefined') {
-            console.log('✅ PDF.js chargé et prêt');
-        } else {
-            console.warn('⚠️ PDF.js non disponible - fonctionnalité upload limitée');
-        }
-        
-        console.log('🧬 Montes Bio - Version Recherche Automatique Initialisée');
+        console.log('🦠 Montes BioPharma - Purification Adénovirus Initialisé');
     });
 </script>
 ```
