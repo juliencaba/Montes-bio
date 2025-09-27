@@ -782,15 +782,24 @@
 
     let currentLanguage = 'fr';
 
-    // FONCTIONS PUBMED API
+    // FONCTIONS PUBMED API avec proxy CORS
     async function searchPubMedAPI(query, maxResults = 15) {
         try {
             console.log('🔍 Recherche PubMed:', query);
             
-            // 1. Recherche des IDs d'articles
-            const searchURL = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmode=json&retmax=${maxResults}&sort=relevance`;
+            // Proxy CORS pour contourner les restrictions
+            const corsProxy = 'https://api.allorigins.win/raw?url=';
             
-            const searchResponse = await fetch(searchURL);
+            // 1. Recherche des IDs d'articles
+            const searchURL = `${corsProxy}${encodeURIComponent(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmode=json&retmax=${maxResults}&sort=relevance`)}`;
+            
+            const searchResponse = await fetch(searchURL, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
             if (!searchResponse.ok) {
                 throw new Error(`Erreur recherche: ${searchResponse.status}`);
             }
@@ -805,9 +814,15 @@
             console.log(`📚 ${articleIds.length} articles trouvés`);
             
             // 2. Récupération des détails des articles  
-            const summaryURL = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${articleIds.join(',')}&retmode=json`;
+            const summaryURL = `${corsProxy}${encodeURIComponent(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${articleIds.join(',')}&retmode=json`)}`;
             
-            const summaryResponse = await fetch(summaryURL);
+            const summaryResponse = await fetch(summaryURL, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
             if (!summaryResponse.ok) {
                 throw new Error(`Erreur détails: ${summaryResponse.status}`);
             }
