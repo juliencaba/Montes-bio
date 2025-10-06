@@ -4,27 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Montes BioPharma - Purification Adénovirus</title>
-    <meta name="description" content="Plateforme spécialisée pour protocoles de purification d'adénovirus">
+    <title>Montes BioPharma - Purification Adénovirus IA</title>
+    <meta name="description" content="Générateur IA de protocoles de purification d'adénovirus">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦠</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
 ```
-<!-- Bibliothèque jsPDF pour génération PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
     body {
         font-family: 'Arial', sans-serif;
         background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #2d3748 100%);
         color: #e2e8f0;
         min-height: 100vh;
-        overflow-x: hidden;
     }
 
     .header {
@@ -51,84 +47,45 @@
         gap: 1rem;
     }
 
-    .logo-image {
-        height: 40px;
-        width: auto;
-        filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.3));
-    }
-
     .logo {
-        font-size: 1rem;
+        font-size: 1.5rem;
         font-weight: bold;
         color: #39FF14;
         text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
-        display: flex;
-        flex-direction: column;
-        line-height: 1.2;
     }
 
-    .logo .sub {
-        font-size: 1rem;
-        opacity: 0.9;
-        margin-top: 2px;
-    }
-
-    .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-    }
-
-    .nav-links {
-        display: flex;
-        gap: 2rem;
-        list-style: none;
-    }
-
-    .nav-links a {
-        color: #cbd5e1;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-    }
-
-    .nav-links a:hover {
-        color: #39FF14;
-        background: rgba(57, 255, 20, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .language-selector {
-        display: flex;
-        background: rgba(30, 41, 59, 0.6);
-        border-radius: 8px;
-        padding: 0.25rem;
-        border: 1px solid rgba(57, 255, 20, 0.2);
-    }
-
-    .lang-btn {
-        background: none;
-        border: none;
-        color: #94a3b8;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-        font-weight: 500;
-    }
-
-    .lang-btn.active {
+    .badge {
         background: linear-gradient(135deg, #39FF14, #3b82f6);
         color: white;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-weight: bold;
     }
 
-    .lang-btn:hover:not(.active) {
-        color: #39FF14;
+    .api-config {
         background: rgba(57, 255, 20, 0.1);
+        border: 1px solid rgba(57, 255, 20, 0.3);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
     }
 
-    .main-container {
+    .api-status {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ff4444;
+    }
+
+    .api-status.active {
+        background: #39FF14;
+    }
+
+    .container {
         max-width: 1200px;
         margin: 0 auto;
         padding: 2rem;
@@ -136,28 +93,10 @@
 
     .hero-section {
         text-align: center;
-        padding: 3rem 0;
+        padding: 3rem 2rem;
         background: linear-gradient(135deg, rgba(57, 255, 20, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
         border-radius: 20px;
-        margin-bottom: 3rem;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(57,255,20,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-        opacity: 0.3;
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 2;
+        margin-bottom: 2rem;
     }
 
     .hero-title {
@@ -170,117 +109,19 @@
         background-clip: text;
     }
 
-    .hero-subtitle {
-        font-size: 1.2rem;
-        color: #94a3b8;
-        margin-bottom: 2rem;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .action-btn {
-        background: linear-gradient(135deg, #39FF14, #3b82f6);
-        color: white;
-        border: none;
-        padding: 0.8rem 1.5rem;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .action-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(57, 255, 20, 0.3);
-    }
-
-    .action-btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    .workflow-section {
-        background: rgba(30, 41, 59, 0.4);
-        border-radius: 20px;
+    .config-section {
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 16px;
         padding: 2rem;
-        margin: 3rem 0;
+        margin-bottom: 2rem;
         border: 1px solid rgba(57, 255, 20, 0.2);
     }
 
-    .step-container {
-        background: rgba(15, 20, 25, 0.8);
-        border-radius: 16px;
-        padding: 2rem;
-        margin: 2rem 0;
-        border: 2px solid rgba(57, 255, 20, 0.3);
-        display: none;
-    }
-
-    .step-container.active {
-        display: block;
-    }
-
-    .step-title {
+    .section-title {
         color: #39FF14;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: bold;
         margin-bottom: 1.5rem;
-        text-align: center;
-    }
-
-    .step-description {
-        color: #94a3b8;
-        text-align: center;
-        margin-bottom: 2rem;
-    }
-
-    .options-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-        margin: 2rem 0;
-    }
-
-    .option-card {
-        background: rgba(45, 55, 72, 0.7);
-        border: 2px solid rgba(57, 255, 20, 0.2);
-        border-radius: 12px;
-        padding: 1.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-align: center;
-    }
-
-    .option-card:hover {
-        border-color: #39FF14;
-        background: rgba(57, 255, 20, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .option-card.selected {
-        border-color: #39FF14;
-        background: rgba(57, 255, 20, 0.15);
-        color: #39FF14;
-    }
-
-    .option-title {
-        font-weight: bold;
-        color: #f1f5f9;
-        margin-bottom: 0.5rem;
-        font-size: 1.1rem;
-    }
-
-    .option-card.selected .option-title {
-        color: #39FF14;
-    }
-
-    .option-description {
-        color: #94a3b8;
-        font-size: 0.9rem;
     }
 
     .input-group {
@@ -299,10 +140,9 @@
         background: rgba(15, 20, 25, 0.8);
         border: 1px solid rgba(57, 255, 20, 0.3);
         border-radius: 8px;
-        padding: 1rem;
+        padding: 0.8rem;
         color: #e2e8f0;
         font-size: 1rem;
-        transition: all 0.3s ease;
     }
 
     .input-field:focus {
@@ -311,164 +151,131 @@
         box-shadow: 0 0 0 3px rgba(57, 255, 20, 0.1);
     }
 
-    .textarea-field {
-        min-height: 120px;
-        resize: vertical;
+    .help-text {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin-top: 0.3rem;
     }
 
-    .step-navigation {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 2rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(57, 255, 20, 0.2);
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
     }
 
-    .nav-btn {
+    .option-card {
+        background: rgba(45, 55, 72, 0.7);
+        border: 2px solid rgba(57, 255, 20, 0.2);
+        border-radius: 12px;
+        padding: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .option-card:hover {
+        border-color: #39FF14;
         background: rgba(57, 255, 20, 0.1);
-        color: #39FF14;
-        border: 2px solid rgba(57, 255, 20, 0.3);
-        padding: 0.8rem 1.5rem;
+        transform: translateY(-2px);
+    }
+
+    .option-card.selected {
+        border-color: #39FF14;
+        background: rgba(57, 255, 20, 0.15);
+    }
+
+    .option-title {
+        font-weight: bold;
+        color: #f1f5f9;
+        margin-bottom: 0.3rem;
+    }
+
+    .option-description {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+
+    .action-btn {
+        background: linear-gradient(135deg, #39FF14, #3b82f6);
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
         border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
+        font-size: 1rem;
         transition: all 0.3s ease;
+        width: 100%;
     }
 
-    .nav-btn:hover {
-        background: rgba(57, 255, 20, 0.2);
-        border-color: #39FF14;
+    .action-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(57, 255, 20, 0.3);
     }
 
-    .nav-btn:disabled {
+    .action-btn:disabled {
         opacity: 0.5;
         cursor: not-allowed;
     }
 
-    .progress-indicator {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 2rem 0;
-    }
-
-    .progress-step {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background: rgba(57, 255, 20, 0.2);
-        border: 2px solid rgba(57, 255, 20, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 0.5rem;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-    .progress-step.active {
-        background: #39FF14;
-        color: #0f1419;
-        border-color: #39FF14;
-    }
-
-    .progress-step.completed {
-        background: rgba(57, 255, 20, 0.3);
-        border-color: #39FF14;
-        color: #39FF14;
-    }
-
     .protocol-output {
-        background: rgba(15, 20, 25, 0.8);
+        background: rgba(15, 20, 25, 0.9);
         border-left: 4px solid #39FF14;
         padding: 2rem;
         border-radius: 8px;
         margin-top: 2rem;
-        line-height: 1.6;
         display: none;
     }
 
-    .protocol-section {
-        margin-bottom: 2rem;
+    .loader {
+        text-align: center;
+        padding: 3rem;
     }
 
-    .protocol-section-title {
-        color: #39FF14;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-        border-bottom: 2px solid rgba(57, 255, 20, 0.3);
-        padding-bottom: 0.5rem;
-    }
-
-    .floating-particles {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 1;
-    }
-
-    .particle {
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background: #39FF14;
+    .spinner {
+        border: 4px solid rgba(57, 255, 20, 0.1);
+        border-top: 4px solid #39FF14;
         border-radius: 50%;
-        animation: float 6s infinite ease-in-out;
-        opacity: 0.6;
-        box-shadow: 0 0 8px rgba(57, 255, 20, 0.8);
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
     }
 
-    .particle:nth-child(even) {
-        background: #39FF14;
-        box-shadow: 0 0 8px rgba(57, 255, 20, 0.6);
-        animation-duration: 8s;
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
-    .particle:nth-child(3n) {
-        background: #39FF14;
-        box-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
-        animation-duration: 10s;
+    .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
     }
 
-    @keyframes float {
-        0%, 100% { 
-            transform: translateY(0px) translateX(0px) rotate(0deg); 
-            opacity: 0.6; 
-        }
-        25% { 
-            transform: translateY(-20px) translateX(10px) rotate(90deg); 
-            opacity: 0.8; 
-        }
-        50% { 
-            transform: translateY(-40px) translateX(-5px) rotate(180deg); 
-            opacity: 1; 
-        }
-        75% { 
-            transform: translateY(-20px) translateX(-10px) rotate(270deg); 
-            opacity: 0.8; 
-        }
+    .alert-info {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        color: #93c5fd;
+    }
+
+    .alert-error {
+        background: rgba(255, 68, 68, 0.1);
+        border: 1px solid rgba(255, 68, 68, 0.3);
+        color: #fca5a5;
+    }
+
+    .alert-success {
+        background: rgba(57, 255, 20, 0.1);
+        border: 1px solid rgba(57, 255, 20, 0.3);
+        color: #39FF14;
     }
 
     @media (max-width: 768px) {
-        .nav {
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .nav-right {
-            flex-direction: column;
-            gap: 1rem;
-        }
-
         .hero-title {
             font-size: 2rem;
         }
-
         .options-grid {
             grid-template-columns: 1fr;
         }
@@ -478,967 +285,435 @@
 
 </head>
 <body>
-    <div class="floating-particles" id="particles"></div>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo-container">
+                <div class="logo">🦠 Montes BioPharma</div>
+                <span class="badge">GROQ AI</span>
+            </div>
+            <div class="api-config">
+                <div class="api-status" id="apiStatus"></div>
+                <span id="apiStatusText">API non configurée</span>
+            </div>
+        </nav>
+    </header>
 
 ```
-<header class="header">
-    <nav class="nav">
-        <div class="logo-container">
-            <svg class="logo-image" viewBox="0 0 150 40" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:#00ff7f;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#39FF14;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
-                <text x="5" y="25" font-family="Arial, sans-serif" font-size="22" font-weight="500" fill="url(#logoGradient)">
-                    <tspan>m</tspan>
-                    <tspan>o</tspan>
-                    <tspan>∩</tspan>
-                    <tspan>t</tspan>
-                    <tspan>e</tspan>
-                    <tspan>s</tspan>
-                </text>
-                <path d="M 48 15 Q 53 10 58 15" stroke="url(#logoGradient)" stroke-width="2" fill="none" opacity="0.8"/>
-            </svg>
-            <div class="logo">
-                <span class="sub">BioPharma</span>
-            </div>
-        </div>
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="#accueil">Accueil</a></li>
-                <li><a href="#protocoles">Protocoles</a></li>
-                <li><a href="#recherche">Recherche</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="language-selector">
-                <button class="lang-btn active" onclick="switchLanguage('fr')">FR</button>
-                <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<div class="main-container">
+<div class="container">
     <section class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">Purification Adénovirus</h1>
-            <p class="hero-subtitle">
-                Générateur de protocoles spécialisé pour la purification d'adénovirus. 
-                Protocoles personnalisés basés sur la littérature scientifique.
-            </p>
-            <button class="action-btn" onclick="startWorkflow()">Commencer le Protocole</button>
-        </div>
+        <h1 class="hero-title">Protocoles IA Adénovirus</h1>
+        <p style="color: #94a3b8; font-size: 1.1rem; margin-bottom: 0.5rem;">
+            Génération automatique de protocoles personnalisés par Intelligence Artificielle
+        </p>
+        <p style="color: #6366f1; font-size: 0.9rem;">
+            Propulsé par Groq AI - API gratuite
+        </p>
     </section>
 
-    <section class="workflow-section" id="workflow">
-        <h2 style="color: #f1f5f9; text-align: center; margin-bottom: 2rem;">Générateur de Protocole Adénovirus</h2>
+    <!-- Configuration API -->
+    <div class="config-section" id="apiConfig">
+        <div class="section-title">Configuration API Groq</div>
         
-        <div class="progress-indicator" id="progressIndicator">
-            <div class="progress-step active" id="step-indicator-1">1</div>
-            <div class="progress-step" id="step-indicator-2">2</div>
-            <div class="progress-step" id="step-indicator-3">3</div>
-            <div class="progress-step" id="step-indicator-4">4</div>
-            <div class="progress-step" id="step-indicator-5">5</div>
-            <div class="progress-step" id="step-indicator-6">6</div>
-            <div class="progress-step" id="step-indicator-7">7</div>
+        <div class="alert alert-info">
+            <strong>Instructions:</strong> Obtenez votre clé API gratuite sur 
+            <a href="https://console.groq.com/keys" target="_blank" style="color: #39FF14; text-decoration: underline;">console.groq.com/keys</a>
+            <br>
+            <small>Créez un compte gratuit, puis créez une nouvelle clé API dans la section "API Keys"</small>
         </div>
 
-        <!-- Étape 1: Type de molécule -->
-        <div class="step-container active" id="step1">
-            <h3 class="step-title">Étape 1: Type de Molécule</h3>
-            <p class="step-description">Confirmez le type de vecteur viral que vous souhaitez purifier</p>
-            
-            <div class="options-grid">
-                <div class="option-card selected" onclick="selectMolecule('adenovirus')">
-                    <div class="option-title">Adénovirus</div>
-                    <div class="option-description">Vecteurs adénoviraux pour thérapie génique</div>
-                </div>
-            </div>
-
-            <div class="step-navigation">
-                <button class="nav-btn" disabled>Précédent</button>
-                <button class="nav-btn" onclick="nextStep()">Suivant</button>
-            </div>
+        <div class="input-group">
+            <label class="input-label">Clé API Groq</label>
+            <input 
+                type="password" 
+                class="input-field" 
+                id="groqApiKey" 
+                placeholder="gsk_..."
+                autocomplete="off"
+            >
+            <p class="help-text">Votre clé ne sera jamais partagée et reste dans votre navigateur</p>
         </div>
 
-        <!-- Étape 2: Sérotype -->
-        <div class="step-container" id="step2">
-            <h3 class="step-title">Étape 2: Sérotype d'Adénovirus</h3>
-            <p class="step-description">Sélectionnez le sérotype d'adénovirus à purifier</p>
-            
-            <div class="options-grid">
-                <div class="option-card" onclick="selectSerotype('ad5')">
-                    <div class="option-title">Adénovirus 5 (Ad5)</div>
-                    <div class="option-description">Sérotype le plus utilisé en thérapie génique</div>
-                </div>
-                <div class="option-card" onclick="selectSerotype('ad2')">
-                    <div class="option-title">Adénovirus 2 (Ad2)</div>
-                    <div class="option-description">Alternative courante à Ad5</div>
-                </div>
-                <div class="option-card" onclick="selectSerotype('other')">
-                    <div class="option-title">Autre sérotype</div>
-                    <div class="option-description">Ad26, Ad35, ou sérotype personnalisé</div>
-                </div>
-            </div>
+        <button class="action-btn" onclick="saveApiKey()">Sauvegarder et Continuer</button>
+    </div>
 
-            <div class="step-navigation">
-                <button class="nav-btn" onclick="previousStep()">Précédent</button>
-                <button class="nav-btn" onclick="nextStep()">Suivant</button>
+    <!-- Workflow principal -->
+    <div class="config-section" id="mainWorkflow" style="display: none;">
+        <div class="section-title">Paramètres du Protocole</div>
+
+        <div class="input-group">
+            <label class="input-label">Sérotype d'Adénovirus</label>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption('serotype', 'Ad5', event)">
+                    <div class="option-title">Adénovirus 5</div>
+                    <div class="option-description">Le plus utilisé</div>
+                </div>
+                <div class="option-card" onclick="selectOption('serotype', 'Ad2', event)">
+                    <div class="option-title">Adénovirus 2</div>
+                    <div class="option-description">Alternative courante</div>
+                </div>
+                <div class="option-card" onclick="selectOption('serotype', 'Ad26', event)">
+                    <div class="option-title">Adénovirus 26</div>
+                    <div class="option-description">Vaccins COVID-19</div>
+                </div>
             </div>
         </div>
 
-        <!-- Étape 3: Étapes de purification -->
-        <div class="step-container" id="step3">
-            <h3 class="step-title">Étape 3: Étapes de Purification</h3>
-            <p class="step-description">Sélectionnez les étapes que vous souhaitez réaliser</p>
-            
+        <div class="input-group">
+            <label class="input-label">Lignée Cellulaire</label>
             <div class="options-grid">
-                <div class="option-card" onclick="toggleStep('harvest')">
-                    <div class="option-title">Récolte cellulaire</div>
-                    <div class="option-description">Lyse cellulaire et récupération du virus</div>
-                </div>
-                <div class="option-card" onclick="toggleStep('purification')">
-                    <div class="option-title">Purification</div>
-                    <div class="option-description">Chromatographie et/ou gradient CsCl</div>
-                </div>
-                <div class="option-card" onclick="toggleStep('concentration')">
-                    <div class="option-title">Concentration</div>
-                    <div class="option-description">Ultrafiltration et concentration finale</div>
-                </div>
-                <div class="option-card" onclick="toggleStep('formulation')">
-                    <div class="option-title">Formulation</div>
-                    <div class="option-description">Changement de tampon et stabilisation</div>
-                </div>
-            </div>
-
-            <div class="step-navigation">
-                <button class="nav-btn" onclick="previousStep()">Précédent</button>
-                <button class="nav-btn" onclick="nextStep()">Suivant</button>
-            </div>
-        </div>
-
-        <!-- Étape 4: Lignée cellulaire -->
-        <div class="step-container" id="step4">
-            <h3 class="step-title">Étape 4: Lignée Cellulaire</h3>
-            <p class="step-description">Quelle lignée cellulaire utilisez-vous pour la production ?</p>
-            
-            <div class="options-grid">
-                <div class="option-card" onclick="selectCellLine('hek293')">
+                <div class="option-card" onclick="selectOption('cellLine', 'HEK293', event)">
                     <div class="option-title">HEK293</div>
-                    <div class="option-description">Lignée de référence pour adénovirus</div>
+                    <div class="option-description">Lignée de référence</div>
                 </div>
-                <div class="option-card" onclick="selectCellLine('hek293t')">
+                <div class="option-card" onclick="selectOption('cellLine', 'HEK293T', event)">
                     <div class="option-title">HEK293T</div>
-                    <div class="option-description">HEK293 avec antigène T SV40</div>
+                    <div class="option-description">Avec antigène T</div>
                 </div>
-                <div class="option-card" onclick="selectCellLine('a549')">
-                    <div class="option-title">A549</div>
-                    <div class="option-description">Lignée pulmonaire humaine</div>
-                </div>
-                <div class="option-card" onclick="selectCellLine('per.c6')">
+                <div class="option-card" onclick="selectOption('cellLine', 'PER.C6', event)">
                     <div class="option-title">PER.C6</div>
-                    <div class="option-description">Lignée commerciale pour production GMP</div>
+                    <div class="option-description">Production GMP</div>
                 </div>
-            </div>
-
-            <div class="step-navigation">
-                <button class="nav-btn" onclick="previousStep()">Précédent</button>
-                <button class="nav-btn" onclick="nextStep()">Suivant</button>
+                <div class="option-card" onclick="selectOption('cellLine', 'A549', event)">
+                    <div class="option-title">A549</div>
+                    <div class="option-description">Lignée pulmonaire</div>
+                </div>
             </div>
         </div>
 
-        <!-- Étape 5: Recherche littérature -->
-        <div class="step-container" id="step5">
-            <h3 class="step-title">Étape 5: Recherche dans la Littérature</h3>
-            <p class="step-description">Souhaitez-vous rechercher des articles scientifiques pertinents ?</p>
-            
+        <div class="input-group">
+            <label class="input-label">Étapes de Purification (sélection multiple)</label>
             <div class="options-grid">
-                <div class="option-card" onclick="selectLiteratureSearch(true)">
-                    <div class="option-title">Oui, rechercher des articles</div>
-                    <div class="option-description">Recherche automatique dans PubMed en temps réel</div>
+                <div class="option-card" onclick="toggleStep('Récolte cellulaire', event)">
+                    <div class="option-title">Récolte</div>
                 </div>
-                <div class="option-card" onclick="selectLiteratureSearch(false)">
-                    <div class="option-title">Non, passer cette étape</div>
-                    <div class="option-description">Utiliser uniquement les connaissances de base</div>
+                <div class="option-card" onclick="toggleStep('Purification CsCl', event)">
+                    <div class="option-title">Purification</div>
                 </div>
-            </div>
-
-            <!-- Zone de recherche PubMed -->
-            <div id="pubmedSearchSection" style="display: none; margin-top: 2rem;">
-                <div style="background: rgba(57, 255, 20, 0.1); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(57, 255, 20, 0.3);">
-                    <h4 style="color: #39FF14; margin-bottom: 1rem;">🔍 Recherche PubMed en Cours</h4>
-                    <div id="searchProgress" style="background: rgba(57, 255, 20, 0.2); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 1rem;">
-                        <div id="searchProgressBar" style="background: #39FF14; height: 100%; width: 0%; transition: width 1s;"></div>
-                    </div>
-                    <p id="searchStatus" style="color: #94a3b8;">Recherche automatique basée sur vos sélections...</p>
+                <div class="option-card" onclick="toggleStep('Concentration', event)">
+                    <div class="option-title">Concentration</div>
                 </div>
-
-                <!-- Résultats PubMed -->
-                <div id="pubmedResults" style="display: none; margin-top: 1rem;">
-                    <h4 style="color: #39FF14; margin-bottom: 1rem;">📚 Articles PubMed Trouvés</h4>
-                    <div id="articlesContainer"></div>
-                    <div style="text-align: center; margin-top: 1rem;">
-                        <button class="action-btn" onclick="confirmArticleSelection()">Sélectionner les Articles Pertinents</button>
-                    </div>
+                <div class="option-card" onclick="toggleStep('Formulation', event)">
+                    <div class="option-title">Formulation</div>
                 </div>
-            </div>
-
-            <div class="step-navigation">
-                <button class="nav-btn" onclick="previousStep()">Précédent</button>
-                <button class="nav-btn" onclick="nextStep()" id="step5NextBtn">Suivant</button>
             </div>
         </div>
 
-        <!-- Étape 6: Extraction d'informations -->
-        <div class="step-container" id="step6">
-            <h3 class="step-title">Étape 6: Extraction d'Informations</h3>
-            <p class="step-description">Voulez-vous extraire les informations utiles des articles pour le protocole ?</p>
-            
-            <div class="options-grid">
-                <div class="option-card" onclick="selectExtraction(true)">
-                    <div class="option-title">Oui, extraire les informations</div>
-                    <div class="option-description">Analyse automatique des articles et intégration</div>
-                </div>
-                <div class="option-card" onclick="selectExtraction(false)">
-                    <div class="option-title">Non, protocole standard</div>
-                    <div class="option-description">Utiliser un protocole générique</div>
-                </div>
-            </div>
-
-            <div class="step-navigation">
-                <button class="nav-btn" onclick="previousStep()">Précédent</button>
-                <button class="nav-btn" onclick="nextStep()">Suivant</button>
-            </div>
+        <div class="input-group">
+            <label class="input-label">Échelle de Production (optionnel)</label>
+            <select class="input-field" id="productionScale">
+                <option value="">Non spécifiée</option>
+                <option value="Laboratoire (flasks)">Laboratoire (flasks)</option>
+                <option value="Bioréacteur 2L">Bioréacteur 2L</option>
+                <option value="Bioréacteur 10L">Bioréacteur 10L</option>
+                <option value="Production pilote 50L+">Production pilote 50L+</option>
+            </select>
         </div>
 
-        <!-- Étape 7: Documents personnels et informations supplémentaires -->
-        <div class="step-container" id="step7">
-            <h3 class="step-title">Étape 7: Informations Supplémentaires</h3>
-            <p class="step-description">Avez-vous des documents ou informations supplémentaires ?</p>
-            
-            <div class="input-group">
-                <label class="input-label">Documents personnels (optionnel)</label>
-                <input type="file" class="input-field" accept=".pdf,.doc,.docx" multiple onchange="handleFileUpload(event)">
-                <small style="color: #94a3b8;">Formats supportés: PDF, DOC, DOCX</small>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Informations supplémentaires (optionnel)</label>
-                <textarea class="input-field textarea-field" placeholder="Contraintes spécifiques, équipements disponibles, objectifs particuliers..." id="additionalInfo"></textarea>
-            </div>
-
-            <div class="step-navigation">
-                <button class="nav-btn" onclick="previousStep()">Précédent</button>
-                <button class="nav-btn" onclick="generateProtocol()">Générer le Protocole</button>
-            </div>
+        <div class="input-group">
+            <label class="input-label">Informations Supplémentaires (optionnel)</label>
+            <textarea 
+                class="input-field" 
+                id="additionalInfo" 
+                rows="3" 
+                placeholder="Ex: équipements disponibles, contraintes particulières, objectifs spécifiques..."
+            ></textarea>
         </div>
 
-        <!-- Sortie du protocole -->
-        <div class="protocol-output" id="protocolOutput">
-            <h3 style="color: #39FF14; text-align: center; margin-bottom: 2rem;">Protocole de Purification Généré</h3>
-            <div id="protocolContent"></div>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <button class="action-btn" onclick="exportPDF()" style="margin-right: 1rem;">Télécharger PDF</button>
-                <button class="nav-btn" onclick="resetWorkflow()">Nouveau Protocole</button>
-            </div>
+        <button class="action-btn" onclick="generateProtocol()">Générer le Protocole avec IA</button>
+    </div>
+
+    <!-- Sortie du protocole -->
+    <div class="protocol-output" id="protocolOutput">
+        <div id="protocolContent"></div>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button class="action-btn" onclick="exportPDF()" style="flex: 1;">Télécharger PDF</button>
+            <button class="action-btn" onclick="resetWorkflow()" style="flex: 1; background: rgba(57, 255, 20, 0.2); color: #39FF14;">Nouveau Protocole</button>
         </div>
-    </section>
+    </div>
 </div>
 
 <script>
-    // Variables globales
-    let currentStep = 1;
-    const totalSteps = 7;
-    
-    let protocolData = {
-        molecule: 'adenovirus',
+    let groqApiKey = localStorage.getItem('groqApiKey') || '';
+    const protocolData = {
         serotype: null,
-        steps: [],
         cellLine: null,
-        literatureSearch: null,
-        pubmedArticles: [], 
-        selectedArticles: [], 
-        extraction: null,
-        additionalFiles: [],
+        steps: [],
+        scale: '',
         additionalInfo: ''
     };
 
-    // Textes multilingues
-    const texts = {
-        fr: {
-            'hero-title': 'Purification Adénovirus',
-            'hero-subtitle': 'Générateur de protocoles spécialisé pour la purification d\'adénovirus. Protocoles personnalisés basés sur la littérature scientifique.',
-            'start-btn': 'Commencer le Protocole'
-        },
-        en: {
-            'hero-title': 'Adenovirus Purification',
-            'hero-subtitle': 'Specialized protocol generator for adenovirus purification. Customized protocols based on scientific literature.',
-            'start-btn': 'Start Protocol'
+    // Vérifier si la clé existe au chargement
+    window.addEventListener('load', () => {
+        if (groqApiKey) {
+            document.getElementById('apiConfig').style.display = 'none';
+            document.getElementById('mainWorkflow').style.display = 'block';
+            updateApiStatus(true);
         }
-    };
+    });
 
-    let currentLanguage = 'fr';
-
-    // FONCTIONS PUBMED API avec proxy CORS
-    async function searchPubMedAPI(query, maxResults = 15) {
-        try {
-            console.log('🔍 Recherche PubMed:', query);
-            
-            // Proxy CORS pour contourner les restrictions
-            const corsProxy = 'https://api.allorigins.win/raw?url=';
-            
-            // 1. Recherche des IDs d'articles
-            const searchURL = `${corsProxy}${encodeURIComponent(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(query)}&retmode=json&retmax=${maxResults}&sort=relevance`)}`;
-            
-            const searchResponse = await fetch(searchURL, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            
-            if (!searchResponse.ok) {
-                throw new Error(`Erreur recherche: ${searchResponse.status}`);
-            }
-            
-            const searchData = await searchResponse.json();
-            const articleIds = searchData.esearchresult?.idlist || [];
-            
-            if (articleIds.length === 0) {
-                return [];
-            }
-            
-            console.log(`📚 ${articleIds.length} articles trouvés`);
-            
-            // 2. Récupération des détails des articles  
-            const summaryURL = `${corsProxy}${encodeURIComponent(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${articleIds.join(',')}&retmode=json`)}`;
-            
-            const summaryResponse = await fetch(summaryURL, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            
-            if (!summaryResponse.ok) {
-                throw new Error(`Erreur détails: ${summaryResponse.status}`);
-            }
-            
-            const summaryData = await summaryResponse.json();
-            
-            // 3. Formatage des résultats
-            const articles = articleIds.map(id => {
-                const article = summaryData.result?.[id];
-                if (!article) return null;
-                
-                return {
-                    pmid: id,
-                    title: article.title || 'Titre non disponible',
-                    authors: Array.isArray(article.authors) 
-                        ? article.authors.slice(0, 3).map(a => a.name || a).join(', ') + (article.authors.length > 3 ? ' et al.' : '')
-                        : 'Auteurs non disponibles',
-                    journal: article.source || 'Journal non spécifié',
-                    pubdate: article.pubdate || 'Date inconnue',
-                    doi: article.elocationid || null,
-                    relevanceScore: Math.floor(Math.random() * 30) + 70
-                };
-            }).filter(article => article !== null);
-            
-            return articles;
-            
-        } catch (error) {
-            console.error('❌ Erreur API PubMed:', error);
-            throw new Error(`Impossible d'accéder à PubMed: ${error.message}`);
-        }
-    }
-
-    function buildPubMedQuery() {
-        let query = 'adenovirus purification';
-        
-        if (protocolData.serotype && protocolData.serotype !== 'other') {
-            query += ` ${protocolData.serotype.toUpperCase()}`;
-        }
-        
-        if (protocolData.cellLine) {
-            query += ` ${getCellLineName(protocolData.cellLine)}`;
-        }
-        
-        if (protocolData.steps.includes('purification')) {
-            query += ' cesium chloride chromatography';
-        }
-        if (protocolData.steps.includes('concentration')) {
-            query += ' ultrafiltration concentration';
-        }
-        
-        query += ' AND ("2020"[Date - Publication] : "2024"[Date - Publication])';
-        
-        return query;
-    }
-
-    async function performPubMedSearch() {
-        console.log('🚀 Démarrage recherche PubMed');
-        const searchSection = document.getElementById('pubmedSearchSection');
-        const progressBar = document.getElementById('searchProgressBar');
-        const statusText = document.getElementById('searchStatus');
-        const resultsDiv = document.getElementById('pubmedResults');
-        const container = document.getElementById('articlesContainer');
-        
-        try {
-            // Afficher la progression
-            searchSection.style.display = 'block';
-            progressBar.style.width = '10%';
-            statusText.textContent = 'Construction de la requête de recherche...';
-            
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Construire la requête
-            const query = buildPubMedQuery();
-            console.log('🔍 Requête construite:', query);
-            
-            progressBar.style.width = '30%';
-            statusText.textContent = 'Connexion à PubMed...';
-            
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
-            // Lancer la recherche
-            progressBar.style.width = '60%';
-            statusText.textContent = 'Recherche en cours...';
-            
-            const articles = await searchPubMedAPI(query);
-            
-            progressBar.style.width = '100%';
-            statusText.textContent = `✅ ${articles.length} articles trouvés et analysés`;
-            
-            // Sauvegarder les articles
-            protocolData.pubmedArticles = articles;
-            
-            // Afficher les résultats
-            if (articles.length > 0) {
-                displayPubMedResults(articles, container);
-                resultsDiv.style.display = 'block';
-            } else {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 2rem; color: #94a3b8;">
-                        <p>Aucun article récent trouvé pour ces critères spécifiques.</p>
-                        <p>Le protocole utilisera les connaissances générales.</p>
-                    </div>
-                `;
-                resultsDiv.style.display = 'block';
-            }
-            
-        } catch (error) {
-            console.error('❌ Erreur recherche PubMed:', error);
-            progressBar.style.width = '100%';
-            progressBar.style.background = '#ff4444';
-            statusText.innerHTML = `❌ Erreur: ${error.message}<br><small>Le protocole utilisera les connaissances de base</small>`;
-            
-            // Afficher un message d'erreur convivial
-            container.innerHTML = `
-                <div style="background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); border-radius: 8px; padding: 1rem; text-align: center;">
-                    <h4 style="color: #ff4444;">⚠️ Recherche PubMed indisponible</h4>
-                    <p style="color: #94a3b8; margin-top: 0.5rem;">
-                        Raison: ${error.message}<br>
-                        Le protocole sera généré avec les connaissances intégrées.
-                    </p>
-                </div>
-            `;
-            resultsDiv.style.display = 'block';
-        }
-    }
-
-    function displayPubMedResults(articles, container) {
-        container.innerHTML = '';
-        
-        articles.forEach((article, index) => {
-            const articleElement = document.createElement('div');
-            articleElement.className = 'pubmed-article';
-            articleElement.style.cssText = `
-                background: rgba(45, 55, 72, 0.7);
-                border: 2px solid rgba(57, 255, 20, 0.2);
-                border-radius: 8px;
-                padding: 1rem;
-                margin: 0.5rem 0;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            `;
-            
-            articleElement.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                    <div style="flex-grow: 1;">
-                        <h4 style="color: #f1f5f9; margin-bottom: 0.5rem; font-size: 1rem; line-height: 1.3;">${article.title}</h4>
-                        <p style="color: #a855f7; font-size: 0.9rem; margin-bottom: 0.3rem;">👥 ${article.authors}</p>
-                        <div style="display: flex; gap: 1rem; font-size: 0.85rem; color: #94a3b8;">
-                            <span>📖 ${article.journal}</span>
-                            <span>📅 ${article.pubdate}</span>
-                            <span style="background: rgba(57, 255, 20, 0.2); color: #39FF14; padding: 0.2rem 0.4rem; border-radius: 3px;">
-                                🎯 ${article.relevanceScore}%
-                            </span>
-                        </div>
-                    </div>
-                    <div style="margin-left: 1rem;">
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/${article.pmid}/" target="_blank" 
-                           style="color: #39FF14; text-decoration: none; font-size: 0.8rem;">
-                            PMID: ${article.pmid} ↗
-                        </a>
-                    </div>
-                </div>
-            `;
-            
-            // Sélection d'articles
-            articleElement.addEventListener('click', function() {
-                toggleArticleSelection(article.pmid, articleElement);
-            });
-            
-            // Auto-sélectionner les 5 premiers articles les plus pertinents
-            if (index < 5 && article.relevanceScore > 75) {
-                protocolData.selectedArticles.push(article.pmid);
-                articleElement.style.borderColor = '#39FF14';
-                articleElement.style.background = 'rgba(57, 255, 20, 0.1)';
-            }
-            
-            container.appendChild(articleElement);
-        });
-    }
-
-    function toggleArticleSelection(pmid, element) {
-        const isSelected = protocolData.selectedArticles.includes(pmid);
-        
-        if (isSelected) {
-            protocolData.selectedArticles = protocolData.selectedArticles.filter(id => id !== pmid);
-            element.style.borderColor = 'rgba(57, 255, 20, 0.2)';
-            element.style.background = 'rgba(45, 55, 72, 0.7)';
+    function updateApiStatus(active) {
+        const status = document.getElementById('apiStatus');
+        const text = document.getElementById('apiStatusText');
+        if (active) {
+            status.classList.add('active');
+            text.textContent = 'API configurée';
         } else {
-            protocolData.selectedArticles.push(pmid);
-            element.style.borderColor = '#39FF14';
-            element.style.background = 'rgba(57, 255, 20, 0.1)';
+            status.classList.remove('active');
+            text.textContent = 'API non configurée';
         }
     }
 
-    function confirmArticleSelection() {
-        const selectedCount = protocolData.selectedArticles.length;
-        if (selectedCount === 0) {
-            alert('⚠️ Aucun article sélectionné. Le protocole utilisera les connaissances de base.');
-        } else {
-            alert(`✅ ${selectedCount} article(s) sélectionné(s) pour intégration dans le protocole`);
-        }
+    function saveApiKey() {
+        const key = document.getElementById('groqApiKey').value.trim();
         
-        // Réactiver le bouton suivant
-        const nextBtn = document.getElementById('step5NextBtn');
-        nextBtn.disabled = false;
-        nextBtn.textContent = 'Suivant';
-        nextBtn.style.opacity = '1';
-    }
-
-    // Créer les particules flottantes
-    function createParticles() {
-        const particlesContainer = document.getElementById('particles');
-        const particleCount = 60;
-
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 10 + 's';
-            particle.style.animationDuration = (Math.random() * 6 + 4) + 's';
-            
-            const size = Math.random() * 3 + 2;
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            
-            particlesContainer.appendChild(particle);
+        if (!key) {
+            alert('Veuillez entrer une clé API');
+            return;
         }
+
+        if (!key.startsWith('gsk_')) {
+            alert('Format de clé invalide. Les clés Groq commencent par "gsk_"');
+            return;
+        }
+
+        groqApiKey = key;
+        localStorage.setItem('groqApiKey', key);
+        
+        document.getElementById('apiConfig').style.display = 'none';
+        document.getElementById('mainWorkflow').style.display = 'block';
+        updateApiStatus(true);
     }
 
-    function switchLanguage(lang) {
-        currentLanguage = lang;
-        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        updateTexts();
+    function selectOption(field, value, event) {
+        const container = event.target.closest('.input-group');
+        container.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+        event.target.closest('.option-card').classList.add('selected');
+        protocolData[field] = value;
     }
 
-    function updateTexts() {
-        // Mise à jour des textes selon la langue
-        document.querySelector('.hero-title').textContent = texts[currentLanguage]['hero-title'];
-        document.querySelector('.hero-subtitle').textContent = texts[currentLanguage]['hero-subtitle'];
-    }
-
-    function startWorkflow() {
-        document.getElementById('workflow').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function selectMolecule(molecule) {
-        protocolData.molecule = molecule;
-        document.querySelectorAll('#step1 .option-card').forEach(card => card.classList.remove('selected'));
-        event.target.classList.add('selected');
-    }
-
-    function selectSerotype(serotype) {
-        protocolData.serotype = serotype;
-        document.querySelectorAll('#step2 .option-card').forEach(card => card.classList.remove('selected'));
-        event.target.classList.add('selected');
-    }
-
-    function toggleStep(step) {
+    function toggleStep(step, event) {
+        const card = event.target.closest('.option-card');
         if (protocolData.steps.includes(step)) {
             protocolData.steps = protocolData.steps.filter(s => s !== step);
-            event.target.classList.remove('selected');
+            card.classList.remove('selected');
         } else {
             protocolData.steps.push(step);
-            event.target.classList.add('selected');
+            card.classList.add('selected');
         }
     }
 
-    function selectCellLine(cellLine) {
-        protocolData.cellLine = cellLine;
-        document.querySelectorAll('#step4 .option-card').forEach(card => card.classList.remove('selected'));
-        event.target.classList.add('selected');
-    }
-
-    function selectLiteratureSearch(search) {
-        protocolData.literatureSearch = search;
-        document.querySelectorAll('#step5 .option-card').forEach(card => card.classList.remove('selected'));
-        event.target.classList.add('selected');
-        
-        if (search) {
-            // Lancer la recherche PubMed automatiquement
-            setTimeout(() => {
-                performPubMedSearch();
-            }, 1000);
-            
-            // Désactiver le bouton suivant jusqu'à confirmation
-            document.getElementById('step5NextBtn').disabled = true;
-            document.getElementById('step5NextBtn').textContent = 'Sélectionnez d\'abord les articles';
-            document.getElementById('step5NextBtn').style.opacity = '0.5';
-        } else {
-            // Réactiver le bouton suivant
-            document.getElementById('step5NextBtn').disabled = false;
-            document.getElementById('step5NextBtn').textContent = 'Suivant';
-            document.getElementById('step5NextBtn').style.opacity = '1';
-            
-            // Cacher la section de recherche
-            document.getElementById('pubmedSearchSection').style.display = 'none';
+    async function generateProtocol() {
+        // Validation
+        if (!protocolData.serotype) {
+            alert('Veuillez sélectionner un sérotype');
+            return;
         }
-    }
-
-    function selectExtraction(extract) {
-        protocolData.extraction = extract;
-        document.querySelectorAll('#step6 .option-card').forEach(card => card.classList.remove('selected'));
-        event.target.classList.add('selected');
-    }
-
-    function handleFileUpload(event) {
-        protocolData.additionalFiles = Array.from(event.target.files);
-    }
-
-    function nextStep() {
-        if (currentStep < totalSteps) {
-            // Cacher l'étape actuelle
-            document.getElementById(`step${currentStep}`).classList.remove('active');
-            document.getElementById(`step-indicator-${currentStep}`).classList.remove('active');
-            document.getElementById(`step-indicator-${currentStep}`).classList.add('completed');
-            
-            // Passer à l'étape suivante
-            currentStep++;
-            document.getElementById(`step${currentStep}`).classList.add('active');
-            document.getElementById(`step-indicator-${currentStep}`).classList.add('active');
+        if (!protocolData.cellLine) {
+            alert('Veuillez sélectionner une lignée cellulaire');
+            return;
         }
-    }
-
-    function previousStep() {
-        if (currentStep > 1) {
-            // Cacher l'étape actuelle
-            document.getElementById(`step${currentStep}`).classList.remove('active');
-            document.getElementById(`step-indicator-${currentStep}`).classList.remove('active');
-            
-            // Revenir à l'étape précédente
-            currentStep--;
-            document.getElementById(`step${currentStep}`).classList.add('active');
-            document.getElementById(`step-indicator-${currentStep}`).classList.remove('completed');
-            document.getElementById(`step-indicator-${currentStep}`).classList.add('active');
+        if (protocolData.steps.length === 0) {
+            alert('Veuillez sélectionner au moins une étape de purification');
+            return;
         }
-    }
 
-    function generateProtocol() {
-        // Récupérer les informations supplémentaires
+        // Récupérer infos additionnelles
+        protocolData.scale = document.getElementById('productionScale').value;
         protocolData.additionalInfo = document.getElementById('additionalInfo').value;
-        
-        // Cacher l'étape actuelle
-        document.getElementById(`step${currentStep}`).classList.remove('active');
-        
-        // Générer et afficher le protocole
-        const protocol = createAdenovirusProtocol();
-        document.getElementById('protocolContent').innerHTML = protocol;
-        document.getElementById('protocolOutput').style.display = 'block';
-        
-        // Scroll vers le protocole
-        document.getElementById('protocolOutput').scrollIntoView({ behavior: 'smooth' });
-    }
 
-    function createAdenovirusProtocol() {
-        let protocol = '';
-        
-        // En-tête du protocole
-        protocol += `
-            <div class="protocol-section">
-                <div class="protocol-section-title">PROTOCOLE DE PURIFICATION - ${protocolData.serotype?.toUpperCase() || 'ADÉNOVIRUS'}</div>
-                <p><strong>Lignée cellulaire:</strong> ${getCellLineName(protocolData.cellLine)}</p>
-                <p><strong>Étapes sélectionnées:</strong> ${protocolData.steps.map(s => getStepName(s)).join(', ')}</p>
-                <p><strong>Recherche littérature:</strong> ${protocolData.literatureSearch ? 'Activée' : 'Désactivée'}</p>
-                ${protocolData.extraction ? '<p><strong>Extraction automatique:</strong> Activée</p>' : ''}
+        // Afficher loader
+        const output = document.getElementById('protocolOutput');
+        output.style.display = 'block';
+        document.getElementById('protocolContent').innerHTML = `
+            <div class="loader">
+                <div class="spinner"></div>
+                <h3 style="color: #39FF14; margin-bottom: 0.5rem;">Génération du protocole par IA</h3>
+                <p style="color: #94a3b8;">L'IA Groq analyse vos paramètres et génère un protocole détaillé...</p>
             </div>
         `;
+        output.scrollIntoView({ behavior: 'smooth' });
 
-        // Génération des étapes selon la sélection
-        if (protocolData.steps.includes('harvest')) {
-            protocol += `
-                <div class="protocol-section">
-                    <div class="protocol-section-title">1. RÉCOLTE CELLULAIRE</div>
-                    <p><strong>Objectif:</strong> Libérer les particules virales des cellules infectées</p>
-                    <ul style="margin-left: 2rem;">
-                        <li>Récolter les cellules 48-72h post-infection (effet cytopathique >80%)</li>
-                        <li>Centrifuger à 1000g pendant 10 minutes à 4°C</li>
-                        <li>Resuspendre le culot cellulaire dans du PBS froid</li>
-                        <li>Effectuer 3 cycles de congélation (-80°C) / décongélation (37°C)</li>
-                        <li>Sonication: 3 × 30 secondes avec intervalles de 1 minute sur glace</li>
-                        <li>Centrifuger à 3000g pendant 15 minutes pour éliminer les débris</li>
-                    </ul>
-                </div>
-            `;
-        }
+        // Construire le prompt
+        const prompt = `Tu es un expert scientifique en purification d'adénovirus avec 20 ans d'expérience. Génère un protocole DÉTAILLÉ, PRÉCIS et PRATIQUE.
+```
 
-        if (protocolData.steps.includes('purification')) {
-            protocol += `
-                <div class="protocol-section">
-                    <div class="protocol-section-title">2. PURIFICATION</div>
-                    <p><strong>Méthode recommandée:</strong> Gradient de chlorure de césium (CsCl)</p>
-                    <ul style="margin-left: 2rem;">
-                        <li><strong>Préparation du gradient:</strong>
-                            <ul style="margin-left: 1rem;">
-                                <li>Solution dense: CsCl 1.4 g/mL dans tampon Tris-HCl pH 8.0</li>
-                                <li>Solution légère: CsCl 1.2 g/mL dans tampon Tris-HCl pH 8.0</li>
-                            </ul>
-                        </li>
-                        <li>Déposer l'échantillon sur gradient discontinu CsCl</li>
-                        <li>Ultracentrifugation: 35,000 rpm, 20h, 4°C (rotor SW41)</li>
-                        <li>Récupérer la bande virale (densité ≈ 1.34 g/mL)</li>
-                        <li>Alternative: Chromatographie échangeuse d'anions (colonne Q-Sepharose)</li>
-                    </ul>
-                </div>
-            `;
-        }
+PARAMÈTRES DU PROJET :
 
-        if (protocolData.steps.includes('concentration')) {
-            protocol += `
-                <div class="protocol-section">
-                    <div class="protocol-section-title">3. CONCENTRATION</div>
-                    <p><strong>Objectif:</strong> Concentrer et dessaler la préparation virale</p>
-                    <ul style="margin-left: 2rem;">
-                        <li>Dialyser contre tampon PBS ou tampon de stockage</li>
-                        <li>Utiliser des colonnes Amicon Ultra (seuil 100 kDa)</li>
-                        <li>Centrifuger à 3000g jusqu'à volume désiré</li>
-                        <li>Déterminer la concentration: DO260/DO280 ou qPCR</li>
-                    </ul>
-                </div>
-            `;
-        }
+- Sérotype : ${protocolData.serotype}
+- Lignée cellulaire : ${protocolData.cellLine}
+- Étapes demandées : ${protocolData.steps.join(’, ’)}
+  ${protocolData.scale ? `- Échelle : ${protocolData.scale}` : ‘’}
+  ${protocolData.additionalInfo ? `- Informations additionnelles : ${protocolData.additionalInfo}` : ‘’}
 
-        if (protocolData.steps.includes('formulation')) {
-            protocol += `
-                <div class="protocol-section">
-                    <div class="protocol-section-title">4. FORMULATION FINALE</div>
-                    <p><strong>Tampon de stockage recommandé:</strong></p>
-                    <ul style="margin-left: 2rem;">
-                        <li>Tris-HCl 10 mM pH 8.0</li>
-                        <li>NaCl 150 mM</li>
-                        <li>MgCl₂ 1 mM</li>
-                        <li>Glycérol 10% (v/v) - optionnel pour stabilité</li>
-                        <li>Aliquoter en fractions de 50-100 μL</li>
-                        <li>Congeler à -80°C pour stockage long terme</li>
-                    </ul>
-                </div>
-            `;
-        }
+INSTRUCTIONS CRITIQUES :
 
-        // Contrôles qualité
-        protocol += `
-            <div class="protocol-section">
-                <div class="protocol-section-title">5. CONTRÔLES QUALITÉ</div>
-                <ul style="margin-left: 2rem;">
-                    <li><strong>Titre viral:</strong> qPCR temps réel (copies/mL)</li>
-                    <li><strong>Infectiosité:</strong> Test TCID50 sur cellules ${getCellLineName(protocolData.cellLine)}</li>
-                    <li><strong>Pureté:</strong> SDS-PAGE et Western blot (protéines capsidiques)</li>
-                    <li><strong>Endotoxines:</strong> Test LAL (< 5 EU/mL pour usage thérapeutique)</li>
-                    <li><strong>Stérilité:</strong> Absence de contamination bactérienne/fongique</li>
-                </ul>
-            </div>
-        `;
+1. Génère un protocole SPÉCIFIQUE avec des valeurs CONCRÈTES et PRÉCISES :
+- Volumes exacts (ex: “50 mL”, “2 mL”, pas de “volumes appropriés”)
+- Températures exactes (ex: “4°C”, “-80°C”)
+- Temps précis (ex: “10 minutes”, “48-72 heures”)
+- Vitesses de centrifugation exactes (ex: “1000g”, “35000 rpm”)
+- Concentrations molaires (ex: “10 mM Tris-HCl”, “150 mM NaCl”)
+1. Adapte SPÉCIFIQUEMENT au sérotype ${protocolData.serotype} et à la lignée ${protocolData.cellLine}
+1. Base-toi sur les meilleures pratiques scientifiques 2023-2025
+1. Pour CHAQUE étape demandée, fournis :
+- Objectif de l’étape (pourquoi on fait ça)
+- Matériel et réactifs requis (liste complète)
+- Procédure détaillée (étapes numérotées avec valeurs précises)
+- Paramètres critiques (tableau avec valeurs exactes)
+- Points d’attention et conseils pratiques
+- Résultats attendus (rendements, titres, pureté)
+1. Inclus une section “Contrôles qualité” avec méthodes analytiques
+1. Inclus une section “Résolution de problèmes” avec problèmes courants et solutions
 
-        // Informations supplémentaires si fournies
-        if (protocolData.additionalInfo) {
-            protocol += `
-                <div class="protocol-section">
-                    <div class="protocol-section-title">6. INFORMATIONS SUPPLÉMENTAIRES</div>
-                    <p>${protocolData.additionalInfo}</p>
-                </div>
-            `;
-        }
+STRUCTURE OBLIGATOIRE :
+Utilise des titres clairs avec — comme séparateurs.
+Format professionnel et lisible.
+Pas d’introduction ni de conclusion génériques.
 
-        // Références PubMed si recherche effectuée
-        if (protocolData.literatureSearch && protocolData.selectedArticles.length > 0) {
-            const selectedPubmedArticles = protocolData.pubmedArticles.filter(
-                article => protocolData.selectedArticles.includes(article.pmid)
-            );
-            
-            protocol += `
-                <div class="protocol-section">
-                    <div class="protocol-section-title">7. RÉFÉRENCES SCIENTIFIQUES PUBMED INTÉGRÉES</div>
-                    <p><strong>Articles sélectionnés et analysés:</strong> ${selectedPubmedArticles.length} publications récentes</p>
-                    <ul style="margin-left: 2rem;">
-            `;
-            
-            selectedPubmedArticles.forEach((article, index) => {
-                protocol += `
-                    <li style="margin-bottom: 0.5rem;">
-                        <strong>[${index + 1}]</strong> ${article.authors} (${article.pubdate.split(' ')[0]}). 
-                        "${article.title}" <em>${article.journal}</em>. 
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/${article.pmid}/" target="_blank" style="color: #39FF14;">
-                            PMID: ${article.pmid}
-                        </a>
-                        <span style="background: rgba(57, 255, 20, 0.2); color: #39FF14; padding: 0.2rem 0.4rem; border-radius: 3px; margin-left: 0.5rem; font-size: 0.8rem;">
-                            Pertinence: ${article.relevanceScore}%
-                        </span>
-                    </li>
-                `;
-            });
-            
-            protocol += `
-                    </ul>
-                    <p style="margin-top: 1rem; font-style: italic; color: #94a3b8;">
-                        ℹ️ Ces articles ont été automatiquement sélectionnés sur PubMed en fonction de vos critères 
-                        (${protocolData.serotype?.toUpperCase() || 'adénovirus'}, ${getCellLineName(protocolData.cellLine)}, 
-                        étapes: ${protocolData.steps.map(s => getStepName(s)).join(', ')}).
-                        Les protocoles ci-dessus intègrent les méthodologies les plus récentes de ces publications.
-                    </p>
-                </div>
-            `;
-        }
+Commence directement par le protocole.`;
 
-        return protocol;
-    }
-
-    function getCellLineName(cellLine) {
-        const names = {
-            'hek293': 'HEK293',
-            'hek293t': 'HEK293T',
-            'a549': 'A549',
-            'per.c6': 'PER.C6'
-        };
-        return names[cellLine] || 'Non spécifiée';
-    }
-
-    function getStepName(step) {
-        const names = {
-            'harvest': 'Récolte',
-            'purification': 'Purification',
-            'concentration': 'Concentration',
-            'formulation': 'Formulation'
-        };
-        return names[step] || step;
-    }
-
-    function exportPDF() {
+```
         try {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // En-tête
-            doc.setFontSize(20);
-            doc.setTextColor(57, 255, 20);
-            doc.text('MONTES BioPharma', 20, 20);
-            
-            doc.setFontSize(16);
-            doc.setTextColor(0, 0, 0);
-            doc.text('Protocole de Purification Adénovirus', 20, 35);
-            
-            // Ligne de séparation
-            doc.setDrawColor(57, 255, 20);
-            doc.line(20, 40, 190, 40);
-            
-            // Date
-            doc.setFontSize(12);
-            doc.text('Généré le: ' + new Date().toLocaleDateString('fr-FR'), 20, 50);
-            
-            // Contenu
-            let yPosition = 60;
-            const protocolText = document.getElementById('protocolContent').textContent;
-            const lines = protocolText.split('\n').filter(line => line.trim() !== '');
-            
-            doc.setFontSize(10);
-            lines.forEach(line => {
-                if (yPosition > 270) {
-                    doc.addPage();
-                    yPosition = 20;
-                }
-                
-                const wrappedLines = doc.splitTextToSize(line.trim(), 170);
-                wrappedLines.forEach(wrappedLine => {
-                    doc.text(wrappedLine, 20, yPosition);
-                    yPosition += 5;
-                });
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${groqApiKey}`
+                },
+                body: JSON.stringify({
+                    model: "llama-3.1-70b-versatile",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "Tu es un expert scientifique en purification d'adénovirus. Tu fournis des protocoles détaillés, précis et basés sur les meilleures pratiques. Tu donnes toujours des valeurs exactes et concrètes."
+                        },
+                        {
+                            role: "user",
+                            content: prompt
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 4000
+                })
             });
 
-            const fileName = `Protocole_Adenovirus_${protocolData.serotype || 'Ad'}_${new Date().toISOString().slice(0,10)}.pdf`;
-            doc.save(fileName);
-            
-            alert('✅ PDF généré et téléchargé: ' + fileName);
-            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || `Erreur API: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const protocolText = data.choices[0].message.content;
+
+            displayProtocol(protocolText);
+
         } catch (error) {
-            console.error('Erreur génération PDF:', error);
-            alert('❌ Erreur lors de la génération PDF');
+            console.error('Erreur:', error);
+            document.getElementById('protocolContent').innerHTML = `
+                <div class="alert alert-error">
+                    <h3 style="margin-bottom: 0.5rem;">Erreur de génération</h3>
+                    <p>${error.message}</p>
+                    <p style="margin-top: 1rem; font-size: 0.9rem;">
+                        Vérifiez que votre clé API Groq est valide et que vous avez des crédits disponibles.
+                    </p>
+                    <button class="action-btn" onclick="resetApiConfig()" style="margin-top: 1rem;">Reconfigurer l'API</button>
+                </div>
+            `;
         }
+    }
+
+    function displayProtocol(protocolText) {
+        const html = `
+            <div class="alert alert-success">
+                <strong>Protocole généré avec succès</strong>
+                <br>
+                <small>${protocolData.serotype} | ${protocolData.cellLine} | ${protocolData.steps.join(', ')}</small>
+                <br>
+                <small>Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}</small>
+            </div>
+            <div style="white-space: pre-wrap; line-height: 1.8; color: #e2e8f0;">
+```
+
+${protocolText}
+</div>
+<div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(57, 255, 20, 0.2);">
+<p style="color: #94a3b8; font-size: 0.9rem; text-align: center;">
+Ce protocole a été généré par IA (Groq - Llama 3.1 70B).
+Vérification et validation par un expert recommandées avant utilisation.
+</p>
+</div>
+`;
+document.getElementById(‘protocolContent’).innerHTML = html;
+}
+
+```
+    function exportPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // En-tête
+        doc.setFontSize(16);
+        doc.setTextColor(57, 255, 20);
+        doc.text('Montes BioPharma', 20, 20);
+        
+        doc.setFontSize(12);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Protocole de Purification Adénovirus - Généré par IA', 20, 30);
+        
+        doc.setFontSize(10);
+        doc.text(`${protocolData.serotype} | ${protocolData.cellLine}`, 20, 38);
+        doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, 20, 44);
+        
+        // Ligne
+        doc.setDrawColor(57, 255, 20);
+        doc.line(20, 48, 190, 48);
+        
+        // Contenu
+        const text = document.getElementById('protocolContent').textContent;
+        const lines = doc.splitTextToSize(text, 170);
+        
+        let y = 55;
+        doc.setFontSize(9);
+        doc.setTextColor(0, 0, 0);
+        
+        lines.forEach(line => {
+            if (y > 275) {
+                doc.addPage();
+                y = 20;
+            }
+            doc.text(line, 20, y);
+            y += 5;
+        });
+
+        doc.save(`Protocole_${protocolData.serotype}_${protocolData.cellLine}_${Date.now()}.pdf`);
     }
 
     function resetWorkflow() {
-        currentStep = 1;
-        protocolData = {
-            molecule: 'adenovirus',
-            serotype: null,
-            steps: [],
-            cellLine: null,
-            literatureSearch: null,
-            extraction: null,
-            additionalFiles: [],
-            additionalInfo: ''
-        };
+        protocolData.serotype = null;
+        protocolData.cellLine = null;
+        protocolData.steps = [];
+        protocolData.scale = '';
+        protocolData.additionalInfo = '';
         
-        // Réinitialiser l'interface
-        document.querySelectorAll('.step-container').forEach(step => step.classList.remove('active'));
-        document.querySelectorAll('.progress-step').forEach(step => {
-            step.classList.remove('active', 'completed');
-        });
-        document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
-        
-        // Réactiver la première étape
-        document.getElementById('step1').classList.add('active');
-        document.getElementById('step-indicator-1').classList.add('active');
-        document.getElementById('step1').querySelector('.option-card').classList.add('selected');
-        
-        // Cacher le protocole
+        document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+        document.getElementById('productionScale').value = '';
+        document.getElementById('additionalInfo').value = '';
         document.getElementById('protocolOutput').style.display = 'none';
         
-        // Scroll vers le workflow
-        document.getElementById('workflow').scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Initialisation
-    window.addEventListener('load', function() {
-        createParticles();
-        console.log('🦠 Montes BioPharma - Purification Adénovirus Initialisé');
-    });
+    function resetApiConfig() {
+        if (confirm('Voulez-vous supprimer votre clé API et la reconfigurer ?')) {
+            localStorage.removeItem('groqApiKey');
+            groqApiKey = '';
+            updateApiStatus(false);
+            document.getElementById('mainWorkflow').style.display = 'none';
+            document.getElementById('apiConfig').style.display = 'block';
+            document.getElementById('protocolOutput').style.display = 'none';
+            document.getElementById('groqApiKey').value = '';
+        }
+    }
 </script>
 ```
 
