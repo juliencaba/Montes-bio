@@ -3,94 +3,97 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Montes BioPharma — Assistant Protocole (Safe Scaffold)</title>
+  <title>Montes BioPharma — Assistant (ossature sûre)</title>
+  <meta name="color-scheme" content="dark"/>
 
-  <!-- ====== PLACEHOLDER: colle ici tes styles existants pour "préserver la charte" ======
-       Si tu as un fichier CSS actuel, tu peux copier/coller son contenu entre les balises <style>.
-       Rien n'écrase ta charte: les règles ci-dessous n’ajoutent que du décor si une classe manque.
-  -->
   <style>
     :root{
-      --bg:#0b1321;
-      --panel:#111b2e;
-      --accent1:#36d1dc;   /* bleu-vert */
-      --accent2:#5b86e5;   /* bleu */
-      --text:#e6f1ff;
-      --muted:#9fb0c8;
-      --ok:#4ad295;
-      --warn:#ffcc66;
-      --danger:#ff6b6b;
+      --bg:#0a1020;
+      --panel:#0f1830;
       --card:#0f1a2d;
       --border:rgba(255,255,255,.08);
-      --shadow:0 10px 30px rgba(0,0,0,.4);
+      --text:#e8f1ff;
+      --muted:#9fb0c8;
+
+      /* Couleurs de marque (logo) */
+      --accentG:#7CF45B; /* vert fluo */
+      --accentB:#2456FF; /* bleu */
+
       --radius:14px;
+      --shadow:0 10px 30px rgba(0,0,0,.45);
+      --glowG:0 0 22px rgba(124,244,91,.55);
+      --glowB:0 0 22px rgba(36,86,255,.55);
     }
-    @media (prefers-color-scheme: light){
-      :root{ --text:#0b1321; --muted:#334; }
-    }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
-      color:var(--text); background: radial-gradient(1200px 800px at 80% -10%, rgba(54,209,220,.25), transparent 60%),
-                          radial-gradient(900px 600px at -10% 120%, rgba(91,134,229,.25), transparent 60%),
-                          var(--bg);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 80% -10%, rgba(36,86,255,.18), transparent 60%),
+        radial-gradient(900px 700px at -10% 120%, rgba(124,244,91,.12), transparent 60%),
+        var(--bg);
       overflow-x:hidden;
     }
-    /* Particules de fond (simples, non intrusives) */
-    .particles{position:fixed; inset:0; z-index:0; pointer-events:none; background-image:
-      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.18) 0, transparent 60%),
-      radial-gradient(2px 2px at 80% 70%, rgba(255,255,255,.15) 0, transparent 60%),
-      radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,.12) 0, transparent 60%),
-      radial-gradient(2px 2px at 70% 20%, rgba(255,255,255,.1) 0, transparent 60%);
-      opacity:.6; animation: twinkle 6s ease-in-out infinite alternate;
+
+    /* Canvas particules : sous la UI, au-dessus du fond */
+    #particlesCanvas{
+      position:fixed; inset:0; z-index:0; pointer-events:none;
     }
-    @keyframes twinkle{from{opacity:.35} to{opacity:.75}}
 
     header{
-      position:sticky; top:0; z-index:5; backdrop-filter:saturate(140%) blur(8px);
-      background:linear-gradient(90deg, rgba(54,209,220,.2), rgba(91,134,229,.2));
+      position:sticky; top:0; z-index:3; backdrop-filter:saturate(140%) blur(8px);
+      background:linear-gradient(90deg, rgba(124,244,91,.08), rgba(36,86,255,.12));
       border-bottom:1px solid var(--border);
     }
-    .nav{
-      max-width:1100px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:16px;
-    }
-    .logo{
-      height:38px; width:auto; display:block; object-fit:contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
-    }
-    .brand{font-weight:700; letter-spacing:.3px}
-    .container{max-width:1100px; margin:28px auto; padding:0 16px; position:relative; z-index:1}
+    .nav{ max-width:1100px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:14px; }
+    .logo{ height:38px; width:auto; object-fit:contain; display:block; }
+    .brand{ font-weight:700; letter-spacing:.3px }
 
-    .hero{
-      display:flex; align-items:center; gap:16px; margin:22px 0 14px;
-    }
+    .container{ max-width:1100px; margin:28px auto; padding:0 16px; position:relative; z-index:2 }
+    .hero{ display:flex; align-items:center; gap:12px; margin:18px 0 10px }
     .hero h1{
       margin:0; font-size: clamp(22px, 4vw, 36px);
-      background: linear-gradient(90deg, var(--accent1), var(--accent2));
-      -webkit-background-clip:text; background-clip:text; color:transparent;
+      background:linear-gradient(90deg, var(--accentG), var(--accentB));
+      -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow: var(--glowG), var(--glowB);
     }
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%), var(--card);
-      border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
-    }
-    .panel{ padding:18px; }
-    .grid{ display:grid; gap:16px }
-    @media(min-width:900px){ .grid-2{ grid-template-columns:1fr 1fr } }
 
+    .card{ background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%), var(--card);
+      border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow) }
+    .panel{ padding:18px }
+    .grid{ display:grid; gap:16px }
+
+    /* Barre de progression + étapes rondes lumineuses */
     .progress-wrap{ margin:14px 0 18px }
     .progress{
       height:10px; background:rgba(255,255,255,.06); border-radius:999px; overflow:hidden; position:relative;
     }
-    .progress > span{
-      display:block; height:100%; width:0%;
-      background:linear-gradient(90deg, var(--accent1), var(--accent2));
-      transition:width .4s ease;
-    }
-    .steps{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px }
+    .progress > span{ display:block; height:100%; width:0%;
+      background:linear-gradient(90deg, var(--accentG), var(--accentB)); transition:width .45s cubic-bezier(.2,.7,.2,1) }
+
+    .steps{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px }
     .chip{
-      font-size:12px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; color:var(--muted);
+      --size:36px;
+      width:var(--size); height:var(--size); border-radius:50%;
+      display:inline-grid; place-items:center; color:var(--muted);
+      border:1px solid var(--border); background:#0a1426;
+      font-weight:700; font-size:14px; position:relative; isolation:isolate;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, color .2s ease;
     }
-    .chip.active{ border-color:transparent; background:linear-gradient(90deg, rgba(54,209,220,.18), rgba(91,134,229,.18)); color:var(--text) }
+    .chip::after{ /* petit glow discret */
+      content:""; position:absolute; inset:-2px; border-radius:inherit; z-index:-1;
+      background: radial-gradient(60% 60% at 50% 40%, rgba(124,244,91,.18), transparent 60%),
+                  radial-gradient(60% 60% at 50% 60%, rgba(36,86,255,.18), transparent 60%);
+      opacity:.0; transition:opacity .2s ease;
+    }
+    .chip.active{
+      color:#02121f; border-color:transparent;
+      background:linear-gradient(135deg, var(--accentG), var(--accentB));
+      box-shadow: var(--glowG), var(--glowB);
+      transform: translateY(-1px);
+    }
+    .chip.active::after{ opacity:1 }
 
     .step{ display:none }
     .step.active{ display:block }
@@ -100,14 +103,14 @@
       width:100%; background:#0a1424; color:var(--text); border:1px solid var(--border);
       border-radius:10px; padding:10px 12px; outline:none; transition:border .2s ease;
     }
-    input:focus, select:focus, textarea:focus{ border-color:var(--accent1) }
+    input:focus, select:focus, textarea:focus{ border-color:var(--accentG) }
     .row{ display:grid; gap:12px }
     @media(min-width:760px){ .row-2{ grid-template-columns:1fr 1fr } .row-3{ grid-template-columns:1fr 1fr 1fr } }
 
     .btn{
-      appearance:none; border:none; background:linear-gradient(90deg, var(--accent1), var(--accent2));
-      color:#02121f; font-weight:700; padding:12px 16px; border-radius:12px; cursor:pointer;
-      box-shadow: 0 8px 24px rgba(54,209,220,.2);
+      appearance:none; border:none; cursor:pointer; font-weight:700; padding:12px 16px; border-radius:12px;
+      background:linear-gradient(90deg, var(--accentG), var(--accentB)); color:#02121f;
+      box-shadow:0 8px 24px rgba(36,86,255,.18), 0 8px 24px rgba(124,244,91,.18);
       transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease;
     }
     .btn:active{ transform: translateY(1px) }
@@ -120,25 +123,22 @@
     }
     .pub-actions{ display:flex; gap:8px; flex-wrap:wrap }
     .tag{ font-size:11px; padding:4px 8px; border:1px solid var(--border); border-radius:999px; color:var(--muted) }
-    .score{ font-weight:700; color:var(--ok) }
-    .warn{ color:var(--warn) }
-    .danger{ color:var(--danger) }
+    .score{ font-weight:700; color:var(--accentG) }
     .muted{ color:var(--muted) }
 
     .footer{ text-align:center; color:var(--muted); font-size:12px; padding:18px 0 40px }
-    a{ color:var(--accent1); text-decoration:none }
+    a{ color:var(--accentG); text-decoration:none }
     a:hover{ text-decoration:underline }
   </style>
 </head>
 
 <body>
-  <div class="particles"></div>
+  <!-- Canvas des particules en suspension -->
+  <canvas id="particlesCanvas"></canvas>
 
   <header>
     <div class="nav">
-      <!-- ====== PLACEHOLDER LOGO ======
-           Remplace src par ton logo transparent. Idéal: /assets/montes-logo.png (GitHub Pages).
-      -->
+      <!-- Logo séparé (SVG transparent) -->
       <img class="logo" src="" alt="Montes BioPharma" id="navLogo" />
       <div class="brand">Montes BioPharma</div>
       <div style="margin-left:auto" class="muted">Assistant IA (ossature sûre)</div>
@@ -151,7 +151,7 @@
       <h1>Assistant d’aide à la documentation &amp; bibliographie</h1>
     </div>
 
-    <!-- Barre de progression -->
+    <!-- Progress + étapes -->
     <div class="progress-wrap card panel">
       <div class="progress"><span id="progressBar"></span></div>
       <div class="steps" id="stepsChips"></div>
@@ -159,7 +159,7 @@
 
     <!-- Wizard -->
     <section class="card panel">
-      <div id="step-1" class="step active" data-title="1. Contexte & conformité">
+      <div id="step-1" class="step active" data-title="1">
         <h2>Étape 1 — Contexte & conformité</h2>
         <p class="muted">Usage strictement professionnel. Cette application ne fournit <strong>aucune procédure pratique</strong> ni paramètres expérimentaux. Elle génère une <em>ossature</em> de document à compléter par vos SOP internes validées.</p>
         <div class="grid">
@@ -177,7 +177,7 @@
             <label>Déclaration</label>
             <label style="display:flex; gap:8px; align-items:flex-start">
               <input type="checkbox" id="complianceChk" style="width:auto; margin-top:4px"/>
-              <span>Je confirme que je suis un professionnel travaillant au sein d’une organisation habilitée et que j’utiliserai uniquement des <strong>SOP internes approuvées</strong>. Cette application n’est pas destinée à un usage domestique.</span>
+              <span>Je confirme que je suis un professionnel au sein d’une organisation habilitée et que j’utiliserai uniquement des <strong>SOP internes approuvées</strong>. Pas d’usage domestique.</span>
             </label>
           </div>
         </div>
@@ -186,7 +186,7 @@
         </div>
       </div>
 
-      <div id="step-2" class="step" data-title="2. Paramètres biologiques (métadonnées)">
+      <div id="step-2" class="step" data-title="2">
         <h2>Étape 2 — Paramètres biologiques (métadonnées)</h2>
         <div class="row row-3">
           <div>
@@ -218,16 +218,16 @@
         </div>
       </div>
 
-      <div id="step-3" class="step" data-title="3. Choix des grandes étapes">
+      <div id="step-3" class="step" data-title="3">
         <h2>Étape 3 — Choix des grandes étapes</h2>
         <div class="row row-2">
           <div class="card panel">
             <label><input type="checkbox" id="upstream" style="width:auto; margin-right:8px">Upstream (métadonnées uniquement)</label>
-            <div class="muted">Décrivez <em>sans détails opératoires</em> : objectifs, points de contrôle qualité, références internes (SOP-UP-###).</div>
+            <div class="muted">Décrire les objectifs, points de contrôle qualité, références internes (SOP-UP-###). <em>Sans paramètres opératoires.</em></div>
           </div>
           <div class="card panel">
             <label><input type="checkbox" id="downstream" style="width:auto; margin-right:8px">Downstream (métadonnées uniquement)</label>
-            <div class="muted">Structurez l’aval : catégories et documents mères (SOP-DS-###). Pas de volumes, vitesses ni paramètres.</div>
+            <div class="muted">Structure documentaire aval : catégories et documents mères (SOP-DS-###). <em>Sans volumes ni vitesses.</em></div>
           </div>
         </div>
         <div style="display:flex; gap:8px; margin-top:14px">
@@ -236,7 +236,7 @@
         </div>
       </div>
 
-      <div id="step-4" class="step" data-title="4. Sous-étapes (catégories)">
+      <div id="step-4" class="step" data-title="4">
         <h2>Étape 4 — Sous-étapes (catégories)</h2>
         <div class="grid">
           <div class="card panel">
@@ -265,9 +265,9 @@
         </div>
       </div>
 
-      <div id="step-5" class="step" data-title="5. Recherche PubMed">
+      <div id="step-5" class="step" data-title="5">
         <h2>Étape 5 — Recherche PubMed</h2>
-        <div class="grid grid-2">
+        <div class="grid" style="grid-template-columns:1fr 1.2fr; gap:16px">
           <div class="card panel">
             <div class="row">
               <div>
@@ -307,7 +307,7 @@
         </div>
       </div>
 
-      <div id="step-6" class="step" data-title="6. Ossature du protocole (sans détails)">
+      <div id="step-6" class="step" data-title="6">
         <h2>Étape 6 — Ossature du protocole <span class="muted">(à compléter par vos SOP)</span></h2>
         <div class="card panel">
           <div class="row row-2">
@@ -337,7 +337,7 @@
         </div>
       </div>
 
-      <div id="step-7" class="step" data-title="7. Aperçu & export PDF">
+      <div id="step-7" class="step" data-title="7">
         <h2>Étape 7 — Aperçu & export PDF</h2>
         <div id="preview" class="card panel" style="white-space:pre-wrap"></div>
         <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
@@ -354,17 +354,16 @@
   </main>
 
   <!-- jsPDF CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" integrity="sha256-5bKc5R0mP8b7r1x7G+M6pV6w5x5j5tBtfWz5bQk6Y+0=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 
   <script>
-    // ===== CONFIG LOGO (tu peux définir ici le chemin vers ton logo transparent) =====
-    const LOGO_PATH = ""; // ex: "./assets/montes-logo.png"
+    /* ========= CONFIG ========= */
+    const LOGO_PATH = "./assets/montes-biopharma-logo.svg"; // <— fichier séparé
 
-    // ===== Wizard state =====
+    /* ========= STATE ========= */
     const steps = [...document.querySelectorAll('.step')];
     const bar = document.getElementById('progressBar');
     const chips = document.getElementById('stepsChips');
-
     const state = {
       org:"", role:"",
       vectorType:"", serotype:"", cellLine:"", keywords:"",
@@ -375,25 +374,19 @@
       docTitle:"", internalRefs:"", summary:"", qms:""
     };
 
-    // UI init
+    /* ========= INIT UI ========= */
     function init(){
       document.getElementById('year').textContent = new Date().getFullYear();
       document.getElementById('navLogo').src = LOGO_PATH;
       document.getElementById('heroLogo').src = LOGO_PATH;
 
-      // chips
-      chips.innerHTML = steps.map((s,i)=>`<span class="chip" data-chip="${i}">${s.dataset.title||("Étape "+(i+1))}</span>`).join('');
+      chips.innerHTML = steps.map((s,i)=>`<span class="chip" data-chip="${i}">${i+1}</span>`).join('');
 
-      // nav buttons
       document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click', ()=>gotoStep(currentStep+1)));
       document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click', ()=>gotoStep(currentStep-1)));
 
-      // bind inputs
-      document.getElementById('complianceChk').addEventListener('change', v => { /* simple gate */ });
-
       document.getElementById('org').addEventListener('input', e=>state.org=e.target.value);
       document.getElementById('role').addEventListener('input', e=>state.role=e.target.value);
-
       document.getElementById('vectorType').addEventListener('change', e=>state.vectorType=e.target.value);
       document.getElementById('serotype').addEventListener('input', e=>state.serotype=e.target.value);
       document.getElementById('cellLine').addEventListener('input', e=>state.cellLine=e.target.value);
@@ -424,6 +417,7 @@
       }catch(e){}
 
       renderPreview();
+      startParticles(); // <— particules en suspension
     }
 
     function syncCats(){
@@ -434,7 +428,6 @@
 
     let currentStep = 0;
     function gotoStep(i){
-      // gate step 1
       if(i>0){
         const ok = document.getElementById('complianceChk').checked;
         if(!ok){ alert("Veuillez valider la déclaration de conformité (usage professionnel)."); return; }
@@ -452,7 +445,6 @@
     }
 
     function hydrate(){
-      // basic inputs
       const bind = (id, v, prop="value")=>{ const el=document.getElementById(id); if(el){ el[prop]=v||el[prop]; } };
       bind('org', state.org);
       bind('role', state.role);
@@ -481,7 +473,7 @@
 
     function persist(){ localStorage.setItem('mbp_state', JSON.stringify(state)); }
 
-    // ===== PubMed (E-utilities) — bibliographie uniquement =====
+    /* ========= PubMed (biblio uniquement) ========= */
     async function runPubMedSearch(){
       if(!state.enablePubMed){ alert("Activez la recherche."); return; }
       const base = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
@@ -495,20 +487,17 @@
       const yfrom = mindate.getFullYear();
 
       try{
-        // 1) esearch
         const esearchUrl = `${base}esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax=${encodeURIComponent(state.retMax||20)}&term=${encodeURIComponent(terms)}+AND+(${yfrom}%3A3000%5Bdp%5D)`;
         const esResp = await fetch(esearchUrl);
         const es = await esResp.json();
         const ids = es.esearchresult?.idlist || [];
         if(!ids.length){ renderArticles([]); alert("Aucun article trouvé avec ces critères."); return; }
 
-        // 2) esummary
         const esumUrl = `${base}esummary.fcgi?db=pubmed&retmode=json&id=${ids.join(',')}`;
         const sumResp = await fetch(esumUrl);
         const sum = await sumResp.json();
         const recs = Object.values(sum.result||{}).filter(v=>v?.uid);
 
-        // scoring simple (mots-clés présents dans title + journal weight + récence)
         const kw = (state.keywords||'').toLowerCase().split(',').map(s=>s.trim()).filter(Boolean);
         const scored = recs.map(r=>{
           const title = r.title||'';
@@ -522,7 +511,6 @@
           if((state.serotype||'').toLowerCase() && t.includes((state.serotype||'').toLowerCase())) score+=2;
           if((state.cellLine||'').toLowerCase() && t.includes((state.cellLine||'').toLowerCase())) score+=2;
           kw.forEach(k=>{ if(k && (t.includes(k) || journal.toLowerCase().includes(k))) score+=1; });
-          // récence
           const y = parseInt(year||'0',10); const now = new Date().getFullYear();
           if(y && now-y <= 2) score+=2; else if(y && now-y<=5) score+=1;
           return {uid:pmid, title, source:journal, year, authors, pmid, url, score, selected:false};
@@ -533,7 +521,7 @@
         persist();
       }catch(err){
         console.error(err);
-        alert("Erreur lors de la recherche PubMed (vérifiez la connexion ou les limites d’API).");
+        alert("Erreur lors de la recherche PubMed (connexion ou limites d’API).");
       }
     }
 
@@ -563,7 +551,7 @@
       });
     }
 
-    // ===== Prévisualisation — Ossature sûre (pas d’étapes expérimentales) =====
+    /* ========= Preview (ossature) ========= */
     function renderPreview(){
       const meta = [
         state.org ? `Organisation : ${state.org}` : null,
@@ -609,15 +597,12 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       document.getElementById('preview').textContent = outline;
     }
 
-    // ===== Export PDF (texte simple) =====
     async function exportPDF(){
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({unit:'pt', format:'a4'});
-
       const title = state.docTitle || 'Ossature protocole — Adénovirus';
       const content = document.getElementById('preview').textContent;
-      const margin = 48;
-      let y = margin;
+      const margin = 48; let y = margin;
 
       doc.setFont('helvetica','bold'); doc.setFontSize(16);
       doc.text(title, margin, y); y += 18;
@@ -628,13 +613,84 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
         if(y > doc.internal.pageSize.getHeight() - margin){ doc.addPage(); y = margin; }
         doc.text(line, margin, y); y += 14;
       });
-
       doc.save((title.replace(/\s+/g,'-').toLowerCase())+'.pdf');
     }
 
     function sanitize(s){ return (s||'').replace(/[<>&]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
 
-    // start
+    /* ========= PARTICULES EN SUSPENSION (drift + twinkle) ========= */
+    let P = []; // particules
+    let ctx, W, H, rafId;
+
+    function startParticles(){
+      const canvas = document.getElementById('particlesCanvas');
+      ctx = canvas.getContext('2d');
+      const setSize = ()=>{ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
+      setSize(); window.addEventListener('resize', setSize);
+
+      const count = Math.min(140, Math.round((W*H)/18000)); // densité douce
+      P = Array.from({length:count}, (_,i)=>spawnParticle(i));
+
+      cancelAnimationFrame(rafId);
+      loopParticles();
+    }
+
+    function spawnParticle(i){
+      // deux familles : vert fluo (petit glow) et bleu (glow doux)
+      const green = Math.random() < 0.55;
+      const r = green ? rand(0.8, 1.8) : rand(1.0, 2.2);
+      const speed = rand(0.06, 0.18);
+      const drift = green ? rand(-0.08, 0.08) : rand(-0.06, 0.06);
+      return {
+        x: Math.random()*W,
+        y: Math.random()*H,
+        vx: drift,
+        vy: -speed, // lente remontée
+        r,
+        phase: Math.random()*Math.PI*2,
+        twinkle: rand(0.4, 0.9),
+        color: green ? 'green' : 'blue'
+      };
+    }
+
+    function loopParticles(t=0){
+      rafId = requestAnimationFrame(loopParticles);
+      ctx.clearRect(0,0,W,H);
+
+      for(let i=0;i<P.length;i++){
+        const p = P[i];
+        // update position
+        p.x += p.vx;
+        p.y += p.vy;
+        // wrap
+        if(p.x < -5) p.x = W+5;
+        if(p.x > W+5) p.x = -5;
+        if(p.y < -5) { p.y = H+5; p.x = Math.random()*W; } // remonte puis réapparaît en bas
+
+        // twinkle
+        p.phase += 0.01 + (p.color==='green' ? 0.005 : 0.008);
+        const a = 0.25 + 0.35 * Math.abs(Math.sin(p.phase)) * p.twinkle;
+
+        // draw with glow
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        if(p.color==='green'){
+          ctx.fillStyle = `rgba(124,244,91,${a})`;
+          ctx.shadowColor = 'rgba(124,244,91,0.7)';
+          ctx.shadowBlur = 6;
+        }else{
+          ctx.fillStyle = `rgba(36,86,255,${a})`;
+          ctx.shadowColor = 'rgba(36,86,255,0.7)';
+          ctx.shadowBlur = 8;
+        }
+        ctx.fill();
+        ctx.shadowBlur = 0; // reset
+      }
+    }
+
+    function rand(a,b){ return a + Math.random()*(b-a); }
+
+    /* ========= START ========= */
     init();
   </script>
 </body>
