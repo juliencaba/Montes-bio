@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Montes BioPharma — Assistant (ossature sûre)</title>
   <meta name="color-scheme" content="dark"/>
+  <!-- Police Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -21,14 +23,14 @@
 
       --radius:14px;
       --shadow:0 10px 30px rgba(0,0,0,.45);
-      --glowG:0 0 22px rgba(124,244,91,.55);
-      --glowB:0 0 22px rgba(36,86,255,.55);
+      --glowG:0 0 22px rgba(124,244,91,.45);
+      --glowB:0 0 22px rgba(36,86,255,.35);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+      margin:0; font-family:Roboto,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
       color:var(--text);
       background:
         radial-gradient(1200px 800px at 80% -10%, rgba(36,86,255,.18), transparent 60%),
@@ -107,6 +109,7 @@
     .row{ display:grid; gap:12px }
     @media(min-width:760px){ .row-2{ grid-template-columns:1fr 1fr } .row-3{ grid-template-columns:1fr 1fr 1fr } }
 
+    /* Boutons */
     .btn{
       appearance:none; border:none; cursor:pointer; font-weight:700; padding:12px 16px; border-radius:12px;
       background:linear-gradient(90deg, var(--accentG), var(--accentB)); color:#02121f;
@@ -140,7 +143,7 @@
     <div class="nav">
       <!-- Logo séparé (SVG transparent) -->
       <img class="logo" src="" alt="Montes BioPharma" id="navLogo" />
-      <div class="brand">Montes BioPharma</div>
+      <div class="brand">BioPharma</div>
       <div style="margin-left:auto" class="muted">Assistant IA (ossature sûre)</div>
     </div>
   </header>
@@ -148,7 +151,7 @@
   <main class="container">
     <div class="hero">
       <img class="logo" src="" alt="Montes BioPharma" id="heroLogo"/>
-      <h1>Assistant d’aide à la documentation &amp; bibliographie</h1>
+      <h1>Purification Adénovirus — Assistant d’aide à la documentation &amp; bibliographie</h1>
     </div>
 
     <!-- Progress + étapes -->
@@ -338,7 +341,7 @@
       </div>
 
       <div id="step-7" class="step" data-title="7">
-        <h2>Étape 7 — Aperçu & export PDF</h2>
+        <h2>Étape 7 — Aperçu & export PDF (stylisé)</h2>
         <div id="preview" class="card panel" style="white-space:pre-wrap"></div>
         <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
           <button class="btn" id="exportPdf">Exporter en PDF</button>
@@ -358,7 +361,8 @@
 
   <script>
     /* ========= CONFIG ========= */
-    const LOGO_PATH = "./assets/montes-biopharma-logo.svg"; // <— fichier séparé
+    const LOGO_PATH = "./assets/montes-biopharma-logo.svg"; // fichier séparé
+    const THEME = { green:"#7CF45B", blue:"#2456FF", text:"#111", gray:"#555" };
 
     /* ========= STATE ========= */
     const steps = [...document.querySelectorAll('.step')];
@@ -417,7 +421,7 @@
       }catch(e){}
 
       renderPreview();
-      startParticles(); // <— particules en suspension
+      startParticles();
     }
 
     function syncCats(){
@@ -597,23 +601,103 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       document.getElementById('preview').textContent = outline;
     }
 
+    /* ========= Export PDF stylisé (fond clair, texte noir, titres thème, logo à gauche) ========= */
     async function exportPDF(){
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({unit:'pt', format:'a4'});
+      const pdf = new jsPDF({unit:'pt', format:'a4'});
+      const margin = 56;
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+
+      // fond blanc
+      pdf.setFillColor(255,255,255);
+      pdf.rect(0,0,pageW,pageH,'F');
+
+      // logo (si dispo)
+      let logoData = null;
+      try{
+        logoData = await fetchAsDataURL(LOGO_PATH);
+      }catch(e){ /* ignore */ }
+
+      // entête
+      const headerY = margin;
+      if(logoData){
+        try{
+          // hauteur cible 28px
+          pdf.addImage(logoData, 'PNG', margin, headerY-8, 120, 28, undefined, 'FAST');
+        }catch(e){
+          // certains SVGs nécessitent conversion PNG côté serveur; si échec, on passe
+        }
+      }
+
+      // Titre
       const title = state.docTitle || 'Ossature protocole — Adénovirus';
+      pdf.setFont('helvetica','bold'); pdf.setTextColor(hexToRGB(THEME.green));
+      pdf.setFontSize(18);
+      pdf.text(title, margin, headerY+28);
+
+      // Règle colorée (dégradé simulé par deux lignes)
+      pdf.setDrawColor(hexToRGB(THEME.green)); pdf.setLineWidth(2);
+      pdf.line(margin, headerY+34, pageW - margin, headerY+34);
+      pdf.setDrawColor(hexToRGB(THEME.blue)); pdf.setLineWidth(2);
+      pdf.line(margin, headerY+38, pageW - margin, headerY+38);
+
+      let y = headerY + 60;
+
+      // Contenu
       const content = document.getElementById('preview').textContent;
-      const margin = 48; let y = margin;
+      const sections = content.split('\n\n');
 
-      doc.setFont('helvetica','bold'); doc.setFontSize(16);
-      doc.text(title, margin, y); y += 18;
+      pdf.setFont('helvetica','normal'); pdf.setTextColor(20,20,20);
 
-      doc.setFont('helvetica','normal'); doc.setFontSize(11);
-      const lines = doc.splitTextToSize(content, doc.internal.pageSize.getWidth() - margin*2);
-      lines.forEach(line=>{
-        if(y > doc.internal.pageSize.getHeight() - margin){ doc.addPage(); y = margin; }
-        doc.text(line, margin, y); y += 14;
+      const para = (text, size=11, color=null)=>{
+        if(color){ const rgb = hexToRGB(color); pdf.setTextColor(rgb[0],rgb[1],rgb[2]); }
+        pdf.setFontSize(size);
+        const lines = pdf.splitTextToSize(text, pageW - margin*2);
+        for(const line of lines){
+          if(y > pageH - margin){ pdf.addPage(); // nouvelle page blanche
+            pdf.setFillColor(255,255,255); pdf.rect(0,0,pageW,pageH,'F'); y = margin; }
+          pdf.text(line, margin, y);
+          y += 14;
+        }
+        if(color){ pdf.setTextColor(20,20,20); }
+        y += 6;
+      };
+
+      // Interprète les titres commençant par '# ' et '## '
+      sections.forEach(block=>{
+        const b = block.trim();
+        if(!b) return;
+        if(b.startsWith('# ')){
+          para(b.replace(/^# /,''), 16, THEME.blue);
+        }else if(b.startsWith('## ')){
+          para(b.replace(/^## /,''), 13, THEME.green);
+        }else{
+          para(b, 11, null);
+        }
       });
-      doc.save((title.replace(/\s+/g,'-').toLowerCase())+'.pdf');
+
+      pdf.save((title.replace(/\s+/g,'-').toLowerCase())+'.pdf');
+    }
+
+    async function fetchAsDataURL(url){
+      const res = await fetch(url);
+      const blob = await res.blob();
+      // Convertit les SVG en canvas/PNG si besoin via FileReader (jsPDF supporte surtout PNG/JPEG)
+      // Ici, on renvoie quand même le dataURL du blob; si addImage échoue, on ignore gracieusement.
+      return await new Promise((resolve,reject)=>{
+        const fr = new FileReader();
+        fr.onerror = reject;
+        fr.onload = ()=> resolve(fr.result);
+        fr.readAsDataURL(blob);
+      });
+    }
+
+    function hexToRGB(hex){
+      const h = hex.replace('#','');
+      const bigint = parseInt(h,16);
+      if(h.length===6) return [(bigint>>16)&255, (bigint>>8)&255, bigint&255];
+      return [0,0,0];
     }
 
     function sanitize(s){ return (s||'').replace(/[<>&]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
@@ -628,50 +712,58 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       const setSize = ()=>{ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
       setSize(); window.addEventListener('resize', setSize);
 
-      const count = Math.min(140, Math.round((W*H)/18000)); // densité douce
-      P = Array.from({length:count}, (_,i)=>spawnParticle(i));
+      const count = Math.min(160, Math.round((W*H)/17000)); // densité douce
+      P = Array.from({length:count}, (_,i)=>spawnParticle());
 
       cancelAnimationFrame(rafId);
       loopParticles();
     }
 
-    function spawnParticle(i){
+    function spawnParticle(){
       // deux familles : vert fluo (petit glow) et bleu (glow doux)
-      const green = Math.random() < 0.55;
+      const green = Math.random() < 0.65;
       const r = green ? rand(0.8, 1.8) : rand(1.0, 2.2);
-      const speed = rand(0.06, 0.18);
-      const drift = green ? rand(-0.08, 0.08) : rand(-0.06, 0.06);
+      const speed = rand(0.05, 0.17);
+      const driftX = green ? rand(-0.08, 0.08) : rand(-0.06, 0.06);
+      const wobbleAmp = rand(4, 12);
+      const wobbleFreq = rand(0.002, 0.006);
       return {
         x: Math.random()*W,
         y: Math.random()*H,
-        vx: drift,
+        vx: driftX,
         vy: -speed, // lente remontée
         r,
+        baseX: 0,
+        wobbleAmp,
+        wobbleFreq,
+        t: Math.random()*1000,
         phase: Math.random()*Math.PI*2,
         twinkle: rand(0.4, 0.9),
         color: green ? 'green' : 'blue'
       };
     }
 
-    function loopParticles(t=0){
+    function loopParticles(){
       rafId = requestAnimationFrame(loopParticles);
       ctx.clearRect(0,0,W,H);
 
       for(let i=0;i<P.length;i++){
         const p = P[i];
-        // update position
-        p.x += p.vx;
+        p.t += 1;
+        const wobble = Math.sin(p.t * p.wobbleFreq) * p.wobbleAmp;
+        p.x += p.vx + wobble*0.02;
         p.y += p.vy;
-        // wrap
+
+        // wrap vertical/horizontal
         if(p.x < -5) p.x = W+5;
         if(p.x > W+5) p.x = -5;
-        if(p.y < -5) { p.y = H+5; p.x = Math.random()*W; } // remonte puis réapparaît en bas
+        if(p.y < -5) { p.y = H+5; p.x = Math.random()*W; }
 
-        // twinkle
+        // scintillement
         p.phase += 0.01 + (p.color==='green' ? 0.005 : 0.008);
-        const a = 0.25 + 0.35 * Math.abs(Math.sin(p.phase)) * p.twinkle;
+        const a = 0.22 + 0.35 * Math.abs(Math.sin(p.phase)) * p.twinkle;
 
-        // draw with glow
+        // dessin + halo
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
         if(p.color==='green'){
@@ -684,7 +776,7 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
           ctx.shadowBlur = 8;
         }
         ctx.fill();
-        ctx.shadowBlur = 0; // reset
+        ctx.shadowBlur = 0;
       }
     }
 
