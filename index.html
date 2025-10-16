@@ -10,32 +10,32 @@
 
   <style>
     :root{
-      --bg:#0a1020;
-      --panel:#0f1830;
-      --card:#0f1a2d;
-      --border:rgba(255,255,255,.08);
-      --text:#e8f1ff;
-      --muted:#9fb0c8;
+      --bg:#070d1c;
+      --panel:#0b1428;
+      --card:#0c152a;
+      --border:rgba(124,244,91,.22); /* vert fluo subtil */
+      --text:#eaf2ff;
+      --muted:#a6b8d6;
 
       /* Couleurs de marque (logo) */
       --accentG:#7CF45B; /* vert fluo */
-      --accentB:#2456FF; /* bleu */
+      --accentB:#2456FF; /* bleu profond */
 
-      --radius:14px;
-      --shadow:0 10px 30px rgba(0,0,0,.45);
-      --glowG:0 0 22px rgba(124,244,91,.45);
-      --glowB:0 0 22px rgba(36,86,255,.35);
+      --radius:16px;
+      --shadow:0 18px 40px rgba(0,0,0,.55);
+      --glowG:0 0 32px rgba(124,244,91,.55);
+      --glowB:0 0 32px rgba(36,86,255,.45);
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; font-family:Roboto,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+      margin:0; font-family:Roboto,system-ui,-apple-system,"Segoe UI",Ubuntu,"Helvetica Neue",Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(1200px 800px at 80% -10%, rgba(36,86,255,.18), transparent 60%),
-        radial-gradient(900px 700px at -10% 120%, rgba(124,244,91,.12), transparent 60%),
-        var(--bg);
+        radial-gradient(1200px 800px at 80% -10%, rgba(36,86,255,.20), transparent 60%),
+        radial-gradient(1000px 720px at -10% 120%, rgba(124,244,91,.16), transparent 60%),
+        linear-gradient(180deg, #060b19, #0a1122 40%, #090f1f 100%);
       overflow-x:hidden;
     }
 
@@ -45,91 +45,115 @@
     }
 
     header{
-      position:sticky; top:0; z-index:3; backdrop-filter:saturate(140%) blur(8px);
-      background:linear-gradient(90deg, rgba(124,244,91,.08), rgba(36,86,255,.12));
+      position:sticky; top:0; z-index:3; backdrop-filter:saturate(160%) blur(10px);
+      background:linear-gradient(90deg, rgba(124,244,91,.10), rgba(36,86,255,.14));
       border-bottom:1px solid var(--border);
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,.04);
     }
-    .nav{ max-width:1100px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:14px; }
-    .logo{ height:38px; width:auto; object-fit:contain; display:block; }
-    .brand{ font-weight:700; letter-spacing:.3px }
+    .nav{ max-width:1180px; margin:0 auto; padding:12px 18px; display:flex; align-items:center; gap:14px; }
+    .brand{ font-weight:700; letter-spacing:.35px; color:#eaf2ff }
 
-    .container{ max-width:1100px; margin:28px auto; padding:0 16px; position:relative; z-index:2 }
-    .hero{ display:flex; align-items:center; gap:12px; margin:18px 0 10px }
+    .container{ max-width:1180px; margin:28px auto; padding:0 18px; position:relative; z-index:2 }
+    .hero{ display:flex; align-items:center; gap:14px; margin:18px 0 12px }
     .hero h1{
       margin:0; font-size: clamp(22px, 4vw, 36px);
       background:linear-gradient(90deg, var(--accentG), var(--accentB));
       -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow: var(--glowG), var(--glowB);
     }
 
-    .card{ background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 30%), var(--card);
-      border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow) }
-    .panel{ padding:18px }
+    /* Cartes translucides “verre fumé” */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), rgba(12,21,42,.42);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow), 0 0 0 1px rgba(36,86,255,.08) inset;
+      backdrop-filter: blur(12px) saturate(120%);
+    }
+    .panel{ padding:20px }
     .grid{ display:grid; gap:16px }
 
     /* Barre de progression + étapes rondes lumineuses */
     .progress-wrap{ margin:14px 0 18px }
     .progress{
-      height:10px; background:rgba(255,255,255,.06); border-radius:999px; overflow:hidden; position:relative;
+      height:12px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; position:relative;
+      box-shadow: inset 0 0 12px rgba(124,244,91,.15), inset 0 0 14px rgba(36,86,255,.12);
     }
     .progress > span{ display:block; height:100%; width:0%;
-      background:linear-gradient(90deg, var(--accentG), var(--accentB)); transition:width .45s cubic-bezier(.2,.7,.2,1) }
+      background:linear-gradient(90deg, var(--accentG), var(--accentB));
+      box-shadow: var(--glowG), var(--glowB);
+      transition:width .45s cubic-bezier(.2,.7,.2,1)
+    }
 
     .steps{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px }
     .chip{
-      --size:36px;
+      --size:40px;
       width:var(--size); height:var(--size); border-radius:50%;
-      display:inline-grid; place-items:center; color:var(--muted);
-      border:1px solid var(--border); background:#0a1426;
+      display:inline-grid; place-items:center; color:#b9c9e6;
+      border:1px solid rgba(124,244,91,.35);
+      background:linear-gradient(180deg, rgba(9,20,40,.45), rgba(9,20,40,.28));
+      box-shadow: inset 0 2px 10px rgba(36,86,255,.16), inset 0 -2px 10px rgba(124,244,91,.18);
       font-weight:700; font-size:14px; position:relative; isolation:isolate;
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, color .2s ease;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, color .2s ease, background .2s ease;
+      backdrop-filter: blur(8px);
     }
-    .chip::after{ /* petit glow discret */
-      content:""; position:absolute; inset:-2px; border-radius:inherit; z-index:-1;
-      background: radial-gradient(60% 60% at 50% 40%, rgba(124,244,91,.18), transparent 60%),
-                  radial-gradient(60% 60% at 50% 60%, rgba(36,86,255,.18), transparent 60%);
-      opacity:.0; transition:opacity .2s ease;
+    .chip::after{
+      content:""; position:absolute; inset:-3px; border-radius:inherit; z-index:-1;
+      background: radial-gradient(60% 60% at 50% 40%, rgba(124,244,91,.22), transparent 60%),
+                  radial-gradient(60% 60% at 50% 60%, rgba(36,86,255,.22), transparent 60%);
+      opacity:.15; transition:opacity .2s ease;
     }
     .chip.active{
-      color:#02121f; border-color:transparent;
-      background:linear-gradient(135deg, var(--accentG), var(--accentB));
+      color:#061427; border-color:transparent;
+      background:linear-gradient(135deg, rgba(124,244,91,.9), rgba(36,86,255,.9));
       box-shadow: var(--glowG), var(--glowB);
       transform: translateY(-1px);
     }
-    .chip.active::after{ opacity:1 }
+    .chip.active::after{ opacity:.9 }
 
     .step{ display:none }
     .step.active{ display:block }
 
     label{ display:block; font-size:14px; margin-bottom:6px; color:var(--muted) }
     input, select, textarea{
-      width:100%; background:#0a1424; color:var(--text); border:1px solid var(--border);
-      border-radius:10px; padding:10px 12px; outline:none; transition:border .2s ease;
+      width:100%; background:rgba(9,20,40,.55); color:var(--text);
+      border:1px solid rgba(124,244,91,.25);
+      border-radius:12px; padding:12px 14px; outline:none;
+      transition:border .2s ease, background .2s ease, box-shadow .2s ease;
+      backdrop-filter: blur(6px);
+      box-shadow: inset 0 0 0 1px rgba(36,86,255,.12);
     }
-    input:focus, select:focus, textarea:focus{ border-color:var(--accentG) }
+    input:focus, select:focus, textarea:focus{
+      border-color:var(--accentG);
+      box-shadow: 0 0 0 3px rgba(124,244,91,.18), 0 0 0 1px rgba(36,86,255,.12) inset;
+      background:rgba(9,20,40,.68);
+    }
     .row{ display:grid; gap:12px }
     @media(min-width:760px){ .row-2{ grid-template-columns:1fr 1fr } .row-3{ grid-template-columns:1fr 1fr 1fr } }
 
-    /* Boutons */
+    /* Boutons NEON */
     .btn{
-      appearance:none; border:none; cursor:pointer; font-weight:700; padding:12px 16px; border-radius:12px;
+      appearance:none; border:none; cursor:pointer; font-weight:700; padding:12px 18px; border-radius:12px;
       background:linear-gradient(90deg, var(--accentG), var(--accentB)); color:#02121f;
-      box-shadow:0 8px 24px rgba(36,86,255,.18), 0 8px 24px rgba(124,244,91,.18);
-      transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease;
+      box-shadow:0 10px 28px rgba(36,86,255,.24), 0 10px 28px rgba(124,244,91,.28), inset 0 0 0 1px rgba(0,0,0,.2);
+      transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease, filter .2s ease;
     }
+    .btn:hover{ filter: brightness(1.06); box-shadow:0 14px 36px rgba(36,86,255,.28), 0 14px 36px rgba(124,244,91,.32) }
     .btn:active{ transform: translateY(1px) }
-    .btn.secondary{ background:#0b1628; color:var(--text); border:1px solid var(--border) }
-    .btn.ghost{ background:transparent; color:var(--text); border:1px dashed var(--border) }
+    .btn.secondary{ background:rgba(9,20,40,.55); color:var(--text); border:1px solid rgba(124,244,91,.3) }
+    .btn.ghost{ background:transparent; color:var(--text); border:1px dashed rgba(124,244,91,.35) }
 
     .pub-card{
-      border:1px solid var(--border); border-radius:12px; padding:12px; background:#0c1629;
-      display:grid; gap:8px;
+      border:1px solid rgba(124,244,91,.28); border-radius:14px; padding:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%), rgba(12,21,42,.38);
+      display:grid; gap:8px; backdrop-filter: blur(10px) saturate(120%);
+      box-shadow: inset 0 0 0 1px rgba(36,86,255,.10);
     }
     .pub-actions{ display:flex; gap:8px; flex-wrap:wrap }
-    .tag{ font-size:11px; padding:4px 8px; border:1px solid var(--border); border-radius:999px; color:var(--muted) }
-    .score{ font-weight:700; color:var(--accentG) }
+    .tag{ font-size:11px; padding:4px 8px; border:1px solid rgba(124,244,91,.28); border-radius:999px; color:#cfe6ff; background:rgba(9,20,40,.45) }
+    .score{ font-weight:700; color:var(--accentG); text-shadow: 0 0 6px rgba(124,244,91,.5) }
     .muted{ color:var(--muted) }
 
-    .footer{ text-align:center; color:var(--muted); font-size:12px; padding:18px 0 40px }
+    .footer{ text-align:center; color:var(--muted); font-size:12px; padding:18px 0 48px }
     a{ color:var(--accentG); text-decoration:none }
     a:hover{ text-decoration:underline }
   </style>
@@ -139,18 +163,37 @@
   <!-- Canvas des particules en suspension -->
   <canvas id="particlesCanvas"></canvas>
 
+  <!-- ====== LOGO INLINE (réutilisable via <use>) ====== -->
+  <svg width="0" height="0" style="position:absolute; left:-9999px; top:-9999px" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="montes-logo" viewBox="0 0 1600 500">
+        <!-- mots "mo" et "tes" en vert -->
+        <text x="60" y="330" fill="#7CF45B" font-size="240" font-family="Roboto, Arial, sans-serif" font-weight="700" letter-spacing="2">mo</text>
+        <!-- "N" en forme de mont (courbe bleue centrée) -->
+        <!-- Fenêtre dédiée à la courbe entre mo et tes -->
+        <path d="M 470 340 C 575 120, 755 120, 860 340" fill="none" stroke="#2456FF" stroke-width="32" stroke-linecap="round"/>
+        <!-- "tes" -->
+        <text x="900" y="330" fill="#7CF45B" font-size="240" font-family="Roboto, Arial, sans-serif" font-weight="700" letter-spacing="2">tes</text>
+      </symbol>
+    </defs>
+  </svg>
+
   <header>
     <div class="nav">
-      <!-- Logo séparé (SVG transparent) -->
-      <img class="logo" src="" alt="Montes BioPharma" id="navLogo" />
-      <div class="brand">BioPharma</div>
+      <!-- Instances redimensionnées du logo inline -->
+      <svg aria-label="Montes BioPharma" id="navLogo" width="180" height="54" viewBox="0 0 1600 500">
+        <use href="#montes-logo"></use>
+      </svg>
+      <div class="brand">Montes BioPharma</div>
       <div style="margin-left:auto" class="muted">Assistant IA (ossature sûre)</div>
     </div>
   </header>
 
   <main class="container">
     <div class="hero">
-      <img class="logo" src="" alt="Montes BioPharma" id="heroLogo"/>
+      <svg aria-label="Montes BioPharma" id="heroLogo" width="240" height="80" viewBox="0 0 1600 500" style="filter: drop-shadow(0 8px 26px rgba(124,244,91,.25)) drop-shadow(0 10px 30px rgba(36,86,255,.22));">
+        <use href="#montes-logo"></use>
+      </svg>
       <h1>Purification Adénovirus — Assistant d’aide à la documentation &amp; bibliographie</h1>
     </div>
 
@@ -360,8 +403,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 
   <script>
-    /* ========= CONFIG ========= */
-    const LOGO_PATH = "./assets/montes-biopharma-logo.svg"; // fichier séparé
+    /* ========= THEME ========= */
     const THEME = { green:"#7CF45B", blue:"#2456FF", text:"#111", gray:"#555" };
 
     /* ========= STATE ========= */
@@ -381,14 +423,15 @@
     /* ========= INIT UI ========= */
     function init(){
       document.getElementById('year').textContent = new Date().getFullYear();
-      document.getElementById('navLogo').src = LOGO_PATH;
-      document.getElementById('heroLogo').src = LOGO_PATH;
 
+      // Étapes (chips)
       chips.innerHTML = steps.map((s,i)=>`<span class="chip" data-chip="${i}">${i+1}</span>`).join('');
 
+      // Navigation
       document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click', ()=>gotoStep(currentStep+1)));
       document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click', ()=>gotoStep(currentStep-1)));
 
+      // Inputs
       document.getElementById('org').addEventListener('input', e=>state.org=e.target.value);
       document.getElementById('role').addEventListener('input', e=>state.role=e.target.value);
       document.getElementById('vectorType').addEventListener('change', e=>state.vectorType=e.target.value);
@@ -613,84 +656,123 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       pdf.setFillColor(255,255,255);
       pdf.rect(0,0,pageW,pageH,'F');
 
-      // logo (si dispo)
+      // convertir le logo inline (<symbol>) en image PNG pour le PDF
       let logoData = null;
       try{
-        logoData = await fetchAsDataURL(LOGO_PATH);
-      }catch(e){ /* ignore */ }
+        logoData = await inlineLogoToPngDataUrl(220, 70); // largeur x hauteur cible
+      }catch(e){ /* on ignore si non dispo */ }
 
       // entête
       const headerY = margin;
       if(logoData){
         try{
-          // hauteur cible 28px
-          pdf.addImage(logoData, 'PNG', margin, headerY-8, 120, 28, undefined, 'FAST');
-        }catch(e){
-          // certains SVGs nécessitent conversion PNG côté serveur; si échec, on passe
-        }
+          pdf.addImage(logoData, 'PNG', margin, headerY-8, 220, 70, undefined, 'FAST');
+        }catch(e){ /* ignore */ }
       }
 
       // Titre
       const title = state.docTitle || 'Ossature protocole — Adénovirus';
-      pdf.setFont('helvetica','bold'); pdf.setTextColor(hexToRGB(THEME.green));
-      pdf.setFontSize(18);
-      pdf.text(title, margin, headerY+28);
+      setText(pdf, THEME.blue, 18, 'bold');
+      pdf.text(title, margin + (logoData?240:0), headerY + 18, {baseline:'middle'});
 
-      // Règle colorée (dégradé simulé par deux lignes)
-      pdf.setDrawColor(hexToRGB(THEME.green)); pdf.setLineWidth(2);
-      pdf.line(margin, headerY+34, pageW - margin, headerY+34);
-      pdf.setDrawColor(hexToRGB(THEME.blue)); pdf.setLineWidth(2);
-      pdf.line(margin, headerY+38, pageW - margin, headerY+38);
+      // Sous-titre (références internes)
+      setText(pdf, '#3a3a3a', 11, 'normal');
+      pdf.text((state.internalRefs || ''), margin + (logoData?240:0), headerY + 38);
 
-      let y = headerY + 60;
+      // Règle double couleur
+      pdf.setDrawColor(...hexToRGB(THEME.green)); pdf.setLineWidth(2);
+      pdf.line(margin, headerY+54, pageW - margin, headerY+54);
+      pdf.setDrawColor(...hexToRGB(THEME.blue)); pdf.setLineWidth(2);
+      pdf.line(margin, headerY+58, pageW - margin, headerY+58);
+
+      let y = headerY + 80;
 
       // Contenu
       const content = document.getElementById('preview').textContent;
-      const sections = content.split('\n\n');
+      const blocks = content.split('\n');
 
-      pdf.setFont('helvetica','normal'); pdf.setTextColor(20,20,20);
+      // Compose lignes avec titres # et ##
+      for(let raw of blocks){
+        const line = raw.trim();
+        if(!line){ y += 6; continue; }
 
-      const para = (text, size=11, color=null)=>{
-        if(color){ const rgb = hexToRGB(color); pdf.setTextColor(rgb[0],rgb[1],rgb[2]); }
-        pdf.setFontSize(size);
-        const lines = pdf.splitTextToSize(text, pageW - margin*2);
-        for(const line of lines){
-          if(y > pageH - margin){ pdf.addPage(); // nouvelle page blanche
-            pdf.setFillColor(255,255,255); pdf.rect(0,0,pageW,pageH,'F'); y = margin; }
-          pdf.text(line, margin, y);
-          y += 14;
-        }
-        if(color){ pdf.setTextColor(20,20,20); }
-        y += 6;
-      };
-
-      // Interprète les titres commençant par '# ' et '## '
-      sections.forEach(block=>{
-        const b = block.trim();
-        if(!b) return;
-        if(b.startsWith('# ')){
-          para(b.replace(/^# /,''), 16, THEME.blue);
-        }else if(b.startsWith('## ')){
-          para(b.replace(/^## /,''), 13, THEME.green);
+        if(line.startsWith('# ')){
+          y = putHeading(pdf, line.replace(/^#\s+/,'').trim(), y, 16, THEME.blue, margin, pageW, pageH);
+        }else if(line.startsWith('## ')){
+          y = putHeading(pdf, line.replace(/^##\s+/,'').trim(), y, 13, THEME.green, margin, pageW, pageH);
         }else{
-          para(b, 11, null);
+          y = putParagraph(pdf, line, y, margin, pageW, pageH, 11);
         }
-      });
+      }
 
       pdf.save((title.replace(/\s+/g,'-').toLowerCase())+'.pdf');
     }
 
-    async function fetchAsDataURL(url){
-      const res = await fetch(url);
-      const blob = await res.blob();
-      // Convertit les SVG en canvas/PNG si besoin via FileReader (jsPDF supporte surtout PNG/JPEG)
-      // Ici, on renvoie quand même le dataURL du blob; si addImage échoue, on ignore gracieusement.
-      return await new Promise((resolve,reject)=>{
-        const fr = new FileReader();
-        fr.onerror = reject;
-        fr.onload = ()=> resolve(fr.result);
-        fr.readAsDataURL(blob);
+    function setText(pdf, hex, size, weight){
+      const rgb = hexToRGB(hex);
+      pdf.setTextColor(rgb[0], rgb[1], rgb[2]);
+      pdf.setFont('helvetica', weight==='bold'?'bold':'normal');
+      pdf.setFontSize(size);
+    }
+
+    function putHeading(pdf, text, y, size, color, M, W, H){
+      // saut de page si besoin
+      if(y + size + 18 > H - M){ pdf.addPage(); pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F'); y = M; }
+      setText(pdf, color, size, 'bold');
+      pdf.text(text, M, y);
+      y += size < 14 ? 12 : 16;
+      // petit séparateur gris
+      pdf.setDrawColor(210,210,210); pdf.setLineWidth(0.6);
+      pdf.line(M, y, W - M, y);
+      return y + 12;
+    }
+
+    function putParagraph(pdf, text, y, M, W, H, size=11){
+      setText(pdf, '#000000', size, 'normal');
+      const lines = pdf.splitTextToSize(text, W - 2*M);
+      for(const ln of lines){
+        if(y > H - M){ pdf.addPage(); pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F'); y = M; }
+        pdf.text(ln, M, y); y += 14;
+      }
+      return y + 4;
+    }
+
+    async function inlineLogoToPngDataUrl(width=220, height=70){
+      // Construit un SVG autonome à partir du <symbol id="montes-logo">
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('xmlns', svgNS);
+      svg.setAttribute('viewBox','0 0 1600 500');
+      svg.setAttribute('width', String(width));
+      svg.setAttribute('height', String(height));
+
+      const use = document.createElementNS(svgNS, 'use');
+      use.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href', '#montes-logo');
+      use.setAttribute('href', '#montes-logo'); // compat moderne
+      svg.appendChild(use);
+
+      const svgString = new XMLSerializer().serializeToString(svg);
+      const blob = new Blob([svgString], {type:'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+
+      // Charger dans un <img>, dessiner sur canvas, exporter en PNG dataURL
+      const dataUrl = await new Promise((resolve, reject)=>{
+        const img = new Image();
+        img.onload = ()=>{
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          // fond transparent
+          ctx.clearRect(0,0,width,height);
+          ctx.drawImage(img, 0, 0, width, height);
+          URL.revokeObjectURL(url);
+          resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = (e)=>{ URL.revokeObjectURL(url); reject(e); };
+        img.src = url;
       });
+      return dataUrl;
     }
 
     function hexToRGB(hex){
@@ -712,20 +794,20 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       const setSize = ()=>{ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
       setSize(); window.addEventListener('resize', setSize);
 
-      const count = Math.min(160, Math.round((W*H)/17000)); // densité douce
-      P = Array.from({length:count}, (_,i)=>spawnParticle());
+      const count = Math.min(200, Math.round((W*H)/15000)); // un peu plus dense
+      P = Array.from({length:count}, ()=>spawnParticle());
 
       cancelAnimationFrame(rafId);
       loopParticles();
     }
 
     function spawnParticle(){
-      // deux familles : vert fluo (petit glow) et bleu (glow doux)
+      // deux familles : vert fluo et bleu, avec halos
       const green = Math.random() < 0.65;
-      const r = green ? rand(0.8, 1.8) : rand(1.0, 2.2);
-      const speed = rand(0.05, 0.17);
-      const driftX = green ? rand(-0.08, 0.08) : rand(-0.06, 0.06);
-      const wobbleAmp = rand(4, 12);
+      const r = green ? rand(0.9, 2.0) : rand(1.0, 2.4);
+      const speed = rand(0.05, 0.16);
+      const driftX = green ? rand(-0.08, 0.09) : rand(-0.06, 0.07);
+      const wobbleAmp = rand(5, 12);
       const wobbleFreq = rand(0.002, 0.006);
       return {
         x: Math.random()*W,
@@ -733,12 +815,11 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
         vx: driftX,
         vy: -speed, // lente remontée
         r,
-        baseX: 0,
         wobbleAmp,
         wobbleFreq,
         t: Math.random()*1000,
         phase: Math.random()*Math.PI*2,
-        twinkle: rand(0.4, 0.9),
+        twinkle: rand(0.45, 0.95),
         color: green ? 'green' : 'blue'
       };
     }
@@ -760,20 +841,20 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
         if(p.y < -5) { p.y = H+5; p.x = Math.random()*W; }
 
         // scintillement
-        p.phase += 0.01 + (p.color==='green' ? 0.005 : 0.008);
-        const a = 0.22 + 0.35 * Math.abs(Math.sin(p.phase)) * p.twinkle;
+        p.phase += 0.010 + (p.color==='green' ? 0.006 : 0.008);
+        const a = 0.20 + 0.38 * Math.abs(Math.sin(p.phase)) * p.twinkle;
 
         // dessin + halo
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
         if(p.color==='green'){
           ctx.fillStyle = `rgba(124,244,91,${a})`;
-          ctx.shadowColor = 'rgba(124,244,91,0.7)';
-          ctx.shadowBlur = 6;
+          ctx.shadowColor = 'rgba(124,244,91,0.75)';
+          ctx.shadowBlur = 7;
         }else{
           ctx.fillStyle = `rgba(36,86,255,${a})`;
-          ctx.shadowColor = 'rgba(36,86,255,0.7)';
-          ctx.shadowBlur = 8;
+          ctx.shadowColor = 'rgba(36,86,255,0.75)';
+          ctx.shadowBlur = 9;
         }
         ctx.fill();
         ctx.shadowBlur = 0;
