@@ -10,21 +10,22 @@
 
   <style>
     :root{
-      --bg:#070d1c;
-      --panel:#0b1428;
-      --card:#0c152a;
-      --border:rgba(124,244,91,.22); /* vert fluo subtil */
+      --bg-1:#060b19;
+      --bg-2:#0b1326;
       --text:#eaf2ff;
       --muted:#a6b8d6;
 
-      /* Couleurs de marque (logo) */
+      /* Palette (fidèle capture) */
       --accentG:#7CF45B; /* vert fluo */
       --accentB:#2456FF; /* bleu profond */
 
+      --card: rgba(15, 26, 45, .42);           /* verre fumé */
+      --card-border: rgba(124,244,91,.38);     /* vert fluo bord */
+      --card-inner: rgba(36,86,255,.10);       /* petit liseré bleu interne */
       --radius:16px;
       --shadow:0 18px 40px rgba(0,0,0,.55);
-      --glowG:0 0 32px rgba(124,244,91,.55);
-      --glowB:0 0 32px rgba(36,86,255,.45);
+      --glowG:0 0 36px rgba(124,244,91,.58);
+      --glowB:0 0 34px rgba(36,86,255,.42);
     }
 
     *{box-sizing:border-box}
@@ -32,122 +33,128 @@
     body{
       margin:0; font-family:Roboto,system-ui,-apple-system,"Segoe UI",Ubuntu,"Helvetica Neue",Arial,sans-serif;
       color:var(--text);
+      /* OPTION B — halo bleu/vert diffus en haut pour profondeur */
       background:
-        radial-gradient(1200px 800px at 80% -10%, rgba(36,86,255,.20), transparent 60%),
-        radial-gradient(1000px 720px at -10% 120%, rgba(124,244,91,.16), transparent 60%),
-        linear-gradient(180deg, #060b19, #0a1122 40%, #090f1f 100%);
+        radial-gradient(1000px 500px at 20% -10%, rgba(36,86,255,.22), transparent 60%),
+        radial-gradient(900px 480px at 85% -8%, rgba(124,244,91,.12), transparent 65%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 40%, #0a1122 100%);
       overflow-x:hidden;
     }
 
-    /* Canvas particules : sous la UI, au-dessus du fond */
-    #particlesCanvas{
-      position:fixed; inset:0; z-index:0; pointer-events:none;
-    }
+    /* Canvas particules : sous l'UI */
+    #particlesCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; }
 
     header{
-      position:sticky; top:0; z-index:3; backdrop-filter:saturate(160%) blur(10px);
-      background:linear-gradient(90deg, rgba(124,244,91,.10), rgba(36,86,255,.14));
-      border-bottom:1px solid var(--border);
-      box-shadow: inset 0 -1px 0 rgba(255,255,255,.04);
+      position:sticky; top:0; z-index:3;
+      background:linear-gradient(90deg, rgba(124,244,91,.10), rgba(36,86,255,.16));
+      backdrop-filter:saturate(160%) blur(10px);
+      border-bottom:1px solid rgba(124,244,91,.22);
+      box-shadow:inset 0 -1px 0 rgba(255,255,255,.05);
     }
     .nav{ max-width:1180px; margin:0 auto; padding:12px 18px; display:flex; align-items:center; gap:14px; }
+    .logo{ display:block; height:auto; width:auto; object-fit:contain; }
     .brand{ font-weight:700; letter-spacing:.35px; color:#eaf2ff }
 
     .container{ max-width:1180px; margin:28px auto; padding:0 18px; position:relative; z-index:2 }
-    .hero{ display:flex; align-items:center; gap:14px; margin:18px 0 12px }
+
+    .hero{ display:flex; align-items:center; gap:16px; margin:16px 0 14px }
     .hero h1{
-      margin:0; font-size: clamp(22px, 4vw, 36px);
+      margin:0; font-size:clamp(22px, 4vw, 36px);
       background:linear-gradient(90deg, var(--accentG), var(--accentB));
-      -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow: var(--glowG), var(--glowB);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow: var(--glowG), var(--glowB);
     }
 
-    /* Cartes translucides “verre fumé” */
+    /* Cartes translucides “verre fumé” des étapes */
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), rgba(12,21,42,.42);
-      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), var(--card);
       border-radius:var(--radius);
-      box-shadow: var(--shadow), 0 0 0 1px rgba(36,86,255,.08) inset;
+      border:1px solid var(--card-border);
+      box-shadow: var(--shadow), inset 0 0 0 1px var(--card-inner);
       backdrop-filter: blur(12px) saturate(120%);
+      padding:20px;
     }
-    .panel{ padding:20px }
-    .grid{ display:grid; gap:16px }
 
-    /* Barre de progression + étapes rondes lumineuses */
+    /* Barre de progression + chips */
     .progress-wrap{ margin:14px 0 18px }
     .progress{
-      height:12px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; position:relative;
+      height:12px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden;
       box-shadow: inset 0 0 12px rgba(124,244,91,.15), inset 0 0 14px rgba(36,86,255,.12);
     }
     .progress > span{ display:block; height:100%; width:0%;
       background:linear-gradient(90deg, var(--accentG), var(--accentB));
       box-shadow: var(--glowG), var(--glowB);
-      transition:width .45s cubic-bezier(.2,.7,.2,1)
+      transition:width .45s cubic-bezier(.2,.7,.2,1);
     }
 
-    .steps{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px }
+    .steps{ display:flex; gap:12px; flex-wrap:wrap; margin-top:12px }
     .chip{
-      --size:40px;
+      --size:42px;
       width:var(--size); height:var(--size); border-radius:50%;
-      display:inline-grid; place-items:center; color:#b9c9e6;
-      border:1px solid rgba(124,244,91,.35);
-      background:linear-gradient(180deg, rgba(9,20,40,.45), rgba(9,20,40,.28));
+      display:grid; place-items:center; color:#b9c9e6;
+      border:1px solid rgba(124,244,91,.38);
+      background:linear-gradient(180deg, rgba(9,20,40,.48), rgba(9,20,40,.30));
       box-shadow: inset 0 2px 10px rgba(36,86,255,.16), inset 0 -2px 10px rgba(124,244,91,.18);
-      font-weight:700; font-size:14px; position:relative; isolation:isolate;
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, color .2s ease, background .2s ease;
+      font-weight:700; font-size:14px;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
       backdrop-filter: blur(8px);
-    }
-    .chip::after{
-      content:""; position:absolute; inset:-3px; border-radius:inherit; z-index:-1;
-      background: radial-gradient(60% 60% at 50% 40%, rgba(124,244,91,.22), transparent 60%),
-                  radial-gradient(60% 60% at 50% 60%, rgba(36,86,255,.22), transparent 60%);
-      opacity:.15; transition:opacity .2s ease;
     }
     .chip.active{
       color:#061427; border-color:transparent;
-      background:linear-gradient(135deg, rgba(124,244,91,.9), rgba(36,86,255,.9));
+      background:linear-gradient(135deg, rgba(124,244,91,.95), rgba(36,86,255,.95));
       box-shadow: var(--glowG), var(--glowB);
       transform: translateY(-1px);
     }
-    .chip.active::after{ opacity:.9 }
 
-    .step{ display:none }
-    .step.active{ display:block }
-
+    /* Grilles et champs */
+    .grid{ display:grid; gap:16px }
+    .row{ display:grid; gap:12px }
+    @media(min-width:760px){ .row-2{ grid-template-columns:1fr 1fr } .row-3{ grid-template-columns:1fr 1fr 1fr } }
     label{ display:block; font-size:14px; margin-bottom:6px; color:var(--muted) }
     input, select, textarea{
       width:100%; background:rgba(9,20,40,.55); color:var(--text);
-      border:1px solid rgba(124,244,91,.25);
-      border-radius:12px; padding:12px 14px; outline:none;
-      transition:border .2s ease, background .2s ease, box-shadow .2s ease;
-      backdrop-filter: blur(6px);
-      box-shadow: inset 0 0 0 1px rgba(36,86,255,.12);
+      border:1px solid rgba(124,244,91,.30); border-radius:12px; padding:12px 14px;
+      outline:none; backdrop-filter: blur(6px);
+      transition: border .2s ease, box-shadow .2s ease, background .2s ease;
+      box-shadow: inset 0 0 0 1px rgba(36,86,255,.10);
     }
     input:focus, select:focus, textarea:focus{
       border-color:var(--accentG);
-      box-shadow: 0 0 0 3px rgba(124,244,91,.18), 0 0 0 1px rgba(36,86,255,.12) inset;
       background:rgba(9,20,40,.68);
+      box-shadow: 0 0 0 3px rgba(124,244,91,.18), inset 0 0 0 1px rgba(36,86,255,.12);
     }
-    .row{ display:grid; gap:12px }
-    @media(min-width:760px){ .row-2{ grid-template-columns:1fr 1fr } .row-3{ grid-template-columns:1fr 1fr 1fr } }
 
-    /* Boutons NEON */
+    /* Boutons */
     .btn{
       appearance:none; border:none; cursor:pointer; font-weight:700; padding:12px 18px; border-radius:12px;
       background:linear-gradient(90deg, var(--accentG), var(--accentB)); color:#02121f;
-      box-shadow:0 10px 28px rgba(36,86,255,.24), 0 10px 28px rgba(124,244,91,.28), inset 0 0 0 1px rgba(0,0,0,.2);
-      transition: transform .06s ease, box-shadow .2s ease, opacity .2s ease, filter .2s ease;
+      box-shadow:0 10px 28px rgba(36,86,255,.24), 0 10px 28px rgba(124,244,91,.28);
+      transition: transform .06s ease, box-shadow .2s ease, filter .2s ease;
     }
-    .btn:hover{ filter: brightness(1.06); box-shadow:0 14px 36px rgba(36,86,255,.28), 0 14px 36px rgba(124,244,91,.32) }
+    .btn:hover{ filter:brightness(1.06); box-shadow:0 14px 36px rgba(36,86,255,.28), 0 14px 36px rgba(124,244,91,.32) }
     .btn:active{ transform: translateY(1px) }
-    .btn.secondary{ background:rgba(9,20,40,.55); color:var(--text); border:1px solid rgba(124,244,91,.3) }
-    .btn.ghost{ background:transparent; color:var(--text); border:1px dashed rgba(124,244,91,.35) }
+    .btn.secondary{ background:rgba(9,20,40,.55); color:var(--text); border:1px solid rgba(124,244,91,.35) }
+    .btn.ghost{ background:transparent; color:var(--text); border:1px dashed rgba(124,244,91,.38) }
 
-    .pub-card{
-      border:1px solid rgba(124,244,91,.28); border-radius:14px; padding:12px;
+    /* État des étapes (fidèle à ta capture) */
+    .step-card{
+      border:1px solid var(--card-border);
+      border-radius:14px;
       background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%), rgba(12,21,42,.38);
-      display:grid; gap:8px; backdrop-filter: blur(10px) saturate(120%);
-      box-shadow: inset 0 0 0 1px rgba(36,86,255,.10);
+      padding:16px; display:grid; gap:8px; backdrop-filter: blur(10px) saturate(120%);
+      box-shadow: inset 0 0 0 1px var(--card-inner);
     }
+    .step-card h3{ margin:0; font-size:16px; color:var(--accentG); text-shadow: 0 0 10px rgba(124,244,91,.35); }
+    .step-card p{ margin:0; color:#cfe0ff }
+
+    /* Étapes visibles / masquées */
+    .step{ display:none }
+    .step.active{ display:block }
+
+    /* Résultats PubMed */
+    .pub-card{ border:1px solid rgba(124,244,91,.28); border-radius:14px; padding:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%), rgba(12,21,42,.38);
+      display:grid; gap:8px; backdrop-filter: blur(10px) saturate(120%); box-shadow: inset 0 0 0 1px rgba(36,86,255,.10); }
     .pub-actions{ display:flex; gap:8px; flex-wrap:wrap }
     .tag{ font-size:11px; padding:4px 8px; border:1px solid rgba(124,244,91,.28); border-radius:999px; color:#cfe6ff; background:rgba(9,20,40,.45) }
     .score{ font-weight:700; color:var(--accentG); text-shadow: 0 0 6px rgba(124,244,91,.5) }
@@ -160,55 +167,42 @@
 </head>
 
 <body>
-  <!-- Canvas des particules en suspension -->
+  <!-- Particules vertes flottantes -->
   <canvas id="particlesCanvas"></canvas>
 
-  <!-- ====== LOGO INLINE (réutilisable via <use>) ====== -->
-  <svg width="0" height="0" style="position:absolute; left:-9999px; top:-9999px" aria-hidden="true" focusable="false">
-    <defs>
-      <symbol id="montes-logo" viewBox="0 0 1600 500">
-        <!-- mots "mo" et "tes" en vert -->
-        <text x="60" y="330" fill="#7CF45B" font-size="240" font-family="Roboto, Arial, sans-serif" font-weight="700" letter-spacing="2">mo</text>
-        <!-- "N" en forme de mont (courbe bleue centrée) -->
-        <!-- Fenêtre dédiée à la courbe entre mo et tes -->
-        <path d="M 470 340 C 575 120, 755 120, 860 340" fill="none" stroke="#2456FF" stroke-width="32" stroke-linecap="round"/>
-        <!-- "tes" -->
-        <text x="900" y="330" fill="#7CF45B" font-size="240" font-family="Roboto, Arial, sans-serif" font-weight="700" letter-spacing="2">tes</text>
-      </symbol>
-    </defs>
-  </svg>
-
+  <!-- Barre de navigation avec logo officiel (fichier séparé, fond transparent) -->
   <header>
     <div class="nav">
-      <!-- Instances redimensionnées du logo inline -->
-      <svg aria-label="Montes BioPharma" id="navLogo" width="180" height="54" viewBox="0 0 1600 500">
-        <use href="#montes-logo"></use>
-      </svg>
+      <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo" style="height:42px"/>
       <div class="brand">Montes BioPharma</div>
       <div style="margin-left:auto" class="muted">Assistant IA (ossature sûre)</div>
     </div>
   </header>
 
   <main class="container">
+    <!-- Hero -->
     <div class="hero">
-      <svg aria-label="Montes BioPharma" id="heroLogo" width="240" height="80" viewBox="0 0 1600 500" style="filter: drop-shadow(0 8px 26px rgba(124,244,91,.25)) drop-shadow(0 10px 30px rgba(36,86,255,.22));">
-        <use href="#montes-logo"></use>
-      </svg>
+      <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo"
+           style="height:78px; filter: drop-shadow(0 10px 26px rgba(124,244,91,.30)) drop-shadow(0 12px 30px rgba(36,86,255,.22))"/>
       <h1>Purification Adénovirus — Assistant d’aide à la documentation &amp; bibliographie</h1>
     </div>
 
-    <!-- Progress + étapes -->
-    <div class="progress-wrap card panel">
+    <!-- Progression + puces étapes -->
+    <div class="card">
       <div class="progress"><span id="progressBar"></span></div>
       <div class="steps" id="stepsChips"></div>
     </div>
 
     <!-- Wizard -->
-    <section class="card panel">
+    <section class="card">
+      <!-- Étape 1 -->
       <div id="step-1" class="step active" data-title="1">
-        <h2>Étape 1 — Contexte & conformité</h2>
-        <p class="muted">Usage strictement professionnel. Cette application ne fournit <strong>aucune procédure pratique</strong> ni paramètres expérimentaux. Elle génère une <em>ossature</em> de document à compléter par vos SOP internes validées.</p>
         <div class="grid">
+          <div class="step-card">
+            <h3>Étape 1 — Contexte & conformité</h3>
+            <p class="muted">Usage strictement professionnel. L’application génère une <em>ossature documentaire</em> — pas de paramètres ni de procédures expérimentales.</p>
+          </div>
+
           <div class="row row-2">
             <div>
               <label>Organisation / Société</label>
@@ -219,21 +213,23 @@
               <input id="role" placeholder="ex: GMP Operations Manager" />
             </div>
           </div>
-          <div>
-            <label>Déclaration</label>
-            <label style="display:flex; gap:8px; align-items:flex-start">
-              <input type="checkbox" id="complianceChk" style="width:auto; margin-top:4px"/>
-              <span>Je confirme que je suis un professionnel au sein d’une organisation habilitée et que j’utiliserai uniquement des <strong>SOP internes approuvées</strong>. Pas d’usage domestique.</span>
+
+          <div class="step-card">
+            <label style="display:flex; gap:10px; align-items:flex-start">
+              <input type="checkbox" id="complianceChk" style="width:auto; margin-top:3px"/>
+              <span>Je confirme être un professionnel au sein d’une organisation habilitée et n’utiliser que des <strong>SOP internes approuvées</strong>. Pas d’usage domestique.</span>
             </label>
           </div>
-        </div>
-        <div style="display:flex; gap:8px; margin-top:14px">
-          <button class="btn" data-next>Continuer</button>
+
+          <div style="display:flex; gap:10px; margin-top:4px">
+            <button class="btn" data-next>Continuer</button>
+          </div>
         </div>
       </div>
 
+      <!-- Étape 2 -->
       <div id="step-2" class="step" data-title="2">
-        <h2>Étape 2 — Paramètres biologiques (métadonnées)</h2>
+        <div class="step-card"><h3>Étape 2 — Paramètres biologiques (métadonnées)</h3></div>
         <div class="row row-3">
           <div>
             <label>Type de vecteur</label>
@@ -258,34 +254,36 @@
             <input id="keywords" placeholder="ex: chromatography, TFF, affinity, anion exchange"/>
           </div>
         </div>
-        <div style="display:flex; gap:8px; margin-top:14px">
+        <div style="display:flex; gap:10px; margin-top:10px">
           <button class="btn secondary" data-prev>Retour</button>
           <button class="btn" data-next>Continuer</button>
         </div>
       </div>
 
+      <!-- Étape 3 -->
       <div id="step-3" class="step" data-title="3">
-        <h2>Étape 3 — Choix des grandes étapes</h2>
+        <div class="step-card"><h3>Étape 3 — Choix des grandes étapes</h3></div>
         <div class="row row-2">
-          <div class="card panel">
-            <label><input type="checkbox" id="upstream" style="width:auto; margin-right:8px">Upstream (métadonnées uniquement)</label>
-            <div class="muted">Décrire les objectifs, points de contrôle qualité, références internes (SOP-UP-###). <em>Sans paramètres opératoires.</em></div>
+          <div class="step-card">
+            <label><input type="checkbox" id="upstream" style="width:auto; margin-right:10px">Upstream (métadonnées uniquement)</label>
+            <p class="muted">Décrire objectifs, points CQ, références internes (SOP-UP-###). <em>Pas de paramètres opératoires.</em></p>
           </div>
-          <div class="card panel">
-            <label><input type="checkbox" id="downstream" style="width:auto; margin-right:8px">Downstream (métadonnées uniquement)</label>
-            <div class="muted">Structure documentaire aval : catégories et documents mères (SOP-DS-###). <em>Sans volumes ni vitesses.</em></div>
+          <div class="step-card">
+            <label><input type="checkbox" id="downstream" style="width:auto; margin-right:10px">Downstream (métadonnées uniquement)</label>
+            <p class="muted">Structure documentaire aval (catégories & SOP-DS-###). <em>Pas de volumes ni vitesses.</em></p>
           </div>
         </div>
-        <div style="display:flex; gap:8px; margin-top:14px">
+        <div style="display:flex; gap:10px; margin-top:10px">
           <button class="btn secondary" data-prev>Retour</button>
           <button class="btn" data-next>Continuer</button>
         </div>
       </div>
 
+      <!-- Étape 4 -->
       <div id="step-4" class="step" data-title="4">
-        <h2>Étape 4 — Sous-étapes (catégories)</h2>
+        <div class="step-card"><h3>Étape 4 — Sous-étapes (catégories)</h3></div>
         <div class="grid">
-          <div class="card panel">
+          <div class="step-card">
             <h3>Upstream — catégories</h3>
             <div class="row row-3">
               <label><input type="checkbox" class="up-cat" value="Conception & contrôles d’entrée (métadonnées)"/> Conception & contrôles d’entrée (métadonnées)</label>
@@ -293,7 +291,7 @@
               <label><input type="checkbox" class="up-cat" value="Contrôles en cours & libération (métadonnées)"/> Contrôles en cours & libération (métadonnées)</label>
             </div>
           </div>
-          <div class="card panel">
+          <div class="step-card">
             <h3>Downstream — catégories</h3>
             <div class="row row-3">
               <label><input type="checkbox" class="ds-cat" value="Clarification (métadonnées)"/> Clarification (métadonnées)</label>
@@ -305,16 +303,17 @@
             </div>
           </div>
         </div>
-        <div style="display:flex; gap:8px; margin-top:14px">
+        <div style="display:flex; gap:10px; margin-top:10px">
           <button class="btn secondary" data-prev>Retour</button>
           <button class="btn" data-next>Continuer</button>
         </div>
       </div>
 
+      <!-- Étape 5 -->
       <div id="step-5" class="step" data-title="5">
-        <h2>Étape 5 — Recherche PubMed</h2>
-        <div class="grid" style="grid-template-columns:1fr 1.2fr; gap:16px">
-          <div class="card panel">
+        <div class="step-card"><h3>Étape 5 — Recherche PubMed</h3></div>
+        <div class="grid" style="grid-template-columns:1fr 1.15fr; gap:16px">
+          <div class="step-card">
             <div class="row">
               <div>
                 <label>Activer la recherche d’articles récents</label>
@@ -342,20 +341,21 @@
               <div>
                 <button id="runSearch" class="btn">Lancer la recherche</button>
               </div>
-              <p class="muted">La recherche combine vos métadonnées et mots-clés pour scorer la pertinence. <strong>Seules des informations bibliographiques</strong> sont affichées (titres, auteurs, journaux, liens). Pas d’extraction de procédures.</p>
+              <p class="muted">Seules des informations bibliographiques sont affichées (titres, auteurs, journaux, liens). <strong>Aucune procédure expérimentale.</strong></p>
             </div>
           </div>
           <div id="pubResults" class="grid"></div>
         </div>
-        <div style="display:flex; gap:8px; margin-top:14px">
+        <div style="display:flex; gap:10px; margin-top:10px">
           <button class="btn secondary" data-prev>Retour</button>
           <button class="btn" data-next>Continuer</button>
         </div>
       </div>
 
+      <!-- Étape 6 -->
       <div id="step-6" class="step" data-title="6">
-        <h2>Étape 6 — Ossature du protocole <span class="muted">(à compléter par vos SOP)</span></h2>
-        <div class="card panel">
+        <div class="step-card"><h3>Étape 6 — Ossature du protocole (à compléter par vos SOP)</h3></div>
+        <div class="step-card">
           <div class="row row-2">
             <div>
               <label>Titre du document</label>
@@ -377,16 +377,17 @@
             </div>
           </div>
         </div>
-        <div style="display:flex; gap:8px; margin-top:14px">
+        <div style="display:flex; gap:10px; margin-top:10px">
           <button class="btn secondary" data-prev>Retour</button>
           <button class="btn" data-next>Continuer</button>
         </div>
       </div>
 
+      <!-- Étape 7 -->
       <div id="step-7" class="step" data-title="7">
-        <h2>Étape 7 — Aperçu & export PDF (stylisé)</h2>
-        <div id="preview" class="card panel" style="white-space:pre-wrap"></div>
-        <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
+        <div class="step-card"><h3>Étape 7 — Aperçu & export PDF</h3></div>
+        <div id="preview" class="step-card" style="white-space:pre-wrap"></div>
+        <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
           <button class="btn" id="exportPdf">Exporter en PDF</button>
           <button class="btn ghost" id="startOver">Recommencer</button>
           <button class="btn secondary" data-prev>Retour</button>
@@ -406,8 +407,8 @@
     /* ========= THEME ========= */
     const THEME = { green:"#7CF45B", blue:"#2456FF", text:"#111", gray:"#555" };
 
-    /* ========= STATE ========= */
-    const steps = [...document.querySelectorAll('.step')];
+    /* ========= ÉTAT ========= */
+    const stepsEls = [...document.querySelectorAll('.step')];
     const bar = document.getElementById('progressBar');
     const chips = document.getElementById('stepsChips');
     const state = {
@@ -420,39 +421,27 @@
       docTitle:"", internalRefs:"", summary:"", qms:""
     };
 
-    /* ========= INIT UI ========= */
+    /* ========= INIT ========= */
     function init(){
       document.getElementById('year').textContent = new Date().getFullYear();
 
-      // Étapes (chips)
-      chips.innerHTML = steps.map((s,i)=>`<span class="chip" data-chip="${i}">${i+1}</span>`).join('');
+      chips.innerHTML = stepsEls.map((s,i)=>`<span class="chip" data-chip="${i}">${i+1}</span>`).join('');
 
-      // Navigation
       document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click', ()=>gotoStep(currentStep+1)));
       document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click', ()=>gotoStep(currentStep-1)));
 
-      // Inputs
-      document.getElementById('org').addEventListener('input', e=>state.org=e.target.value);
-      document.getElementById('role').addEventListener('input', e=>state.role=e.target.value);
-      document.getElementById('vectorType').addEventListener('change', e=>state.vectorType=e.target.value);
-      document.getElementById('serotype').addEventListener('input', e=>state.serotype=e.target.value);
-      document.getElementById('cellLine').addEventListener('input', e=>state.cellLine=e.target.value);
-      document.getElementById('keywords').addEventListener('input', e=>state.keywords=e.target.value);
-
-      document.getElementById('upstream').addEventListener('change', e=>state.upstream=e.target.checked);
-      document.getElementById('downstream').addEventListener('change', e=>state.downstream=e.target.checked);
+      // Bind inputs
+      bind('org'); bind('role'); bind('serotype'); bind('cellLine'); bind('keywords');
+      document.getElementById('vectorType').addEventListener('change', e=>{state.vectorType=e.target.value; persist();});
+      document.getElementById('upstream').addEventListener('change', e=>{state.upstream=e.target.checked; persist();});
+      document.getElementById('downstream').addEventListener('change', e=>{state.downstream=e.target.checked; persist();});
       document.querySelectorAll('.up-cat').forEach(c=>c.addEventListener('change', syncCats));
       document.querySelectorAll('.ds-cat').forEach(c=>c.addEventListener('change', syncCats));
-
-      document.getElementById('enablePubMed').addEventListener('change', e=>state.enablePubMed=e.target.checked);
-      document.getElementById('yearsWindow').addEventListener('change', e=>state.yearsWindow=+e.target.value);
-      document.getElementById('retMax').addEventListener('change', e=>state.retMax=+e.target.value);
+      document.getElementById('enablePubMed').addEventListener('change', e=>{state.enablePubMed=e.target.checked; persist();});
+      document.getElementById('yearsWindow').addEventListener('change', e=>{state.yearsWindow=+e.target.value; persist();});
+      document.getElementById('retMax').addEventListener('change', e=>{state.retMax=+e.target.value; persist();});
       document.getElementById('runSearch').addEventListener('click', runPubMedSearch);
-
-      document.getElementById('docTitle').addEventListener('input', e=>state.docTitle=e.target.value);
-      document.getElementById('internalRefs').addEventListener('input', e=>state.internalRefs=e.target.value);
-      document.getElementById('summary').addEventListener('input', e=>state.summary=e.target.value);
-      document.getElementById('qms').addEventListener('input', e=>state.qms=e.target.value);
+      bind('docTitle'); bind('internalRefs'); bind('summary', true); bind('qms', true);
 
       document.getElementById('exportPdf').addEventListener('click', exportPDF);
       document.getElementById('startOver').addEventListener('click', ()=>{ localStorage.removeItem('mbp_state'); location.reload(); });
@@ -466,7 +455,11 @@
       renderPreview();
       startParticles();
     }
-
+    function bind(id, isTextArea=false){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener('input', e=>{ state[id]=e.target.value; persist(); });
+    }
     function syncCats(){
       state.upCats = [...document.querySelectorAll('.up-cat:checked')].map(c=>c.value);
       state.dsCats = [...document.querySelectorAll('.ds-cat:checked')].map(c=>c.value);
@@ -479,11 +472,11 @@
         const ok = document.getElementById('complianceChk').checked;
         if(!ok){ alert("Veuillez valider la déclaration de conformité (usage professionnel)."); return; }
       }
-      if(i<0 || i>=steps.length) return;
-      steps[currentStep].classList.remove('active');
+      if(i<0 || i>=stepsEls.length) return;
+      stepsEls[currentStep].classList.remove('active');
       currentStep = i;
-      steps[currentStep].classList.add('active');
-      const percent = Math.round(((currentStep+1)/steps.length)*100);
+      stepsEls[currentStep].classList.add('active');
+      const percent = Math.round(((currentStep+1)/stepsEls.length)*100);
       bar.style.width = percent+"%";
       [...chips.children].forEach((chip,idx)=>chip.classList.toggle('active', idx===currentStep));
       renderPreview();
@@ -492,29 +485,17 @@
     }
 
     function hydrate(){
-      const bind = (id, v, prop="value")=>{ const el=document.getElementById(id); if(el){ el[prop]=v||el[prop]; } };
-      bind('org', state.org);
-      bind('role', state.role);
-      bind('vectorType', state.vectorType, 'value');
-      bind('serotype', state.serotype);
-      bind('cellLine', state.cellLine);
-      bind('keywords', state.keywords);
-
+      const set = (id, v, prop='value')=>{ const el=document.getElementById(id); if(el && v) el[prop]=v; };
+      set('org', state.org); set('role', state.role); set('vectorType', state.vectorType);
+      set('serotype', state.serotype); set('cellLine', state.cellLine); set('keywords', state.keywords);
       document.getElementById('upstream').checked = !!state.upstream;
       document.getElementById('downstream').checked = !!state.downstream;
-
       document.querySelectorAll('.up-cat').forEach(c=>c.checked = state.upCats.includes(c.value));
       document.querySelectorAll('.ds-cat').forEach(c=>c.checked = state.dsCats.includes(c.value));
-
       document.getElementById('enablePubMed').checked = !!state.enablePubMed;
-      bind('yearsWindow', state.yearsWindow, 'value');
-      bind('retMax', state.retMax, 'value');
-
-      bind('docTitle', state.docTitle);
-      bind('internalRefs', state.internalRefs);
-      bind('summary', state.summary);
-      bind('qms', state.qms);
-
+      set('yearsWindow', state.yearsWindow); set('retMax', state.retMax);
+      set('docTitle', state.docTitle); set('internalRefs', state.internalRefs);
+      set('summary', state.summary, 'value'); set('qms', state.qms, 'value');
       if(state.articles?.length) renderArticles(state.articles);
     }
 
@@ -574,7 +555,7 @@
 
     function renderArticles(list){
       const box = document.getElementById('pubResults');
-      if(!list.length){ box.innerHTML = '<div class="panel card muted">Aucun résultat pour l’instant.</div>'; return; }
+      if(!list.length){ box.innerHTML = '<div class="step-card muted">Aucun résultat pour l’instant.</div>'; return; }
       box.innerHTML = '';
       list.forEach(rec=>{
         const el = document.createElement('div');
@@ -598,7 +579,7 @@
       });
     }
 
-    /* ========= Preview (ossature) ========= */
+    /* ========= Aperçu (ossature) ========= */
     function renderPreview(){
       const meta = [
         state.org ? `Organisation : ${state.org}` : null,
@@ -644,7 +625,7 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       document.getElementById('preview').textContent = outline;
     }
 
-    /* ========= Export PDF stylisé (fond clair, texte noir, titres thème, logo à gauche) ========= */
+    /* ========= Export PDF (clair, texte noir, titres aux couleurs thème, logo à gauche) ========= */
     async function exportPDF(){
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF({unit:'pt', format:'a4'});
@@ -656,34 +637,31 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       pdf.setFillColor(255,255,255);
       pdf.rect(0,0,pageW,pageH,'F');
 
-      // convertir le logo inline (<symbol>) en image PNG pour le PDF
+      // charger logo externe (même fichier que l'app)
       let logoData = null;
       try{
-        logoData = await inlineLogoToPngDataUrl(220, 70); // largeur x hauteur cible
-      }catch(e){ /* on ignore si non dispo */ }
+        logoData = await fetchAsDataURL('./assets/montes-biopharma-logo.svg');
+      }catch(e){ /* ignore */ }
 
       // entête
       const headerY = margin;
       if(logoData){
-        try{
-          pdf.addImage(logoData, 'PNG', margin, headerY-8, 220, 70, undefined, 'FAST');
-        }catch(e){ /* ignore */ }
+        try{ pdf.addImage(logoData, 'PNG', margin, headerY-8, 160, 40, undefined, 'FAST'); }catch(e){}
       }
 
-      // Titre
-      const title = state.docTitle || 'Ossature protocole — Adénovirus';
+      // Titre et sous-titre
       setText(pdf, THEME.blue, 18, 'bold');
-      pdf.text(title, margin + (logoData?240:0), headerY + 18, {baseline:'middle'});
+      const title = state.docTitle || 'Ossature protocole — Adénovirus';
+      pdf.text(title, margin + (logoData?180:0), headerY + 14);
 
-      // Sous-titre (références internes)
       setText(pdf, '#3a3a3a', 11, 'normal');
-      pdf.text((state.internalRefs || ''), margin + (logoData?240:0), headerY + 38);
+      pdf.text((state.internalRefs || ''), margin + (logoData?180:0), headerY + 34);
 
-      // Règle double couleur
+      // Double règle colorée
       pdf.setDrawColor(...hexToRGB(THEME.green)); pdf.setLineWidth(2);
-      pdf.line(margin, headerY+54, pageW - margin, headerY+54);
+      pdf.line(margin, headerY+50, pageW - margin, headerY+50);
       pdf.setDrawColor(...hexToRGB(THEME.blue)); pdf.setLineWidth(2);
-      pdf.line(margin, headerY+58, pageW - margin, headerY+58);
+      pdf.line(margin, headerY+54, pageW - margin, headerY+54);
 
       let y = headerY + 80;
 
@@ -691,15 +669,13 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       const content = document.getElementById('preview').textContent;
       const blocks = content.split('\n');
 
-      // Compose lignes avec titres # et ##
       for(let raw of blocks){
         const line = raw.trim();
         if(!line){ y += 6; continue; }
-
         if(line.startsWith('# ')){
-          y = putHeading(pdf, line.replace(/^#\s+/,'').trim(), y, 16, THEME.blue, margin, pageW, pageH);
+          y = putHeading(pdf, line.replace(/^#\s+/,''), y, 16, THEME.blue, margin, pageW, pageH);
         }else if(line.startsWith('## ')){
-          y = putHeading(pdf, line.replace(/^##\s+/,'').trim(), y, 13, THEME.green, margin, pageW, pageH);
+          y = putHeading(pdf, line.replace(/^##\s+/,''), y, 13, THEME.green, margin, pageW, pageH);
         }else{
           y = putParagraph(pdf, line, y, margin, pageW, pageH, 11);
         }
@@ -708,25 +684,31 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       pdf.save((title.replace(/\s+/g,'-').toLowerCase())+'.pdf');
     }
 
+    async function fetchAsDataURL(url){
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return await new Promise((resolve,reject)=>{
+        const fr = new FileReader();
+        fr.onerror = reject;
+        fr.onload = ()=> resolve(fr.result);
+        fr.readAsDataURL(blob);
+      });
+    }
     function setText(pdf, hex, size, weight){
       const rgb = hexToRGB(hex);
       pdf.setTextColor(rgb[0], rgb[1], rgb[2]);
       pdf.setFont('helvetica', weight==='bold'?'bold':'normal');
       pdf.setFontSize(size);
     }
-
     function putHeading(pdf, text, y, size, color, M, W, H){
-      // saut de page si besoin
       if(y + size + 18 > H - M){ pdf.addPage(); pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F'); y = M; }
       setText(pdf, color, size, 'bold');
       pdf.text(text, M, y);
       y += size < 14 ? 12 : 16;
-      // petit séparateur gris
       pdf.setDrawColor(210,210,210); pdf.setLineWidth(0.6);
       pdf.line(M, y, W - M, y);
       return y + 12;
     }
-
     function putParagraph(pdf, text, y, M, W, H, size=11){
       setText(pdf, '#000000', size, 'normal');
       const lines = pdf.splitTextToSize(text, W - 2*M);
@@ -736,134 +718,50 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       }
       return y + 4;
     }
-
-    async function inlineLogoToPngDataUrl(width=220, height=70){
-      // Construit un SVG autonome à partir du <symbol id="montes-logo">
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('xmlns', svgNS);
-      svg.setAttribute('viewBox','0 0 1600 500');
-      svg.setAttribute('width', String(width));
-      svg.setAttribute('height', String(height));
-
-      const use = document.createElementNS(svgNS, 'use');
-      use.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href', '#montes-logo');
-      use.setAttribute('href', '#montes-logo'); // compat moderne
-      svg.appendChild(use);
-
-      const svgString = new XMLSerializer().serializeToString(svg);
-      const blob = new Blob([svgString], {type:'image/svg+xml;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-
-      // Charger dans un <img>, dessiner sur canvas, exporter en PNG dataURL
-      const dataUrl = await new Promise((resolve, reject)=>{
-        const img = new Image();
-        img.onload = ()=>{
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          // fond transparent
-          ctx.clearRect(0,0,width,height);
-          ctx.drawImage(img, 0, 0, width, height);
-          URL.revokeObjectURL(url);
-          resolve(canvas.toDataURL('image/png'));
-        };
-        img.onerror = (e)=>{ URL.revokeObjectURL(url); reject(e); };
-        img.src = url;
-      });
-      return dataUrl;
-    }
-
     function hexToRGB(hex){
-      const h = hex.replace('#','');
-      const bigint = parseInt(h,16);
-      if(h.length===6) return [(bigint>>16)&255, (bigint>>8)&255, bigint&255];
-      return [0,0,0];
+      const h = hex.replace('#',''); const n = parseInt(h,16);
+      return [(n>>16)&255, (n>>8)&255, n&255];
     }
-
     function sanitize(s){ return (s||'').replace(/[<>&]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
 
-    /* ========= PARTICULES EN SUSPENSION (drift + twinkle) ========= */
-    let P = []; // particules
-    let ctx, W, H, rafId;
-
+    /* ========= Particules vertes (drift + twinkle) ========= */
+    let P = []; let ctx, W, H, rafId;
     function startParticles(){
       const canvas = document.getElementById('particlesCanvas');
       ctx = canvas.getContext('2d');
-      const setSize = ()=>{ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
-      setSize(); window.addEventListener('resize', setSize);
+      const setSize = ()=>{ W = canvas.width = innerWidth; H = canvas.height = innerHeight; };
+      setSize(); addEventListener('resize', setSize);
 
-      const count = Math.min(200, Math.round((W*H)/15000)); // un peu plus dense
+      const count = Math.min(200, Math.round((W*H)/15000)); // densité douce
       P = Array.from({length:count}, ()=>spawnParticle());
-
       cancelAnimationFrame(rafId);
       loopParticles();
     }
-
     function spawnParticle(){
-      // deux familles : vert fluo et bleu, avec halos
-      const green = Math.random() < 0.65;
-      const r = green ? rand(0.9, 2.0) : rand(1.0, 2.4);
-      const speed = rand(0.05, 0.16);
-      const driftX = green ? rand(-0.08, 0.09) : rand(-0.06, 0.07);
-      const wobbleAmp = rand(5, 12);
-      const wobbleFreq = rand(0.002, 0.006);
+      const r = rnd(0.9, 2.2);
       return {
-        x: Math.random()*W,
-        y: Math.random()*H,
-        vx: driftX,
-        vy: -speed, // lente remontée
-        r,
-        wobbleAmp,
-        wobbleFreq,
-        t: Math.random()*1000,
-        phase: Math.random()*Math.PI*2,
-        twinkle: rand(0.45, 0.95),
-        color: green ? 'green' : 'blue'
+        x: Math.random()*W, y: Math.random()*H,
+        vx: rnd(-0.08, 0.08), vy: -rnd(0.05, 0.16),
+        r, t: Math.random()*1000, tw: rnd(0.5, 1.0)
       };
     }
-
     function loopParticles(){
       rafId = requestAnimationFrame(loopParticles);
       ctx.clearRect(0,0,W,H);
-
-      for(let i=0;i<P.length;i++){
-        const p = P[i];
-        p.t += 1;
-        const wobble = Math.sin(p.t * p.wobbleFreq) * p.wobbleAmp;
-        p.x += p.vx + wobble*0.02;
+      for(const p of P){
+        p.t += 0.02; const a = 0.20 + 0.40*Math.abs(Math.sin(p.t))*p.tw;
+        p.x += p.vx + Math.sin(p.t*0.5)*0.04;
         p.y += p.vy;
-
-        // wrap vertical/horizontal
-        if(p.x < -5) p.x = W+5;
-        if(p.x > W+5) p.x = -5;
-        if(p.y < -5) { p.y = H+5; p.x = Math.random()*W; }
-
-        // scintillement
-        p.phase += 0.010 + (p.color==='green' ? 0.006 : 0.008);
-        const a = 0.20 + 0.38 * Math.abs(Math.sin(p.phase)) * p.twinkle;
-
-        // dessin + halo
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-        if(p.color==='green'){
-          ctx.fillStyle = `rgba(124,244,91,${a})`;
-          ctx.shadowColor = 'rgba(124,244,91,0.75)';
-          ctx.shadowBlur = 7;
-        }else{
-          ctx.fillStyle = `rgba(36,86,255,${a})`;
-          ctx.shadowColor = 'rgba(36,86,255,0.75)';
-          ctx.shadowBlur = 9;
-        }
-        ctx.fill();
-        ctx.shadowBlur = 0;
+        if(p.x<-5) p.x=W+5; if(p.x>W+5) p.x=-5; if(p.y<-5){ p.y=H+5; p.x=Math.random()*W; }
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283);
+        ctx.fillStyle = `rgba(124,244,91,${a})`;
+        ctx.shadowColor = 'rgba(124,244,91,.75)'; ctx.shadowBlur = 8;
+        ctx.fill(); ctx.shadowBlur = 0;
       }
     }
+    const rnd=(a,b)=>a+Math.random()*(b-a);
 
-    function rand(a,b){ return a + Math.random()*(b-a); }
-
-    /* ========= START ========= */
+    /* ========= GO ========= */
     init();
   </script>
 </body>
