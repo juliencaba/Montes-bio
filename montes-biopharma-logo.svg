@@ -3,9 +3,9 @@
   <text x="20" y="160" font-family="Arial, Helvetica, sans-serif"
         font-size="100" font-weight="500" fill="#00CC00">mo</text>
 
-  <!-- Courbe "N" stylisée entre o et t -->
-  <path d="M 165 150 Q 205 60 245 150"
-        stroke="#0033FF" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <!-- Courbe "N" plus fine et centrée, légèrement sous les lettres -->
+  <path d="M 158 153 Q 205 65 252 153"
+        stroke="#0033FF" stroke-width="6" fill="none" stroke-linecap="round"/>
 
   <!-- Texte "tes" -->
   <text x="250" y="160" font-family="Arial, Helvetica, sans-serif"
