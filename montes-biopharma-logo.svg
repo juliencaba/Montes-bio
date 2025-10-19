@@ -4,11 +4,11 @@
         font-size="100" font-weight="500" fill="#00CC00">mo</text>
 
   <!-- Courbe "N" plus fine et centrée, légèrement sous les lettres -->
-  <path d="M 158 175 Q 190 30 225 175"
+  <path d="M 158 175 Q 250 30 225 175"
         stroke="#0033FF" stroke-width="6" fill="none" stroke-linecap="round"/>
 
   <!-- Texte "tes" -->
-  <text x="228" y="160" font-family="Arial, Helvetica, sans-serif"
+  <text x="227" y="160" font-family="Arial, Helvetica, sans-serif"
         font-size="100" font-weight="500" fill="#00CC00">tes</text>
 
   <!-- Texte "BioPharma" -->
