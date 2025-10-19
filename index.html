@@ -646,7 +646,7 @@ ${refs.length ? refs.join('\n') : 'Aucune référence sélectionnée pour le mom
       // entête
       const headerY = margin;
       if(logoData){
-        try{ pdf.addImage(logoData, 'PNG', margin, headerY-8, 160, 40, undefined, 'FAST'); }catch(e){}
+        try{ pdf.addImage(logoData, 'jpg', margin, headerY-8, 160, 40, undefined, 'FAST'); }catch(e){}
       }
 
       // Titre et sous-titre
