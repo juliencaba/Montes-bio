@@ -4,7 +4,7 @@
         font-size="100" font-weight="500" fill="#00CC00">mo</text>
 
   <!-- Courbe "N" plus fine et centrée, légèrement sous les lettres -->
-  <path d="M 158 153 Q 215 65 242 153"
+  <path d="M 158 153 Q 200 65 242 153"
         stroke="#0033FF" stroke-width="6" fill="none" stroke-linecap="round"/>
 
   <!-- Texte "tes" -->
