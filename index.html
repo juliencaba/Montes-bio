@@ -3,24 +3,19 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Montes BioPharma — Assistant Littérature & Synthèse</title>
+<title>Montes BioPharma — Assistant Littérature (Europe PMC)</title>
 <meta name="color-scheme" content="dark"/>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
 <style>
 :root{
-  --bg1:#060b19;--bg2:#0b1326;
-  --text:#eaf2ff;--muted:#a6b8d6;
-  --g:#7CF45B;--b:#2456FF;
-  --glass:rgba(15,26,45,.42);
-  --border:rgba(124,244,91,.38);
-  --inner:rgba(36,86,255,.10);
-  --radius:16px;
+  --bg1:#060b19;--bg2:#0b1326;--text:#eaf2ff;--muted:#a6b8d6;
+  --g:#7CF45B;--b:#2456FF;--glass:rgba(15,26,45,.42);
+  --border:rgba(124,244,91,.38);--inner:rgba(36,86,255,.10);--radius:16px;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;font-family:Roboto,system-ui,-apple-system,"Segoe UI",Ubuntu,"Helvetica Neue",Arial,sans-serif;color:var(--text);
+  margin:0;font-family:Roboto,system-ui,-apple-system,"Segoe UI",Ubuntu,Arial,sans-serif;color:var(--text);
   background:
     radial-gradient(1000px 500px at 20% -10%, rgba(36,86,255,.22), transparent 60%),
     radial-gradient(900px 480px at 85% -8%, rgba(124,244,91,.12), transparent 65%),
@@ -50,14 +45,12 @@ header{
 
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), var(--glass);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
+  border:1px solid var(--border);border-radius:var(--radius);
   box-shadow:0 18px 40px rgba(0,0,0,.55), inset 0 0 0 1px var(--inner);
   backdrop-filter: blur(12px) saturate(120%);
   padding:20px;margin-bottom:18px;
 }
-.muted{color:var(--muted)}
-a{color:var(--g)} a:hover{text-decoration:underline}
+.muted{color:var(--muted)} a{color:var(--g)} a:hover{text-decoration:underline}
 .btn{
   appearance:none;border:none;cursor:pointer;font-weight:700;border-radius:12px;
   padding:12px 18px;background:linear-gradient(90deg,var(--g),var(--b));color:#02121f;
@@ -67,23 +60,18 @@ a{color:var(--g)} a:hover{text-decoration:underline}
 .controls{display:flex;gap:10px;flex-wrap:wrap}
 
 .step{display:none} .step.active{display:block}
-
 .grid{display:grid;gap:14px}
 .row{display:grid;gap:10px}
 @media(min-width:760px){.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr 1fr}}
-
 input,select,textarea{
   width:100%;background:rgba(9,20,40,.55);color:var(--text);
-  border:1px solid rgba(124,244,91,.30);border-radius:12px;padding:12px 14px;
-  outline:none;backdrop-filter: blur(6px);
-  transition:border .2s, box-shadow .2s, background .2s;
-  box-shadow: inset 0 0 0 1px rgba(36,86,255,.10);
+  border:1px solid rgba(124,244,91,.30);border-radius:12px;padding:12px 14px;outline:none;backdrop-filter: blur(6px);
+  transition:border .2s, box-shadow .2s, background .2s;box-shadow: inset 0 0 0 1px rgba(36,86,255,.10);
 }
 input:focus,select:focus,textarea:focus{
   border-color:var(--g);background:rgba(9,20,40,.68);
   box-shadow:0 0 0 3px rgba(124,244,91,.18), inset 0 0 0 1px rgba(36,86,255,.12);
 }
-
 .pub-card{
   border:1px solid rgba(124,244,91,.28);border-radius:14px;padding:12px;
   background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%), rgba(12,21,42,.38);
@@ -91,6 +79,7 @@ input:focus,select:focus,textarea:focus{
 }
 .tag{font-size:11px;padding:4px 8px;border:1px solid rgba(124,244,91,.28);border-radius:999px;color:#cfe6ff;background:rgba(9,20,40,.45)}
 hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
+pre#preview{white-space:pre-wrap}
 </style>
 </head>
 <body>
@@ -100,7 +89,7 @@ hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
   <div class="nav">
     <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo">
     <div class="brand">Montes BioPharma</div>
-    <div style="margin-left:auto" class="muted">Assistant Littérature (client-side)</div>
+    <div style="margin-left:auto" class="muted">Assistant Littérature — Europe PMC (CORS OK)</div>
   </div>
 </header>
 
@@ -113,7 +102,7 @@ hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
   <!-- Étape 1: Contexte -->
   <section id="step1" class="card step active">
     <h2>Étape 1 — Contexte & conformité</h2>
-    <p class="muted">Usage strictement professionnel. Cette application fournit une <em>ossature documentaire</em> basée sur la littérature PubMed. <strong>Aucun paramètre expérimental ni protocole opératoire n’est fourni.</strong></p>
+    <p class="muted">Usage strictement professionnel. Cette application fournit une <em>ossature documentaire</em> basée sur la littérature. <strong>Aucun paramètre expérimental ni protocole opératoire n’est fourni.</strong></p>
     <label style="display:flex;align-items:flex-start;gap:10px;margin-top:8px">
       <input type="checkbox" id="compliance" style="width:auto;margin-top:4px">
       <span>Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.</span>
@@ -143,7 +132,7 @@ hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
       </div>
     </div>
     <div class="row" style="margin-top:8px">
-      <div><label>Mots-clés complémentaires (PubMed)</label><input id="keywords" placeholder="chromatography, anion exchange, membrane, affinity"></div>
+      <div><label>Mots-clés complémentaires</label><input id="keywords" placeholder="chromatography, anion exchange, membrane, affinity"></div>
     </div>
     <div class="controls" style="margin-top:12px">
       <button class="btn secondary" id="back2">Retour</button>
@@ -151,9 +140,9 @@ hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
     </div>
   </section>
 
-  <!-- Étape 3: Recherche PubMed -->
+  <!-- Étape 3: Recherche Europe PMC -->
   <section id="step3" class="card step">
-    <h2>Étape 3 — Recherche PubMed (réelle via proxy)</h2>
+    <h2>Étape 3 — Recherche (Europe PMC, abstracts réels)</h2>
     <div class="row row-2">
       <div>
         <label>Fenêtre (années récentes)</label>
@@ -189,7 +178,7 @@ hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
   <!-- Étape 4: Sélection & analyse -->
   <section id="step4" class="card step">
     <h2>Étape 4 — Sélection des articles & analyse ciblée</h2>
-    <p class="muted">Coche <strong>au moins 5 articles</strong> puis lance l’analyse. Nous extrayons des phrases pertinentes des <em>abstracts PubMed</em> en fonction des techniques choisies. <strong>Les paramètres opératoires sont masqués automatiquement.</strong></p>
+    <p class="muted">Coche <strong>au moins 5 articles</strong> puis lance l’analyse. Nous extrayons des phrases pertinentes des <em>abstracts</em> en fonction des techniques choisies. <strong>Les paramètres opératoires sont masqués automatiquement.</strong></p>
     <div class="controls">
       <button class="btn" id="analyzeBtn">Analyser les articles sélectionnés</button>
       <span id="selInfo" class="muted"></span>
@@ -205,7 +194,7 @@ hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
   <!-- Étape 5: Aperçu & PDF -->
   <section id="step5" class="card step">
     <h2>Étape 5 — Aperçu & export PDF</h2>
-    <pre id="preview" style="white-space:pre-wrap"></pre>
+    <pre id="preview"></pre>
     <div class="controls" style="margin-top:10px">
       <button class="btn" id="exportPdf">Exporter le PDF</button>
       <button class="btn secondary" id="restart">Recommencer</button>
@@ -213,7 +202,7 @@ hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
   </section>
 
   <p class="muted" style="text-align:center;margin:28px 0 48px">
-    © <span id="year"></span> Montes BioPharma — Données issues de PubMed (NCBI E-utilities) via proxy CORS pour usage client-side.
+    © <span id="year"></span> Montes BioPharma — Données issues d’Europe PMC (CORS OK). Aucun protocole expérimental.
   </p>
 </main>
 
@@ -221,9 +210,7 @@ hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 
 <script>
-/* =========================
-   Particules flottantes
-========================= */
+/* ========= Particules dérivantes ========= */
 const cv=document.getElementById('particlesCanvas'),cx=cv.getContext('2d');let W,H,PTS=[];
 function size(){W=cv.width=innerWidth;H=cv.height=innerHeight} size(); addEventListener('resize',size);
 function R(a,b){return a+Math.random()*(b-a)}
@@ -234,17 +221,11 @@ for(const p of PTS){p.t+=.02;const a=.2+.4*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.v
 if(p.x<-5)p.x=W+5;if(p.x>W+5)p.x=-5;if(p.y<-5){p.y=H+5;p.x=Math.random()*W;}
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(124,244,91,${a})`;cx.shadowColor='rgba(124,244,91,.75)';cx.shadowBlur=8;cx.fill();cx.shadowBlur=0;}})();
 
-/* =========================
-   Navigation du wizard
-========================= */
+/* ========= Wizard nav ========= */
 const steps=['step1','step2','step3','step4','step5'];
 function show(id){steps.forEach(s=>document.getElementById(s).classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
 document.getElementById('year').textContent=new Date().getFullYear();
-
-document.getElementById('to2').onclick=()=>{
-  if(!document.getElementById('compliance').checked){alert("Merci de confirmer l'usage professionnel.");return;}
-  show('step2');
-};
+document.getElementById('to2').onclick=()=>{if(!document.getElementById('compliance').checked){alert("Merci de confirmer l'usage professionnel.");return;}show('step2');};
 document.getElementById('back2').onclick=()=>show('step1');
 document.getElementById('to3').onclick=()=>show('step3');
 document.getElementById('back3').onclick=()=>show('step2');
@@ -253,18 +234,15 @@ document.getElementById('back4').onclick=()=>show('step3');
 document.getElementById('to5').onclick=()=>show('step5');
 document.getElementById('restart').onclick=()=>{localStorage.removeItem('mbp_state');location.reload();};
 
-/* =========================
-   État & outils
-========================= */
+/* ========= État & utilitaires ========= */
 const state={
   vector:"", serotype:"", cellLine:"",
   techniques:[],
   yearsWindow:2, retMax:10,
-  articles:[],        // [{pmid,title,source,year,authors,selected}]
-  abstracts:{},       // pmid -> text
-  summaries:{}        // pmid -> {Technique: "bullets ..."}
+  articles:[],      // {id, pmid, source, title, year, authors, selected}
+  abstracts:{},     // id -> abstract text
+  summaries:{}      // id -> {Technique: "..."}
 };
-
 const TECH_KEYWORDS={
   Clarification:["clarification","depth filter","microfiltration","centrifugation","filter"],
   Capture:["capture","affinity","anion exchange","aex","ion exchange","chromatography","membrane"],
@@ -277,85 +255,71 @@ const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?
 function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
 function esc(s){return (s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
 
-/* =========================
-   Recherche PubMed via CORS proxy
-========================= */
-const UA={'User-Agent':'MontesBioPharma/1.0 (client-side demo)'};
-// IMPORTANT : proxy CORS pour usage client-side
-const BASE='https://corsproxy.io/?https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
+/* ========= Europe PMC (CORS OK) =========
+   - Recherche : /rest/search?query=...&pageSize=...&format=json
+   - Abstract : /rest/{src}/{id}/abstractText?format=plain
+   Sources possibles: MED (PubMed), PMC. */
+document.getElementById('runSearch').onclick=runSearchEPMC;
 
-document.getElementById('runSearch').onclick=runSearch;
-async function runSearch(){
-  // paramètres
+async function runSearchEPMC(){
   state.vector=document.getElementById('vector').value.trim()||'adenovirus';
   state.serotype=document.getElementById('serotype').value.trim();
   state.cellLine=document.getElementById('cellLine').value.trim();
-  const extra=(document.getElementById('keywords').value||'').split(',').map(x=>x.trim()).filter(Boolean);
+  const extra=(document.getElementById('keywords').value||'').split(',').map(s=>s.trim()).filter(Boolean);
   state.yearsWindow=+document.getElementById('yearsWindow').value||2;
   state.retMax=+document.getElementById('retMax').value||10;
 
   const minYear=(new Date().getFullYear()-state.yearsWindow);
-  const terms=[
-    state.vector,
-    state.serotype,
-    state.cellLine,
-    ...extra
-  ].filter(Boolean).join(' ');
-  const esearch=`${BASE}esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax=${encodeURIComponent(state.retMax)}&term=${encodeURIComponent(terms)}+AND+(${minYear}%3A3000%5Bdp%5D)`;
-  document.getElementById('searchInfo').textContent="Recherche en cours…";
-  let ids=[];
-  try{
-    const r=await fetch(esearch,{headers:UA});
-    const js=await r.json();
-    ids=js.esearchresult?.idlist||[];
-  }catch(e){
-    console.error(e);
-    document.getElementById('searchInfo').textContent="⚠️ Erreur CORS/réseau (proxy).";
-    return;
-  }
-  if(!ids.length){
-    document.getElementById('results').innerHTML='<div class="card">Aucun article trouvé. Élargis les mots-clés.</div>';
-    document.getElementById('searchInfo').textContent="";
-    return;
-  }
+  // Requête Europe PMC : filtres + année + abstract
+  const terms=[state.vector,state.serotype,state.cellLine,...extra].filter(Boolean).join(' ');
+  const q = `${terms} AND PUB_YEAR:[${minYear} TO 3000] AND HAS_ABSTRACT:Y`;
+  const url = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent(q)}&pageSize=${state.retMax}&format=json&sort_date:y`;
 
-  const esum=`${BASE}esummary.fcgi?db=pubmed&retmode=json&id=${ids.join(',')}`;
+  document.getElementById('searchInfo').textContent="Recherche en cours…";
   try{
-    const r=await fetch(esum,{headers:UA});
-    const js=await r.json();
-    const recs=Object.values(js.result||{}).filter(v=>v?.uid);
-    state.articles=recs.map(r=>({
-      pmid:r.uid,
-      title:r.title||'',
-      source:r.fulljournalname||r.source||'',
-      year:(r.pubdate||'').slice(0,4),
-      authors:(r.authors||[]).map(a=>a.name).slice(0,6),
-      selected:false
-    }));
+    const r=await fetch(url);
+    const j=await r.json();
+    const res=(j.resultList?.result)||[];
+    state.articles = res.map(x=>{
+      // id & source : MED + pmid, ou PMC + pmcid
+      const id = x.pmid ? x.pmid : x.pmcid;
+      const src = x.pmid ? 'MED' : 'PMC';
+      return {
+        id, src,
+        pmid: x.pmid || '',
+        title: x.title || '',
+        source: x.journalTitle || x.source || '',
+        year: x.pubYear || '',
+        authors: (x.authorString||'').split(', ').slice(0,6),
+        selected:false,
+        hasAbstractInline: !!x.abstractText,
+        abstractInline: x.abstractText || ''
+      };
+    });
     renderResults();
+    document.getElementById('searchInfo').textContent=`${state.articles.length} article(s) — Europe PMC (CORS OK).`;
   }catch(e){
     console.error(e);
-    document.getElementById('results').innerHTML='<div class="card">Erreur de lecture des métadonnées (esummary).</div>';
+    document.getElementById('results').innerHTML='<div class="card">Erreur Europe PMC (réseau).</div>';
+    document.getElementById('searchInfo').textContent='';
   }
-  document.getElementById('searchInfo').textContent=`${state.articles.length} article(s) — source: PubMed (via proxy).`;
 }
 
 function renderResults(){
-  const box=document.getElementById('results');
-  box.innerHTML='';
+  const box=document.getElementById('results'); box.innerHTML='';
   state.articles.forEach(a=>{
-    const el=document.createElement('div');
-    el.className='pub-card';
+    const el=document.createElement('div'); el.className='pub-card';
+    const pubLink = a.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/` : `https://europepmc.org/article/${a.src}/${a.id}`;
     el.innerHTML=`
       <label style="display:flex;gap:10px;align-items:flex-start">
-        <input type="checkbox" data-id="${a.pmid}" style="width:auto;margin-top:4px">
+        <input type="checkbox" data-id="${a.id}" style="width:auto;margin-top:4px">
         <div>
           <div><strong>${esc(a.title)}</strong></div>
           <div class="muted">${esc(a.source)} · ${esc(a.year||'—')}</div>
           <div class="muted">Auteurs: ${esc(a.authors.join(', '))}</div>
           <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
-            <span class="tag">PMID: ${a.pmid}</span>
-            <a class="tag" href="https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/" target="_blank" rel="noopener noreferrer">Voir sur PubMed</a>
+            <span class="tag">${a.src}:${a.id}${a.pmid?` · PMID:${a.pmid}`:''}</span>
+            <a class="tag" href="${pubLink}" target="_blank" rel="noopener noreferrer">Voir l’article</a>
           </div>
         </div>
       </label>`;
@@ -369,59 +333,52 @@ function renderResults(){
 
 function updateSelectionInfo(){
   const n=state.articles.filter(a=>a.selected).length;
-  const selInfo=document.getElementById('selInfo');
-  if(selInfo) selInfo.textContent=`${n} article(s) sélectionné(s) — minimum requis : 5`;
-  // liste courte sous Étape 4
+  const txt=`${n} article(s) sélectionné(s) — minimum requis : 5`;
+  const selInfo=document.getElementById('selInfo'); if(selInfo) selInfo.textContent=txt;
   const L=document.getElementById('selectedList');
   if(!L) return;
   const chosen=state.articles.filter(a=>a.selected);
   L.innerHTML = chosen.length
-    ? chosen.map(a=>`<div class="pub-card"><strong>${esc(a.title)}</strong><div class="muted">${esc(a.source)} · ${esc(a.year||'—')} — PMID: ${a.pmid}</div></div>`).join('')
+    ? chosen.map(a=>`<div class="pub-card"><strong>${esc(a.title)}</strong><div class="muted">${esc(a.source)} · ${esc(a.year||'—')} — ${a.src}:${a.id}</div></div>`).join('')
     : '<div class="pub-card muted">Aucune sélection pour l’instant.</div>';
 }
 
-/* =========================
-   Analyse ciblée (EFetch)
-========================= */
+/* ========= Analyse (récupère les abstracts réels) ========= */
 document.getElementById('analyzeBtn').onclick=analyzeSelected;
 
 async function analyzeSelected(){
   const chosen=state.articles.filter(a=>a.selected);
   if(chosen.length<5){alert("Sélectionne au moins 5 articles.");return;}
-  const pmids=chosen.map(a=>a.pmid);
-  const efetch=`${BASE}efetch.fcgi?db=pubmed&id=${pmids.join(',')}&retmode=xml`;
-  let xml;
-  try{
-    const r=await fetch(efetch,{headers:UA});
-    const txt=await r.text();
-    xml=new DOMParser().parseFromString(txt,"text/xml");
-  }catch(e){
-    console.error(e); alert("Erreur EFetch (proxy/connexion)."); return;
-  }
-
-  // abstracts
-  state.abstracts={};
-  [...xml.querySelectorAll("PubmedArticle")].forEach(node=>{
-    const pmid=node.querySelector("PMID")?.textContent?.trim();
-    // Plusieurs AbstractText possibles → concat
-    const parts=[...node.querySelectorAll("Abstract AbstractText")].map(n=>n.textContent.trim());
-    state.abstracts[pmid]=(parts.join(" ")||"").replace(/\s+/g," ").trim();
-  });
-
-  // techniques cochées
   const techs=[...document.querySelectorAll('.tech:checked')].map(x=>x.value);
   if(!techs.length){alert("Sélectionne au moins une technique (Étape 2).");return;}
 
-  // résumés par technique
+  // Récup abstracts : si pas en ligne, appelle /rest/{src}/{id}/abstractText?format=plain
+  state.abstracts={};
+  for(const a of chosen){
+    if(a.hasAbstractInline && a.abstractInline){
+      state.abstracts[a.id]=a.abstractInline;
+      continue;
+    }
+    const absUrl = `https://www.ebi.ac.uk/europepmc/webservices/rest/${a.src}/${a.id}/abstractText?format=plain`;
+    try{
+      const r=await fetch(absUrl);
+      const t=await r.text();
+      state.abstracts[a.id]=t||'';
+    }catch(e){
+      console.error(e); state.abstracts[a.id]='';
+    }
+  }
+
+  // Génère résumés par technique (extraction de phrases contenant mots-clés)
   state.summaries={};
   chosen.forEach(a=>{
-    const abs=state.abstracts[a.pmid]||"";
+    const abs=(state.abstracts[a.id]||'').replace(/\s+/g,' ').trim();
     const perTech={};
     techs.forEach(t=>{
       const bullets = extractBullets(abs, t);
       perTech[t] = bullets.length ? bullets.map(b=>sanitize(b)).join(" • ") : "(aucune phrase saillante trouvée dans l’abstract pour cette technique)";
     });
-    state.summaries[a.pmid]=perTech;
+    state.summaries[a.id]=perTech;
   });
 
   renderPreview();
@@ -432,16 +389,11 @@ function extractBullets(text, tech){
   if(!text) return [];
   const kws=(TECH_KEYWORDS[tech]||[]).map(k=>k.toLowerCase());
   const sentences=text.split(/(?<=[\.\!\?])\s+/);
-  const hits=sentences.filter(s=>{
-    const low=s.toLowerCase();
-    return kws.some(k=>low.includes(k));
-  });
+  const hits=sentences.filter(s=>kws.some(k=>s.toLowerCase().includes(k)));
   return hits.slice(0,5).map(s=>s.replace(/\s+/g,' ').trim());
 }
 
-/* =========================
-   Aperçu & Export PDF
-========================= */
+/* ========= Aperçu & Export PDF ========= */
 function renderPreview(){
   const meta=[
     document.getElementById('vector').value?`Vecteur : ${document.getElementById('vector').value}`:null,
@@ -451,13 +403,16 @@ function renderPreview(){
 
   const techs=[...document.querySelectorAll('.tech:checked')].map(x=>x.value);
   const chosen=state.articles.filter(a=>a.selected);
-  const refs=chosen.map(a=>`- ${a.title} (${a.year||'—'}), ${a.source}. PMID:${a.pmid} — https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/`).join('\n');
+  const refs=chosen.map(a=>{
+    const link = a.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/` : `https://europepmc.org/article/${a.src}/${a.id}`;
+    return `- ${a.title} (${a.year||'—'}), ${a.source}. ${a.pmid?`PMID:${a.pmid}; `:''}${a.src}:${a.id} — ${link}`;
+  }).join('\n');
 
   let synth='';
   techs.forEach(t=>{
     synth+=`### ${t}\n`;
     chosen.forEach(a=>{
-      const s=state.summaries[a.pmid]?.[t];
+      const s=state.summaries[a.id]?.[t];
       if(s) synth+=`• ${a.title} — ${s}\n`;
     });
     synth+='\n';
@@ -468,20 +423,19 @@ function renderPreview(){
 ${meta||''}
 
 ## 1. Portée et principes
-Synthèse bibliographique ciblée (PubMed) des techniques sélectionnées. Ce document est une **ossature documentaire** : il **n’inclut aucun paramètre expérimental** ni instruction opératoire. Les détails proviennent de vos **SOP internes validées**.
+Synthèse bibliographique ciblée (Europe PMC) des techniques sélectionnées. Ce document est une **ossature documentaire** : il **n’inclut aucun paramètre expérimental** ni instruction opératoire. Les détails proviennent de vos **SOP internes validées**.
 
 ## 2. Techniques sélectionnées
 ${techs.length?techs.join(', '):'(aucune)'}
 
-## 3. Synthèses par techniques (extraits d’abstracts PubMed)
+## 3. Synthèses par techniques (extraits d’abstracts)
 ${synth || '(Aucune analyse disponible.)'}
 
-## 4. Références PubMed
+## 4. Références
 ${refs || '(Aucune)'}
 `;
   document.getElementById('preview').textContent=outline;
 }
-
 document.getElementById('exportPdf').onclick=exportPDF;
 
 async function exportPDF(){
