@@ -1,780 +1,225 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Montes BioPharma — Assistant Littérature & Synthèse</title>
-  <meta name="color-scheme" content="dark"/>
-  <!-- Roboto -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg-1:#060b19;
-      --bg-2:#0b1326;
-      --text:#eaf2ff;
-      --muted:#a6b8d6;
-      --accentG:#7CF45B;
-      --accentB:#2456FF;
-      --card: rgba(15, 26, 45, .42);
-      --card-border: rgba(124,244,91,.38);
-      --card-inner: rgba(36,86,255,.10);
-      --radius:16px;
-      --shadow:0 18px 40px rgba(0,0,0,.55);
-      --glowG:0 0 36px rgba(124,244,91,.58);
-      --glowB:0 0 34px rgba(36,86,255,.42);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;font-family:Roboto,system-ui,-apple-system,"Segoe UI",Ubuntu,"Helvetica Neue",Arial,sans-serif;color:var(--text);
-      background:
-        radial-gradient(1000px 500px at 20% -10%, rgba(36,86,255,.22), transparent 60%),
-        radial-gradient(900px 480px at 85% -8%, rgba(124,244,91,.12), transparent 65%),
-        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 40%, #0a1122 100%);
-      overflow-x:hidden;
-    }
-    #particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
-
-    header{
-      position:sticky;top:0;z-index:3;
-      background:linear-gradient(90deg, rgba(124,244,91,.10), rgba(36,86,255,.16));
-      backdrop-filter:saturate(160%) blur(10px);
-      border-bottom:1px solid rgba(124,244,91,.22);
-    }
-    .nav{max-width:1180px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;}
-    .logo{display:block;height:auto;width:auto;object-fit:contain;}
-    .brand{font-weight:700;letter-spacing:.35px;color:#eaf2ff}
-
-    .container{max-width:1180px;margin:28px auto;padding:0 18px;position:relative;z-index:2}
-
-    .hero{display:flex;align-items:center;gap:16px;margin:16px 0 14px}
-    .hero h1{
-      margin:0;font-size:clamp(22px, 4vw, 36px);
-      background:linear-gradient(90deg, var(--accentG), var(--accentB));
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-      text-shadow:var(--glowG), var(--glowB);
-    }
-
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%), var(--card);
-      border-radius:var(--radius);
-      border:1px solid var(--card-border);
-      box-shadow: var(--shadow), inset 0 0 0 1px var(--card-inner);
-      backdrop-filter: blur(12px) saturate(120%);
-      padding:20px;
-    }
-
-    .progress{height:12px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden;
-      box-shadow: inset 0 0 12px rgba(124,244,91,.15), inset 0 0 14px rgba(36,86,255,.12);}
-    .progress>span{display:block;height:100%;width:0%;
-      background:linear-gradient(90deg, var(--accentG), var(--accentB));
-      box-shadow:var(--glowG), var(--glowB);transition:width .45s cubic-bezier(.2,.7,.2,1);}
-
-    .steps{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
-    .chip{--size:42px;width:var(--size);height:var(--size);border-radius:50%;
-      display:grid;place-items:center;color:#b9c9e6;border:1px solid rgba(124,244,91,.38);
-      background:linear-gradient(180deg, rgba(9,20,40,.48), rgba(9,20,40,.30));
-      box-shadow: inset 0 2px 10px rgba(36,86,255,.16), inset 0 -2px 10px rgba(124,244,91,.18);
-      font-weight:700;font-size:14px;transition:.2s;backdrop-filter: blur(8px);}
-    .chip.active{color:#061427;border-color:transparent;background:linear-gradient(135deg, rgba(124,244,91,.95), rgba(36,86,255,.95));box-shadow:var(--glowG), var(--glowB);transform:translateY(-1px);}
-
-    .grid{display:grid;gap:16px}
-    .row{display:grid;gap:12px}
-    @media(min-width:760px){.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr 1fr}}
-
-    label{display:block;font-size:14px;margin-bottom:6px;color:var(--muted)}
-    input,select,textarea{
-      width:100%;background:rgba(9,20,40,.55);color:var(--text);
-      border:1px solid rgba(124,244,91,.30);border-radius:12px;padding:12px 14px;
-      outline:none;backdrop-filter: blur(6px);
-      transition:border .2s, box-shadow .2s, background .2s;
-      box-shadow: inset 0 0 0 1px rgba(36,86,255,.10);
-    }
-    input:focus,select:focus,textarea:focus{
-      border-color:var(--accentG);
-      background:rgba(9,20,40,.68);
-      box-shadow: 0 0 0 3px rgba(124,244,91,.18), inset 0 0 0 1px rgba(36,86,255,.12);
-    }
-
-    .btn{
-      border:none;cursor:pointer;font-weight:700;padding:12px 18px;border-radius:12px;
-      background:linear-gradient(90deg, var(--accentG), var(--accentB));color:#02121f;
-      box-shadow:0 10px 28px rgba(36,86,255,.24), 0 10px 28px rgba(124,244,91,.28);
-      transition: transform .06s, box-shadow .2s, filter .2s;
-    }
-    .btn:hover{filter:brightness(1.06);box-shadow:0 14px 36px rgba(36,86,255,.28),0 14px 36px rgba(124,244,91,.32)}
-    .btn:active{transform:translateY(1px)}
-    .btn.secondary{background:rgba(9,20,40,.55);color:var(--text);border:1px solid rgba(124,244,91,.35)}
-    .btn.ghost{background:transparent;color:var(--text);border:1px dashed rgba(124,244,91,.38)}
-
-    .step-card{border:1px solid var(--card-border);border-radius:14px;padding:16px;
-      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%), rgba(12,21,42,.38);
-      backdrop-filter: blur(10px) saturate(120%);box-shadow: inset 0 0 0 1px var(--card-inner);}
-    .step-card h3{margin:0;font-size:16px;color:var(--accentG);text-shadow:0 0 10px rgba(124,244,91,.35);}
-    .step-card p{margin:0;color:#cfe0ff}
-
-    .step{display:none}.step.active{display:block}
-
-    .pub-card{border:1px solid rgba(124,244,91,.28);border-radius:14px;padding:12px;
-      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%), rgba(12,21,42,.38);
-      display:grid;gap:8px;backdrop-filter: blur(10px) saturate(120%);box-shadow: inset 0 0 0 1px rgba(36,86,255,.10);}
-    .pub-actions{display:flex;gap:8px;flex-wrap:wrap}
-    .tag{font-size:11px;padding:4px 8px;border:1px solid rgba(124,244,91,.28);border-radius:999px;color:#cfe6ff;background:rgba(9,20,40,.45)}
-    .score{font-weight:700;color:var(--accentG);text-shadow:0 0 6px rgba(124,244,91,.5)}
-    .muted{color:var(--muted)}
-    .footer{text-align:center;color:var(--muted);font-size:12px;padding:18px 0 48px}
-    a{color:var(--accentG);text-decoration:none}a:hover{text-decoration:underline}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Montes BioPharma — Assistant IA PubMed</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="color-scheme" content="dark"/>
+<style>
+:root{
+  --bg1:#060b19;--bg2:#0b1326;--text:#eaf2ff;--muted:#a6b8d6;
+  --g:#7CF45B;--b:#2456FF;--card:rgba(15,26,45,.42);--border:rgba(124,244,91,.38);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Roboto,Arial,sans-serif;color:var(--text);
+background:radial-gradient(1000px 500px at 20% -10%,rgba(36,86,255,.22),transparent 60%),
+radial-gradient(900px 480px at 85% -8%,rgba(124,244,91,.12),transparent 65%),
+linear-gradient(180deg,var(--bg1),var(--bg2) 40%,#0a1122 100%);}
+header{position:sticky;top:0;z-index:5;
+background:linear-gradient(90deg,rgba(124,244,91,.10),rgba(36,86,255,.16));
+backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
+.nav{max-width:1100px;margin:auto;padding:10px 18px;display:flex;align-items:center;gap:10px}
+.logo{height:42px}
+.container{max-width:1100px;margin:25px auto;padding:0 18px;position:relative;z-index:1}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+padding:18px;margin-bottom:20px;backdrop-filter:blur(10px)}
+.btn{cursor:pointer;background:linear-gradient(90deg,var(--g),var(--b));color:#02121f;
+border:none;border-radius:10px;padding:10px 16px;font-weight:700;margin-top:8px}
+.btn.secondary{background:rgba(9,20,40,.6);color:var(--text);border:1px solid rgba(124,244,91,.3)}
+.pub-card{background:rgba(12,21,42,.38);border:1px solid rgba(124,244,91,.25);border-radius:12px;padding:10px;margin-bottom:8px}
+.muted{color:var(--muted)}a{color:var(--g)}
+.step{display:none}.step.active{display:block}
+#particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+</style>
 </head>
 <body>
-  <!-- Particules -->
-  <canvas id="particlesCanvas"></canvas>
-
-  <!-- Header + Logo -->
-  <header>
-    <div class="nav">
-      <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo" style="height:42px"/>
-      <div class="brand">Montes BioPharma</div>
-      <div style="margin-left:auto" class="muted">Assistant Littérature</div>
-    </div>
-  </header>
-
-  <main class="container">
-    <div class="hero">
-      <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo"
-           style="height:78px;filter:drop-shadow(0 10px 26px rgba(124,244,91,.30)) drop-shadow(0 12px 30px rgba(36,86,255,.22))"/>
-      <h1>Purification Adénovirus — Sélection et Synthèse bibliographique</h1>
-    </div>
-
-    <!-- Progress -->
-    <div class="card">
-      <div class="progress"><span id="progressBar"></span></div>
-      <div class="steps" id="stepsChips"></div>
-    </div>
-
-    <!-- Wizard -->
-    <section class="card">
-      <!-- Étape 1 -->
-      <div id="step-1" class="step active" data-title="1">
-        <div class="grid">
-          <div class="step-card">
-            <h3>Étape 1 — Contexte & conformité</h3>
-            <p class="muted">Usage strictement professionnel. L’application génère une <em>ossature documentaire</em> basée sur la littérature (pas de paramètres expérimentaux ni de protocoles opératoires).</p>
-          </div>
-
-          <div class="row row-2">
-            <div>
-              <label>Organisation / Société</label>
-              <input id="org" placeholder="ex: Thermo Fisher Scientific" />
-            </div>
-            <div>
-              <label>Rôle</label>
-              <input id="role" placeholder="ex: GMP Operations Manager" />
-            </div>
-          </div>
-
-          <div class="step-card">
-            <label style="display:flex; gap:10px; align-items:flex-start">
-              <input type="checkbox" id="complianceChk" style="width:auto;margin-top:3px"/>
-              <span>Je confirme être un professionnel au sein d’une organisation habilitée et n’utiliser que des <strong>SOP internes approuvées</strong>. Pas d’usage domestique.</span>
-            </label>
-          </div>
-
-          <div style="display:flex; gap:10px; margin-top:4px">
-            <button class="btn" data-next>Continuer</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Étape 2 -->
-      <div id="step-2" class="step" data-title="2">
-        <div class="step-card"><h3>Étape 2 — Paramètres & techniques ciblées</h3></div>
-        <div class="row row-3">
-          <div>
-            <label>Type de vecteur</label>
-            <select id="vectorType">
-              <option value="">— Sélectionner —</option>
-              <option>Adénovirus</option>
-              <option disabled>Autres (désactivés)</option>
-            </select>
-          </div>
-          <div>
-            <label>Sérotype</label>
-            <input id="serotype" placeholder="ex: Ad5"/>
-          </div>
-          <div>
-            <label>Lignée cellulaire</label>
-            <input id="cellLine" placeholder="ex: HEK293 / PER.C6"/>
-          </div>
-        </div>
-
-        <div class="step-card">
-          <h3>Techniques (Downstream)</h3>
-          <div class="row row-3">
-            <label><input type="checkbox" class="tech" value="Clarification"/> Clarification</label>
-            <label><input type="checkbox" class="tech" value="Capture"/> Capture (ex. Affinité/AEX)</label>
-            <label><input type="checkbox" class="tech" value="Polishing"/> Polishing</label>
-            <label><input type="checkbox" class="tech" value="TFF"/> TFF (Concentration/Échange de tampon)</label>
-            <label><input type="checkbox" class="tech" value="QC"/> Contrôles qualité (attributs)</label>
-            <label><input type="checkbox" class="tech" value="Formulation"/> Conditionnement/Documentation</label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label>Mots-clés supplémentaires</label>
-            <input id="keywords" placeholder="ex: chromatography, anion exchange, membrane, affinity"/>
-          </div>
-        </div>
-
-        <div style="display:flex; gap:10px; margin-top:10px">
-          <button class="btn secondary" data-prev>Retour</button>
-          <button class="btn" data-next>Continuer</button>
-        </div>
-      </div>
-
-      <!-- Étape 3 : Recherche PubMed -->
-      <div id="step-3" class="step" data-title="3">
-        <div class="step-card"><h3>Étape 3 — Recherche PubMed (réelle)</h3></div>
-        <div class="grid" style="grid-template-columns:1fr 1.2fr; gap:16px">
-          <div class="step-card">
-            <div class="row">
-              <div class="row row-2">
-                <div>
-                  <label>Fenêtre (années récentes)</label>
-                  <select id="yearsWindow">
-                    <option value="1">1 an</option>
-                    <option value="2" selected>2 ans</option>
-                    <option value="5">5 ans</option>
-                    <option value="10">10 ans</option>
-                  </select>
-                </div>
-                <div>
-                  <label>Nombre max. d’articles</label>
-                  <select id="retMax">
-                    <option>5</option><option selected>10</option><option>20</option><option>50</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <button id="runSearch" class="btn">Lancer la recherche</button>
-              </div>
-              <p class="muted">Les résultats proviennent directement de PubMed (NCBI). Tu pourras <strong>sélectionner au moins 5 articles</strong> pour l’analyse ciblée.</p>
-            </div>
-          </div>
-          <div id="pubResults" class="grid"></div>
-        </div>
-        <div style="display:flex; gap:10px; margin-top:10px">
-          <button class="btn secondary" data-prev>Retour</button>
-          <button class="btn" data-next>Continuer</button>
-        </div>
-      </div>
-
-      <!-- Étape 4 : Sélection et analyse -->
-      <div id="step-4" class="step" data-title="4">
-        <div class="step-card"><h3>Étape 4 — Sélection des articles & analyse ciblée</h3></div>
-        <div class="step-card">
-          <p class="muted">Coche <strong>au moins 5 articles</strong> puis clique “Analyser les articles”. L’analyse extrait des phrases pertinentes des abstracts, selon les techniques sélectionnées. Les paramètres opératoires sont automatiquement masqués.</p>
-          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
-            <button id="analyzeBtn" class="btn">Analyser les articles sélectionnés</button>
-            <span id="selectionInfo" class="muted"></span>
-          </div>
-        </div>
-        <div id="selectedList" class="grid" style="margin-top:12px"></div>
-
-        <div style="display:flex; gap:10px; margin-top:12px">
-          <button class="btn secondary" data-prev>Retour</button>
-          <button class="btn" data-next>Continuer</button>
-        </div>
-      </div>
-
-      <!-- Étape 5 : Aperçu & Export -->
-      <div id="step-5" class="step" data-title="5">
-        <div class="step-card"><h3>Étape 5 — Aperçu & export PDF</h3></div>
-        <div id="preview" class="step-card" style="white-space:pre-wrap"></div>
-        <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
-          <button class="btn" id="exportPdf">Exporter en PDF</button>
-          <button class="btn ghost" id="startOver">Recommencer</button>
-          <button class="btn secondary" data-prev>Retour</button>
-        </div>
-      </div>
-    </section>
-
-    <p class="footer">© <span id="year"></span> Montes BioPharma — Synthèse bibliographique client-side (aucun paramètre expérimental).</p>
-  </main>
-
-  <!-- jsPDF -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
-
-  <script>
-    /**********************
-     * ÉTAT & UTILITAIRES *
-     **********************/
-    const THEME = { green:"#7CF45B", blue:"#2456FF", text:"#111", gray:"#555" };
-    const stepsEls = [...document.querySelectorAll('.step')];
-    const bar = document.getElementById('progressBar');
-    const chips = document.getElementById('stepsChips');
-
-    const state = {
-      org:"", role:"",
-      vectorType:"", serotype:"", cellLine:"", keywords:"",
-      techniques:[], // ex ["Clarification","Capture"]
-      yearsWindow:2, retMax:10,
-      articles:[],      // esummary: {pmid,title,source,year,authors,url,selected:false}
-      abstracts:{},     // {pmid: "abstract text"}
-      summaries:{}      // {pmid: {Clarification:"...", Capture:"..."}}
-    };
-
-    const TECH_KEYWORDS = {
-      "Clarification": ["clarification","filtration","depth filter","microfiltration","centrifugation"],
-      "Capture": ["capture","affinity","anion exchange","AEX","IEX","chromatography"],
-      "Polishing": ["polishing","SEC","size exclusion","ion exchange","mixed mode"],
-      "TFF": ["tff","tangential flow","diafiltration","concentration","buffer exchange"],
-      "QC": ["qc","analytics","quality","potency","purity","rca","endotoxin","residual"],
-      "Formulation": ["formulation","stability","storage","buffer selection","excipient"]
-    };
-
-    const REDACT_REGEX = new RegExp(
-      String.raw`\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa)\b`,
-      "gi"
-    );
-
-    function sanitizeText(txt){
-      if(!txt) return "";
-      // masque les paramètres expérimentaux sensibles
-      return txt.replace(REDACT_REGEX, "[…]");
-    }
-
-    function nowYear(){ return new Date().getFullYear(); }
-
-    /****************
-     * INITIALISER  *
-     ****************/
-    function init(){
-      document.getElementById('year').textContent = nowYear();
-
-      // chips
-      chips.innerHTML = stepsEls.map((s,i)=>`<span class="chip" data-chip="${i}">${i+1}</span>`).join('');
-
-      // nav step
-      document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click', ()=>gotoStep(currentStep+1)));
-      document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click', ()=>gotoStep(currentStep-1)));
-
-      // bind champ
-      bind('org'); bind('role'); bind('serotype'); bind('cellLine'); bind('keywords');
-      document.getElementById('vectorType').addEventListener('change', e=>{state.vectorType=e.target.value; persist();});
-      document.querySelectorAll('.tech').forEach(cb=>cb.addEventListener('change', ()=>{
-        state.techniques = [...document.querySelectorAll('.tech:checked')].map(x=>x.value);
-        persist();
-      }));
-      document.getElementById('yearsWindow').addEventListener('change', e=>{state.yearsWindow=+e.target.value; persist();});
-      document.getElementById('retMax').addEventListener('change', e=>{state.retMax=+e.target.value; persist();});
-
-      document.getElementById('runSearch').addEventListener('click', runPubMedSearch);
-      document.getElementById('analyzeBtn').addEventListener('click', analyzeSelected);
-      document.getElementById('exportPdf').addEventListener('click', exportPDF);
-      document.getElementById('startOver').addEventListener('click', ()=>{ localStorage.removeItem('mbp_state'); location.reload(); });
-
-      // restore
-      try{
-        const saved = JSON.parse(localStorage.getItem('mbp_state')||"null");
-        if(saved){ Object.assign(state, saved); hydrate(); }
-      }catch(e){}
-
-      renderPreview();
-      startParticles();
-    }
-
-    function bind(id){
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.addEventListener('input', e=>{ state[id]=e.target.value; persist(); });
-    }
-
-    function hydrate(){
-      const set = (id, v, prop='value')=>{ const el=document.getElementById(id); if(el && v!==undefined) el[prop]=v; };
-      set('vectorType', state.vectorType);
-      set('serotype', state.serotype);
-      set('cellLine', state.cellLine);
-      set('keywords', state.keywords);
-      set('yearsWindow', state.yearsWindow);
-      set('retMax', state.retMax);
-      document.querySelectorAll('.tech').forEach(cb=>{ cb.checked = state.techniques.includes(cb.value); });
-      if(state.articles?.length) renderSearchResults(state.articles);
-      if(Object.keys(state.summaries).length) renderSelectedList();
-    }
-
-    let currentStep = 0;
-    function gotoStep(i){
-      if(i>0){
-        if(!document.getElementById('complianceChk').checked){
-          alert("Veuillez valider la déclaration de conformité (usage professionnel).");
-          return;
-        }
-      }
-      if(i<0 || i>=stepsEls.length) return;
-      stepsEls[currentStep].classList.remove('active');
-      currentStep = i;
-      stepsEls[currentStep].classList.add('active');
-      const percent = Math.round(((currentStep+1)/stepsEls.length)*100);
-      bar.style.width = percent+"%";
-      [...chips.children].forEach((chip,idx)=>chip.classList.toggle('active', idx===currentStep));
-      renderPreview();
-      persist();
-      window.scrollTo({top:0, behavior:'smooth'});
-    }
-
-    function persist(){ localStorage.setItem('mbp_state', JSON.stringify(state)); }
-
-    /**********************
-     * PUBMED — RECHERCHE *
-     **********************/
-    async function runPubMedSearch(){
-      const base = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
-      const kw = [
-        'adenovirus',
-        (state.serotype||'').trim(),
-        (state.cellLine||'').trim(),
-        ...(state.keywords||'').split(',').map(s=>s.trim()).filter(Boolean)
-      ].filter(Boolean).join(' ');
-      const mindate = new Date(); mindate.setFullYear(mindate.getFullYear()- (+state.yearsWindow||2));
-      const yfrom = mindate.getFullYear();
-
-      try{
-        // 1) esearch : ids
-        const esearchUrl = `${base}esearch.fcgi?db=pubmed&retmode=json&sort=date&retmax=${encodeURIComponent(state.retMax||10)}&term=${encodeURIComponent(kw)}+AND+(${yfrom}%3A3000%5Bdp%5D)`;
-        const esResp = await fetch(esearchUrl);
-        const es = await esResp.json();
-        const ids = es.esearchresult?.idlist || [];
-        if(!ids.length){ renderSearchResults([]); alert("Aucun article trouvé. Essaie d’élargir les mots-clés."); return; }
-
-        // 2) esummary : métadonnées
-        const esumUrl = `${base}esummary.fcgi?db=pubmed&retmode=json&id=${ids.join(',')}`;
-        const sumResp = await fetch(esumUrl);
-        const sum = await sumResp.json();
-        const recs = Object.values(sum.result||{}).filter(v=>v?.uid);
-
-        const scored = recs.map(r=>{
-          const title = r.title||'';
-          const journal = r.fulljournalname||r.source||'';
-          const year = (r.pubdate||'').slice(0,4);
-          const authors = (r.authors||[]).map(a=>a.name).slice(0,6);
-          const pmid = r.uid;
-          return {
-            pmid, title, source:journal, year,
-            authors, url: `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`,
-            selected:false
-          };
-        });
-        state.articles = scored;
-        state.summaries = {};
-        state.abstracts = {};
-        renderSearchResults(scored);
-        gotoStep(3); // reste sur l'étape 3 pour voir les résultats
-        persist();
-      }catch(err){
-        console.error(err);
-        alert("Erreur PubMed (réseau ou limites API). Réessaie dans quelques instants.");
-      }
-    }
-
-    function renderSearchResults(list){
-      const box = document.getElementById('pubResults');
-      if(!list.length){ box.innerHTML = '<div class="step-card muted">Aucun résultat pour l’instant.</div>'; return; }
-      box.innerHTML = '';
-      list.forEach(rec=>{
-        const el = document.createElement('div');
-        el.className = 'pub-card';
-        el.innerHTML = `
-          <label style="display:flex;gap:10px;align-items:flex-start">
-            <input type="checkbox" data-pmid="${rec.pmid}" ${rec.selected?'checked':''} style="width:auto;margin-top:4px"/>
-            <div>
-              <div><strong>${escapeHTML(rec.title)}</strong></div>
-              <div class="muted">${escapeHTML(rec.source)} · ${escapeHTML(rec.year||'—')}</div>
-              <div class="muted">Auteurs: ${escapeHTML((rec.authors||[]).join(', '))}</div>
-              <div class="pub-actions" style="margin-top:6px">
-                <span class="tag">PMID: ${rec.pmid}</span>
-                <a class="tag" href="${rec.url}" target="_blank" rel="noopener noreferrer">Voir sur PubMed</a>
-              </div>
-            </div>
-          </label>
-        `;
-        el.querySelector(`input[data-pmid="${rec.pmid}"]`).addEventListener('change', (e)=>{
-          rec.selected = e.target.checked;
-          updateSelectionInfo();
-          persist();
-        });
-        box.appendChild(el);
-      });
-      updateSelectionInfo();
-    }
-
-    function updateSelectionInfo(){
-      const n = state.articles.filter(a=>a.selected).length;
-      const info = document.getElementById('selectionInfo');
-      if(info) info.textContent = `${n} article(s) sélectionné(s) — minimum 5 requis pour l'analyse.`;
-      renderSelectedList();
-    }
-
-    function renderSelectedList(){
-      const cont = document.getElementById('selectedList');
-      if(!cont) return;
-      const sel = state.articles.filter(a=>a.selected);
-      cont.innerHTML = sel.length ? sel.map(a=>`<div class="step-card"><strong>${escapeHTML(a.title)}</strong><div class="muted">${escapeHTML(a.source)} · ${escapeHTML(a.year||'—')} — PMID: ${a.pmid}</div></div>`).join('') : '<div class="step-card muted">Sélection vide.</div>';
-    }
-
-    /*************************
-     * ANALYSE & RÉSUMÉS     *
-     *************************/
-    async function analyzeSelected(){
-      const chosen = state.articles.filter(a=>a.selected);
-      if(chosen.length < 5){ alert("Sélectionne au moins 5 articles."); return; }
-      if(state.techniques.length===0){ alert("Sélectionne au moins une technique (Étape 2)."); return; }
-
-      const pmids = chosen.map(a=>a.pmid);
-      // Récupère les abstracts réels via EFetch (XML)
-      const base = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
-      const efetchUrl = `${base}efetch.fcgi?db=pubmed&id=${pmids.join(',')}&retmode=xml`;
-      let xml;
-      try{
-        const resp = await fetch(efetchUrl);
-        const txt = await resp.text();
-        xml = new window.DOMParser().parseFromString(txt, "application/xml");
-      }catch(err){
-        console.error(err);
-        alert("Erreur lors de la récupération des abstracts (EFetch).");
-        return;
-      }
-
-      // Parse abstracts
-      const abstracts = {};
-      pmids.forEach(pmid=>{
-        const node = xml.querySelector(`PubmedArticle MedlineCitation PMID:contains("${pmid}")`);
-        // Safari ne supporte pas :contains. On passe en plan B : itérer.
-      });
-
-      // Plan B robuste : itérer sur PubmedArticle
-      const arts = [...xml.querySelectorAll("PubmedArticle")];
-      arts.forEach(a=>{
-        const pmidNode = a.querySelector("PMID");
-        const pmid = pmidNode ? pmidNode.textContent.trim() : null;
-        const abst = a.querySelector("Abstract AbstractText");
-        abstracts[pmid] = abst ? abst.textContent.trim() : "";
-      });
-
-      state.abstracts = abstracts;
-
-      // Résumés ciblés par techniques (extraction de phrases contenant les mots-clés)
-      const summaries = {};
-      chosen.forEach(rec=>{
-        const abs = abstracts[rec.pmid] || "";
-        const s = {};
-        state.techniques.forEach(tech=>{
-          const bullets = extractBulletsForTechnique(abs, tech);
-          s[tech] = bullets.length ? bullets.map(b=>sanitizeText(b)).join(" • ") : "(pas d’élément saillant trouvé dans l’abstract pour cette technique)";
-        });
-        summaries[rec.pmid] = s;
-      });
-      state.summaries = summaries;
-      persist();
-      renderPreview();
-      alert("Analyse terminée : les résumés ciblés ont été générés (aperçu disponible à l’étape 5).");
-    }
-
-    function extractBulletsForTechnique(text, tech){
-      if(!text) return [];
-      const kws = (TECH_KEYWORDS[tech]||[]).map(k=>k.toLowerCase());
-      const sentences = splitSentences(text);
-      const hits = sentences.filter(s=>{
-        const low = s.toLowerCase();
-        return kws.some(k=> low.includes(k));
-      });
-      // Limite 3-5 puces informatives
-      return hits.slice(0,5).map(s=>s.replace(/\s+/g,' ').trim());
-    }
-
-    function splitSentences(t){
-      // découpe grossière en phrases
-      return (t||"").split(/(?<=[\.\!\?])\s+/);
-    }
-
-    /***********************
-     * APERÇU & PROTOCOLE  *
-     ***********************/
-    function renderPreview(){
-      // En-tête
-      const meta = [
-        state.org ? `Organisation : ${state.org}` : null,
-        state.role ? `Rôle : ${state.role}` : null,
-        state.vectorType ? `Vecteur : ${state.vectorType}` : null,
-        state.serotype ? `Sérotype : ${state.serotype}` : null,
-        state.cellLine ? `Lignée cellulaire : ${state.cellLine}` : null,
-      ].filter(Boolean).join('\n');
-
-      const techniquesTxt = state.techniques.length ? state.techniques.join(', ') : '(non défini)';
-
-      // Corps : synthèse par techniques à partir des articles sélectionnés
-      const chosen = state.articles.filter(a=>a.selected);
-      const refs = chosen.map(a=>`- ${a.title} (${a.year||'—'}), ${a.source}. PMID:${a.pmid} — ${a.url}`).join('\n');
-
-      let synth = '';
-      state.techniques.forEach(tech=>{
-        synth += `### ${tech}\n`;
-        chosen.forEach(a=>{
-          const s = state.summaries[a.pmid]?.[tech];
-          if(s){
-            synth += `• ${a.title} — ${sanitizeText(s)}\n`;
-          }
-        });
-        synth += '\n';
-      });
-
-      const outline = `# Protocole documentaire — Purification Adénovirus
-${meta}
-
-## 1. Portée et principes
-Synthèse bibliographique ciblée (PubMed) des techniques sélectionnées. Ce document est une **ossature documentaire** et n’inclut **aucun paramètre expérimental**. Les détails opératoires doivent venir de vos SOP internes validées.
-
-## 2. Techniques sélectionnées
-${techniquesTxt}
-
-## 3. Synthèse par techniques (extraits d’abstracts)
-${synth || '(Aucune analyse disponible. Lancez la recherche, sélectionnez ≥ 5 articles, puis “Analyser les articles”.)'}
-
-## 4. Références PubMed
-${refs || '(Aucune)'}
-`;
-      const el = document.getElementById('preview');
-      if(el) el.textContent = outline;
-    }
-
-    /****************
-     * EXPORT PDF   *
-     ****************/
-    async function exportPDF(){
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({unit:'pt', format:'a4'});
-      const M = 56;
-      const W = pdf.internal.pageSize.getWidth();
-      const H = pdf.internal.pageSize.getHeight();
-
-      // fond blanc
-      pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F');
-
-      // logo
-      let logoData = null;
-      try{ logoData = await fetchAsDataURL('./assets/montes-biopharma-logo.svg'); }catch(e){}
-      if(logoData){ try{ pdf.addImage(logoData, 'PNG', M, M-8, 160, 40, undefined, 'FAST'); }catch(e){} }
-
-      // titre
-      setText(pdf, THEME.blue, 18, 'bold');
-      pdf.text('Protocole documentaire — Purification Adénovirus', M + (logoData?180:0), M + 14);
-
-      setText(pdf, '#3a3a3a', 11, 'normal');
-      const metaLine = [
-        state.vectorType?`Vecteur: ${state.vectorType}`:null,
-        state.serotype?`Sérotype: ${state.serotype}`:null,
-        state.cellLine?`Cell Line: ${state.cellLine}`:null
-      ].filter(Boolean).join(' · ');
-      if(metaLine) pdf.text(metaLine, M + (logoData?180:0), M + 34);
-
-      // double barre couleur
-      pdf.setDrawColor(...hexToRGB(THEME.green)); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
-      pdf.setDrawColor(...hexToRGB(THEME.blue)); pdf.setLineWidth(2); pdf.line(M, M+54, W-M, M+54);
-
-      let y = M+80;
-      const content = document.getElementById('preview').textContent || '';
-      const lines = content.split('\n');
-
-      for(const raw of lines){
-        const line = raw.trim();
-        if(!line){ y+=6; continue; }
-        if(line.startsWith('# ')){
-          y = putHeading(pdf, line.replace(/^#\s+/,'').trim(), y, 16, THEME.blue, M, W, H);
-        }else if(line.startsWith('## ')){
-          y = putHeading(pdf, line.replace(/^##\s+/,'').trim(), y, 13, THEME.green, M, W, H);
-        }else if(line.startsWith('### ')){
-          y = putHeading(pdf, line.replace(/^###\s+/,'').trim(), y, 12, THEME.green, M, W, H);
-        }else{
-          y = putParagraph(pdf, line, y, M, W, H, 11);
-        }
-      }
-
-      pdf.save('protocole-documentaire-adenovirus.pdf');
-    }
-
-    async function fetchAsDataURL(url){
-      const res = await fetch(url);
-      const blob = await res.blob();
-      return await new Promise((resolve,reject)=>{
-        const fr = new FileReader();
-        fr.onerror = reject;
-        fr.onload = ()=> resolve(fr.result);
-        fr.readAsDataURL(blob);
-      });
-    }
-    function setText(pdf, hex, size, weight){
-      const rgb = hexToRGB(hex);
-      pdf.setTextColor(rgb[0], rgb[1], rgb[2]);
-      pdf.setFont('helvetica', weight==='bold'?'bold':'normal');
-      pdf.setFontSize(size);
-    }
-    function putHeading(pdf, text, y, size, color, M, W, H){
-      if(y + size + 18 > H - M){ pdf.addPage(); pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F'); y = M; }
-      setText(pdf, color, size, 'bold'); pdf.text(text, M, y);
-      y += size < 14 ? 12 : 16;
-      pdf.setDrawColor(210,210,210); pdf.setLineWidth(0.6); pdf.line(M, y, W - M, y);
-      return y + 12;
-    }
-    function putParagraph(pdf, text, y, M, W, H, size=11){
-      setText(pdf, '#000000', size, 'normal');
-      const safe = sanitizeText(text);
-      const lines = pdf.splitTextToSize(safe, W - 2*M);
-      for(const ln of lines){
-        if(y > H - M){ pdf.addPage(); pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F'); y = M; }
-        pdf.text(ln, M, y); y += 14;
-      }
-      return y + 4;
-    }
-    function hexToRGB(hex){
-      const h = hex.replace('#',''); const n = parseInt(h,16);
-      return [(n>>16)&255, (n>>8)&255, n&255];
-    }
-    function escapeHTML(s){ return (s||'').replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m])); }
-
-    /****************
-     * PARTICULES   *
-     ****************/
-    let P=[]; let ctx, Wc, Hc, rafId;
-    function startParticles(){
-      const canvas = document.getElementById('particlesCanvas');
-      ctx = canvas.getContext('2d');
-      const setSize = ()=>{ Wc = canvas.width = innerWidth; Hc = canvas.height = innerHeight; };
-      setSize(); addEventListener('resize', setSize);
-      const count = Math.min(200, Math.round((Wc*Hc)/15000));
-      P = Array.from({length:count}, ()=>spawnParticle());
-      cancelAnimationFrame(rafId); loopParticles();
-    }
-    function spawnParticle(){
-      return { x:Math.random()*Wc, y:Math.random()*Hc, vx:rand(-.08,.08), vy:-rand(.05,.16), r:rand(.9,2.2), t:Math.random()*1000, tw:rand(.5,1.0) };
-    }
-    function loopParticles(){
-      rafId = requestAnimationFrame(loopParticles);
-      ctx.clearRect(0,0,Wc,Hc);
-      for(const p of P){
-        p.t += .02; const a = 0.20 + 0.40*Math.abs(Math.sin(p.t))*p.tw;
-        p.x += p.vx + Math.sin(p.t*0.5)*0.04; p.y += p.vy;
-        if(p.x<-5) p.x=Wc+5; if(p.x>Wc+5) p.x=-5; if(p.y<-5){ p.y=Hc+5; p.x=Math.random()*Wc; }
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283);
-        ctx.fillStyle = `rgba(124,244,91,${a})`; ctx.shadowColor='rgba(124,244,91,.75)'; ctx.shadowBlur=8; ctx.fill(); ctx.shadowBlur=0;
-      }
-    }
-    const rand=(a,b)=>a+Math.random()*(b-a);
-
-    /***********
-     * START   *
-     ***********/
-    init();
-  </script>
+<canvas id="particlesCanvas"></canvas>
+
+<header>
+ <div class="nav">
+   <img src="./assets/montes-biopharma-logo.svg" alt="logo" class="logo">
+   <strong>Montes BioPharma</strong>
+   <span style="margin-left:auto;color:var(--muted)">Assistant Littérature</span>
+ </div>
+</header>
+
+<main class="container">
+ <!-- Étape 1 -->
+ <section class="card step active" id="s1">
+  <h2>1 – Contexte</h2>
+  <p>Confirmez votre usage professionnel.</p>
+  <label><input type="checkbox" id="ok"/> Je confirme être habilité</label><br>
+  <button class="btn" id="next1">Continuer</button>
+ </section>
+
+ <!-- Étape 2 -->
+ <section class="card step" id="s2">
+  <h2>2 – Paramètres</h2>
+  <label>Vecteur viral :</label><input id="vector" placeholder="Adénovirus"><br>
+  <label>Sérotype :</label><input id="sero" placeholder="Ad5"><br>
+  <label>Lignée cellulaire :</label><input id="cell" placeholder="HEK293"><br>
+  <label>Techniques :</label><br>
+  <label><input type="checkbox" class="tech" value="Clarification"> Clarification</label>
+  <label><input type="checkbox" class="tech" value="Capture"> Capture</label>
+  <label><input type="checkbox" class="tech" value="Polishing"> Polishing</label>
+  <label><input type="checkbox" class="tech" value="TFF"> TFF</label>
+  <label><input type="checkbox" class="tech" value="QC"> QC</label>
+  <label><input type="checkbox" class="tech" value="Formulation"> Formulation</label><br>
+  <button class="btn secondary" id="back2">Retour</button>
+  <button class="btn" id="next2">Continuer</button>
+ </section>
+
+ <!-- Étape 3 -->
+ <section class="card step" id="s3">
+  <h2>3 – Recherche PubMed</h2>
+  <label>Mots-clés supplémentaires :</label>
+  <input id="kw" placeholder="chromatography, purification">
+  <button class="btn" id="runSearch">Lancer la recherche</button>
+  <p class="muted" id="info">Les résultats proviennent directement de PubMed.</p>
+  <div id="pubResults"></div>
+  <button class="btn secondary" id="back3">Retour</button>
+  <button class="btn" id="next3">Continuer</button>
+ </section>
+
+ <!-- Étape 4 -->
+ <section class="card step" id="s4">
+  <h2>4 – Sélection et analyse</h2>
+  <p>Sélectionnez au moins 5 articles, puis analysez.</p>
+  <button class="btn" id="analyzeBtn">Analyser les articles</button>
+  <div id="selectedList"></div>
+  <button class="btn secondary" id="back4">Retour</button>
+  <button class="btn" id="next4">Continuer</button>
+ </section>
+
+ <!-- Étape 5 -->
+ <section class="card step" id="s5">
+  <h2>5 – Aperçu et export PDF</h2>
+  <pre id="preview" style="white-space:pre-wrap"></pre>
+  <button class="btn" id="exportPdf">Exporter PDF</button>
+  <button class="btn secondary" id="restart">Recommencer</button>
+ </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script>
+/* ========= Navigation ========= */
+let step=1;const max=5;
+function show(i){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+document.getElementById('s'+i).classList.add('active');step=i;window.scrollTo(0,0);}
+document.getElementById('next1').onclick=()=>{if(!ok.checked){alert('Cochez la case.');return;}show(2);}
+document.getElementById('next2').onclick=()=>show(3);
+document.getElementById('back2').onclick=()=>show(1);
+document.getElementById('next3').onclick=()=>show(4);
+document.getElementById('back3').onclick=()=>show(2);
+document.getElementById('next4').onclick=()=>show(5);
+document.getElementById('back4').onclick=()=>show(3);
+document.getElementById('restart').onclick=()=>location.reload();
+
+/* ========= Particules ========= */
+const c=document.getElementById('particlesCanvas'),x=c.getContext('2d');let W,H,P=[];
+function resize(){W=c.width=innerWidth;H=c.height=innerHeight}resize();addEventListener('resize',resize);
+function r(a,b){return a+Math.random()*(b-a)}
+for(let i=0;i<160;i++)P.push({x:r(0,W),y:r(0,H),vx:r(-.05,.05),vy:r(-.1,-.3),r:r(.8,2.2),t:r(0,6.28)});
+!function loop(){requestAnimationFrame(loop);x.clearRect(0,0,W,H);
+for(const p of P){p.t+=.02;p.x+=p.vx;p.y+=p.vy;if(p.y<-5)p.y=H+5;
+x.beginPath();x.arc(p.x,p.y,p.r,0,6.28);const a=.3+.4*Math.abs(Math.sin(p.t));
+x.fillStyle=`rgba(124,244,91,${a})`;x.shadowColor='rgba(124,244,91,.6)';x.shadowBlur=8;x.fill();x.shadowBlur=0;}}();
+
+/* ========= PubMed Search ========= */
+let articles=[],selected=[],abstracts={},summaries={};
+const headers={'User-Agent':'MontesBioPharma/1.0 (https://github.com/JulienCM)'};
+
+document.getElementById('runSearch').onclick=runPubMedSearch;
+async function runPubMedSearch(){
+ const base='https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
+ const kw=[
+  'adenovirus',
+  document.getElementById('vector').value||'',
+  document.getElementById('sero').value||'',
+  document.getElementById('cell').value||'',
+  document.getElementById('kw').value||''
+ ].join(' ');
+ const esearch=`${base}esearch.fcgi?db=pubmed&retmode=json&retmax=20&sort=date&term=${encodeURIComponent(kw)}`;
+ let ids=[];try{
+  const r=await fetch(esearch,{headers});const j=await r.json();ids=j.esearchresult.idlist||[];
+ }catch(e){console.error(e);alert("Erreur CORS ou réseau.");return;}
+ if(!ids.length){pubResults.innerHTML='<div class="card">Aucun résultat.</div>';return;}
+ const esum=`${base}esummary.fcgi?db=pubmed&retmode=json&id=${ids.join(',')}`;
+ try{
+  const r=await fetch(esum,{headers});const j=await r.json();
+  const recs=Object.values(j.result||{}).filter(v=>v.uid);
+  articles=recs.map(v=>({pmid:v.uid,title:v.title||'',year:(v.pubdate||'').slice(0,4),
+  journal:v.fulljournalname||v.source||'',authors:(v.authors||[]).map(a=>a.name).slice(0,5).join(', '),sel:false}));
+ }catch(e){console.error(e);return;}
+ renderResults();
+}
+function renderResults(){
+ pubResults.innerHTML='';
+ articles.forEach(a=>{
+  const d=document.createElement('div');d.className='pub-card';
+  d.innerHTML=`<label><input type="checkbox" data-id="${a.pmid}"> <strong>${a.title}</strong></label><br>
+  <span class="muted">${a.journal} · ${a.year}</span><br><span class="muted">${a.authors}</span><br>
+  <a href="https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/" target="_blank">Voir PubMed</a>`;
+  d.querySelector('input').onchange=e=>{a.sel=e.target.checked;};
+  pubResults.appendChild(d);
+ });
+ info.textContent="Sélectionnez au moins 5 articles.";
+}
+
+/* ========= Analyse ========= */
+document.getElementById('analyzeBtn').onclick=analyze;
+async function analyze(){
+ selected=articles.filter(a=>a.sel);
+ if(selected.length<5){alert("Sélectionnez au moins 5 articles.");return;}
+ const ids=selected.map(a=>a.pmid);
+ const base='https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
+ const url=`${base}efetch.fcgi?db=pubmed&id=${ids.join(',')}&retmode=xml`;
+ let xml;try{
+  const r=await fetch(url,{headers});const t=await r.text();
+  xml=new DOMParser().parseFromString(t,"text/xml");
+ }catch(e){alert("Erreur EFetch.");return;}
+ abstracts={};xml.querySelectorAll("PubmedArticle").forEach(a=>{
+  const pmid=a.querySelector("PMID").textContent.trim();
+  const ab=a.querySelector("AbstractText");abstracts[pmid]=ab?ab.textContent.trim():"";
+ });
+ const TECH={"Clarification":["clarification","filtration","centrifugation"],
+ "Capture":["capture","affinity","ion exchange","chromatography"],
+ "Polishing":["polishing","sec","size exclusion"],"TFF":["tff","diafiltration","buffer exchange"],
+ "QC":["quality","analytics","purity"],"Formulation":["formulation","stability","storage"]};
+ const techs=[...document.querySelectorAll('.tech:checked')].map(x=>x.value);
+ summaries={};
+ selected.forEach(a=>{
+  const abs=abstracts[a.pmid]||"",S={};
+  techs.forEach(t=>{
+   const hits=abs.split(/(?<=[.!?])\s+/).filter(s=>TECH[t].some(k=>s.toLowerCase().includes(k)));
+   S[t]=hits.slice(0,3).map(s=>s.replace(/\b\d+(?:[\.,]\d+)?\s?(mL|ml|g|rpm|°C|%|h|min)\b/gi,"[…]")).join(" • ");
+  });
+  summaries[a.pmid]=S;
+ });
+ renderPreview();
+ alert("Analyse terminée !");
+}
+function renderPreview(){
+ let out=`# Protocole documentaire Adénovirus\n\n## Techniques\n`;
+ const techs=[...document.querySelectorAll('.tech:checked')].map(x=>x.value);
+ out+=techs.join(', ')+"\n\n## Résumés par technique\n";
+ selected.forEach(a=>{
+  out+=`### ${a.title}\n`;
+  techs.forEach(t=>{out+=`• ${t} → ${summaries[a.pmid][t]||"(aucune info)"}\n`;});
+ });
+ preview.textContent=out;
+}
+
+/* ========= Export PDF ========= */
+document.getElementById('exportPdf').onclick=async()=>{
+ const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:'pt',format:'a4'});
+ const W=pdf.internal.pageSize.getWidth(),H=pdf.internal.pageSize.getHeight(),M=56;
+ pdf.setFillColor(255,255,255);pdf.rect(0,0,W,H,'F');
+ try{const res=await fetch('./assets/montes-biopharma-logo.svg');
+ const blob=await res.blob();const fr=new FileReader();fr.onload=()=>{pdf.addImage(fr.result,'PNG',M,M-8,160,40,'','FAST');pdf.save('protocole.pdf');};
+ fr.readAsDataURL(blob);}catch(e){pdf.save('protocole.pdf');}
+};
+</script>
 </body>
 </html>
