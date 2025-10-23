@@ -1,16 +1,16 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-lang="fr">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Montes BioPharma — Assistant Littérature (Europe PMC)</title>
+<title>Montes BioPharma — AI Literature Assistant</title>
 <meta name="color-scheme" content="dark"/>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg1:#060b19;--bg2:#0b1326;--text:#eaf2ff;--muted:#a6b8d6;
-  --g:#7CF45B;--b:#2456FF;--glass:rgba(15,26,45,.42);
-  --border:rgba(124,244,91,.38);--inner:rgba(36,86,255,.10);--radius:16px;
+  --g:#7CF45B;--b:#2456FF;--glass:rgba(15,26,45,.42);--border:rgba(124,244,91,.38);
+  --inner:rgba(36,86,255,.10);--radius:16px;--danger:#ff6b6b;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -25,7 +25,7 @@ body{
 #particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
 header{
-  position:sticky;top:0;z-index:10;
+  position:sticky;top:0;z-index:15;
   background:linear-gradient(90deg, rgba(124,244,91,.10), rgba(36,86,255,.16));
   backdrop-filter:blur(10px) saturate(160%);
   border-bottom:1px solid var(--border);
@@ -33,13 +33,15 @@ header{
 .nav{max-width:1180px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:12px}
 .logo{height:42px;width:auto;object-fit:contain}
 .brand{font-weight:700;letter-spacing:.35px}
+.lang{margin-left:auto;display:flex;gap:8px}
+.lang button{background:rgba(9,20,40,.6);border:1px solid rgba(124,244,91,.35);color:var(--text);border-radius:999px;padding:6px 10px;cursor:pointer}
+.lang button.active{background:linear-gradient(90deg,var(--g),var(--b));color:#02121f;border:none}
 
-.container{max-width:1180px;margin:28px auto;padding:0 18px;position:relative;z-index:1}
+.container{max-width:1180px;margin:24px auto;padding:0 18px;position:relative;z-index:1}
 .hero{display:flex;align-items:center;gap:16px;margin:14px 0}
 .hero h1{
   margin:0;font-size:clamp(22px,4vw,36px);
-  background:linear-gradient(90deg, var(--g), var(--b));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
+  background:linear-gradient(90deg, var(--g), var(--b));-webkit-background-clip:text;background-clip:text;color:transparent;
   text-shadow:0 0 32px rgba(124,244,91,.55), 0 0 32px rgba(36,86,255,.45);
 }
 
@@ -80,6 +82,11 @@ input:focus,select:focus,textarea:focus{
 .tag{font-size:11px;padding:4px 8px;border:1px solid rgba(124,244,91,.28);border-radius:999px;color:#cfe6ff;background:rgba(9,20,40,.45)}
 hr.sep{border:none;border-top:1px solid rgba(124,244,91,.25);margin:10px 0}
 pre#preview{white-space:pre-wrap}
+
+/* Progress bar */
+.progress{position:sticky;top:70px;z-index:10;margin:10px 0 16px;background:rgba(9,20,40,.5);border:1px solid rgba(124,244,91,.25);border-radius:999px;overflow:hidden;height:10px}
+.progress .bar{height:100%;width:0;background:linear-gradient(90deg,var(--g),var(--b));box-shadow:0 0 18px rgba(124,244,91,.6)}
+.warn{color:var(--danger);font-weight:600}
 </style>
 </head>
 <body>
@@ -89,128 +96,135 @@ pre#preview{white-space:pre-wrap}
   <div class="nav">
     <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo">
     <div class="brand">Montes BioPharma</div>
-    <div style="margin-left:auto" class="muted">Assistant Littérature — Europe PMC (CORS OK)</div>
+    <div class="lang">
+      <button id="btnFR" class="active">FR</button>
+      <button id="btnEN">EN</button>
+    </div>
   </div>
 </header>
 
 <main class="container">
   <div class="hero">
     <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo" style="height:72px;filter:drop-shadow(0 10px 26px rgba(124,244,91,.30)) drop-shadow(0 12px 30px rgba(36,86,255,.22))">
-    <h1>Purification Adénovirus — Sélection & Synthèse bibliographique</h1>
+    <h1 data-i="heroTitle">Purification Adenovirus — Guided literature & protocol synthesis</h1>
   </div>
+
+  <div class="progress"><div class="bar" id="pbar"></div></div>
 
   <!-- Étape 1: Contexte -->
   <section id="step1" class="card step active">
-    <h2>Étape 1 — Contexte & conformité</h2>
-    <p class="muted">Usage strictement professionnel. Cette application fournit une <em>ossature documentaire</em> basée sur la littérature. <strong>Aucun paramètre expérimental ni protocole opératoire n’est fourni.</strong></p>
+    <h2 data-i="s1Title">Step 1 — Context & compliance</h2>
+    <p class="muted" data-i="s1Text">Professional use only. This application provides a literature-based documentary scaffold. <b>No experimental parameters or operational SOP are provided.</b></p>
     <label style="display:flex;align-items:flex-start;gap:10px;margin-top:8px">
       <input type="checkbox" id="compliance" style="width:auto;margin-top:4px">
-      <span>Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.</span>
+      <span data-i="s1Check">I confirm I am a qualified professional and rely on validated internal SOPs.</span>
     </label>
     <div class="controls" style="margin-top:10px">
-      <button class="btn" id="to2">Continuer</button>
+      <button class="btn" id="to2" data-i="btnContinue">Continue</button>
     </div>
   </section>
 
   <!-- Étape 2: Paramètres -->
   <section id="step2" class="card step">
-    <h2>Étape 2 — Paramètres & techniques ciblées</h2>
+    <h2 data-i="s2Title">Step 2 — Parameters & techniques</h2>
     <div class="row row-3">
-      <div><label>Vecteur</label><input id="vector" placeholder="Adénovirus"></div>
-      <div><label>Sérotype</label><input id="serotype" placeholder="Ad5"></div>
-      <div><label>Lignée cellulaire</label><input id="cellLine" placeholder="HEK293 / PER.C6"></div>
+      <div><label data-i="labVector">Vector</label><input id="vector" placeholder="Adenovirus"></div>
+      <div><label data-i="labSerotype">Serotype</label><input id="serotype" placeholder="Ad5"></div>
+      <div><label data-i="labCellLine">Cell line</label><input id="cellLine" placeholder="HEK293 / PER.C6"></div>
     </div>
+
     <div class="card" style="padding:14px;margin-top:12px">
-      <strong>Techniques Downstream</strong>
+      <strong data-i="techTitle">Downstream techniques</strong>
       <div class="row row-3" style="margin-top:8px">
-        <label><input type="checkbox" class="tech" value="Clarification"> Clarification</label>
-        <label><input type="checkbox" class="tech" value="Capture"> Capture (affinité / AEX)</label>
-        <label><input type="checkbox" class="tech" value="Polishing"> Polishing</label>
-        <label><input type="checkbox" class="tech" value="TFF"> TFF (Concentration / Diafiltration)</label>
-        <label><input type="checkbox" class="tech" value="QC"> Contrôles qualité (attributs)</label>
-        <label><input type="checkbox" class="tech" value="Formulation"> Conditionnement / Documentation</label>
+        <label><input type="checkbox" class="tech" value="Clarification"> <span data-i="tClar">Clarification</span></label>
+        <label><input type="checkbox" class="tech" value="Capture"> <span data-i="tCapt">Capture (affinity / AEX)</span></label>
+        <label><input type="checkbox" class="tech" value="Polishing"> <span data-i="tPol">Polishing</span></label>
+        <label><input type="checkbox" class="tech" value="TFF"> <span data-i="tTff">TFF (Concentration / Diafiltration)</span></label>
+        <label><input type="checkbox" class="tech" value="QC"> <span data-i="tQc">Quality controls (attributes)</span></label>
+        <label><input type="checkbox" class="tech" value="Formulation"> <span data-i="tForm">Formulation / Documentation</span></label>
       </div>
     </div>
+
     <div class="row" style="margin-top:8px">
-      <div><label>Mots-clés complémentaires</label><input id="keywords" placeholder="chromatography, anion exchange, membrane, affinity"></div>
+      <div><label data-i="labKeywords">Additional keywords</label><input id="keywords" placeholder="chromatography, anion exchange, membrane, affinity"></div>
     </div>
+
+    <div class="row row-2" style="margin-top:8px">
+      <div>
+        <label data-i="labYears">Recency window</label>
+        <select id="yearsWindow">
+          <option value="1">1</option><option value="2" selected>2</option><option value="5">5</option><option value="10">10</option>
+        </select>
+      </div>
+      <div>
+        <label data-i="labMax">Max articles</label>
+        <select id="retMax"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="50">50</option></select>
+      </div>
+    </div>
+
+    <label style="margin-top:8px;display:flex;gap:8px;align-items:center">
+      <input type="checkbox" id="onlyOA" checked style="width:auto">
+      <span data-i="labOA">Only open access (full text)</span>
+    </label>
+
     <div class="controls" style="margin-top:12px">
-      <button class="btn secondary" id="back2">Retour</button>
-      <button class="btn" id="to3">Continuer</button>
+      <button class="btn secondary" id="back2" data-i="btnBack">Back</button>
+      <button class="btn" id="to3" data-i="btnContinue">Continue</button>
     </div>
   </section>
 
-  <!-- Étape 3: Recherche Europe PMC -->
+  <!-- Étape 3: Recherche -->
   <section id="step3" class="card step">
-    <h2>Étape 3 — Recherche (Europe PMC, abstracts réels)</h2>
-    <div class="row row-2">
-      <div>
-        <label>Fenêtre (années récentes)</label>
-        <select id="yearsWindow">
-          <option value="1">1 an</option>
-          <option value="2" selected>2 ans</option>
-          <option value="5">5 ans</option>
-          <option value="10">10 ans</option>
-        </select>
-      </div>
-      <div>
-        <label>Nombre max. d’articles</label>
-        <select id="retMax">
-          <option value="5">5</option>
-          <option value="10" selected>10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-        </select>
-      </div>
-    </div>
+    <h2 data-i="s3Title">Step 3 — Search (Europe PMC, abstracts & full text)</h2>
     <div class="controls" style="margin-top:8px">
-      <button class="btn" id="runSearch">Lancer la recherche</button>
+      <button class="btn" id="runSearch" data-i="btnSearch">Run search</button>
       <span id="searchInfo" class="muted"></span>
     </div>
     <hr class="sep">
     <div id="results" class="grid"></div>
     <div class="controls" style="margin-top:12px">
-      <button class="btn secondary" id="back3">Retour</button>
-      <button class="btn" id="to4">Continuer</button>
+      <button class="btn secondary" id="back3" data-i="btnBack">Back</button>
+      <button class="btn" id="to4" data-i="btnContinue">Continue</button>
     </div>
   </section>
 
-  <!-- Étape 4: Sélection & analyse -->
+  <!-- Étape 4: Sélection & Analyse IA -->
   <section id="step4" class="card step">
-    <h2>Étape 4 — Sélection des articles & analyse ciblée</h2>
-    <p class="muted">Coche <strong>au moins 5 articles</strong> puis lance l’analyse. Nous extrayons des phrases pertinentes des <em>abstracts</em> en fonction des techniques choisies. <strong>Les paramètres opératoires sont masqués automatiquement.</strong></p>
+    <h2 data-i="s4Title">Step 4 — Selection & AI analysis</h2>
+    <p class="muted" data-i="s4Text">Select <b>at least 5 articles</b> then run analysis. We extract relevant sentences and request the AI to produce a high-level protocol (no operational parameters). Footnotes will cite sources.</p>
     <div class="controls">
-      <button class="btn" id="analyzeBtn">Analyser les articles sélectionnés</button>
+      <button class="btn" id="analyzeBtn" data-i="btnAnalyze">Analyze selected articles</button>
       <span id="selInfo" class="muted"></span>
     </div>
     <hr class="sep">
     <div id="selectedList" class="grid"></div>
     <div class="controls" style="margin-top:12px">
-      <button class="btn secondary" id="back4">Retour</button>
-      <button class="btn" id="to5">Continuer</button>
+      <button class="btn secondary" id="back4" data-i="btnBack">Back</button>
+      <button class="btn" id="to5" data-i="btnContinue">Continue</button>
     </div>
   </section>
 
   <!-- Étape 5: Aperçu & PDF -->
   <section id="step5" class="card step">
-    <h2>Étape 5 — Aperçu & export PDF</h2>
+    <h2 data-i="s5Title">Step 5 — Preview & PDF</h2>
+    <div class="card" style="padding:14px;margin:8px 0">
+      <div class="warn" data-i="safety">Safety note: output is a literature-based documentary scaffold. It must not be used as experimental instructions or as a substitute for validated SOPs.</div>
+    </div>
     <pre id="preview"></pre>
     <div class="controls" style="margin-top:10px">
-      <button class="btn" id="exportPdf">Exporter le PDF</button>
-      <button class="btn secondary" id="restart">Recommencer</button>
+      <button class="btn" id="exportPdf" data-i="btnPdf">Export PDF</button>
+      <button class="btn secondary" id="restart" data-i="btnRestart">Restart</button>
     </div>
   </section>
 
   <p class="muted" style="text-align:center;margin:28px 0 48px">
-    © <span id="year"></span> Montes BioPharma — Données issues d’Europe PMC (CORS OK). Aucun protocole expérimental.
+    © <span id="year"></span> Montes BioPharma — Europe PMC / PubMed. Open-access filtering enabled. No experimental parameters or SOPs.
   </p>
 </main>
 
-<!-- jsPDF -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
-
 <script>
-/* ========= Particules dérivantes ========= */
+/* ===== Particules ===== */
 const cv=document.getElementById('particlesCanvas'),cx=cv.getContext('2d');let W,H,PTS=[];
 function size(){W=cv.width=innerWidth;H=cv.height=innerHeight} size(); addEventListener('resize',size);
 function R(a,b){return a+Math.random()*(b-a)}
@@ -221,11 +235,29 @@ for(const p of PTS){p.t+=.02;const a=.2+.4*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.v
 if(p.x<-5)p.x=W+5;if(p.x>W+5)p.x=-5;if(p.y<-5){p.y=H+5;p.x=Math.random()*W;}
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(124,244,91,${a})`;cx.shadowColor='rgba(124,244,91,.75)';cx.shadowBlur=8;cx.fill();cx.shadowBlur=0;}})();
 
-/* ========= Wizard nav ========= */
-const steps=['step1','step2','step3','step4','step5'];
-function show(id){steps.forEach(s=>document.getElementById(s).classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+/* ===== i18n ===== */
+const I={
+  fr:{heroTitle:"Purification Adénovirus — Sélection & Synthèse bibliographique",s1Title:"Étape 1 — Contexte & conformité",s1Text:"Usage strictement professionnel. Cette application fournit une ossature documentaire issue de la littérature. Aucun paramètre expérimental ou SOP opératoire n’est fourni.",s1Check:"Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.",btnContinue:"Continuer",s2Title:"Étape 2 — Paramètres & techniques",labVector:"Vecteur",labSerotype:"Sérotype",labCellLine:"Lignée cellulaire",techTitle:"Techniques Downstream",tClar:"Clarification",tCapt:"Capture (affinité / AEX)",tPol:"Polishing",tTff:"TFF (Concentration / Diafiltration)",tQc:"Contrôles qualité (attributs)",tForm:"Formulation / Documentation",labKeywords:"Mots-clés complémentaires",labYears:"Fenêtre (années récentes)",labMax:"Nombre max. d’articles",labOA:"Uniquement open access (texte intégral)",btnBack:"Retour",s3Title:"Étape 3 — Recherche (Europe PMC, abstracts & texte intégral)",btnSearch:"Lancer la recherche",s4Title:"Étape 4 — Sélection & analyse IA",s4Text:"Coche au moins 5 articles puis lance l’analyse. Nous extrayons des phrases pertinentes et demandons à l’IA de produire un protocole de haut niveau (sans paramètres opératoires). Les notes de bas de page citent les sources.",btnAnalyze:"Analyser les articles sélectionnés",s5Title:"Étape 5 — Aperçu & PDF",safety:"Note sécurité : sortie à visée documentaire issue de la littérature, non utilisable comme instructions expérimentales ou substitut d’une SOP validée.",btnPdf:"Exporter le PDF",btnRestart:"Recommencer"},
+  en:{heroTitle:"Adenovirus Purification — Guided Literature & Protocol Synthesis",s1Title:"Step 1 — Context & compliance",s1Text:"Professional use only. This application provides a literature-based documentary scaffold. No experimental parameters or operational SOP are provided.",s1Check:"I confirm I am a qualified professional and rely on validated internal SOPs.",btnContinue:"Continue",s2Title:"Step 2 — Parameters & techniques",labVector:"Vector",labSerotype:"Serotype",labCellLine:"Cell line",techTitle:"Downstream techniques",tClar:"Clarification",tCapt:"Capture (affinity / AEX)",tPol:"Polishing",tTff:"TFF (Concentration / Diafiltration)",tQc:"Quality controls (attributes)",tForm:"Formulation / Documentation",labKeywords:"Additional keywords",labYears:"Recency window",labMax:"Max articles",labOA:"Only open access (full text)",btnBack:"Back",s3Title:"Step 3 — Search (Europe PMC, abstracts & full text)",btnSearch:"Run search",s4Title:"Step 4 — Selection & AI analysis",s4Text:"Select at least 5 articles then run analysis. We extract relevant sentences and request the AI to produce a high-level protocol (no operational parameters). Footnotes will cite sources.",btnAnalyze:"Analyze selected articles",s5Title:"Step 5 — Preview & PDF",safety:"Safety note: output is a literature-based documentary scaffold. It must not be used as experimental instructions or as a substitute for validated SOPs.",btnPdf:"Export PDF",btnRestart:"Restart"}
+};
+function setLang(lang){
+  document.documentElement.setAttribute('lang',lang);
+  document.documentElement.dataset.lang=lang;
+  for(const el of document.querySelectorAll('[data-i]')){
+    const k=el.dataset.i; el.textContent = I[lang][k] || el.textContent;
+  }
+  document.getElementById('btnFR').classList.toggle('active',lang==='fr');
+  document.getElementById('btnEN').classList.toggle('active',lang==='en');
+}
+document.getElementById('btnFR').onclick=()=>setLang('fr');
+document.getElementById('btnEN').onclick=()=>setLang('en');
+
+/* ===== Wizard & Progress ===== */
+const steps=['step1','step2','step3','step4','step5']; const pbar=document.getElementById('pbar');
+function show(id){steps.forEach(s=>document.getElementById(s).classList.remove('active'));document.getElementById(id).classList.add('active');updateProgress(id);window.scrollTo({top:0,behavior:'smooth'});}
+function updateProgress(id){const idx=steps.indexOf(id); const pct=Math.round(((idx+1)/steps.length)*100); pbar.style.width=pct+'%';}
 document.getElementById('year').textContent=new Date().getFullYear();
-document.getElementById('to2').onclick=()=>{if(!document.getElementById('compliance').checked){alert("Merci de confirmer l'usage professionnel.");return;}show('step2');};
+document.getElementById('to2').onclick=()=>{if(!document.getElementById('compliance').checked){alert(I[document.documentElement.dataset.lang].s1Check);return;}show('step2');};
 document.getElementById('back2').onclick=()=>show('step1');
 document.getElementById('to3').onclick=()=>show('step3');
 document.getElementById('back3').onclick=()=>show('step2');
@@ -233,15 +265,14 @@ document.getElementById('to4').onclick=()=>show('step4');
 document.getElementById('back4').onclick=()=>show('step3');
 document.getElementById('to5').onclick=()=>show('step5');
 document.getElementById('restart').onclick=()=>{localStorage.removeItem('mbp_state');location.reload();};
+setLang(document.documentElement.dataset.lang||'fr'); updateProgress('step1');
 
-/* ========= État & utilitaires ========= */
+/* ===== State & utils ===== */
 const state={
   vector:"", serotype:"", cellLine:"",
   techniques:[],
-  yearsWindow:2, retMax:10,
-  articles:[],      // {id, pmid, source, title, year, authors, selected}
-  abstracts:{},     // id -> abstract text
-  summaries:{}      // id -> {Technique: "..."}
+  yearsWindow:2, retMax:10, onlyOA:true,
+  articles:[], abstracts:{}, fulltexts:{}, summaries:{}, aiProtocol:null, citations:[]
 };
 const TECH_KEYWORDS={
   Clarification:["clarification","depth filter","microfiltration","centrifugation","filter"],
@@ -255,12 +286,8 @@ const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?
 function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
 function esc(s){return (s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
 
-/* ========= Europe PMC (CORS OK) =========
-   - Recherche : /rest/search?query=...&pageSize=...&format=json
-   - Abstract : /rest/{src}/{id}/abstractText?format=plain
-   Sources possibles: MED (PubMed), PMC. */
+/* ===== Europe PMC Search (OA + abstracts) ===== */
 document.getElementById('runSearch').onclick=runSearchEPMC;
-
 async function runSearchEPMC(){
   state.vector=document.getElementById('vector').value.trim()||'adenovirus';
   state.serotype=document.getElementById('serotype').value.trim();
@@ -268,174 +295,209 @@ async function runSearchEPMC(){
   const extra=(document.getElementById('keywords').value||'').split(',').map(s=>s.trim()).filter(Boolean);
   state.yearsWindow=+document.getElementById('yearsWindow').value||2;
   state.retMax=+document.getElementById('retMax').value||10;
+  state.onlyOA=document.getElementById('onlyOA').checked;
 
   const minYear=(new Date().getFullYear()-state.yearsWindow);
-  // Requête Europe PMC : filtres + année + abstract
   const terms=[state.vector,state.serotype,state.cellLine,...extra].filter(Boolean).join(' ');
-  const q = `${terms} AND PUB_YEAR:[${minYear} TO 3000] AND HAS_ABSTRACT:Y`;
+  let q = `${terms} AND PUB_YEAR:[${minYear} TO 3000] AND HAS_ABSTRACT:Y`;
+  if(state.onlyOA) q += ` AND OPEN_ACCESS:Y`;
   const url = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent(q)}&pageSize=${state.retMax}&format=json&sort_date:y`;
 
-  document.getElementById('searchInfo').textContent="Recherche en cours…";
+  document.getElementById('searchInfo').textContent = (document.documentElement.dataset.lang==='fr'?'Recherche…':'Searching…');
   try{
-    const r=await fetch(url);
-    const j=await r.json();
-    const res=(j.resultList?.result)||[];
+    const r=await fetch(url); const j=await r.json(); const res=(j.resultList?.result)||[];
     state.articles = res.map(x=>{
-      // id & source : MED + pmid, ou PMC + pmcid
-      const id = x.pmid ? x.pmid : x.pmcid;
-      const src = x.pmid ? 'MED' : 'PMC';
+      const id = x.pmid ? x.pmid : x.pmcid; const src = x.pmid ? 'MED' : 'PMC';
       return {
-        id, src,
-        pmid: x.pmid || '',
+        id, src, pmid: x.pmid || '', doi:x.doi||'',
         title: x.title || '',
         source: x.journalTitle || x.source || '',
         year: x.pubYear || '',
         authors: (x.authorString||'').split(', ').slice(0,6),
+        oa: (x.isOpenAccess==="Y" || x.openAccess=="Y" || x.openAccess),
         selected:false,
         hasAbstractInline: !!x.abstractText,
         abstractInline: x.abstractText || ''
       };
     });
     renderResults();
-    document.getElementById('searchInfo').textContent=`${state.articles.length} article(s) — Europe PMC (CORS OK).`;
+    document.getElementById('searchInfo').textContent=`${state.articles.length} ${document.documentElement.dataset.lang==='fr'?'article(s)':'result(s)'} — Europe PMC.`;
   }catch(e){
     console.error(e);
-    document.getElementById('results').innerHTML='<div class="card">Erreur Europe PMC (réseau).</div>';
+    document.getElementById('results').innerHTML='<div class="card">Europe PMC error.</div>';
     document.getElementById('searchInfo').textContent='';
   }
 }
 
 function renderResults(){
   const box=document.getElementById('results'); box.innerHTML='';
-  state.articles.forEach(a=>{
+  state.articles.forEach((a,idx)=>{
     const el=document.createElement('div'); el.className='pub-card';
-    const pubLink = a.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/` : `https://europepmc.org/article/${a.src}/${a.id}`;
+    const link = a.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/` : `https://europepmc.org/article/${a.src}/${a.id}`;
     el.innerHTML=`
       <label style="display:flex;gap:10px;align-items:flex-start">
         <input type="checkbox" data-id="${a.id}" style="width:auto;margin-top:4px">
         <div>
-          <div><strong>${esc(a.title)}</strong></div>
+          <div><strong>${esc(a.title)}</strong> ${a.oa?'<span class="tag">Open Access</span>':''}</div>
           <div class="muted">${esc(a.source)} · ${esc(a.year||'—')}</div>
-          <div class="muted">Auteurs: ${esc(a.authors.join(', '))}</div>
+          <div class="muted">${esc(a.authors.join(', '))}</div>
           <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
-            <span class="tag">${a.src}:${a.id}${a.pmid?` · PMID:${a.pmid}`:''}</span>
-            <a class="tag" href="${pubLink}" target="_blank" rel="noopener noreferrer">Voir l’article</a>
+            <span class="tag">${a.src}:${a.id}${a.pmid?` · PMID:${a.pmid}`:''}${a.doi?` · DOI:${a.doi}`:''}</span>
+            <a class="tag" href="${link}" target="_blank" rel="noopener noreferrer">${document.documentElement.dataset.lang==='fr'?'Voir':'Open'}</a>
           </div>
+          <div id="abs-${idx}" class="muted" style="margin-top:6px;font-size:13px"></div>
+          ${a.oa?`<button class="btn secondary" data-full="${idx}" style="margin-top:8px">${document.documentElement.dataset.lang==='fr'?'Charger le texte intégral':'Load full text'}</button>`:''}
         </div>
       </label>`;
-    el.querySelector('input').addEventListener('change',e=>{
-      a.selected=e.target.checked; updateSelectionInfo();
-    });
+    el.querySelector('input').addEventListener('change',e=>{a.selected=e.target.checked; updateSelectionInfo();});
     box.appendChild(el);
+
+    // show abstract inline
+    const absEl=el.querySelector(`#abs-${idx}`);
+    if(a.abstractInline){absEl.textContent = a.abstractInline;}
+    else if(a.pmid){ // fallback quick abstract via EPMC detail
+      fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/MED/${a.pmid}/abstractText?format=plain`).then(r=>r.text()).then(t=>absEl.textContent=t).catch(()=>{});
+    }
+
+    // load full text if OA
+    const btn=el.querySelector(`[data-full="${idx}"]`);
+    if(btn){
+      btn.onclick=async()=>{
+        btn.disabled=true;
+        const url=`https://www.ebi.ac.uk/europepmc/webservices/rest/${a.src}/${a.id}/fullTextXML`;
+        try{
+          const r=await fetch(url); const xml=await r.text();
+          state.fulltexts[a.id]=xml;
+          btn.textContent=document.documentElement.dataset.lang==='fr'?'Texte intégral chargé':'Full text loaded';
+          btn.classList.remove('secondary');
+        }catch(e){btn.disabled=false;btn.textContent='Retry';}
+      };
+    }
   });
   updateSelectionInfo();
 }
 
 function updateSelectionInfo(){
   const n=state.articles.filter(a=>a.selected).length;
-  const txt=`${n} article(s) sélectionné(s) — minimum requis : 5`;
+  const txt = `${n} ${document.documentElement.dataset.lang==='fr'?'article(s) sélectionné(s) — minimum requis : 5':'selected — minimum required: 5'}`;
   const selInfo=document.getElementById('selInfo'); if(selInfo) selInfo.textContent=txt;
-  const L=document.getElementById('selectedList');
-  if(!L) return;
+  const L=document.getElementById('selectedList'); if(!L) return;
   const chosen=state.articles.filter(a=>a.selected);
   L.innerHTML = chosen.length
-    ? chosen.map(a=>`<div class="pub-card"><strong>${esc(a.title)}</strong><div class="muted">${esc(a.source)} · ${esc(a.year||'—')} — ${a.src}:${a.id}</div></div>`).join('')
-    : '<div class="pub-card muted">Aucune sélection pour l’instant.</div>';
+    ? chosen.map(a=>`<div class="pub-card"><strong>${esc(a.title)}</strong><div class="muted">${esc(a.source)} · ${esc(a.year||'—')} — ${a.src}:${a.id}${a.doi?` — DOI:${a.doi}`:''}</div></div>`).join('')
+    : `<div class="pub-card muted">${document.documentElement.dataset.lang==='fr'?'Aucune sélection pour l’instant.':'No selection yet.'}</div>`;
 }
 
-/* ========= Analyse (récupère les abstracts réels) ========= */
+/* ===== Analyse IA (full text + abstracts) ===== */
 document.getElementById('analyzeBtn').onclick=analyzeSelected;
 
 async function analyzeSelected(){
   const chosen=state.articles.filter(a=>a.selected);
-  if(chosen.length<5){alert("Sélectionne au moins 5 articles.");return;}
+  if(chosen.length<5){alert(document.documentElement.dataset.lang==='fr'?'Sélectionne au moins 5 articles.':'Select at least 5 articles.');return;}
   const techs=[...document.querySelectorAll('.tech:checked')].map(x=>x.value);
-  if(!techs.length){alert("Sélectionne au moins une technique (Étape 2).");return;}
+  if(!techs.length){alert(document.documentElement.dataset.lang==='fr'?'Sélectionne au moins une technique (Étape 2).':'Select at least one technique (Step 2).');return;}
 
-  // Récup abstracts : si pas en ligne, appelle /rest/{src}/{id}/abstractText?format=plain
-  state.abstracts={};
+  // Compile texts for AI: prefer fulltext XML (OA), fallback to abstracts
+  const docs = [];
   for(const a of chosen){
-    if(a.hasAbstractInline && a.abstractInline){
-      state.abstracts[a.id]=a.abstractInline;
-      continue;
-    }
-    const absUrl = `https://www.ebi.ac.uk/europepmc/webservices/rest/${a.src}/${a.id}/abstractText?format=plain`;
-    try{
-      const r=await fetch(absUrl);
-      const t=await r.text();
-      state.abstracts[a.id]=t||'';
-    }catch(e){
-      console.error(e); state.abstracts[a.id]='';
+    if(state.fulltexts[a.id]){ // XML → extract sections text
+      const txt = extractTextFromFullTextXML(state.fulltexts[a.id]);
+      docs.push({id:a.id,title:a.title,source:a.source,year:a.year,pmid:a.pmid,doi:a.doi,text:txt});
+    }else{
+      const abs = a.abstractInline || await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/${a.src}/${a.id}/abstractText?format=plain`).then(r=>r.text()).catch(()=> '');
+      docs.push({id:a.id,title:a.title,source:a.source,year:a.year,pmid:a.pmid,doi:a.doi,text:abs});
     }
   }
 
-  // Génère résumés par technique (extraction de phrases contenant mots-clés)
-  state.summaries={};
-  chosen.forEach(a=>{
-    const abs=(state.abstracts[a.id]||'').replace(/\s+/g,' ').trim();
-    const perTech={};
-    techs.forEach(t=>{
-      const bullets = extractBullets(abs, t);
-      perTech[t] = bullets.length ? bullets.map(b=>sanitize(b)).join(" • ") : "(aucune phrase saillante trouvée dans l’abstract pour cette technique)";
+  // User intent summary
+  const intent = {
+    lang: document.documentElement.dataset.lang,
+    vector: document.getElementById('vector').value || 'Adenovirus',
+    serotype: document.getElementById('serotype').value || '',
+    cellLine: document.getElementById('cellLine').value || '',
+    techniques: techs,
+    keywords: (document.getElementById('keywords').value||'')
+  };
+
+  // Call backend IA
+  try{
+    const resp=await fetch('/api/analyse',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ intent, docs })
     });
-    state.summaries[a.id]=perTech;
-  });
+    if(!resp.ok){ throw new Error('AI backend error'); }
+    const data=await resp.json();
+    state.aiProtocol=data.protocol;   // markdown-like with [n] footnotes
+    state.citations=data.citations;   // [{n,title,year,source,pmid,doi,url}]
+  }catch(e){
+    alert(document.documentElement.dataset.lang==='fr'?'Erreur IA (backend). Vérifie le déploiement /api/analyse et la clé OpenAI.':'AI error (backend). Check /api/analyse deployment and OpenAI key.');
+    return;
+  }
 
   renderPreview();
-  alert("Analyse terminée : synthèses par technique disponibles (Étape 5).");
+  alert(document.documentElement.dataset.lang==='fr'?'Analyse IA terminée.':'AI analysis complete.');
+  show('step5');
 }
 
-function extractBullets(text, tech){
-  if(!text) return [];
-  const kws=(TECH_KEYWORDS[tech]||[]).map(k=>k.toLowerCase());
-  const sentences=text.split(/(?<=[\.\!\?])\s+/);
-  const hits=sentences.filter(s=>kws.some(k=>s.toLowerCase().includes(k)));
-  return hits.slice(0,5).map(s=>s.replace(/\s+/g,' ').trim());
+function extractTextFromFullTextXML(xmlString){
+  // naive XML text extraction: Materials/Methods/Results/Discussion when present
+  const parser=new DOMParser();
+  let text=''; try{
+    const xml=parser.parseFromString(xmlString,'text/xml');
+    const wanted=['materials','methods','materials and methods','results','discussion','introduction','conclusion'];
+    const secs=[...xml.querySelectorAll('sec')];
+    for(const s of secs){
+      const title=(s.querySelector('title')?.textContent||'').toLowerCase();
+      if(wanted.some(w=>title.includes(w))){
+        const ps=[...s.querySelectorAll('p')].map(p=>p.textContent.trim()).join('\n');
+        text += (title?(`\n\n### ${title}\n`):'\n\n') + ps;
+      }
+    }
+    if(!text){ text = [...xml.querySelectorAll('p')].map(p=>p.textContent.trim()).join('\n'); }
+  }catch(e){/* ignore */}
+  return text;
 }
 
-/* ========= Aperçu & Export PDF ========= */
+/* ===== Aperçu & PDF ===== */
 function renderPreview(){
+  const lang=document.documentElement.dataset.lang;
   const meta=[
-    document.getElementById('vector').value?`Vecteur : ${document.getElementById('vector').value}`:null,
-    document.getElementById('serotype').value?`Sérotype : ${document.getElementById('serotype').value}`:null,
-    document.getElementById('cellLine').value?`Lignée cellulaire : ${document.getElementById('cellLine').value}`:null
+    document.getElementById('vector').value?`${lang==='fr'?'Vecteur':'Vector'} : ${document.getElementById('vector').value}`:null,
+    document.getElementById('serotype').value?`${lang==='fr'?'Sérotype':'Serotype'} : ${document.getElementById('serotype').value}`:null,
+    document.getElementById('cellLine').value?`${lang==='fr'?'Lignée cellulaire':'Cell line'} : ${document.getElementById('cellLine').value}`:null
   ].filter(Boolean).join('\n');
 
-  const techs=[...document.querySelectorAll('.tech:checked')].map(x=>x.value);
-  const chosen=state.articles.filter(a=>a.selected);
-  const refs=chosen.map(a=>{
-    const link = a.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/` : `https://europepmc.org/article/${a.src}/${a.id}`;
-    return `- ${a.title} (${a.year||'—'}), ${a.source}. ${a.pmid?`PMID:${a.pmid}; `:''}${a.src}:${a.id} — ${link}`;
-  }).join('\n');
+  // Header section
+  const header = (lang==='fr'?
+`# Protocole documentaire — Purification Adénovirus
 
-  let synth='';
-  techs.forEach(t=>{
-    synth+=`### ${t}\n`;
-    chosen.forEach(a=>{
-      const s=state.summaries[a.id]?.[t];
-      if(s) synth+=`• ${a.title} — ${s}\n`;
-    });
-    synth+='\n';
-  });
+${meta}
 
-  const outline = `# Protocole documentaire — Purification Adénovirus
+## Résumé de la demande & méthodologie
+Interprétation IA de la demande utilisateur et revue de littérature (Europe PMC / PubMed) focalisée sur les sections pertinentes (Matériels & Méthodes, Résultats, Discussion) des articles open access sélectionnés. Sortie non-opérationnelle, sans paramètres expérimentaux. Citations en bas de page.`:
+`# Documentary protocol — Adenovirus purification
 
-${meta||''}
+${meta}
 
-## 1. Portée et principes
-Synthèse bibliographique ciblée (Europe PMC) des techniques sélectionnées. Ce document est une **ossature documentaire** : il **n’inclut aucun paramètre expérimental** ni instruction opératoire. Les détails proviennent de vos **SOP internes validées**.
+## Request summary & methodology
+AI interpretation of the user request and literature review (Europe PMC / PubMed) focused on relevant sections (Materials & Methods, Results, Discussion) of the selected open-access articles. Non-operational output, no experimental parameters. Footnote citations included.`);
 
-## 2. Techniques sélectionnées
-${techs.length?techs.join(', '):'(aucune)'}
+  // AI protocol body
+  const body = state.aiProtocol || (lang==='fr'?'[En attente de génération IA]':'[Awaiting AI generation]');
+  // Footnotes
+  const foot = (state.citations||[]).map(c=>`[${c.n}] ${c.title} (${c.year}), ${c.source}${c.doi?` — DOI:${c.doi}`:''}${c.pmid?` — PMID:${c.pmid}`:''} — ${c.url}`).join('\n');
 
-## 3. Synthèses par techniques (extraits d’abstracts)
-${synth || '(Aucune analyse disponible.)'}
+  const doc = `${header}
 
-## 4. Références
-${refs || '(Aucune)'}
+${body}
+
+${lang==='fr'?'## Références (notes de bas de page)':'## References (footnotes)'}
+${foot||'(none)'}
 `;
-  document.getElementById('preview').textContent=outline;
+  document.getElementById('preview').textContent=doc;
 }
+
 document.getElementById('exportPdf').onclick=exportPDF;
 
 async function exportPDF(){
@@ -451,18 +513,13 @@ async function exportPDF(){
     const res=await fetch('./assets/montes-biopharma-logo.svg'); const blob=await res.blob();
     const data=await blobToDataURL(blob);
     pdf.addImage(data,'PNG',M,M-8,160,40,'','FAST');
-  }catch(e){/* logo optionnel */}
+  }catch(e){}
 
   // titre
+  const lang=document.documentElement.dataset.lang;
   setText(pdf,'#2456FF',18,'bold');
-  pdf.text('Protocole documentaire — Purification Adénovirus', M+180, M+14);
+  pdf.text(lang==='fr'?'Protocole documentaire — Purification Adénovirus':'Documentary protocol — Adenovirus purification', M+180, M+14);
   setText(pdf,'#3a3a3a',11,'normal');
-  const metaLine=[
-    document.getElementById('vector').value?`Vecteur: ${document.getElementById('vector').value}`:null,
-    document.getElementById('serotype').value?`Sérotype: ${document.getElementById('serotype').value}`:null,
-    document.getElementById('cellLine').value?`Cell line: ${document.getElementById('cellLine').value}`:null
-  ].filter(Boolean).join(' · ');
-  if(metaLine) pdf.text(metaLine, M+180, M+34);
 
   // barres colorées
   pdf.setDrawColor(124,244,91); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
@@ -480,7 +537,7 @@ async function exportPDF(){
     else if(line.startsWith('### ')){ y=putHeading(pdf,line.replace(/^###\s+/,'').trim(),y,12,'#7CF45B',M,W,H); }
     else { y=putParagraph(pdf,line,y,M,W,H,11); }
   }
-  pdf.save('protocole-documentaire-adenovirus.pdf');
+  pdf.save(lang==='fr'?'protocole-documentaire-adenovirus.pdf':'documentary-protocol-adenovirus.pdf');
 }
 
 function setText(pdf,hex,size,weight){
