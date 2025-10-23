@@ -421,7 +421,7 @@ async function analyzeSelected(){
 
   // Call backend IA
   try{
-    const resp=await fetch('/api/analyse',{
+    const resp=await fetch('https://montes-bio.vercel.app/api/analyse',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ intent, docs })
