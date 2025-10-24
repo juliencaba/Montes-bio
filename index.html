@@ -3,160 +3,108 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Montes BioPharma — AI Literature Assistant</title>
+<title>Montes BioPharma — Assistant Littérature</title>
 <meta name="color-scheme" content="light"/>
-<!-- Polices: look clinique & premium -->
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
-<!-- pdf.js (pour extraction PDF en local) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha512-6rU1hXg6H5ZcPL4m7r2ItkUmtQ3gH8xQ4z4y+0pKkCwjZ+oI61W5tD6K6GmTQy6y9Xl8sUn3G4z0Ff8gqRz0NA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!-- mammoth.js (pour extraction DOCX en local) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" integrity="sha512-7tG1o4mTzU0lQqDq0m9H5tPp7uVf6sHjz8hK2aR+H6q3H6A8mJm2i7cUe4m6QeQm2oFqR7zXg9Gk1D3b3mF7xQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- pdf.js (extraction PDF locale) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
+<!-- mammoth.js (extraction DOCX locale) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" crossorigin="anonymous"></script>
 <style>
-/* =================== THEME — LIGHT BIOTECH (Duponte DNA ultra-renforcé) =================== */
+/* =================== THEME — Flat, blanc, bleu clinique, vert fluo =================== */
 :root{
-  --bg0:#f9fbfc; --bg1:#eef5ff; --bg2:#dcebf9;
-  --ink:#0a1b2b; --ink-2:#13324e; --muted:#6c7f94;
-  --g:#00c98b; --g2:#00ffb3; --b:#1587ff; --b2:#46b3ff;
-  --glass: rgba(255,255,255,.72);
-  --border: rgba(21,135,255,.22);
-  --radius:18px;
-  --shadow: 0 18px 50px rgba(31,62,120,.13);
-  --haloG: 0 0 34px rgba(0,201,139,.26), 0 0 70px rgba(0,255,179,.18);
-  --haloB: 0 0 34px rgba(21,135,255,.24), 0 0 70px rgba(70,179,255,.18);
-  --danger:#e25555;
+  --bg:#ffffff;
+  --ink:#0d2a5a;          /* bleu clinique/foncé — couleur unique pour le texte UI */
+  --ink-muted:#5a6a88;    /* bleu adouci pour métadonnées */
+  --blue:#0d2a5a;         /* même bleu pour éléments interactifs (flat) */
+  --green:#00ff6a;        /* vert fluo pour le texte des boutons */
+  --border:#e6eaf2;       /* bordures discrètes */
+  --radius:14px;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;color:var(--ink); font-family:Outfit,system-ui,-apple-system,"Segoe UI",Ubuntu,Arial,sans-serif;
-  background:
-    radial-gradient(1400px 640px at 14% -12%, rgba(70,179,255,.26), transparent 60%),
-    radial-gradient(1200px 600px at 92% -12%, rgba(0,201,139,.22), transparent 65%),
-    linear-gradient(180deg, var(--bg0), var(--bg1) 46%, var(--bg2));
-  overflow-x:hidden;
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Outfit,system-ui,-apple-system,"Segoe UI",Ubuntu,Arial,sans-serif;
 }
-a{color:var(--b);text-decoration:none}
-a:hover{text-decoration:underline}
+a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
 img{display:block;max-width:100%}
 
-/* =================== PARTICLES =================== */
-#particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply}
+/* =================== PARTICLES (fond, vert fluo) =================== */
+#particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-/* =================== HEADER =================== */
-header{
-  position:sticky;top:0;z-index:20;
-  background:linear-gradient(90deg, rgba(255,255,255,.80), rgba(255,255,255,.58));
-  backdrop-filter:saturate(160%) blur(10px);
-  border-bottom:1px solid rgba(21,135,255,.16);
-}
-.nav{
-  max-width:1260px;margin:0 auto;padding:10px 18px;
-  display:flex;align-items:center;gap:12px;
-}
-.logo{height:42px;width:auto;object-fit:contain;filter: drop-shadow(0 6px 18px rgba(21,135,255,.18)) drop-shadow(0 8px 22px rgba(0,201,139,.18))}
-.brand{
-  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.10em;font-weight:700;font-size:20px;color:#0a1a2c;
-}
+/* =================== HEADER (flat) =================== */
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--border)}
+.nav{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.logo{height:40px;width:auto}
+.brand{font-weight:700;letter-spacing:.02em;color:var(--ink)}
 .lang{margin-left:auto;display:flex;gap:8px}
 .lang button{
-  background:#fff;color:#0c2033;border:1px solid rgba(0,201,139,.35);
-  border-radius:999px;padding:6px 12px;cursor:pointer;transition:.25s ease;font-weight:600; letter-spacing:.03em;
+  appearance:none;border:1px solid var(--border);background:#fff;color:var(--ink);
+  padding:6px 12px;border-radius:999px;cursor:pointer;font-weight:600
 }
-.lang button.active{background:linear-gradient(90deg,var(--g2),var(--b2));color:#042031;border:none;box-shadow: var(--haloG), var(--haloB)}
+.lang button.active{border-color:var(--blue);}
 
-/* =================== HERO =================== */
-.container{max-width:1260px;margin:0 auto;padding:0 18px;position:relative;z-index:1}
-.hero{
-  display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;
-  padding:28px 0 8px;
-}
-.hero .logoWrap{
-  height:80px;width:80px;border-radius:999px;display:grid;place-items:center;
-  background:
-    radial-gradient(72px 72px at 50% 50%, rgba(0,201,139,.13), transparent 60%),
-    radial-gradient(92px 92px at 50% 50%, rgba(21,135,255,.12), transparent 65%);
-  border:1px solid rgba(21,135,255,.18); box-shadow: var(--haloG), var(--haloB);
-}
-.hero h1{
-  margin:0;font-size:clamp(26px,4.2vw,48px);line-height:1.06;
-  background:linear-gradient(90deg, #0a2a44, #1c5b92);-webkit-background-clip:text;background-clip:text;color:transparent;
+/* =================== LAYOUT principal : pile inversée (bas -> haut) =================== */
+.container{
+  max-width:1180px;margin:0 auto;padding:18px 16px 80px;position:relative;z-index:1;
+  display:flex;flex-direction:column-reverse;gap:16px; /* << le cœur : du bas vers le haut */
 }
 
-/* =================== PANELS (verre dépoli) =================== */
-.panel{
-  background:
-    radial-gradient(520px 260px at 18% -8%, rgba(0,201,139,.06), transparent 60%),
-    radial-gradient(540px 260px at 84% -10%, rgba(21,135,255,.08), transparent 65%),
-    var(--glass);
-  border:1px solid var(--border);border-radius:var(--radius);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(16px) saturate(150%); padding:20px; margin:18px 0;
-  transition:transform .25s ease, box-shadow .25s ease;
+/* =================== Panneaux accordéon (flat) =================== */
+.block{
+  border:1px solid var(--border); border-radius:var(--radius); background:#fff;
 }
-.panel:hover{transform:translateY(-1px)}
-
-/* =================== WIZARD =================== */
-.step{display:none} .step.active{display:block}
-.controls{display:flex;gap:10px;flex-wrap:wrap}
-.btn{
-  appearance:none;border:none;cursor:pointer;font-weight:700;border-radius:14px;
-  padding:12px 18px;background:#fff;color:#062032;border:1px solid rgba(0,201,139,.30);
-  box-shadow:0 12px 28px rgba(21,135,255,.12),0 12px 28px rgba(0,201,139,.16);
-  letter-spacing:.01em; transition:.25s ease;
+.block header{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;background:#fff;
 }
-.btn:hover{transform:translateY(-1px); box-shadow:0 16px 36px rgba(21,135,255,.16),0 16px 36px rgba(0,201,139,.20)}
-.btn.primary{background:linear-gradient(90deg,var(--g2),var(--b2));color:#062032;border:none}
-.btn.secondary{background:#ffffff;color:#0a2234;border:1px solid rgba(0,201,139,.26)}
+.block header h2{margin:0;font-size:18px;color:var(--ink)}
+.block .inner{padding:14px 16px;display:none}
+.block.open .inner{display:block}
 
-.grid{display:grid;gap:14px}
+/* =================== Inputs / Buttons (flat) =================== */
+.grid{display:grid;gap:12px}
 .row{display:grid;gap:10px}
 @media(min-width:760px){.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:1fr 1fr 1fr}}
 
 label,strong,em,small{font-weight:600}
 input,select,textarea{
-  width:100%;background:rgba(255,255,255,.85);color:#0a1f32;
-  border:1px solid rgba(21,135,255,.22);border-radius:14px;padding:12px 14px;outline:none;
-  transition:border .2s, box-shadow .2s, background .2s;box-shadow: inset 0 0 0 1px rgba(0,201,139,.06);
-  font-weight:500;
+  width:100%;background:#fff;color:var(--ink);
+  border:1px solid var(--border);border-radius:12px;padding:12px 14px;outline:none;
 }
-input:focus,select:focus,textarea:focus{
-  border-color:var(--g);background:#fff;
-  box-shadow:0 0 0 3px rgba(0,201,139,.16), inset 0 0 0 1px rgba(21,135,255,.12);
-}
-.muted{color:var(--muted)}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.btn{
+  appearance:none;border:1px solid var(--blue);background:var(--blue);
+  color:var(--green);font-weight:700;border-radius:12px;padding:12px 18px;cursor:pointer;
+}
+.btn.secondary{
+  background:#fff;color:var(--ink);border:1px solid var(--blue);
+}
+
+/* Cartes articles (flat) */
 .pub-card{
-  border:1px solid rgba(0,201,139,.26);border-radius:14px;padding:12px;
-  background:linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.75));
-  display:grid;gap:8px;backdrop-filter: blur(10px) saturate(120%);box-shadow: inset 0 0 0 1px rgba(21,135,255,.08);
+  border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff;display:grid;gap:6px
 }
-.tag{font-size:11px;padding:4px 8px;border:1px solid rgba(0,201,139,.28);border-radius:999px;color:#084;background:#eafff7}
-hr.sep{border:none;border-top:1px solid rgba(0,201,139,.24);margin:10px 0}
-pre#preview{white-space:pre-wrap;font-family:ui-monospace,monospace;background:#fff;border:1px solid rgba(21,135,255,.18);border-radius:12px;padding:14px}
+.muted{color:var(--ink-muted)}
+.tag{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:999px;color:var(--ink);background:#fff}
+hr.sep{border:none;border-top:1px solid var(--border);margin:10px 0}
+pre#preview{white-space:pre-wrap;background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;color:#000}
 
-/* =================== PROGRESS BAR =================== */
-.progress{position:sticky;top:72px;z-index:10;margin:8px 0 16px;background:rgba(255,255,255,.8);border:1px solid rgba(0,201,139,.22);border-radius:999px;overflow:hidden;height:10px;box-shadow: var(--shadow)}
-.progress .bar{height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--b2));box-shadow:0 0 18px rgba(0,201,139,.42)}
-
-/* =================== NOTICES =================== */
-.warn{color:var(--danger);font-weight:700}
-
-/* =================== UPLOAD ZONE (Étape 6) =================== */
+/* Upload (flat) */
 .drop{
   display:grid;place-items:center;text-align:center;gap:8px;
-  padding:22px;border:2px dashed rgba(21,135,255,.30);border-radius:16px;background:rgba(255,255,255,.7);
+  padding:22px;border:2px dashed var(--border);border-radius:12px;background:#fff
 }
-.drop.drag{border-color: var(--g); box-shadow: var(--haloG)}
-.drop small{color:var(--muted)}
+.drop.drag{border-color:var(--blue)}
 .file-list{display:grid;gap:10px;margin-top:10px}
-.file-item{padding:10px;border:1px solid rgba(21,135,255,.18);border-radius:12px;background:#fff}
+.file-item{padding:10px;border:1px solid var(--border);border-radius:12px;background:#fff}
 
-/* =================== FOOTER =================== */
-.footer{opacity:.8;text-align:center;margin:28px 0 48px}
-
-/* =================== TRANSITIONS D’ÉTAPES =================== */
-.step{opacity:0;transform:translateY(6px);transition:opacity .28s ease, transform .28s ease}
-.step.active{opacity:1;transform:translateY(0)}
+/* Aides */
+.kv{display:flex;gap:10px;align-items:center}
+footer{color:var(--ink-muted);text-align:center;margin:28px 0}
 </style>
 </head>
 <body>
@@ -174,166 +122,153 @@ pre#preview{white-space:pre-wrap;font-family:ui-monospace,monospace;background:#
 </header>
 
 <main class="container">
-  <section class="hero">
-    <div class="logoWrap"><img src="./assets/montes-biopharma-logo.svg" alt="logo" style="height:50px;width:auto"></div>
-    <h1 data-i="heroTitle">Adenovirus purification — Intelligent literature & protocol synthesis</h1>
-  </section>
-
-  <div class="progress"><div class="bar" id="pbar"></div></div>
-
-  <!-- Step 1 -->
-  <section id="step1" class="panel step active">
-    <h2 data-i="s1Title">Step 1 — Context & compliance</h2>
-    <p class="muted" data-i="s1Text">Professional use only. This application provides a literature-based documentary scaffold. <b>No experimental parameters or SOP are provided.</b></p>
-    <label style="display:flex;align-items:flex-start;gap:10px;margin-top:8px">
-      <input type="checkbox" id="compliance" style="width:auto;margin-top:4px">
-      <span data-i="s1Check">I confirm I am a qualified professional and rely on validated internal SOPs.</span>
-    </label>
-    <div class="controls" style="margin-top:10px">
-      <button class="btn primary" id="to2" data-i="btnContinue">Continue</button>
-    </div>
-  </section>
-
-  <!-- Step 2 -->
-  <section id="step2" class="panel step">
-    <h2 data-i="s2Title">Step 2 — Parameters & techniques</h2>
-    <div class="row row-3">
-      <div><label data-i="labVector">Vector</label><input id="vector" placeholder="Adenovirus"></div>
-      <div><label data-i="labSerotype">Serotype</label><input id="serotype" placeholder="Ad5"></div>
-      <div><label data-i="labCellLine">Cell line</label><input id="cellLine" placeholder="HEK293 / PER.C6"></div>
-    </div>
-
-    <div class="panel" style="padding:14px;margin-top:12px">
-      <strong data-i="techTitle">Downstream techniques</strong>
-      <div class="row row-3" style="margin-top:8px">
-        <label><input type="checkbox" class="tech" value="Clarification"> <span data-i="tClar">Clarification</span></label>
-        <label><input type="checkbox" class="tech" value="Capture"> <span data-i="tCapt">Capture (affinity / AEX)</span></label>
-        <label><input type="checkbox" class="tech" value="Polishing"> <span data-i="tPol">Polishing</span></label>
-        <label><input type="checkbox" class="tech" value="TFF"> <span data-i="tTff">TFF (Concentration / Diafiltration)</span></label>
-        <label><input type="checkbox" class="tech" value="QC"> <span data-i="tQc">Quality controls (attributes)</span></label>
-        <label><input type="checkbox" class="tech" value="Formulation"> <span data-i="tForm">Formulation / Documentation</span></label>
+  <!-- Bloc 6 (en bas visuel, mais DOM en haut) : Aperçu & PDF -->
+  <section id="blk5" class="block open">
+    <header><h2 data-i="s5Title">Aperçu & Export PDF</h2><small class="muted">Protocole documentaire</small></header>
+    <div class="inner">
+      <div class="kv">
+        <div class="muted" data-i="safety">Note : sortie documentaire basée littérature. Aucun paramètre expérimental.</div>
+      </div>
+      <pre id="preview"></pre>
+      <div class="controls">
+        <button class="btn" id="exportPdf" data-i="btnPdf">Exporter le PDF</button>
       </div>
     </div>
+  </section>
 
-    <div class="row" style="margin-top:8px">
-      <div><label data-i="labKeywords">Additional keywords</label><input id="keywords" placeholder="chromatography, anion exchange, membrane, affinity"></div>
-    </div>
-
-    <div class="row row-2" style="margin-top:8px">
-      <div>
-        <label data-i="labYears">Recency window</label>
-        <select id="yearsWindow">
-          <option value="1">1</option><option value="2" selected>2</option><option value="5">5</option><option value="10">10</option>
-        </select>
-      </div>
-      <div>
-        <label data-i="labMax">Max articles</label>
-        <select id="retMax"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="50">50</option></select>
+  <!-- Bloc 5 : Analyse IA -->
+  <section id="blk4" class="block">
+    <header><h2 data-i="s4Title">Analyse IA (articles sélectionnés)</h2><small id="selInfo" class="muted"></small></header>
+    <div class="inner">
+      <p class="muted" data-i="s4Text">Sélectionne au moins 1 article puis lance l’analyse. Résumé automatique (Hugging Face).</p>
+      <div id="selectedList" class="grid"></div>
+      <div class="controls">
+        <button class="btn" id="analyzeBtn" data-i="btnAnalyze">Analyser</button>
+        <button class="btn secondary" data-open="#blk5">Continuer</button>
       </div>
     </div>
-
-    <label style="margin-top:8px;display:flex;gap:8px;align-items:center">
-      <input type="checkbox" id="onlyOA" checked style="width:auto">
-      <span data-i="labOA">Only open access (full text)</span>
-    </label>
-
-    <div class="controls" style="margin-top:12px">
-      <button class="btn secondary" id="back2" data-i="btnBack">Back</button>
-      <button class="btn primary" id="to3" data-i="btnContinue">Continue</button>
-    </div>
   </section>
 
-  <!-- Step 3 -->
-  <section id="step3" class="panel step">
-    <h2 data-i="s3Title">Step 3 — Search (Europe PMC, abstracts & full text)</h2>
-    <div class="controls" style="margin-top:8px">
-      <button class="btn primary" id="runSearch" data-i="btnSearch">Run search</button>
-      <span id="searchInfo" class="muted"></span>
-    </div>
-    <hr class="sep">
-    <div id="results" class="grid"></div>
-    <div class="controls" style="margin-top:12px">
-      <button class="btn secondary" id="back3" data-i="btnBack">Back</button>
-      <button class="btn primary" id="to4" data-i="btnContinue">Continue</button>
-    </div>
-  </section>
-
-  <!-- Step 4 -->
-  <section id="step4" class="panel step">
-    <h2 data-i="s4Title">Step 4 — Selection & AI analysis</h2>
-    <p class="muted" data-i="s4Text">Select <b>at least one article</b> then run analysis. We extract relevant text and ask the AI (Hugging Face) to summarize. Footnotes will cite sources where relevant.</p>
-    <div class="controls">
-      <button class="btn primary" id="analyzeBtn" data-i="btnAnalyze">Analyze selected articles</button>
-      <span id="selInfo" class="muted"></span>
-    </div>
-    <hr class="sep">
-    <div id="selectedList" class="grid"></div>
-    <div class="controls" style="margin-top:12px">
-      <button class="btn secondary" id="back4" data-i="btnBack">Back</button>
-      <button class="btn primary" id="to5" data-i="btnContinue">Continue</button>
-    </div>
-  </section>
-
-  <!-- Step 5 -->
-  <section id="step5" class="panel step">
-    <h2 data-i="s5Title">Step 5 — Preview & PDF</h2>
-    <div class="panel" style="padding:14px;margin:8px 0">
-      <div class="warn" data-i="safety">Safety note: output is a literature-based documentary scaffold. It must not be used as experimental instructions or as a substitute for validated SOPs.</div>
-    </div>
-    <pre id="preview"></pre>
-    <div class="controls" style="margin-top:10px">
-      <button class="btn primary" id="exportPdf" data-i="btnPdf">Export PDF</button>
-      <button class="btn secondary" id="restart" data-i="btnRestart">Restart</button>
-    </div>
-  </section>
-
-  <!-- Step 6 — DOCUMENTS INTERNES -->
-  <section id="step6" class="panel step">
-    <h2 data-i="s6Title">Step 6 — Internal documents (local)</h2>
-    <p class="muted" data-i="s6Text">Drop PDFs, DOCX or TXT files below. Text is extracted <b>locally</b> in your browser (no network). Then the content is summarized with Hugging Face (free).</p>
-    <div id="drop" class="drop">
-      <div>
-        <strong data-i="s6DropTitle">Drop your files here</strong>
-        <div class="muted" data-i="s6DropHint">or click to select</div>
-        <small data-i="s6DropTypes">Accepted: PDF, DOCX, TXT</small>
+  <!-- Bloc 4 : Résultats de recherche -->
+  <section id="blk3" class="block">
+    <header><h2 data-i="s3Title">Résultats littérature (Europe PMC)</h2><small id="searchInfo" class="muted"></small></header>
+    <div class="inner">
+      <div id="results" class="grid"></div>
+      <div class="controls">
+        <button class="btn secondary" data-open="#blk4">Continuer</button>
       </div>
-      <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt" style="display:none">
-    </div>
-    <div class="file-list" id="filesList"></div>
-    <div class="controls" style="margin-top:12px">
-      <button class="btn secondary" id="back6" data-i="btnBack">Back</button>
-      <button class="btn primary" id="runLocal" data-i="btnAnalyze">Analyze selected articles</button>
     </div>
   </section>
 
-  <p class="footer muted">
-    © <span id="year"></span> Montes BioPharma — Europe PMC / PubMed. Open-access filtering enabled. Hugging Face summaries. No experimental parameters or SOPs.
-  </p>
+  <!-- Bloc 3 : Lancer la recherche -->
+  <section id="blk2" class="block">
+    <header><h2 data-i="searchTitle">Recherche littérature</h2><small class="muted">Europe PMC (OA + abstracts)</small></header>
+    <div class="inner">
+      <div class="row row-2">
+        <div>
+          <label data-i="labYears">Fenêtre (années)</label>
+          <select id="yearsWindow">
+            <option value="1">1</option><option value="2" selected>2</option><option value="5">5</option><option value="10">10</option>
+          </select>
+        </div>
+        <div>
+          <label data-i="labMax">Nombre max. d’articles</label>
+          <select id="retMax"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="50">50</option></select>
+        </div>
+      </div>
+      <label class="kv" style="margin-top:8px">
+        <input type="checkbox" id="onlyOA" checked style="width:auto">
+        <span data-i="labOA">Uniquement open access (texte intégral)</span>
+      </label>
+      <div class="controls">
+        <button class="btn" id="runSearch" data-i="btnSearch">Lancer la recherche</button>
+        <button class="btn secondary" data-open="#blk3">Continuer</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bloc 2 : Paramètres -->
+  <section id="blk1" class="block">
+    <header><h2 data-i="s2Title">Paramètres & Techniques</h2><small class="muted">Contexte scientifique</small></header>
+    <div class="inner">
+      <div class="row row-3">
+        <div><label data-i="labVector">Vecteur</label><input id="vector" placeholder="Adenovirus"></div>
+        <div><label data-i="labSerotype">Sérotype</label><input id="serotype" placeholder="Ad5"></div>
+        <div><label data-i="labCellLine">Lignée cellulaire</label><input id="cellLine" placeholder="HEK293 / PER.C6"></div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <div><label data-i="labKeywords">Mots-clés complémentaires</label><input id="keywords" placeholder="chromatography, anion exchange, membrane, affinity"></div>
+      </div>
+      <div class="grid" style="margin-top:10px">
+        <strong data-i="techTitle">Techniques Downstream</strong>
+        <label><input type="checkbox" class="tech" value="Clarification"> Clarification</label>
+        <label><input type="checkbox" class="tech" value="Capture"> Capture (affinité / AEX)</label>
+        <label><input type="checkbox" class="tech" value="Polishing"> Polishing</label>
+        <label><input type="checkbox" class="tech" value="TFF"> TFF (Concentration / Diafiltration)</label>
+        <label><input type="checkbox" class="tech" value="QC"> Contrôles qualité (attributs)</label>
+        <label><input type="checkbox" class="tech" value="Formulation"> Formulation / Documentation</label>
+      </div>
+      <div class="controls">
+        <button class="btn secondary" data-open="#blk2">Continuer</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bloc 1 (tout en haut visuel) : Conformité + Upload internes -->
+  <section id="blk0" class="block">
+    <header><h2 data-i="s1Title">Contexte & conformité</h2><small class="muted">Usage pro uniquement</small></header>
+    <div class="inner">
+      <label class="kv">
+        <input type="checkbox" id="compliance" style="width:auto">
+        <span data-i="s1Check">Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.</span>
+      </label>
+
+      <hr class="sep">
+
+      <h3 data-i="s6Title">Documents internes (analyse locale)</h3>
+      <p class="muted" data-i="s6Text">Déposez des fichiers PDF, DOCX ou TXT. Le texte est extrait localement dans votre navigateur (sans envoi réseau). La synthèse utilise Hugging Face (si configuré).</p>
+      <div id="drop" class="drop">
+        <div>
+          <strong data-i="s6DropTitle">Déposez vos fichiers ici</strong>
+          <div class="muted" data-i="s6DropHint">ou cliquez pour sélectionner</div>
+          <small data-i="s6DropTypes">Acceptés : PDF, DOCX, TXT</small>
+        </div>
+        <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt" style="display:none">
+      </div>
+      <div class="file-list" id="filesList"></div>
+      <div class="controls">
+        <button class="btn" id="runLocal" data-i="btnAnalyze">Analyser</button>
+        <button class="btn secondary" data-open="#blk1">Continuer</button>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  © <span id="year"></span> Montes BioPharma — Europe PMC / PubMed. Hugging Face (optionnel). Aucune instruction expérimentale.
+</footer>
 
 <!-- jsPDF -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 
 <script>
-/* =================== PARTICLES — Light, slow, translucent =================== */
+/* =================== PARTICLES — vert fluo sur fond blanc =================== */
 const cv=document.getElementById('particlesCanvas'),cx=cv.getContext('2d');let W,H,PTS=[];
 function size(){W=cv.width=innerWidth;H=cv.height=innerHeight} size(); addEventListener('resize',size);
 function R(a,b){return a+Math.random()*(b-a)}
-function spawn(){return{x:R(0,W),y:R(0,H),vx:R(-.03,.03),vy:-R(.03,.09),r:R(1.0,2.2),t:R(0,6.28),tw:R(.6,1.2)}}
-PTS=Array.from({length:Math.min(240,Math.round((W*H)/17000))},spawn);
+function spawn(){return{x:R(0,W),y:R(0,H),vx:R(-.04,.04),vy:-R(.02,.07),r:R(1.0,2.2),t:R(0,6.28),tw:R(.6,1.2)}}
+PTS=Array.from({length:Math.min(220,Math.round((W*H)/17000))},spawn);
 (function loop(){requestAnimationFrame(loop);cx.clearRect(0,0,W,H);
-for(const p of PTS){p.t+=.018;const a=.14+.38*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.vx+Math.sin(p.t*.35)*.03;p.y+=p.vy;
+for(const p of PTS){p.t+=.016;const a=.10+.35*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.vx+Math.sin(p.t*.35)*.03;p.y+=p.vy;
 if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);
-const g=Math.floor(180+60*Math.abs(Math.sin(p.t)));
-const b=Math.floor(190+60*Math.abs(Math.cos(p.t*0.8)));
-cx.fillStyle=`rgba(${b-80},${g},${b},${a})`; // turquoise/bleu clair
-cx.shadowColor=`rgba(${b-80},${g},${b},.65)`;cx.shadowBlur=10;cx.fill();cx.shadowBlur=0;}})();
+cx.fillStyle=`rgba(0,255,106,${a})`; /* vert fluo */
+cx.fill();}})();
 
-/* =================== i18n =================== */
+/* =================== i18n basique =================== */
 const I={
-  fr:{heroTitle:"Purification Adénovirus — Sélection & synthèse intelligente",s1Title:"Étape 1 — Contexte & conformité",s1Text:"Usage strictement professionnel. Cette application fournit une ossature documentaire issue de la littérature. Aucun paramètre expérimental ou SOP opératoire n’est fourni.",s1Check:"Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.",btnContinue:"Continuer",s2Title:"Étape 2 — Paramètres & techniques",labVector:"Vecteur",labSerotype:"Sérotype",labCellLine:"Lignée cellulaire",techTitle:"Techniques Downstream",tClar:"Clarification",tCapt:"Capture (affinité / AEX)",tPol:"Polishing",tTff:"TFF (Concentration / Diafiltration)",tQc:"Contrôles qualité (attributs)",tForm:"Formulation / Documentation",labKeywords:"Mots-clés complémentaires",labYears:"Fenêtre (années récentes)",labMax:"Nombre max. d’articles",labOA:"Uniquement open access (texte intégral)",btnBack:"Retour",s3Title:"Étape 3 — Recherche (Europe PMC, abstracts & texte intégral)",btnSearch:"Lancer la recherche",s4Title:"Étape 4 — Sélection & analyse IA",s4Text:"Coche au moins 1 article puis lance l’analyse. Nous extrayons du texte pertinent et demandons à l’IA (Hugging Face) de résumer. Notes de bas de page si pertinent.",btnAnalyze:"Analyser",s5Title:"Étape 5 — Aperçu & PDF",safety:"Note sécurité : sortie à visée documentaire issue de la littérature, non utilisable comme instructions expérimentales ou substitut d’une SOP validée.",btnPdf:"Exporter le PDF",btnRestart:"Recommencer",s6Title:"Étape 6 — Documents internes (local)",s6Text:"Déposez des fichiers PDF, DOCX ou TXT. Le texte est extrait localement dans votre navigateur (sans envoi réseau). La synthèse est produite via Hugging Face (gratuit).",s6DropTitle:"Déposez vos fichiers ici",s6DropHint:"ou cliquez pour sélectionner",s6DropTypes:"Acceptés : PDF, DOCX, TXT"},
-  en:{heroTitle:"Adenovirus Purification — Intelligent literature & protocol synthesis",s1Title:"Step 1 — Context & compliance",s1Text:"Professional use only. This application provides a literature-based documentary scaffold. No experimental parameters or operational SOP are provided.",s1Check:"I confirm I am a qualified professional and rely on validated internal SOPs.",btnContinue:"Continue",s2Title:"Step 2 — Parameters & techniques",labVector:"Vector",labSerotype:"Serotype",labCellLine:"Cell line",techTitle:"Downstream techniques",tClar:"Clarification",tCapt:"Capture (affinity / AEX)",tPol:"Polishing",tTff:"TFF (Concentration / Diafiltration)",tQc:"Quality controls (attributes)",tForm:"Formulation / Documentation",labKeywords:"Additional keywords",labYears:"Recency window",labMax:"Max articles",labOA:"Only open access (full text)",btnBack:"Back",s3Title:"Step 3 — Search (Europe PMC, abstracts & full text)",btnSearch:"Run search",s4Title:"Step 4 — Selection & AI analysis",s4Text:"Select at least 1 article then run analysis. We extract relevant text and ask the AI (Hugging Face) to summarize. Footnotes will cite sources where relevant.",btnAnalyze:"Analyze",s5Title:"Step 5 — Preview & PDF",safety:"Safety note: output is a literature-based documentary scaffold. It must not be used as experimental instructions or as a substitute for validated SOPs.",btnPdf:"Export PDF",btnRestart:"Restart",s6Title:"Step 6 — Internal documents (local)",s6Text:"Drop PDF, DOCX or TXT files. Text is extracted locally in your browser (no network). The synthesis is generated via Hugging Face (free).",s6DropTitle:"Drop your files here",s6DropHint:"or click to select",s6DropTypes:"Accepted: PDF, DOCX, TXT"}
+  fr:{s1Title:"Contexte & conformité",s1Check:"Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.",s2Title:"Paramètres & Techniques",techTitle:"Techniques Downstream",labVector:"Vecteur",labSerotype:"Sérotype",labCellLine:"Lignée cellulaire",labKeywords:"Mots-clés complémentaires",searchTitle:"Recherche littérature",labYears:"Fenêtre (années)",labMax:"Nombre max. d’articles",labOA:"Uniquement open access (texte intégral)",btnSearch:"Lancer la recherche",s3Title:"Résultats littérature (Europe PMC)",s4Title:"Analyse IA (articles sélectionnés)",s4Text:"Sélectionne au moins 1 article puis lance l’analyse. Résumé automatique (Hugging Face).",btnAnalyze:"Analyser",s5Title:"Aperçu & Export PDF",btnPdf:"Exporter le PDF",safety:"Note : sortie documentaire basée littérature. Aucun paramètre expérimental.",s6Title:"Documents internes (analyse locale)",s6Text:"Déposez des fichiers PDF, DOCX ou TXT. Le texte est extrait localement (aucun envoi réseau). La synthèse peut utiliser Hugging Face si configuré.",s6DropTitle:"Déposez vos fichiers ici",s6DropHint:"ou cliquez pour sélectionner",s6DropTypes:"Acceptés : PDF, DOCX, TXT"},
+  en:{s1Title:"Context & compliance",s1Check:"I confirm I am a qualified professional and rely on validated internal SOPs.",s2Title:"Parameters & Techniques",techTitle:"Downstream techniques",labVector:"Vector",labSerotype:"Serotype",labCellLine:"Cell line",labKeywords:"Additional keywords",searchTitle:"Literature search",labYears:"Recency (years)",labMax:"Max articles",labOA:"Open access only (full text)",btnSearch:"Run search",s3Title:"Literature results (Europe PMC)",s4Title:"AI analysis (selected articles)",s4Text:"Select at least one article and run the analysis. Automatic summary (Hugging Face).",btnAnalyze:"Analyze",s5Title:"Preview & PDF",btnPdf:"Export PDF",safety:"Note: literature-based documentary output. No experimental parameters.",s6Title:"Internal documents (local analysis)",s6Text:"Drop PDF, DOCX or TXT files. Text is extracted locally (no network). Summaries may use Hugging Face if configured.",s6DropTitle:"Drop your files here",s6DropHint:"or click to select",s6DropTypes:"Accepted: PDF, DOCX, TXT"}
 };
 function setLang(lang){
   document.documentElement.setAttribute('lang',lang);
@@ -341,39 +276,40 @@ function setLang(lang){
   for(const el of document.querySelectorAll('[data-i]')){
     const k=el.dataset.i; el.textContent = I[lang][k] || el.textContent;
   }
-  document.getElementById('btnFR').classList.toggle('active',lang==='fr');
-  document.getElementById('btnEN').classList.toggle('active',lang==='en');
-  document.querySelector('h1[data-i="heroTitle"]').textContent = I[lang].heroTitle;
 }
-document.getElementById('btnFR').onclick=()=>setLang('fr');
-document.getElementById('btnEN').onclick=()=>setLang('en');
+document.getElementById('btnFR').onclick=()=>{setLang('fr');btnFR.classList.add('active');btnEN.classList.remove('active');};
+document.getElementById('btnEN').onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
 setLang('fr');
-
-/* =================== Wizard & Progress =================== */
-const steps=['step1','step2','step3','step4','step5','step6']; const pbar=document.getElementById('pbar');
-function show(id){steps.forEach(s=>document.getElementById(s).classList.remove('active'));document.getElementById(id).classList.add('active');updateProgress(id);window.scrollTo({top:0,behavior:'smooth'});}
-function updateProgress(id){const idx=steps.indexOf(id); const pct=Math.round(((idx+1)/steps.length)*100); pbar.style.width=pct+'%';}
 document.getElementById('year').textContent=new Date().getFullYear();
-document.getElementById('to2').onclick=()=>{if(!document.getElementById('compliance').checked){alert(I[document.documentElement.dataset.lang].s1Check);return;}show('step2');};
-document.getElementById('back2').onclick=()=>show('step1');
-document.getElementById('to3').onclick=()=>show('step3');
-document.getElementById('back3').onclick=()=>show('step2');
-document.getElementById('to4').onclick=()=>show('step4');
-document.getElementById('back4').onclick=()=>show('step3');
-document.getElementById('to5').onclick=()=>show('step5');
-document.getElementById('restart').onclick=()=>{localStorage.removeItem('mbp_state');location.reload();};
-document.getElementById('back6').onclick=()=>show('step5');
-updateProgress('step1');
 
-/* =================== State / Utils =================== */
-const state={ vector:"",serotype:"",cellLine:"",techniques:[],yearsWindow:2,retMax:10,onlyOA:true,articles:[],abstracts:{},fulltexts:{},summaries:[],aiText:"",citations:[], uploads:[] };
+/* =================== Accordéon + défilement bas -> haut =================== */
+for(const blk of document.querySelectorAll('.block')){
+  const head=blk.querySelector('header');
+  head.addEventListener('click', (e)=>{
+    // éviter de refermer si clic sur bouton data-open
+    if(e.target.closest('button[data-open]')) return;
+    blk.classList.toggle('open');
+  });
+}
+// boutons "Continuer" : ouvrent le bloc ciblé (au-dessus à l’écran)
+for(const btn of document.querySelectorAll('button[data-open]')){
+  btn.addEventListener('click', ()=>{
+    const sel = btn.getAttribute('data-open');
+    const target = document.querySelector(sel);
+    if(target){ target.classList.add('open'); target.scrollIntoView({behavior:'smooth',block:'center'}); }
+  });
+}
+
+/* =================== État & utilitaires =================== */
+const state={ vector:"",serotype:"",cellLine:"",techniques:[],yearsWindow:2,retMax:10,onlyOA:true,articles:[],abstracts:{},fulltexts:{},aiText:"",citations:[], uploads:[] };
 const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa)\b/gi;
 function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
 function esc(s){return (s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
 
-/* =================== Europe PMC Search (OA + abstracts) =================== */
+/* =================== Recherche Europe PMC =================== */
 document.getElementById('runSearch').onclick=runSearchEPMC;
 async function runSearchEPMC(){
+  if(!document.getElementById('compliance').checked){ alert(document.documentElement.dataset.lang==='fr'?'Merci de confirmer la conformité.':'Please confirm compliance.'); return; }
   state.vector=document.getElementById('vector').value.trim()||'adenovirus';
   state.serotype=document.getElementById('serotype').value.trim();
   state.cellLine=document.getElementById('cellLine').value.trim();
@@ -387,7 +323,7 @@ async function runSearchEPMC(){
   let q = `${terms} AND PUB_YEAR:[${minYear} TO 3000] AND HAS_ABSTRACT:Y`; if(state.onlyOA) q+=` AND OPEN_ACCESS:Y`;
   const url = `https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent(q)}&pageSize=${state.retMax}&format=json&sort_date:y`;
 
-  document.getElementById('searchInfo').textContent = (document.documentElement.dataset.lang==='fr'?'Recherche…':'Searching…');
+  const info=document.getElementById('searchInfo'); info.textContent=(document.documentElement.dataset.lang==='fr'?'Recherche…':'Searching…');
   try{
     const r=await fetch(url); const j=await r.json(); const res=(j.resultList?.result)||[];
     state.articles = res.map(x=>{
@@ -395,11 +331,14 @@ async function runSearchEPMC(){
       return { id, src, pmid:x.pmid||'', doi:x.doi||'', title:x.title||'', source:x.journalTitle||x.source||'', year:x.pubYear||'', authors:(x.authorString||'').split(', ').slice(0,6), oa:(x.isOpenAccess==="Y"||x.openAccess=="Y"||x.openAccess), selected:false, hasAbstractInline:!!x.abstractText, abstractInline:x.abstractText||'' };
     });
     renderResults();
-    document.getElementById('searchInfo').textContent=`${state.articles.length} ${(document.documentElement.dataset.lang==='fr'?'article(s)':'result(s)')} — Europe PMC.`;
+    info.textContent = `${state.articles.length} ${(document.documentElement.dataset.lang==='fr'?'article(s)':'result(s)')}`;
+    // Ouvrir auto le bloc Résultats
+    document.querySelector('#blk3').classList.add('open');
+    document.querySelector('#blk3').scrollIntoView({behavior:'smooth',block:'center'});
   }catch(e){
     console.error(e);
-    document.getElementById('results').innerHTML='<div class="panel">Europe PMC error.</div>';
-    document.getElementById('searchInfo').textContent='';
+    document.getElementById('results').innerHTML='<div class="pub-card">Erreur Europe PMC.</div>';
+    info.textContent='';
   }
 }
 function renderResults(){
@@ -440,7 +379,6 @@ function renderResults(){
           const r=await fetch(url); const xml=await r.text();
           state.fulltexts[a.id]=xml;
           btn.textContent=document.documentElement.dataset.lang==='fr'?'Texte intégral chargé':'Full text loaded';
-          btn.classList.remove('secondary');
         }catch(e){btn.disabled=false;btn.textContent='Retry';}
       };
     }
@@ -449,35 +387,33 @@ function renderResults(){
 }
 function updateSelectionInfo(){
   const n=state.articles.filter(a=>a.selected).length;
-  const txt = `${n} ${document.documentElement.dataset.lang==='fr'?'article(s) sélectionné(s) — minimum requis : 1':'selected — minimum required: 1'}`;
+  const txt = `${n} ${document.documentElement.dataset.lang==='fr'?'sélectionné(s) — min: 1':'selected — min: 1'}`;
   const selInfo=document.getElementById('selInfo'); if(selInfo) selInfo.textContent=txt;
   const L=document.getElementById('selectedList'); if(!L) return;
   const chosen=state.articles.filter(a=>a.selected);
   L.innerHTML = chosen.length
     ? chosen.map(a=>`<div class="pub-card"><strong>${esc(a.title)}</strong><div class="muted">${esc(a.source)} · ${esc(a.year||'—')} — ${a.src}:${a.id}${a.doi?` — DOI:${a.doi}`:''}</div></div>`).join('')
-    : `<div class="pub-card muted">${document.documentElement.dataset.lang==='fr'?'Aucune sélection pour l’instant.':'No selection yet.'}</div>`;
+    : `<div class="pub-card muted">${document.documentElement.dataset.lang==='fr'?'Aucune sélection.':'No selection.'}</div>`;
 }
 
-/* =================== IA: Hugging Face (gratuit) =================== */
+/* =================== IA Hugging Face (résumé) =================== */
 document.getElementById('analyzeBtn').onclick=analyzeSelected;
 async function analyzeSelected(){
   const chosen=state.articles.filter(a=>a.selected);
   if(chosen.length<1){alert(document.documentElement.dataset.lang==='fr'?'Sélectionne au moins 1 article.':'Select at least 1 article.');return;}
   const techs=[...document.querySelectorAll('.tech:checked')].map(x=>x.value);
-  if(!techs.length){alert(document.documentElement.dataset.lang==='fr'?'Sélectionne au moins une technique (Étape 2).':'Select at least one technique (Step 2).');return;}
+  if(!techs.length){alert(document.documentElement.dataset.lang==='fr'?'Sélectionne au moins une technique.':'Select at least one technique.');return;}
 
-  // >>>>>>>>>> INSÈRE ICI TON TOKEN HF (Read) — crée-le sur https://huggingface.co/settings/tokens <<<<<<<<<<
-  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // <-- remplace par ton vrai token Hugging Face
+  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // <-- remplace si tu utilises Hugging Face
   const HF_MODEL = "facebook/bart-large-cnn";
 
-  document.getElementById('selInfo').textContent=(document.documentElement.dataset.lang==='fr'?'Analyse IA en cours (Hugging Face)…':'AI analysis in progress (Hugging Face)…');
+  document.getElementById('selInfo').textContent=(document.documentElement.dataset.lang==='fr'?'Analyse IA…':'AI analysis…');
 
   const docs = [];
-  for(const a of chosen.slice(0,8)){ // limite vitesse
+  for(const a of chosen.slice(0,8)){
     let text="";
-    if(state.fulltexts[a.id]){
-      text = extractTextFromFullTextXML(state.fulltexts[a.id]);
-    }else{
+    if(state.fulltexts[a.id]) text = extractTextFromFullTextXML(state.fulltexts[a.id]);
+    else{
       const abs = a.abstractInline || await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/${a.src}/${a.id}/abstractText?format=plain`).then(r=>r.text()).catch(()=> '');
       text = abs;
     }
@@ -488,10 +424,10 @@ async function analyzeSelected(){
   const summaries=[];
   for(const d of docs){
     try{
-      const response = await fetch(
-        `https://api-inference.huggingface.co/models/${HF_MODEL}`,
-        { headers: { Authorization: `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" }, method: "POST", body: JSON.stringify({ inputs: d.text }) }
-      );
+      const response = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{
+        headers:{Authorization:`Bearer ${HF_TOKEN}`,"Content-Type":"application/json"},
+        method:"POST", body: JSON.stringify({ inputs: d.text })
+      });
       const result = await response.json();
       const summary = (Array.isArray(result) && result[0]?.summary_text) ? result[0].summary_text : "(summary unavailable)";
       summaries.push({ meta:d.meta, summary });
@@ -499,7 +435,7 @@ async function analyzeSelected(){
   }
 
   const lang=document.documentElement.dataset.lang;
-  let body = (lang==='fr' ? `## Synthèse interprétée (niveau documentaire)\n` : `## Interpreted synthesis (documentary level)\n`);
+  let body = (lang==='fr'?`## Synthèse interprétée (documentaire)\n`:`## Interpreted synthesis (documentary)\n`);
   body += (lang==='fr'
     ? `Demande: vecteur=${document.getElementById('vector').value||'Adenovirus'}; sérotype=${document.getElementById('serotype').value||''}; lignée=${document.getElementById('cellLine').value||''}; techniques=${techs.join(', ')}.\n\n`
     : `Request: vector=${document.getElementById('vector').value||'Adenovirus'}; serotype=${document.getElementById('serotype').value||''}; cell line=${document.getElementById('cellLine').value||''}; techniques=${techs.join(', ')}.\n\n`);
@@ -510,11 +446,8 @@ async function analyzeSelected(){
   });
 
   body += (lang==='fr'
-    ? `### Proposition documentaire (non-opérationnelle)\n`
-    : `### Documentary proposal (non-operational)\n`);
-  body += (lang==='fr'
-    ? `Synthèse des pratiques décrites : production cellulaire amont, récolte & clarification, capture (affinité/AEX), concentration/diafiltration (TFF), polishing et contrôles qualité. Les paramètres opératoires restent volontairement absents. À adapter via vos SOP internes.\n\n`
-    : `Synthesis of practices: upstream cell production, harvest & clarification, capture (affinity/AEX), concentration/diafiltration (TFF), polishing and quality controls. Operational parameters are intentionally omitted. Adapt via your internal SOPs.\n\n`);
+    ? `### Proposition documentaire (non-opérationnelle)\nSynthèse des pratiques : amont cellulaire, récolte & clarification, capture (affinité/AEX), TFF, polishing, contrôles qualité. Paramètres opératoires volontairement absents.\n\n`
+    : `### Documentary proposal (non-operational)\nPractices synthesized: upstream cell production, harvest & clarification, capture (affinity/AEX), TFF, polishing, quality controls. Operational parameters intentionally omitted.\n\n`);
 
   state.aiText = body;
   state.citations = summaries.map((s,i)=>({
@@ -524,11 +457,11 @@ async function analyzeSelected(){
   }));
 
   renderPreview();
-  document.getElementById('selInfo').textContent=(lang==='fr'?'Analyse terminée (Hugging Face)':'Analysis complete (Hugging Face)');
-  show('step5');
+  // ouvrir le bloc Aperçu
+  const b=document.querySelector('#blk5'); b.classList.add('open'); b.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
-/* =================== Fulltext XML → sections texte =================== */
+/* =================== Fulltext XML → texte =================== */
 function extractTextFromFullTextXML(xmlString){
   const parser=new DOMParser();
   let text=''; try{
@@ -547,7 +480,7 @@ function extractTextFromFullTextXML(xmlString){
   return text;
 }
 
-/* =================== Étape 6 — Upload & extraction locale =================== */
+/* =================== Upload local (PDF/DOCX/TXT) =================== */
 const drop = document.getElementById('drop');
 const input = document.getElementById('fileInput');
 const list = document.getElementById('filesList');
@@ -568,7 +501,6 @@ function handleFiles(files){
 document.getElementById('runLocal').onclick = runLocalAnalysis;
 
 async function runLocalAnalysis(){
-  // Extract text locally (no network)
   const texts=[];
   for(const u of state.uploads){
     if(u.text){ texts.push({name:u.file.name, text:u.text}); continue; }
@@ -576,14 +508,12 @@ async function runLocalAnalysis(){
     const buf = await u.file.arrayBuffer();
 
     if(ext==='pdf'){
-      // pdf.js
       const pdfjsLib = window['pdfjsLib'];
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
       const pdf = await pdfjsLib.getDocument({data:buf}).promise;
       let out=''; for(let i=1;i<=pdf.numPages;i++){ const page = await pdf.getPage(i); const content=await page.getTextContent(); out += content.items.map(it=>it.str).join(' ') + '\n'; }
       u.text = out.replace(/\s+/g,' ').trim();
     }else if(ext==='docx'){
-      // mammoth.js
       const res = await window.mammoth.extractRawText({arrayBuffer:buf});
       u.text = (res.value||'').replace(/\s+/g,' ').trim();
     }else if(ext==='txt'){
@@ -596,35 +526,40 @@ async function runLocalAnalysis(){
 
   if(!texts.length){ alert(document.documentElement.dataset.lang==='fr'?'Aucun fichier.':'No file.'); return; }
 
-  // Summarize with Hugging Face (same token)
-  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // <-- remplace par ton token
+  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // <-- optionnel
   const HF_MODEL = "facebook/bart-large-cnn";
   const summaries=[];
   for(const t of texts){
     const clip = (t.text||'').slice(0,4000);
     if(!clip){ summaries.push({name:t.name, summary:'(vide)'}); continue; }
-    try{
-      const resp = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{
-        method:'POST',
-        headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},
-        body:JSON.stringify({inputs: clip})
-      });
-      const j=await resp.json();
-      const s=(Array.isArray(j)&&j[0]?.summary_text)?j[0].summary_text:'(summary unavailable)';
-      summaries.push({name:t.name, summary:sanitize(s)});
-    }catch(e){ summaries.push({name:t.name, summary:'(error)'}); }
+    if(HF_TOKEN.startsWith("hf_")){
+      try{
+        const resp = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{
+          method:'POST',
+          headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},
+          body:JSON.stringify({inputs: clip})
+        });
+        const j=await resp.json();
+        const s=(Array.isArray(j)&&j[0]?.summary_text)?j[0].summary_text:'(summary unavailable)';
+        summaries.push({name:t.name, summary:sanitize(s)});
+      }catch(e){ summaries.push({name:t.name, summary:'(error)'}); }
+    }else{
+      // Pas de token : on se contente d'ajouter le texte brut (ou message)
+      summaries.push({name:t.name, summary:'(IA non configurée — ajoute un token Hugging Face pour résumer automatiquement)'});
+    }
   }
 
   const lang=document.documentElement.dataset.lang;
-  let block = (lang==='fr'?`## Documents internes — Synthèse locale (niveau documentaire)\n`:`## Internal documents — Local synthesis (documentary level)\n`);
+  let block = (lang==='fr'?`## Documents internes — Synthèse locale (documentaire)\n`:`## Internal documents — Local synthesis (documentary)\n`);
   summaries.forEach(s=>{ block += `**${s.name}** — ${s.summary}\n\n`; });
 
   state.aiText = (state.aiText||'') + '\n' + block;
   renderPreview();
-  show('step5');
+  // ouvrir l’aperçu
+  const b=document.querySelector('#blk5'); b.classList.add('open'); b.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
-/* =================== Preview & PDF =================== */
+/* =================== Preview & Export PDF (fond blanc, titres bleus) =================== */
 function renderPreview(){
   const lang=document.documentElement.dataset.lang;
   const meta=[
@@ -633,22 +568,10 @@ function renderPreview(){
     document.getElementById('cellLine').value?`${lang==='fr'?'Lignée cellulaire':'Cell line'} : ${document.getElementById('cellLine').value}`:null
   ].filter(Boolean).join('\n');
 
-  const header = (lang==='fr'
-  ? `# Protocole documentaire — Purification Adénovirus
-
-${meta}
-
-## Résumé de la demande & méthode
-Revue de littérature (Europe PMC / PubMed) focalisée sur les abstracts et le texte intégral open access. Résumés IA (Hugging Face). Sortie non-opérationnelle. Citations en bas de page.`
-  : `# Documentary protocol — Adenovirus purification
-
-${meta}
-
-## Request summary & method
-Literature review (Europe PMC / PubMed) focused on abstracts and open-access full text. AI summaries (Hugging Face). Non-operational output. Footnote citations included.`);
-
   const foot = (state.citations||[]).map(c=>`[${c.n}] ${c.title} (${c.year}), ${c.source}${c.doi?` — DOI:${c.doi}`:''}${c.pmid?` — PMID:${c.pmid}`:''} — ${c.url}`).join('\n');
-  const doc = `${header}
+  const doc = `${lang==='fr'
+  ? `# Protocole documentaire — Purification Adénovirus\n\n${meta}\n\n## Résumé & méthode\nRevue Europe PMC (abstracts + OA). Synthèse IA (si configurée). Aucune instruction expérimentale.\n`
+  : `# Documentary protocol — Adenovirus purification\n\n${meta}\n\n## Summary & method\nEurope PMC review (abstracts + OA). AI synthesis (if configured). No experimental instructions.\n`}
 
 ${state.aiText||''}
 
@@ -675,30 +598,28 @@ async function exportPDF(){
   }catch(e){}
 
   // titre
+  setText(pdf,'#0d2a5a',18,'bold');
   const lang=document.documentElement.dataset.lang;
-  setText(pdf,'#1587ff',18,'bold');
   pdf.text(lang==='fr'?'Protocole documentaire — Purification Adénovirus':'Documentary protocol — Adenovirus purification', M+180, M+14);
   setText(pdf,'#333333',11,'normal');
 
-  // barres colorées
-  pdf.setDrawColor(0,201,139); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
-  pdf.setDrawColor(21,135,255); pdf.setLineWidth(2); pdf.line(M, M+54, W-M, M+54);
+  // ligne bleue
+  pdf.setDrawColor(13,42,90); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
 
   // contenu
-  let y=M+80;
+  let y=M+74;
   const content=document.getElementById('preview').textContent||'';
   const lines=content.split('\n');
   for(const raw of lines){
     const line=raw.trim();
     if(!line){ y+=6; continue; }
-    if(line.startsWith('# ')){ y=putHeading(pdf,line.replace(/^#\s+/,'').trim(),y,16,'#1587ff',M,W,H); }
-    else if(line.startsWith('## ')){ y=putHeading(pdf,line.replace(/^##\s+/,'').trim(),y,13,'#00c98b',M,W,H); }
-    else if(line.startsWith('### ')){ y=putHeading(pdf,line.replace(/^###\s+/,'').trim(),y,12,'#00c98b',M,W,H); }
+    if(line.startsWith('# ')){ y=putHeading(pdf,line.replace(/^#\s+/,'').trim(),y,16,'#0d2a5a',M,W,H); }
+    else if(line.startsWith('## ')){ y=putHeading(pdf,line.replace(/^##\s+/,'').trim(),y,13,'#0d2a5a',M,W,H); }
+    else if(line.startsWith('### ')){ y=putHeading(pdf,line.replace(/^###\s+/,'').trim(),y,12,'#0d2a5a',M,W,H); }
     else { y=putParagraph(pdf,line,y,M,W,H,11); }
   }
   pdf.save(lang==='fr'?'protocole-documentaire-adenovirus.pdf':'documentary-protocol-adenovirus.pdf');
 }
-
 function setText(pdf,hex,size,weight){const [r,g,b]=hexToRGB(hex); pdf.setTextColor(r,g,b); pdf.setFont('helvetica', weight==='bold'?'bold':'normal'); pdf.setFontSize(size);}
 function putHeading(pdf,text,y,size,color,M,W,H){
   if(y + size + 18 > H - M){ pdf.addPage(); pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F'); y=M; }
@@ -707,7 +628,7 @@ function putHeading(pdf,text,y,size,color,M,W,H){
   return y+12;
 }
 function putParagraph(pdf,text,y,M,W,H,size=11){
-  setText(pdf,'#000000',size,'normal');
+  setText(pdf,'#000000',size,'normal'); /* texte noir dans PDF pour lisibilité */
   const safe=(text||'').replace(REDACT,"[…]");
   const chunks=pdf.splitTextToSize(safe,W-2*M);
   for(const ln of chunks){
