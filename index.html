@@ -5,36 +5,39 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Montes BioPharma — AI Literature Assistant</title>
 <meta name="color-scheme" content="light"/>
+<!-- Polices: look clinique & premium -->
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<!-- pdf.js (pour extraction PDF en local) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha512-6rU1hXg6H5ZcPL4m7r2ItkUmtQ3gH8xQ4z4y+0pKkCwjZ+oI61W5tD6K6GmTQy6y9Xl8sUn3G4z0Ff8gqRz0NA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- mammoth.js (pour extraction DOCX en local) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" integrity="sha512-7tG1o4mTzU0lQqDq0m9H5tPp7uVf6sHjz8hK2aR+H6q3H6A8mJm2i7cUe4m6QeQm2oFqR7zXg9Gk1D3b3mF7xQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
-/* =================== THEME — LIGHT BIOTECH (Duponte ADN style) =================== */
+/* =================== THEME — LIGHT BIOTECH (Duponte DNA ultra-renforcé) =================== */
 :root{
-  --bg0:#f7fbff; --bg1:#ecf4ff; --bg2:#dfeafb;
-  --ink:#09131e; --sub:#475a73; --muted:#7a8aa0;
+  --bg0:#f9fbfc; --bg1:#eef5ff; --bg2:#dcebf9;
+  --ink:#0a1b2b; --ink-2:#13324e; --muted:#6c7f94;
   --g:#00c98b; --g2:#00ffb3; --b:#1587ff; --b2:#46b3ff;
-  --glass: rgba(255,255,255,.65);
-  --border: rgba(13, 110, 253, .22);
+  --glass: rgba(255,255,255,.72);
+  --border: rgba(21,135,255,.22);
   --radius:18px;
-  --shadow: 0 18px 50px rgba(31,62,120,.15);
-  --haloG: 0 0 30px rgba(0,201,139,.25), 0 0 60px rgba(0,255,179,.18);
-  --haloB: 0 0 30px rgba(21,135,255,.22), 0 0 60px rgba(70,179,255,.18);
+  --shadow: 0 18px 50px rgba(31,62,120,.13);
+  --haloG: 0 0 34px rgba(0,201,139,.26), 0 0 70px rgba(0,255,179,.18);
+  --haloB: 0 0 34px rgba(21,135,255,.24), 0 0 70px rgba(70,179,255,.18);
   --danger:#e25555;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;color:var(--ink);
-  font-family:Outfit,system-ui,-apple-system,"Segoe UI",Ubuntu,Arial,sans-serif;
+  margin:0;color:var(--ink); font-family:Outfit,system-ui,-apple-system,"Segoe UI",Ubuntu,Arial,sans-serif;
   background:
-    radial-gradient(1200px 600px at 12% -10%, rgba(70,179,255,.25), transparent 60%),
-    radial-gradient(1100px 540px at 90% -12%, rgba(0,201,139,.20), transparent 65%),
+    radial-gradient(1400px 640px at 14% -12%, rgba(70,179,255,.26), transparent 60%),
+    radial-gradient(1200px 600px at 92% -12%, rgba(0,201,139,.22), transparent 65%),
     linear-gradient(180deg, var(--bg0), var(--bg1) 46%, var(--bg2));
   overflow-x:hidden;
 }
 a{color:var(--b);text-decoration:none}
 a:hover{text-decoration:underline}
 img{display:block;max-width:100%}
-.mono{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace}
 
 /* =================== PARTICLES =================== */
 #particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply}
@@ -42,7 +45,7 @@ img{display:block;max-width:100%}
 /* =================== HEADER =================== */
 header{
   position:sticky;top:0;z-index:20;
-  background:linear-gradient(90deg, rgba(255,255,255,.75), rgba(255,255,255,.55));
+  background:linear-gradient(90deg, rgba(255,255,255,.80), rgba(255,255,255,.58));
   backdrop-filter:saturate(160%) blur(10px);
   border-bottom:1px solid rgba(21,135,255,.16);
 }
@@ -52,8 +55,7 @@ header{
 }
 .logo{height:42px;width:auto;object-fit:contain;filter: drop-shadow(0 6px 18px rgba(21,135,255,.18)) drop-shadow(0 8px 22px rgba(0,201,139,.18))}
 .brand{
-  font-family:"Barlow Condensed",sans-serif;
-  text-transform:uppercase;letter-spacing:.10em;font-weight:700;font-size:20px;color:#0a1a2c;
+  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.10em;font-weight:700;font-size:20px;color:#0a1a2c;
 }
 .lang{margin-left:auto;display:flex;gap:8px}
 .lang button{
@@ -66,26 +68,25 @@ header{
 .container{max-width:1260px;margin:0 auto;padding:0 18px;position:relative;z-index:1}
 .hero{
   display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;
-  padding:26px 0 10px;
+  padding:28px 0 8px;
 }
 .hero .logoWrap{
-  height:78px;width:78px;border-radius:999px;display:grid;place-items:center;
+  height:80px;width:80px;border-radius:999px;display:grid;place-items:center;
   background:
-    radial-gradient(70px 70px at 50% 50%, rgba(0,201,139,.12), transparent 60%),
-    radial-gradient(90px 90px at 50% 50%, rgba(21,135,255,.10), transparent 65%);
-  border:1px solid rgba(21,135,255,.18);
-  box-shadow: var(--haloG), var(--haloB);
+    radial-gradient(72px 72px at 50% 50%, rgba(0,201,139,.13), transparent 60%),
+    radial-gradient(92px 92px at 50% 50%, rgba(21,135,255,.12), transparent 65%);
+  border:1px solid rgba(21,135,255,.18); box-shadow: var(--haloG), var(--haloB);
 }
 .hero h1{
-  margin:0;font-size:clamp(26px,4.2vw,46px);line-height:1.06;color:#082136;
-  background:linear-gradient(90deg, #082136, #104b78);-webkit-background-clip:text;background-clip:text;color:transparent;
+  margin:0;font-size:clamp(26px,4.2vw,48px);line-height:1.06;
+  background:linear-gradient(90deg, #0a2a44, #1c5b92);-webkit-background-clip:text;background-clip:text;color:transparent;
 }
 
-/* =================== PANELS =================== */
+/* =================== PANELS (verre dépoli) =================== */
 .panel{
   background:
-    radial-gradient(500px 240px at 20% -10%, rgba(0,201,139,.06), transparent 60%),
-    radial-gradient(520px 240px at 82% -12%, rgba(21,135,255,.08), transparent 65%),
+    radial-gradient(520px 260px at 18% -8%, rgba(0,201,139,.06), transparent 60%),
+    radial-gradient(540px 260px at 84% -10%, rgba(21,135,255,.08), transparent 65%),
     var(--glass);
   border:1px solid var(--border);border-radius:var(--radius);
   box-shadow: var(--shadow);
@@ -99,15 +100,13 @@ header{
 .controls{display:flex;gap:10px;flex-wrap:wrap}
 .btn{
   appearance:none;border:none;cursor:pointer;font-weight:700;border-radius:14px;
-  padding:12px 18px;background:linear-gradient(90deg,var(--g2),var(--b2));color:#062032;
-  box-shadow:0 12px 28px rgba(21,135,255,.18),0 12px 28px rgba(0,201,139,.22);
+  padding:12px 18px;background:#fff;color:#062032;border:1px solid rgba(0,201,139,.30);
+  box-shadow:0 12px 28px rgba(21,135,255,.12),0 12px 28px rgba(0,201,139,.16);
   letter-spacing:.01em; transition:.25s ease;
 }
-.btn:hover{transform:translateY(-1px); box-shadow:0 16px 36px rgba(21,135,255,.22),0 16px 36px rgba(0,201,139,.28)}
-.btn.secondary{
-  background:#ffffff;color:#0a2234;border:1px solid rgba(0,201,139,.26);
-  box-shadow:none;
-}
+.btn:hover{transform:translateY(-1px); box-shadow:0 16px 36px rgba(21,135,255,.16),0 16px 36px rgba(0,201,139,.20)}
+.btn.primary{background:linear-gradient(90deg,var(--g2),var(--b2));color:#062032;border:none}
+.btn.secondary{background:#ffffff;color:#0a2234;border:1px solid rgba(0,201,139,.26)}
 
 .grid{display:grid;gap:14px}
 .row{display:grid;gap:10px}
@@ -115,8 +114,8 @@ header{
 
 label,strong,em,small{font-weight:600}
 input,select,textarea{
-  width:100%;background:rgba(255,255,255,.78);color:#0a1f32;
-  border:1px solid rgba(21,135,255,.24);border-radius:14px;padding:12px 14px;outline:none;
+  width:100%;background:rgba(255,255,255,.85);color:#0a1f32;
+  border:1px solid rgba(21,135,255,.22);border-radius:14px;padding:12px 14px;outline:none;
   transition:border .2s, box-shadow .2s, background .2s;box-shadow: inset 0 0 0 1px rgba(0,201,139,.06);
   font-weight:500;
 }
@@ -128,19 +127,29 @@ input:focus,select:focus,textarea:focus{
 
 .pub-card{
   border:1px solid rgba(0,201,139,.26);border-radius:14px;padding:12px;
-  background:linear-gradient(180deg, rgba(255,255,255,.40), rgba(255,255,255,.70));
+  background:linear-gradient(180deg, rgba(255,255,255,.45), rgba(255,255,255,.75));
   display:grid;gap:8px;backdrop-filter: blur(10px) saturate(120%);box-shadow: inset 0 0 0 1px rgba(21,135,255,.08);
 }
-.tag{font-size:11px;padding:4px 8px;border:1px solid rgba(0,201,139,.28);border-radius:999px;color:#084;color:var(--ink);background:#eafff7}
+.tag{font-size:11px;padding:4px 8px;border:1px solid rgba(0,201,139,.28);border-radius:999px;color:#084;background:#eafff7}
 hr.sep{border:none;border-top:1px solid rgba(0,201,139,.24);margin:10px 0}
 pre#preview{white-space:pre-wrap;font-family:ui-monospace,monospace;background:#fff;border:1px solid rgba(21,135,255,.18);border-radius:12px;padding:14px}
 
 /* =================== PROGRESS BAR =================== */
-.progress{position:sticky;top:70px;z-index:10;margin:8px 0 16px;background:rgba(255,255,255,.7);border:1px solid rgba(0,201,139,.22);border-radius:999px;overflow:hidden;height:10px;box-shadow: var(--shadow)}
+.progress{position:sticky;top:72px;z-index:10;margin:8px 0 16px;background:rgba(255,255,255,.8);border:1px solid rgba(0,201,139,.22);border-radius:999px;overflow:hidden;height:10px;box-shadow: var(--shadow)}
 .progress .bar{height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--b2));box-shadow:0 0 18px rgba(0,201,139,.42)}
 
 /* =================== NOTICES =================== */
 .warn{color:var(--danger);font-weight:700}
+
+/* =================== UPLOAD ZONE (Étape 6) =================== */
+.drop{
+  display:grid;place-items:center;text-align:center;gap:8px;
+  padding:22px;border:2px dashed rgba(21,135,255,.30);border-radius:16px;background:rgba(255,255,255,.7);
+}
+.drop.drag{border-color: var(--g); box-shadow: var(--haloG)}
+.drop small{color:var(--muted)}
+.file-list{display:grid;gap:10px;margin-top:10px}
+.file-item{padding:10px;border:1px solid rgba(21,135,255,.18);border-radius:12px;background:#fff}
 
 /* =================== FOOTER =================== */
 .footer{opacity:.8;text-align:center;margin:28px 0 48px}
@@ -181,7 +190,7 @@ pre#preview{white-space:pre-wrap;font-family:ui-monospace,monospace;background:#
       <span data-i="s1Check">I confirm I am a qualified professional and rely on validated internal SOPs.</span>
     </label>
     <div class="controls" style="margin-top:10px">
-      <button class="btn" id="to2" data-i="btnContinue">Continue</button>
+      <button class="btn primary" id="to2" data-i="btnContinue">Continue</button>
     </div>
   </section>
 
@@ -230,7 +239,7 @@ pre#preview{white-space:pre-wrap;font-family:ui-monospace,monospace;background:#
 
     <div class="controls" style="margin-top:12px">
       <button class="btn secondary" id="back2" data-i="btnBack">Back</button>
-      <button class="btn" id="to3" data-i="btnContinue">Continue</button>
+      <button class="btn primary" id="to3" data-i="btnContinue">Continue</button>
     </div>
   </section>
 
@@ -238,30 +247,30 @@ pre#preview{white-space:pre-wrap;font-family:ui-monospace,monospace;background:#
   <section id="step3" class="panel step">
     <h2 data-i="s3Title">Step 3 — Search (Europe PMC, abstracts & full text)</h2>
     <div class="controls" style="margin-top:8px">
-      <button class="btn" id="runSearch" data-i="btnSearch">Run search</button>
+      <button class="btn primary" id="runSearch" data-i="btnSearch">Run search</button>
       <span id="searchInfo" class="muted"></span>
     </div>
     <hr class="sep">
     <div id="results" class="grid"></div>
     <div class="controls" style="margin-top:12px">
       <button class="btn secondary" id="back3" data-i="btnBack">Back</button>
-      <button class="btn" id="to4" data-i="btnContinue">Continue</button>
+      <button class="btn primary" id="to4" data-i="btnContinue">Continue</button>
     </div>
   </section>
 
   <!-- Step 4 -->
   <section id="step4" class="panel step">
     <h2 data-i="s4Title">Step 4 — Selection & AI analysis</h2>
-    <p class="muted" data-i="s4Text">Select <b>at least 5 articles</b> then run analysis. We extract relevant text and ask the AI (Hugging Face) to summarize. Footnotes will cite sources where relevant.</p>
+    <p class="muted" data-i="s4Text">Select <b>at least one article</b> then run analysis. We extract relevant text and ask the AI (Hugging Face) to summarize. Footnotes will cite sources where relevant.</p>
     <div class="controls">
-      <button class="btn" id="analyzeBtn" data-i="btnAnalyze">Analyze selected articles</button>
+      <button class="btn primary" id="analyzeBtn" data-i="btnAnalyze">Analyze selected articles</button>
       <span id="selInfo" class="muted"></span>
     </div>
     <hr class="sep">
     <div id="selectedList" class="grid"></div>
     <div class="controls" style="margin-top:12px">
       <button class="btn secondary" id="back4" data-i="btnBack">Back</button>
-      <button class="btn" id="to5" data-i="btnContinue">Continue</button>
+      <button class="btn primary" id="to5" data-i="btnContinue">Continue</button>
     </div>
   </section>
 
@@ -273,8 +282,27 @@ pre#preview{white-space:pre-wrap;font-family:ui-monospace,monospace;background:#
     </div>
     <pre id="preview"></pre>
     <div class="controls" style="margin-top:10px">
-      <button class="btn" id="exportPdf" data-i="btnPdf">Export PDF</button>
+      <button class="btn primary" id="exportPdf" data-i="btnPdf">Export PDF</button>
       <button class="btn secondary" id="restart" data-i="btnRestart">Restart</button>
+    </div>
+  </section>
+
+  <!-- Step 6 — DOCUMENTS INTERNES -->
+  <section id="step6" class="panel step">
+    <h2 data-i="s6Title">Step 6 — Internal documents (local)</h2>
+    <p class="muted" data-i="s6Text">Drop PDFs, DOCX or TXT files below. Text is extracted <b>locally</b> in your browser (no network). Then the content is summarized with Hugging Face (free).</p>
+    <div id="drop" class="drop">
+      <div>
+        <strong data-i="s6DropTitle">Drop your files here</strong>
+        <div class="muted" data-i="s6DropHint">or click to select</div>
+        <small data-i="s6DropTypes">Accepted: PDF, DOCX, TXT</small>
+      </div>
+      <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt" style="display:none">
+    </div>
+    <div class="file-list" id="filesList"></div>
+    <div class="controls" style="margin-top:12px">
+      <button class="btn secondary" id="back6" data-i="btnBack">Back</button>
+      <button class="btn primary" id="runLocal" data-i="btnAnalyze">Analyze selected articles</button>
     </div>
   </section>
 
@@ -304,8 +332,8 @@ cx.shadowColor=`rgba(${b-80},${g},${b},.65)`;cx.shadowBlur=10;cx.fill();cx.shado
 
 /* =================== i18n =================== */
 const I={
-  fr:{heroTitle:"Purification Adénovirus — Sélection & synthèse intelligente",s1Title:"Étape 1 — Contexte & conformité",s1Text:"Usage strictement professionnel. Cette application fournit une ossature documentaire issue de la littérature. Aucun paramètre expérimental ou SOP opératoire n’est fourni.",s1Check:"Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.",btnContinue:"Continuer",s2Title:"Étape 2 — Paramètres & techniques",labVector:"Vecteur",labSerotype:"Sérotype",labCellLine:"Lignée cellulaire",techTitle:"Techniques Downstream",tClar:"Clarification",tCapt:"Capture (affinité / AEX)",tPol:"Polishing",tTff:"TFF (Concentration / Diafiltration)",tQc:"Contrôles qualité (attributs)",tForm:"Formulation / Documentation",labKeywords:"Mots-clés complémentaires",labYears:"Fenêtre (années récentes)",labMax:"Nombre max. d’articles",labOA:"Uniquement open access (texte intégral)",btnBack:"Retour",s3Title:"Étape 3 — Recherche (Europe PMC, abstracts & texte intégral)",btnSearch:"Lancer la recherche",s4Title:"Étape 4 — Sélection & analyse IA",s4Text:"Coche au moins 5 articles puis lance l’analyse. Nous extrayons du texte pertinent et demandons à l’IA (Hugging Face) de résumer. Les notes de bas de page citent les sources si pertinent.",btnAnalyze:"Analyser les articles sélectionnés",s5Title:"Étape 5 — Aperçu & PDF",safety:"Note sécurité : sortie à visée documentaire issue de la littérature, non utilisable comme instructions expérimentales ou substitut d’une SOP validée.",btnPdf:"Exporter le PDF",btnRestart:"Recommencer"},
-  en:{heroTitle:"Adenovirus Purification — Intelligent literature & protocol synthesis",s1Title:"Step 1 — Context & compliance",s1Text:"Professional use only. This application provides a literature-based documentary scaffold. No experimental parameters or operational SOP are provided.",s1Check:"I confirm I am a qualified professional and rely on validated internal SOPs.",btnContinue:"Continue",s2Title:"Step 2 — Parameters & techniques",labVector:"Vector",labSerotype:"Serotype",labCellLine:"Cell line",techTitle:"Downstream techniques",tClar:"Clarification",tCapt:"Capture (affinity / AEX)",tPol:"Polishing",tTff:"TFF (Concentration / Diafiltration)",tQc:"Quality controls (attributes)",tForm:"Formulation / Documentation",labKeywords:"Additional keywords",labYears:"Recency window",labMax:"Max articles",labOA:"Only open access (full text)",btnBack:"Back",s3Title:"Step 3 — Search (Europe PMC, abstracts & full text)",btnSearch:"Run search",s4Title:"Step 4 — Selection & AI analysis",s4Text:"Select at least 5 articles then run analysis. We extract relevant text and ask the AI (Hugging Face) to summarize. Footnotes will cite sources where relevant.",btnAnalyze:"Analyze selected articles",s5Title:"Step 5 — Preview & PDF",safety:"Safety note: output is a literature-based documentary scaffold. It must not be used as experimental instructions or as a substitute for validated SOPs.",btnPdf:"Export PDF",btnRestart:"Restart"}
+  fr:{heroTitle:"Purification Adénovirus — Sélection & synthèse intelligente",s1Title:"Étape 1 — Contexte & conformité",s1Text:"Usage strictement professionnel. Cette application fournit une ossature documentaire issue de la littérature. Aucun paramètre expérimental ou SOP opératoire n’est fourni.",s1Check:"Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.",btnContinue:"Continuer",s2Title:"Étape 2 — Paramètres & techniques",labVector:"Vecteur",labSerotype:"Sérotype",labCellLine:"Lignée cellulaire",techTitle:"Techniques Downstream",tClar:"Clarification",tCapt:"Capture (affinité / AEX)",tPol:"Polishing",tTff:"TFF (Concentration / Diafiltration)",tQc:"Contrôles qualité (attributs)",tForm:"Formulation / Documentation",labKeywords:"Mots-clés complémentaires",labYears:"Fenêtre (années récentes)",labMax:"Nombre max. d’articles",labOA:"Uniquement open access (texte intégral)",btnBack:"Retour",s3Title:"Étape 3 — Recherche (Europe PMC, abstracts & texte intégral)",btnSearch:"Lancer la recherche",s4Title:"Étape 4 — Sélection & analyse IA",s4Text:"Coche au moins 1 article puis lance l’analyse. Nous extrayons du texte pertinent et demandons à l’IA (Hugging Face) de résumer. Notes de bas de page si pertinent.",btnAnalyze:"Analyser",s5Title:"Étape 5 — Aperçu & PDF",safety:"Note sécurité : sortie à visée documentaire issue de la littérature, non utilisable comme instructions expérimentales ou substitut d’une SOP validée.",btnPdf:"Exporter le PDF",btnRestart:"Recommencer",s6Title:"Étape 6 — Documents internes (local)",s6Text:"Déposez des fichiers PDF, DOCX ou TXT. Le texte est extrait localement dans votre navigateur (sans envoi réseau). La synthèse est produite via Hugging Face (gratuit).",s6DropTitle:"Déposez vos fichiers ici",s6DropHint:"ou cliquez pour sélectionner",s6DropTypes:"Acceptés : PDF, DOCX, TXT"},
+  en:{heroTitle:"Adenovirus Purification — Intelligent literature & protocol synthesis",s1Title:"Step 1 — Context & compliance",s1Text:"Professional use only. This application provides a literature-based documentary scaffold. No experimental parameters or operational SOP are provided.",s1Check:"I confirm I am a qualified professional and rely on validated internal SOPs.",btnContinue:"Continue",s2Title:"Step 2 — Parameters & techniques",labVector:"Vector",labSerotype:"Serotype",labCellLine:"Cell line",techTitle:"Downstream techniques",tClar:"Clarification",tCapt:"Capture (affinity / AEX)",tPol:"Polishing",tTff:"TFF (Concentration / Diafiltration)",tQc:"Quality controls (attributes)",tForm:"Formulation / Documentation",labKeywords:"Additional keywords",labYears:"Recency window",labMax:"Max articles",labOA:"Only open access (full text)",btnBack:"Back",s3Title:"Step 3 — Search (Europe PMC, abstracts & full text)",btnSearch:"Run search",s4Title:"Step 4 — Selection & AI analysis",s4Text:"Select at least 1 article then run analysis. We extract relevant text and ask the AI (Hugging Face) to summarize. Footnotes will cite sources where relevant.",btnAnalyze:"Analyze",s5Title:"Step 5 — Preview & PDF",safety:"Safety note: output is a literature-based documentary scaffold. It must not be used as experimental instructions or as a substitute for validated SOPs.",btnPdf:"Export PDF",btnRestart:"Restart",s6Title:"Step 6 — Internal documents (local)",s6Text:"Drop PDF, DOCX or TXT files. Text is extracted locally in your browser (no network). The synthesis is generated via Hugging Face (free).",s6DropTitle:"Drop your files here",s6DropHint:"or click to select",s6DropTypes:"Accepted: PDF, DOCX, TXT"}
 };
 function setLang(lang){
   document.documentElement.setAttribute('lang',lang);
@@ -322,7 +350,7 @@ document.getElementById('btnEN').onclick=()=>setLang('en');
 setLang('fr');
 
 /* =================== Wizard & Progress =================== */
-const steps=['step1','step2','step3','step4','step5']; const pbar=document.getElementById('pbar');
+const steps=['step1','step2','step3','step4','step5','step6']; const pbar=document.getElementById('pbar');
 function show(id){steps.forEach(s=>document.getElementById(s).classList.remove('active'));document.getElementById(id).classList.add('active');updateProgress(id);window.scrollTo({top:0,behavior:'smooth'});}
 function updateProgress(id){const idx=steps.indexOf(id); const pct=Math.round(((idx+1)/steps.length)*100); pbar.style.width=pct+'%';}
 document.getElementById('year').textContent=new Date().getFullYear();
@@ -334,10 +362,11 @@ document.getElementById('to4').onclick=()=>show('step4');
 document.getElementById('back4').onclick=()=>show('step3');
 document.getElementById('to5').onclick=()=>show('step5');
 document.getElementById('restart').onclick=()=>{localStorage.removeItem('mbp_state');location.reload();};
+document.getElementById('back6').onclick=()=>show('step5');
 updateProgress('step1');
 
 /* =================== State / Utils =================== */
-const state={ vector:"",serotype:"",cellLine:"",techniques:[],yearsWindow:2,retMax:10,onlyOA:true,articles:[],abstracts:{},fulltexts:{},summaries:[],aiText:"",citations:[] };
+const state={ vector:"",serotype:"",cellLine:"",techniques:[],yearsWindow:2,retMax:10,onlyOA:true,articles:[],abstracts:{},fulltexts:{},summaries:[],aiText:"",citations:[], uploads:[] };
 const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa)\b/gi;
 function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
 function esc(s){return (s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
@@ -420,7 +449,7 @@ function renderResults(){
 }
 function updateSelectionInfo(){
   const n=state.articles.filter(a=>a.selected).length;
-  const txt = `${n} ${document.documentElement.dataset.lang==='fr'?'article(s) sélectionné(s) — minimum requis : 5':'selected — minimum required: 5'}`;
+  const txt = `${n} ${document.documentElement.dataset.lang==='fr'?'article(s) sélectionné(s) — minimum requis : 1':'selected — minimum required: 1'}`;
   const selInfo=document.getElementById('selInfo'); if(selInfo) selInfo.textContent=txt;
   const L=document.getElementById('selectedList'); if(!L) return;
   const chosen=state.articles.filter(a=>a.selected);
@@ -433,7 +462,7 @@ function updateSelectionInfo(){
 document.getElementById('analyzeBtn').onclick=analyzeSelected;
 async function analyzeSelected(){
   const chosen=state.articles.filter(a=>a.selected);
-  if(chosen.length<5){alert(document.documentElement.dataset.lang==='fr'?'Sélectionne au moins 5 articles.':'Select at least 5 articles.');return;}
+  if(chosen.length<1){alert(document.documentElement.dataset.lang==='fr'?'Sélectionne au moins 1 article.':'Select at least 1 article.');return;}
   const techs=[...document.querySelectorAll('.tech:checked')].map(x=>x.value);
   if(!techs.length){alert(document.documentElement.dataset.lang==='fr'?'Sélectionne au moins une technique (Étape 2).':'Select at least one technique (Step 2).');return;}
 
@@ -461,11 +490,7 @@ async function analyzeSelected(){
     try{
       const response = await fetch(
         `https://api-inference.huggingface.co/models/${HF_MODEL}`,
-        {
-          headers: { Authorization: `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" },
-          method: "POST",
-          body: JSON.stringify({ inputs: d.text })
-        }
+        { headers: { Authorization: `Bearer ${HF_TOKEN}`, "Content-Type": "application/json" }, method: "POST", body: JSON.stringify({ inputs: d.text }) }
       );
       const result = await response.json();
       const summary = (Array.isArray(result) && result[0]?.summary_text) ? result[0].summary_text : "(summary unavailable)";
@@ -474,9 +499,7 @@ async function analyzeSelected(){
   }
 
   const lang=document.documentElement.dataset.lang;
-  let body = (lang==='fr'
-    ? `## Synthèse interprétée (niveau documentaire)\n`
-    : `## Interpreted synthesis (documentary level)\n`);
+  let body = (lang==='fr' ? `## Synthèse interprétée (niveau documentaire)\n` : `## Interpreted synthesis (documentary level)\n`);
   body += (lang==='fr'
     ? `Demande: vecteur=${document.getElementById('vector').value||'Adenovirus'}; sérotype=${document.getElementById('serotype').value||''}; lignée=${document.getElementById('cellLine').value||''}; techniques=${techs.join(', ')}.\n\n`
     : `Request: vector=${document.getElementById('vector').value||'Adenovirus'}; serotype=${document.getElementById('serotype').value||''}; cell line=${document.getElementById('cellLine').value||''}; techniques=${techs.join(', ')}.\n\n`);
@@ -522,6 +545,83 @@ function extractTextFromFullTextXML(xmlString){
     if(!text){ text = [...xml.querySelectorAll('p')].map(p=>p.textContent.trim()).join('\n'); }
   }catch(e){}
   return text;
+}
+
+/* =================== Étape 6 — Upload & extraction locale =================== */
+const drop = document.getElementById('drop');
+const input = document.getElementById('fileInput');
+const list = document.getElementById('filesList');
+drop.addEventListener('click',()=>input.click());
+drop.addEventListener('dragover',(e)=>{e.preventDefault();drop.classList.add('drag');});
+drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));
+drop.addEventListener('drop',(e)=>{e.preventDefault();drop.classList.remove('drag');handleFiles(e.dataTransfer.files);});
+input.addEventListener('change',(e)=>handleFiles(e.target.files));
+
+function handleFiles(files){
+  [...files].forEach(f=>{
+    state.uploads.push({file:f, text:null});
+    const item=document.createElement('div'); item.className='file-item';
+    item.textContent = `${f.name} — ${(f.size/1024/1024).toFixed(2)} MB`;
+    list.appendChild(item);
+  });
+}
+document.getElementById('runLocal').onclick = runLocalAnalysis;
+
+async function runLocalAnalysis(){
+  // Extract text locally (no network)
+  const texts=[];
+  for(const u of state.uploads){
+    if(u.text){ texts.push({name:u.file.name, text:u.text}); continue; }
+    const ext = u.file.name.toLowerCase().split('.').pop();
+    const buf = await u.file.arrayBuffer();
+
+    if(ext==='pdf'){
+      // pdf.js
+      const pdfjsLib = window['pdfjsLib'];
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+      let out=''; for(let i=1;i<=pdf.numPages;i++){ const page = await pdf.getPage(i); const content=await page.getTextContent(); out += content.items.map(it=>it.str).join(' ') + '\n'; }
+      u.text = out.replace(/\s+/g,' ').trim();
+    }else if(ext==='docx'){
+      // mammoth.js
+      const res = await window.mammoth.extractRawText({arrayBuffer:buf});
+      u.text = (res.value||'').replace(/\s+/g,' ').trim();
+    }else if(ext==='txt'){
+      u.text = new TextDecoder().decode(new Uint8Array(buf)).replace(/\s+/g,' ').trim();
+    }else{
+      u.text = '';
+    }
+    texts.push({name:u.file.name, text:u.text});
+  }
+
+  if(!texts.length){ alert(document.documentElement.dataset.lang==='fr'?'Aucun fichier.':'No file.'); return; }
+
+  // Summarize with Hugging Face (same token)
+  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // <-- remplace par ton token
+  const HF_MODEL = "facebook/bart-large-cnn";
+  const summaries=[];
+  for(const t of texts){
+    const clip = (t.text||'').slice(0,4000);
+    if(!clip){ summaries.push({name:t.name, summary:'(vide)'}); continue; }
+    try{
+      const resp = await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{
+        method:'POST',
+        headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},
+        body:JSON.stringify({inputs: clip})
+      });
+      const j=await resp.json();
+      const s=(Array.isArray(j)&&j[0]?.summary_text)?j[0].summary_text:'(summary unavailable)';
+      summaries.push({name:t.name, summary:sanitize(s)});
+    }catch(e){ summaries.push({name:t.name, summary:'(error)'}); }
+  }
+
+  const lang=document.documentElement.dataset.lang;
+  let block = (lang==='fr'?`## Documents internes — Synthèse locale (niveau documentaire)\n`:`## Internal documents — Local synthesis (documentary level)\n`);
+  summaries.forEach(s=>{ block += `**${s.name}** — ${s.summary}\n\n`; });
+
+  state.aiText = (state.aiText||'') + '\n' + block;
+  renderPreview();
+  show('step5');
 }
 
 /* =================== Preview & PDF =================== */
