@@ -3,60 +3,59 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Montes BioPharma — Assistant Littérature</title>
+<title>Montes BioPharma — Literature Assistant</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" crossorigin="anonymous"></script>
+
 <style>
 :root{
   --bg:#F6F7FB;--panel:#fff;--ink:#0F1226;--muted:#6C7392;
   --primary:#3A49FF;--accent:#00FF6A;--border:#E6E9F4;
   --radius:18px;--shadow:0 10px 30px rgba(15,18,38,.06);
 }
-body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:Outfit,system-ui,-apple-system,"Segoe UI",Ubuntu,Arial,sans-serif;}
-a{color:var(--primary);text-decoration:none}
-a:hover{text-decoration:underline}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Outfit,system-ui,-apple-system,"Segoe UI",Ubuntu,Arial,sans-serif}
+a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
 #particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.75}
-header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.7);
-  backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
-.nav{max-width:1200px;margin:0 auto;padding:12px 20px;
-  display:flex;align-items:center;gap:14px}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.7);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
 .logo{height:40px}.brand{font-weight:800;color:var(--ink)}
 .lang{margin-left:auto;display:flex;gap:8px}
-.lang button{border:1px solid var(--border);background:#fff;
-  padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer}
+.lang button{border:1px solid var(--border);background:#fff;padding:8px 14px;border-radius:999px;font-weight:600;cursor:pointer}
 .lang button.active{border-color:var(--primary)}
-.hero{max-width:1200px;margin:0 auto;padding:60px 20px 20px;z-index:1;position:relative}
+.hero{max-width:1200px;margin:0 auto;padding:56px 20px 12px;z-index:1;position:relative}
 .kicker{color:var(--accent);font-weight:800;letter-spacing:.28em;font-size:13px;text-transform:uppercase}
 .hero h1{margin:10px 0;font-size:clamp(36px,6vw,64px);line-height:1.04;color:var(--primary);font-weight:800;text-transform:uppercase}
-.hero-sub{color:var(--muted);max-width:700px}
-.btn{border-radius:999px;padding:14px 22px;font-weight:700;border:2px solid transparent;cursor:pointer}
-.btn.primary{background:var(--primary);color:#fff}
-.btn.secondary{background:#fff;color:var(--primary);border-color:var(--primary)}
+.hero-sub{color:var(--muted);max-width:720px}
 .section{max-width:1200px;margin:0 auto;padding:20px;z-index:1;position:relative}
 .block{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px}
 .block header{padding:16px 20px;border-bottom:1px solid var(--border);background:#fff}
 .block h2{margin:0;color:var(--primary)}
 .inner{padding:20px}
+.btn{border-radius:999px;padding:12px 18px;font-weight:700;border:2px solid transparent;cursor:pointer}
+.btn.primary{background:var(--primary);color:#fff}
+.btn.secondary{background:#fff;color:var(--primary);border-color:var(--primary)}
+.drop{display:grid;place-items:center;text-align:center;padding:26px;border:2px dashed #CBD3FF;border-radius:16px;background:#FBFCFF;color:var(--muted);cursor:pointer}
+.drop.drag{border-color:var(--primary);background:#F4F6FF}
+.file-list{margin-top:10px}
+.file-item{padding:8px;border:1px solid var(--border);border-radius:12px;background:#fff;margin-top:6px}
 .pub-card{border:1px solid var(--border);border-radius:16px;padding:14px;background:#fff;box-shadow:0 6px 16px rgba(15,18,38,.04);margin-bottom:12px}
 .pub-card strong{color:#0F1226}.muted{color:var(--muted)}
 .tag{font-size:11px;padding:4px 10px;border:1px solid #E0E5FF;border-radius:999px;background:#fff;color:var(--primary);font-weight:700}
-.drop{display:grid;place-items:center;text-align:center;padding:26px;border:2px dashed #CBD3FF;border-radius:16px;background:#FBFCFF;color:var(--muted);cursor:pointer}
-.drop.drag{border-color:var(--primary);background:#F4F6FF}
-.file-list{margin-top:10px}.file-item{padding:8px;border:1px solid var(--border);border-radius:12px;background:#fff;margin-top:6px}
 pre#preview{white-space:pre-wrap;background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;color:#111;box-shadow:0 6px 16px rgba(15,18,38,.04)}
-pre#preview h2{color:#3A49FF;margin-top:16px}
 footer{text-align:center;padding:30px;color:var(--muted)}
 </style>
 </head>
+
 <body>
 <canvas id="particlesCanvas"></canvas>
 
 <header>
   <div class="nav">
     <img src="./assets/montes-biopharma-logo.svg" class="logo" alt="logo">
-    <div class="brand">Montes BioPharma</div>
+    <div class="brand" data-i="brand">Montes BioPharma</div>
     <div class="lang">
       <button id="btnFR" class="active">FR</button>
       <button id="btnEN">EN</button>
@@ -76,7 +75,11 @@ footer{text-align:center;padding:30px;color:var(--muted)}
     <header><h2 data-i="uploadTitle">Documents internes (analyse locale)</h2></header>
     <div class="inner">
       <div id="drop" class="drop">
-        <div><strong data-i="dropTitle">Déposez vos fichiers ici</strong><div class="muted" data-i="dropHint">ou cliquez pour sélectionner</div></div>
+        <div>
+          <strong data-i="dropTitle">Déposez vos fichiers ici</strong>
+          <div class="muted" data-i="dropHint">ou cliquez pour sélectionner</div>
+          <small data-i="dropTypes">Acceptés : PDF, DOCX, TXT</small>
+        </div>
         <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt" style="display:none">
       </div>
       <div id="filesList" class="file-list"></div>
@@ -84,11 +87,17 @@ footer{text-align:center;padding:30px;color:var(--muted)}
     </div>
   </section>
 
-  <!-- Résultats Europe PMC -->
+  <!-- Europe PMC -->
   <section id="blk3" class="block">
-    <header><h2 data-i="pubmedTitle">Résultats littérature (Europe PMC)</h2><small id="searchInfo" class="muted"></small></header>
+    <header>
+      <h2 data-i="pubmedTitle">Résultats littérature (Europe PMC)</h2>
+      <small id="searchInfo" class="muted"></small>
+    </header>
     <div class="inner">
-      <button class="btn primary" id="runSearch" data-i="btnSearch">Rechercher</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input id="q" placeholder="adenovirus purification" style="flex:1;min-width:240px;padding:10px 12px;border:1px solid var(--border);border-radius:12px"/>
+        <button class="btn primary" id="runSearch" data-i="btnSearch">Rechercher</button>
+      </div>
       <div id="results" style="margin-top:20px"></div>
     </div>
   </section>
@@ -96,18 +105,21 @@ footer{text-align:center;padding:30px;color:var(--muted)}
   <!-- Aperçu -->
   <section id="blk5" class="block open">
     <header><h2 data-i="previewTitle">Aperçu et export</h2></header>
-    <div class="inner"><pre id="preview">(Aucun résultat pour l’instant)</pre></div>
+    <div class="inner">
+      <pre id="preview" data-i="previewEmpty">(Aucun résultat pour l’instant)</pre>
+    </div>
   </section>
 </main>
 
-<footer>© <span id="year"></span> Montes BioPharma — Europe PMC / PubMed — Hugging Face</footer>
+<footer>© <span id="year"></span> <span data-i="brand">Montes BioPharma</span> — <span data-i="foot">Europe PMC / PubMed — Hugging Face</span></footer>
 
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 <script>
-/* === Particules visibles === */
+/* === Particules visibles (bleu/vert) === */
 const cv=document.getElementById('particlesCanvas'),cx=cv.getContext('2d');let W,H,PTS=[];
 function size(){W=cv.width=innerWidth;H=cv.height=innerHeight}size();addEventListener('resize',size);
-function R(a,b){return a+Math.random()*(b-a)}function spawn(){return{x:R(0,W),y:R(0,H),vx:R(-.05,.05),vy:-R(.02,.07),r:R(1.2,3.0),t:R(0,6.28),tw:R(.8,1.3)}}
+function R(a,b){return a+Math.random()*(b-a)}
+function spawn(){return{x:R(0,W),y:R(0,H),vx:R(-.05,.05),vy:-R(.02,.07),r:R(1.2,3.0),t:R(0,6.28),tw:R(.8,1.3)}}
 PTS=Array.from({length:Math.min(280,Math.round((W*H)/14000))},spawn);
 (function loop(){requestAnimationFrame(loop);cx.clearRect(0,0,W,H);
 for(const p of PTS){p.t+=.016;const a=.15+.45*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.vx+Math.sin(p.t*.35)*.03;p.y+=p.vy;
@@ -115,62 +127,248 @@ if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
 const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(20+38*mix);const g=Math.round(150+100*(1-mix));const b=Math.round(255-40*(1-mix));
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(${r},${g},${b},${a})`;cx.fill();}})();
 
-/* === Traduction FR/EN === */
-const I={fr:{heroTitle:"Analyse documentaire<br/>scientifique",heroSub:"Recherche Europe PMC, analyse IA, extraction de protocoles, résumé et export PDF.",uploadTitle:"Documents internes (analyse locale)",dropTitle:"Déposez vos fichiers ici",dropHint:"ou cliquez pour sélectionner",btnAnalyze:"Analyser",pubmedTitle:"Résultats littérature (Europe PMC)",btnSearch:"Rechercher",previewTitle:"Aperçu et export"},
-en:{heroTitle:"Scientific<br/>document analysis",heroSub:"Europe PMC search, AI analysis, protocol extraction, summary and PDF export.",uploadTitle:"Internal documents (local analysis)",dropTitle:"Drop your files here",dropHint:"or click to select",btnAnalyze:"Analyze",pubmedTitle:"Literature results (Europe PMC)",btnSearch:"Search",previewTitle:"Preview and export"}};
-function setLang(lang){document.documentElement.dataset.lang=lang;for(const el of document.querySelectorAll('[data-i]')){const t=I[lang][el.dataset.i];if(t){el.innerHTML=t;}}}
-window.addEventListener('DOMContentLoaded',()=>{const btnFR=document.getElementById('btnFR');const btnEN=document.getElementById('btnEN');
-btnFR.onclick=()=>{setLang('fr');btnFR.classList.add('active');btnEN.classList.remove('active');};
-btnEN.onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
-setLang('fr');});
+/* ======================== I18N COMPLET ======================== */
+const I = {
+  fr: {
+    brand:"Montes BioPharma",
+    kicker:"ASSISTANT LITTÉRATURE",
+    heroTitle:"Analyse documentaire<br/>scientifique",
+    heroSub:"Recherche Europe PMC, analyse IA, extraction de protocoles, résumé et export PDF.",
+    uploadTitle:"Documents internes (analyse locale)",
+    dropTitle:"Déposez vos fichiers ici",
+    dropHint:"ou cliquez pour sélectionner",
+    dropTypes:"Acceptés : PDF, DOCX, TXT",
+    btnAnalyze:"Analyser",
+    pubmedTitle:"Résultats littérature (Europe PMC)",
+    btnSearch:"Rechercher",
+    previewTitle:"Aperçu et export",
+    previewEmpty:"(Aucun résultat pour l’instant)",
+    foot:"Europe PMC / PubMed — Hugging Face",
 
-/* === Upload Drag&Drop === */
-const drop=document.getElementById('drop'),input=document.getElementById('fileInput'),list=document.getElementById('filesList');
-drop.addEventListener('click',e=>{e.preventDefault();input.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));});
-drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('drag');});
-drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));
-drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('drag');handleFiles(e.dataTransfer.files);});
-input.addEventListener('change',e=>handleFiles(e.target.files));
-let uploads=[];
-function handleFiles(files){uploads=[...files];list.innerHTML='';[...files].forEach(f=>{const item=document.createElement('div');item.className='file-item';item.textContent=`${f.name} — ${(f.size/1024/1024).toFixed(2)} MB`;list.appendChild(item);});}
+    // Dynamiques / messages
+    m_click_upload:"Aucun fichier sélectionné.",
+    m_searching:"Recherche…",
+    m_results_singular:"1 résultat",
+    m_results_plural:"{n} résultats",
+    m_error_epmc:"Erreur Europe PMC",
+    m_open:"Ouvrir",
+    m_no_selection:"(vide)",
+  },
+  en: {
+    brand:"Montes BioPharma",
+    kicker:"LITERATURE ASSISTANT",
+    heroTitle:"Scientific<br/>document analysis",
+    heroSub:"Europe PMC search, AI analysis, protocol extraction, summary and PDF export.",
+    uploadTitle:"Internal documents (local analysis)",
+    dropTitle:"Drop your files here",
+    dropHint:"or click to select",
+    dropTypes:"Accepted: PDF, DOCX, TXT",
+    btnAnalyze:"Analyze",
+    pubmedTitle:"Literature results (Europe PMC)",
+    btnSearch:"Search",
+    previewTitle:"Preview and export",
+    previewEmpty:"(No output yet)",
+    foot:"Europe PMC / PubMed — Hugging Face",
 
-/* === Analyse IA locale (extraction + résumé) === */
-document.getElementById('runLocal').onclick=runLocalAnalysis;
-async function runLocalAnalysis(){
-  if(!uploads.length){alert('Aucun fichier.');return;}
-  const HF_TOKEN="hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // <-- ton token HF
-  const HF_MODEL="facebook/bart-large-cnn";
-  let combinedText="";
-  for(const file of uploads){
-    const ext=file.name.toLowerCase().split('.').pop();const buf=await file.arrayBuffer();let text="";
-    if(ext==='pdf'){const pdfjsLib=window['pdfjsLib'];pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';const pdf=await pdfjsLib.getDocument({data:buf}).promise;for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i);const content=await page.getTextContent();text+=content.items.map(it=>it.str).join(' ')+' ';}}
-    else if(ext==='docx'){const res=await window.mammoth.extractRawText({arrayBuffer:buf});text=res.value;}
-    else if(ext==='txt'){text=new TextDecoder().decode(new Uint8Array(buf));}
-    combinedText+="\n\n"+text;
+    // Dynamic / messages
+    m_click_upload:"No file selected.",
+    m_searching:"Searching…",
+    m_results_singular:"1 result",
+    m_results_plural:"{n} results",
+    m_error_epmc:"Europe PMC error",
+    m_open:"Open",
+    m_no_selection:"(empty)",
   }
-  async function hf(prompt){const r=await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},method:'POST',body:JSON.stringify({inputs:prompt})});const j=await r.json();return Array.isArray(j)&&j[0]?.summary_text?j[0].summary_text:"(no summary)";}
-  const methodText=await hf("Extract only methodology, materials, purification and QC info:\n"+combinedText.slice(0,6000));
-  const summaryText=await hf("Summarize in one page (≈300 words):\n"+combinedText.slice(0,7000));
-  const out=`## Extracted Methodological Sections\n${methodText}\n\n## One-page Summary\n${summaryText}`;
-  document.getElementById('preview').textContent=out;
+};
+
+// Accès rapide à la locale courante
+function lang(){ return document.documentElement.dataset.lang || 'fr'; }
+function t(key, vars={}){
+  const L = I[lang()] || I.fr;
+  let s = (L && L[key]) || (I.fr[key] || key);
+  Object.keys(vars).forEach(k => { s = s.replace(new RegExp('\\{'+k+'\\}','g'), vars[k]); });
+  return s;
 }
 
-/* === Recherche Europe PMC (proxy anti-CORS) === */
-document.getElementById('runSearch').onclick=runSearchEPMC;
-async function runSearchEPMC(){
-  const q="adenovirus purification";
-  const url=`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+encodeURIComponent(q)+'&pageSize=5&format=json&sort_date:y')}`;
-  const info=document.getElementById('searchInfo');info.textContent='Recherche...';
-  try{
-    const r=await fetch(url);const raw=await r.json();const j=JSON.parse(raw.contents);const res=j.resultList?.result||[];
-    const box=document.getElementById('results');box.innerHTML='';
-    res.forEach(x=>{
-      const link=x.pmid?`https://pubmed.ncbi.nlm.nih.gov/${x.pmid}/`:`https://europepmc.org/article/PMC/${x.pmcid}`;
-      box.innerHTML+=`<div class="pub-card"><strong>${x.title}</strong><div class="muted">${x.journalTitle||''} • ${x.pubYear||''}</div><div>${(x.authorString||'').split(', ').slice(0,4).join(', ')}</div><div style="margin-top:6px"><a class="tag" href="${link}" target="_blank">Open</a></div></div>`;
-    });
-    info.textContent=res.length+" résultats";
-  }catch(e){info.textContent='Erreur Europe PMC';}
+// Appliquer les traductions aux éléments statiques (data-i)
+function applyStaticStrings(){
+  for(const el of document.querySelectorAll('[data-i]')){
+    const k = el.dataset.i;
+    const val = t(k);
+    // Autoriser <br/> & entités dans certaines clés
+    if(/<br\s*\/?>|&nbsp;/.test(val)) el.innerHTML = val;
+    else el.textContent = val;
+  }
 }
+
+// Basculer la langue globalement
+function setLang(newLang){
+  document.documentElement.setAttribute('lang', newLang === 'en' ? 'en' : 'fr');
+  document.documentElement.dataset.lang = newLang === 'en' ? 'en' : 'fr';
+  applyStaticStrings();
+  // Mettre à jour des placeholders si besoin
+  document.getElementById('q').placeholder = (newLang==='en'?'adenovirus purification':'adenovirus purification');
+  // Si l’aperçu était "vide", réapplique le placeholder localisé
+  const prev = document.getElementById('preview');
+  if(!prev.textContent || prev.textContent.trim() === I.fr.previewEmpty || prev.textContent.trim() === I.en.previewEmpty){
+    prev.textContent = t('previewEmpty');
+  }
+  // Repeindre l’entête et pied
+  document.getElementById('year').textContent = new Date().getFullYear();
+}
+
+// Bind boutons langue après chargement DOM
+window.addEventListener('DOMContentLoaded', () => {
+  const btnFR = document.getElementById('btnFR');
+  const btnEN = document.getElementById('btnEN');
+
+  btnFR.addEventListener('click', () => {
+    setLang('fr');
+    btnFR.classList.add('active'); btnEN.classList.remove('active');
+  });
+  btnEN.addEventListener('click', () => {
+    setLang('en');
+    btnEN.classList.add('active'); btnFR.classList.remove('active');
+  });
+
+  setLang('fr'); // langue par défaut
+  document.getElementById('year').textContent = new Date().getFullYear();
+});
+
+/* ================= UPLOAD drag & drop (compatible iOS) ================= */
+const drop = document.getElementById('drop');
+const input = document.getElementById('fileInput');
+const list = document.getElementById('filesList');
+let uploads = [];
+
+drop.addEventListener('click',(e)=>{
+  e.preventDefault();
+  input.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));
+});
+drop.addEventListener('dragover',(e)=>{e.preventDefault();drop.classList.add('drag');});
+drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));
+drop.addEventListener('drop',(e)=>{e.preventDefault();drop.classList.remove('drag');handleFiles(e.dataTransfer.files);});
+input.addEventListener('change',(e)=>handleFiles(e.target.files));
+
+function handleFiles(files){
+  uploads = [...files];
+  list.innerHTML = '';
+  uploads.forEach(f=>{
+    const it=document.createElement('div');
+    it.className='file-item';
+    it.textContent=`${f.name} — ${(f.size/1024/1024).toFixed(2)} MB`;
+    list.appendChild(it);
+  });
+}
+
+/* ============== ANALYSE LOCALE (extraction + résumé) — i18n ============== */
+document.getElementById('runLocal').onclick = runLocalAnalysis;
+
+async function runLocalAnalysis(){
+  if(!uploads.length){ alert(t('m_click_upload')); return; }
+
+  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // Remplace par ton token
+  const HF_MODEL = "facebook/bart-large-cnn";
+
+  let combinedText = "";
+  for(const file of uploads){
+    const ext = file.name.toLowerCase().split('.').pop();
+    const buf = await file.arrayBuffer();
+    let text = "";
+    if(ext==='pdf'){
+      const pdfjsLib = window['pdfjsLib'];
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf = await pdfjsLib.getDocument({data:buf}).promise;
+      for(let i=1;i<=pdf.numPages;i++){ const page=await pdf.getPage(i); const content=await page.getTextContent(); text += content.items.map(it=>it.str).join(' ')+' '; }
+    }else if(ext==='docx'){
+      const res = await window.mammoth.extractRawText({arrayBuffer:buf});
+      text = res.value;
+    }else if(ext==='txt'){
+      text = new TextDecoder().decode(new Uint8Array(buf));
+    }
+    combinedText += "\n\n" + text;
+  }
+
+  async function hf(prompt){
+    const r=await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{
+      method:'POST', headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},
+      body:JSON.stringify({inputs:prompt})
+    });
+    const j=await r.json();
+    return Array.isArray(j)&&j[0]?.summary_text ? j[0].summary_text : t('m_no_selection');
+  }
+
+  const extractPrompt_en = `Identify and extract only the sentences that describe materials, reagents, cell lines, buffers, purification steps (chromatography, TFF, capture, polishing), and QC/analytics. Keep scientific tone. Text:\n${combinedText.slice(0,6000)}`;
+  const extractPrompt_fr = `Identifie et extrais uniquement les phrases décrivant matériaux/réactifs, lignées cellulaires, tampons, étapes de purification (chromatographie, TFF, capture, polishing) et contrôles qualité. Ton scientifique. Texte :\n${combinedText.slice(0,6000)}`;
+
+  const summaryPrompt_en = `Summarize the document in one concise page (≈300 words) focusing on process development and purification methodology. Text:\n${combinedText.slice(0,7000)}`;
+  const summaryPrompt_fr = `Résume le document en une page concise (≈300 mots) en te concentrant sur le développement procédé et la méthodologie de purification. Texte :\n${combinedText.slice(0,7000)}`;
+
+  const isEN = (lang()==='en');
+  const methodText  = await hf(isEN ? extractPrompt_en : extractPrompt_fr);
+  const summaryText = await hf(isEN ? summaryPrompt_en : summaryPrompt_fr);
+
+  const header1 = isEN ? '## Extracted Methodological Sections' : '## Sections méthodologiques extraites';
+  const header2 = isEN ? '## One-page Summary' : '## Résumé d’une page';
+
+  document.getElementById('preview').textContent = `${header1}\n${methodText}\n\n${header2}\n${summaryText}`;
+}
+
+/* =================== EUROPE PMC — recherche i18n =================== */
+document.getElementById('runSearch').onclick = runSearchEPMC;
+
+async function runSearchEPMC(){
+  const qInput = document.getElementById('q');
+  const query  = (qInput.value || 'adenovirus purification').trim();
+
+  const info=document.getElementById('searchInfo');
+  info.textContent = t('m_searching');
+
+  // proxy anti-CORS pour dev/local
+  const url = `https://api.allorigins.win/get?url=${encodeURIComponent(
+    'https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=' + encodeURIComponent(query) + '&pageSize=8&format=json&sort_date:y'
+  )}`;
+
+  try{
+    const r   = await fetch(url);
+    const raw = await r.json();
+    const j   = JSON.parse(raw.contents);
+    const res = j.resultList?.result || [];
+
+    const box = document.getElementById('results');
+    box.innerHTML = '';
+
+    res.forEach(x=>{
+      const pmid = x.pmid || '';
+      const isOA = (x.isOpenAccess==="Y"||x.openAccess=="Y"||x.openAccess);
+      const link = pmid ? `https://pubmed.ncbi.nlm.nih.gov/${pmid}/` :
+                          (x.pmcid ? `https://europepmc.org/article/PMC/${x.pmcid}` : '#');
+
+      const card = document.createElement('div');
+      card.className = 'pub-card';
+      card.innerHTML = `
+        <strong>${escapeHTML(x.title||'')}</strong>
+        <div class="muted">${escapeHTML(x.journalTitle||x.source||'')} • ${escapeHTML(x.pubYear||'')}</div>
+        <div class="muted">${escapeHTML((x.authorString||'').split(', ').slice(0,6).join(', '))}</div>
+        <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
+          ${isOA ? '<span class="tag">Open Access</span>' : ''}
+          <a class="tag" href="${link}" target="_blank" rel="noopener">${t('m_open')}</a>
+        </div>
+      `;
+      box.appendChild(card);
+    });
+
+    const countText = res.length===1 ? t('m_results_singular') : t('m_results_plural',{n:res.length});
+    info.textContent = countText;
+  }catch(e){
+    console.error(e);
+    info.textContent = t('m_error_epmc');
+  }
+}
+
+function escapeHTML(s){return (s||'').replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
+
+/* =================== Init =================== */
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 </body>
