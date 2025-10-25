@@ -380,18 +380,63 @@ footer{
 
 <!-- ========= JS : réutilise TON JS ACTUEL tel quel (IDs/flux conservés) ========= -->
 <script>
-/* === Particles : dégradé bleu/vert === */
-const cv=document.getElementById('particlesCanvas'),cx=cv.getContext('2d');let W,H,PTS=[];
-function size(){W=cv.width=innerWidth;H=cv.height=innerHeight} size(); addEventListener('resize',size);
-function R(a,b){return a+Math.random()*(b-a)}
-function spawn(){return{x:R(0,W),y:R(0,H),vx:R(-.05,.05),vy:-R(.02,.07),r:R(1.0,2.4),t:R(0,6.28),tw:R(.6,1.1)}}
-PTS=Array.from({length:Math.min(240,Math.round((W*H)/16000))},spawn);
-(function loop(){requestAnimationFrame(loop);cx.clearRect(0,0,W,H);
-for(const p of PTS){p.t+=.016;const a=.10+.35*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.vx+Math.sin(p.t*.35)*.03;p.y+=p.vy;
-if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
-const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(58*mix);const g=Math.round(255*(1-mix));const b=Math.round(255*(mix));
-cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);
-cx.fillStyle=`rgba(${r},${b},${255-b},${a})`;cx.fill();}})();
+/* === Particles : dégradé bleu/vert (version plus visible) === */
+const cv = document.getElementById('particlesCanvas');
+const cx = cv.getContext('2d');
+let W, H, PTS = [];
+
+function resizeCanvas() {
+  W = cv.width = innerWidth;
+  H = cv.height = innerHeight;
+}
+resizeCanvas();
+addEventListener('resize', resizeCanvas);
+
+function rand(a, b) {
+  return a + Math.random() * (b - a);
+}
+
+function newParticle() {
+  return {
+    x: rand(0, W),
+    y: rand(0, H),
+    vx: rand(-0.05, 0.05),
+    vy: -rand(0.02, 0.07),
+    r: rand(1.2, 3.0),
+    t: rand(0, 6.28),
+    tw: rand(0.8, 1.3)
+  };
+}
+
+// densité ajustée selon résolution
+PTS = Array.from({ length: Math.min(280, Math.round((W * H) / 14000)) }, newParticle);
+
+(function animate() {
+  requestAnimationFrame(animate);
+  cx.clearRect(0, 0, W, H);
+
+  for (const p of PTS) {
+    p.t += 0.016;
+    const flicker = 0.15 + 0.45 * Math.abs(Math.sin(p.t)) * p.tw; // intensité augmentée
+    p.x += p.vx + Math.sin(p.t * 0.4) * 0.04;
+    p.y += p.vy;
+
+    if (p.x < -8) p.x = W + 8;
+    if (p.x > W + 8) p.x = -8;
+    if (p.y < -8) { p.y = H + 8; p.x = Math.random() * W; }
+
+    // dégradé bleu -> vert plus saturé
+    const mix = Math.abs(Math.sin(p.t * 0.5));
+    const r = Math.round(20 + 38 * mix);
+    const g = Math.round(150 + 100 * (1 - mix));
+    const b = Math.round(255 - 40 * (1 - mix));
+
+    cx.beginPath();
+    cx.arc(p.x, p.y, p.r, 0, 6.283);
+    cx.fillStyle = `rgba(${r},${g},${b},${flicker})`;
+    cx.fill();
+  }
+})();
 
 /* === i18n/UX/EuropePMC/HF/PDF ===
    >> Colle ici tel quel le JS de ta version précédente (tout le bloc que tu m'as envoyé).
