@@ -163,7 +163,7 @@ footer{position:relative;z-index:1;margin-top:36px;background:#fff;border-top:1p
 <!-- ===== Header ===== -->
 <header>
   <div class="nav">
-    <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo">
+    <img src="./assets/montes-biopharma-logo.jpg" alt="Montes BioPharma" class="logo">
     <div class="brand" data-i="brand">Montes BioPharma</div>
 
     <div class="lang">
@@ -900,7 +900,7 @@ async function exportPDF(){
   pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F');
 
   try{
-    const res=await fetch('./assets/montes-biopharma-logo.svg'); const blob=await res.blob();
+    const res=await fetch('./assets/montes-biopharma-logo.jpg'); const blob=await res.blob();
     const data=await blobToDataURL(blob);
     pdf.addImage(data,'PNG',M,M-8,160,40,'','FAST');
   }catch(e){}
