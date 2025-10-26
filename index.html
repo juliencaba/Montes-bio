@@ -105,6 +105,15 @@ input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4p
 .snip mark{padding:0 2px;border-radius:4px;background:#FFF59D}
 pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:12px}
 
+/* Basic cards & tags used in modal/overview/uploader */
+.pub-card{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff;display:grid;gap:6px}
+.tag{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:999px;background:#fff;color:var(--ink}
+
+/* Uploader block */
+.drop{display:grid;place-items:center;text-align:center;gap:8px;padding:22px;border:2px dashed var(--border);border-radius:12px;background:#fff}
+.drop.drag{border-color:var(--primary)}
+.file-list{display:grid;gap:10px;margin-top:10px}
+
 /* Tabs (top) */
 .tab{display:none}.tab.active{display:block}
 
@@ -421,7 +430,7 @@ const xfade=document.getElementById('xfade');
 function openMenu(){menuDD.classList.add('open');menuBtn.setAttribute('aria-expanded','true');}
 function closeMenu(){menuDD.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}
 
-// ✅ robust: stopPropagation + contains
+// robust: stopPropagation + contains
 menuBtn.addEventListener('click',(e)=>{
   e.preventDefault();
   e.stopPropagation();
@@ -440,7 +449,7 @@ function showTab(name){
     Object.values(tabs).forEach(t=>t.classList.remove('active'));
     (tabs[name]||tabs.intro).classList.add('active');
     closeMenu();
-    window.scrollTo({top:0,behavior:'instant'});
+    window.scrollTo({top:0,behavior:'auto'}); /* fix: 'instant' -> 'auto' */
     setTimeout(()=>xfade.classList.remove('show'), 260);
   },160);
 }
@@ -455,7 +464,7 @@ function showAppSub(key){
   setTimeout(()=>{
     Object.values(appSubs).forEach(s=>s.classList.remove('active'));
     (appSubs[key]||appSubs.step1).classList.add('active');
-    window.scrollTo({top:0,behavior:'instant'});
+    window.scrollTo({top:0,behavior:'auto'}); /* fix */
     setTimeout(()=>xfade.classList.remove('show'),260);
   },160);
 }
@@ -488,21 +497,18 @@ const I={
     contactIntro:"Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).",
     labelName:"Nom",labelOrg:"Société",labelEmail:"Email",labelMsg:"Message",sendEmail:"Envoyer par e-mail",
     footerNote:"Europe PMC / PubMed — Hugging Face (optionnel). Aucune instruction expérimentale.",
-    // Runtime texts
     searching:"Recherche…", epmcError:"Erreur Europe PMC", open:"Ouvrir", selectAtLeastOne:"Sélectionnez au moins un article.",
     ctx:"Contexte", noActiveSD:"Aucun sous-domaine actif.",
     docsInternal:"Documents internes", literature:"Littérature (Europe PMC / PubMed)", targetedSummary:"Résumé ciblé (~1 page)",
-    // PDF
     pdfTitle:"Protocole documentaire — Analyse ciblée", pdfOverview:"Vue d’ensemble", pdfEvidences:"Évidences",
-    // Domains (labels)
     dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytique", dom_qa:"Assurance Qualité", dom_cmc:"CMC",
-    // Subdomain group titles
     sdtitle_downstream:"Spécifiez les sous-domaines Downstream",
     sdtitle_upstream:"Spécifiez les sous-domaines Upstream",
     sdtitle_fill:"Spécifiez les sous-domaines Fill & Finish",
     sdtitle_analytics:"Spécifiez les sous-domaines Analytiques",
     sdtitle_qa:"Spécifiez les sous-domaines Assurance Qualité",
-    sdtitle_cmc:"Spécifiez les sous-domaines CMC"
+    sdtitle_cmc:"Spécifiez les sous-domaines CMC",
+    biomolecule:"Biomolécule", domain:"Domaine"
   },
   en:{
     brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
@@ -530,21 +536,18 @@ const I={
     contactIntro:"Our expert scientists can help accelerate your process development (adenoviral vectors, purification, analytics, documentation).",
     labelName:"Name",labelOrg:"Company",labelEmail:"Email",labelMsg:"Message",sendEmail:"Send Email",
     footerNote:"Europe PMC / PubMed — Hugging Face (optional). No experimental instructions.",
-    // Runtime texts
     searching:"Searching…", epmcError:"Europe PMC error", open:"Open", selectAtLeastOne:"Select at least one article.",
     ctx:"Context", noActiveSD:"No active subdomains.",
     docsInternal:"Internal documents", literature:"Literature (Europe PMC / PubMed)", targetedSummary:"Targeted summary (~1 page)",
-    // PDF
     pdfTitle:"Documentary protocol — Targeted analysis", pdfOverview:"Overview", pdfEvidences:"Evidences",
-    // Domains (labels)
     dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytical", dom_qa:"Quality Assurance", dom_cmc:"CMC",
-    // Subdomain group titles
     sdtitle_downstream:"Specify Downstream subdomains",
     sdtitle_upstream:"Specify Upstream subdomains",
     sdtitle_fill:"Specify Fill & Finish subdomains",
     sdtitle_analytics:"Specify Analytical subdomains",
     sdtitle_qa:"Specify Quality Assurance subdomains",
-    sdtitle_cmc:"Specify CMC subdomains"
+    sdtitle_cmc:"Specify CMC subdomains",
+    biomolecule:"Biomolecule", domain:"Domain"
   }
 };
 function lang(){return document.documentElement.dataset.lang||'fr';}
@@ -603,14 +606,15 @@ const SUBDOMAINS = {
 };
 function L_dom(key){
   const map = {
-    downstream:['dom_downstream'],
-    upstream:['dom_upstream'],
-    fill:['dom_fill'],
-    analytics:['dom_analytics'],
-    qa:['dom_qa'],
-    cmc:['dom_cmc']
+    downstream:'dom_downstream',
+    upstream:'dom_upstream',
+    fill:'dom_fill',
+    analytics:'dom_analytics',
+    qa:'dom_qa',
+    cmc:'dom_cmc'
   };
-  const k = map[key]?.[0]; return k ? t(k) : key;
+  const k = map[key];
+  return k ? t(k) : (key||'-');
 }
 
 /* ========= Targeted taxonomy & scoring config ========= */
@@ -707,23 +711,23 @@ function setLang(newLang){
   document.documentElement.setAttribute('lang', newLang);
   document.documentElement.dataset.lang = newLang;
 
-  // 1) Replace all data-i texts
+  // Replace all data-i texts
   for(const el of document.querySelectorAll('[data-i]')){
     const v = t(el.dataset.i);
     if(/<br\s*\/?>|&nbsp;/.test(v)) el.innerHTML = v; else el.textContent = v;
   }
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // 2) (Re)render domain options with preserved selection
+  // Rebuild domain select
   renderDomainOptions(state.request.domain);
 
-  // 3) Rebuild subdomain choices if domain exists
+  // Rebuild subdomains if domain exists
   if (state.request.domain) {
     buildDetailChoices(state.request.domain);
     if ((state.request.details||[]).length) confirmWrap.classList.remove('hide');
   }
 
-  // 4) Update Contact mailto (subject placeholder)
+  // Update contact mailto (fix: function now exists)
   updateMailto();
 }
 function renderDomainOptions(selectedKey){
@@ -787,8 +791,8 @@ function buildDetailChoices(domainKey){
         return id;
       });
 
-      const txtFR = `Parfait. Vous avez choisi : biomolécule = ${state.request.biomolecule}; domaine = ${L_dom(state.request.domain)}; sous-domaines = ${visibleLabels.join(', ')}. Je garde ces choix en mémoire et nous allons passer à la seconde partie du processus.`;
-      const txtEN = `Great. You selected: biomolecule = ${state.request.biomolecule}; domain = ${L_dom(state.request.domain)}; subdomains = ${visibleLabels.join(', ')}. I'll keep these choices in memory and we'll move to the second part of the process.`;
+      const txtFR = `Parfait. Vous avez choisi : ${t('biomolecule').toLowerCase()} = ${state.request.biomolecule}; ${t('domain').toLowerCase()} = ${L_dom(state.request.domain)}; sous-domaines = ${visibleLabels.join(', ')}. Je garde ces choix en mémoire et nous allons passer à la seconde partie du processus.`;
+      const txtEN = `Great. You selected: ${t('biomolecule')} = ${state.request.biomolecule}; ${t('domain')} = ${L_dom(state.request.domain)}; subdomains = ${visibleLabels.join(', ')}. I'll keep these choices in memory and we'll move to the second part of the process.`;
 
       const hasSel = ids.length > 0;
       confirmWrap.classList.toggle('hide', !hasSel);
@@ -958,13 +962,13 @@ function buildWorkspace(){
     chips.appendChild(chip);
   });
 
-  // Overview
+  // Overview (now fully translated)
   const ov=document.getElementById('overview');
   const d=state.request;
   ov.innerHTML = `
     <div class="pub-card">
       <div><strong>${t('ctx')}</strong></div>
-      <div class="muted">Biomolecule : ${esc(d.biomolecule||'-')} · ${t('dom_'+(d.domain||'downstream'))} : ${esc(L_dom(d.domain)||'-')}</div>
+      <div class="muted">${t('biomolecule')}: ${esc(d.biomolecule||'-')} · ${t('domain')}: ${esc(L_dom(d.domain)||'-')}</div>
     </div>
   `;
 
@@ -1209,7 +1213,7 @@ document.getElementById('exportPdf').onclick = async ()=>{
   y = putHeading(pdf, t('pdfOverview'), y, 13, '#3A49FF', M,W,H);
   const d=state.request;
   const domainLabel = L_dom(d.domain||'downstream');
-  y=putParagraph(pdf,`Biomolecule: ${d.biomolecule||'-'} · Domain: ${domainLabel||'-'}`,y,M,W,H,11);
+  y=putParagraph(pdf,`${t('biomolecule')}: ${d.biomolecule||'-'} · ${t('domain')}: ${domainLabel||'-'}`,y,M,W,H,11);
 
   // Each subdomain
   const activeIds = (state.request.details||[]);
@@ -1237,6 +1241,24 @@ function putParagraph(pdf,text,y,M,W,H,size=11){ pdf.setTextColor(0,0,0); pdf.se
 function hexToRGB(hex){const h=hex.replace('#','');const n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];}
 function blobToDataURL(blob){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(blob);});}
 document.getElementById('year').textContent=new Date().getFullYear();
+
+/* ========= Contact mailto (FIX) ========= */
+function updateMailto(){
+  const name = document.getElementById('c_name').value || '';
+  const org  = document.getElementById('c_org').value || '';
+  const email= document.getElementById('c_email').value || '';
+  const msg  = document.getElementById('c_msg').value || '';
+  const subject = encodeURIComponent( lang()==='fr' ? 'Contact — Projet bioprocédé' : 'Contact — Bioprocess project' );
+  const body = encodeURIComponent(
+    `${lang()==='fr'?'Nom':'Name'}: ${name}\n${lang()==='fr'?'Société':'Company'}: ${org}\nEmail: ${email}\n\n${msg}`
+  );
+  document.getElementById('c_mailto').href = `mailto:info@montes-biopharma.com?subject=${subject}&body=${body}`;
+}
+['c_name','c_org','c_email','c_msg'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input', updateMailto);
+});
+updateMailto();
 </script>
 </body>
 </html>
