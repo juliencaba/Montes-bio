@@ -23,7 +23,7 @@ img{display:block;max-width:100%}
 .hide{display:none}
 
 /* Particles */
-#particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.75}
+#particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.85}
 
 /* Header */
 header{position:sticky;top:0;z-index:40;backdrop-filter:saturate(180%) blur(10px);background:rgba(255,255,255,.7);border-bottom:1px solid var(--border)}
@@ -90,9 +90,20 @@ input,select,textarea{width:100%;background:#fff;color:var(--ink);border:1.5px s
 input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4px rgba(58,73,255,.12)}
 .controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 
-/* Pub cards & tags */
-.pub-card{border:1px solid var(--border);border-radius:16px;padding:14px;background:#fff;display:grid;gap:6px;box-shadow:0 6px 16px rgba(15,18,38,.04)}
-.tag{font-size:11px;padding:4px 10px;border:1px solid #E0E5FF;border-radius:999px;background:#fff;color:#3A49FF;font-weight:700;letter-spacing:.02em}
+/* Chips / bars */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:#fff;cursor:pointer}
+.chip.active{border-color:#3A49FF;box-shadow:0 2px 10px rgba(58,73,255,.16)}
+.bar{height:6px;border-radius:6px;background:#EEF1FF;overflow:hidden}
+.bar > span{display:block;height:100%;background:#3A49FF}
+
+/* Results list */
+.result-card{border:1px solid var(--border);border-radius:16px;background:#fff;padding:12px;box-shadow:0 6px 16px rgba(15,18,38,.04);display:grid;gap:10px}
+.result-meta{color:var(--muted);font-size:13px}
+.snip{font-size:14px;line-height:1.4;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:10px}
+.snip .meta{color:var(--muted);font-size:12px;margin-bottom:4px}
+.snip mark{padding:0 2px;border-radius:4px;background:#FFF59D}
+pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:12px}
 
 /* Tabs (top) */
 .tab{display:none}.tab.active{display:block}
@@ -102,7 +113,7 @@ input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4p
 
 /* Ergonomic analysis workspace */
 .workspace{display:grid;gap:16px}
-@media(min-width:1024px){.workspace{grid-template-columns:320px 1fr}}
+@media(min-width:1100px){.workspace{grid-template-columns:320px 1fr}}
 .sidebar{border:1px solid var(--border);border-radius:16px;background:#fff;padding:12px;height:100%}
 .sidebar h4{margin:6px 0 10px;color:#3A49FF}
 .source-item{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px}
@@ -110,7 +121,6 @@ input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4p
 .mainpanel{display:grid;gap:12px}
 .panel{border:1px solid var(--border);border-radius:16px;background:#fff;padding:16px}
 .panel h3{margin:0 0 8px;color:#3A49FF}
-pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:12px}
 
 /* Modal for literature results */
 .modal{position:fixed;inset:0;background:rgba(5,8,20,.38);display:none;align-items:center;justify-content:center;z-index:70}
@@ -310,14 +320,14 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
       </div>
     </section>
 
-    <!-- Subtab 3: ANALYSE APPROFONDIE -->
+    <!-- Subtab 3: ANALYSE APPROFONDIE (ciblée) -->
     <section id="app-step3" class="app-sub">
       <div class="cards">
         <section class="block open">
           <header>
             <div>
               <div class="overline">ANALYSE APPROFONDIE</div>
-              <h2>Espace d’analyse</h2>
+              <h2>Espace d’analyse ciblée</h2>
             </div>
           </header>
           <div class="inner">
@@ -328,6 +338,9 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
                 <div id="docList"></div>
                 <h4 style="margin-top:12px">Articles sélectionnés</h4>
                 <div id="artList"></div>
+                <hr class="sep">
+                <h4>Sous-domaines actifs</h4>
+                <div id="sdChips" class="chips"></div>
               </aside>
 
               <!-- Main panels -->
@@ -336,23 +349,11 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
                   <h3>Vue d’ensemble</h3>
                   <div id="overview"></div>
                 </div>
-                <div class="panel">
-                  <h3>Sections méthodologiques extraites</h3>
-                  <pre id="methodSections" class="code"></pre>
-                </div>
-                <div class="panel">
-                  <h3>Résumé d’une page</h3>
-                  <pre id="onePager" class="code"></pre>
-                </div>
-                <div class="panel">
-                  <h3>Points clés & risques</h3>
-                  <ul id="keyRisks" style="margin:0;padding-left:18px"></ul>
-                </div>
-                <div class="panel">
-                  <h3>Traçabilité (citations)</h3>
-                  <div id="trace" class="muted"></div>
-                </div>
-                <div class="controls">
+
+                <!-- Contenu ciblé par sous-domaine -->
+                <div id="sdResults"></div>
+
+                <div class="controls" style="margin-top:6px">
                   <button class="btn primary" id="exportPdf">Exporter le PDF</button>
                 </div>
               </div>
@@ -413,11 +414,11 @@ const cv=document.getElementById('particlesCanvas'),cx=cv.getContext('2d');let W
 function size(){W=cv.width=innerWidth;H=cv.height=innerHeight} size(); addEventListener('resize',size);
 function R(a,b){return a+Math.random()*(b-a)}
 function spawn(){return{x:R(0,W),y:R(0,H),vx:R(-.05,.05),vy:-R(.02,.07),r:R(1.2,3.0),t:R(0,6.28),tw:R(.8,1.3)}}
-PTS=Array.from({length:Math.min(280,Math.round((W*H)/14000))},spawn);
+PTS=Array.from({length:Math.min(300,Math.round((W*H)/12000))},spawn);
 (function loop(){requestAnimationFrame(loop);cx.clearRect(0,0,W,H);
-for(const p of PTS){p.t+=.016;const a=.15+.45*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.vx+Math.sin(p.t*.35)*.03;p.y+=p.vy;
+for(const p of PTS){p.t+=.016;const a=.18+.5*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.vx+Math.sin(p.t*.35)*.03;p.y+=p.vy;
 if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
-const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(20+38*mix), g=Math.round(150+100*(1-mix)), b=Math.round(255-40*(1-mix));
+const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(20+38*mix), g=Math.round(170+70*(1-mix)), b=Math.round(255-30*(1-mix));
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(${r},${g},${b},${a})`;cx.fill();}})();
 
 /* ========= Top menu & gradient transition ========= */
@@ -454,7 +455,7 @@ function showAppSub(key){
   },160);
 }
 
-/* ========= i18n minimal (FR/EN placeholders conservés) ========= */
+/* ========= i18n minimal (Intro) ========= */
 const I={ fr:{brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
 kicker:"ASSISTANT LITTÉRATURE",heroTitle:"No learning curve,<br/>no complications",
 heroSub:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
@@ -467,10 +468,188 @@ introP1:"Article search (Europe PMC), internal document upload, AI analysis and 
 ctaOpenMenu:"Open menu",ctaOpenLearn:"What can I do?"}};
 function lang(){return document.documentElement.dataset.lang||'fr';}
 function t(k){const L=I[lang()]||I.fr;return (L&&L[k])||(I.fr[k]||k);}
+
+/* ========= State ========= */
+const state={
+  request:{ biomolecule:null, domain:null, details:[] },   // details = IDs canoniques
+  uploads:[], // File[]
+  literature:{ results:[], selected:[] }, // selected: [{meta, abstract, summary}]
+  analysis:{ targeted:{} } // targeted[sdId] = { labelFR,labelEN, docs:[{name,score,snippets[]}], papers:[{title,score,snippets[],link}], summary }
+};
+
+/* ===== Sous-domaines i18n (IDs canoniques + libellés FR/EN) ===== */
+const DOMAIN_KEY = {
+  "Downstream":"downstream", "Upstream":"upstream",
+  "Fill & Finish":"fill",
+  "Analytique":"analytics", "Analytical":"analytics",
+  "Assurance Qualité":"qa", "Quality Assurance":"qa",
+  "CMC":"cmc"
+};
+function getDomainKey(label){ return DOMAIN_KEY[label] || label?.toLowerCase() || ""; }
+
+const SUB_TITLES = {
+  downstream: { fr:"Spécifiez les sous-domaines Downstream", en:"Specify Downstream subdomains" },
+  upstream:   { fr:"Spécifiez les sous-domaines Upstream",   en:"Specify Upstream subdomains" },
+  fill:       { fr:"Spécifiez les sous-domaines Fill & Finish", en:"Specify Fill & Finish subdomains" },
+  analytics:  { fr:"Spécifiez les sous-domaines Analytiques", en:"Specify Analytical subdomains" },
+  qa:         { fr:"Spécifiez les sous-domaines Assurance Qualité", en:"Specify Quality Assurance subdomains" },
+  cmc:        { fr:"Spécifiez les sous-domaines CMC", en:"Specify CMC subdomains" }
+};
+
+const SUBDOMAINS = {
+  downstream: [
+    {id:"clarification", fr:"Clarification", en:"Clarification"},
+    {id:"tff_df", fr:"Concentration et Diafiltration", en:"Concentration and Diafiltration"},
+    {id:"capture_chrom", fr:"Capture par chromatographie", en:"Capture by chromatography"},
+    {id:"polishing", fr:"Polishing", en:"Polishing"},
+    {id:"formulation", fr:"Formulation", en:"Formulation"},
+    {id:"final_filtration", fr:"Filtration finale", en:"Final Filtration"}
+  ],
+  upstream: [
+    {id:"cell_bank_seed", fr:"Banque cellulaire & Seed train", en:"Cell bank & seed train"},
+    {id:"production_bioreactor", fr:"Bioréacteur de production (batch/fed-batch/perfusion)", en:"Production bioreactor (batch/fed-batch/perfusion)"},
+    {id:"infection_strategy", fr:"Stratégie d’infection/MOI (si applicable)", en:"Infection/MOI strategy (if applicable)"},
+    {id:"harvest_lysis", fr:"Récolte / Lyse", en:"Harvest / Lysis"},
+    {id:"ipc", fr:"Contrôles en cours de procédé (IPC)", en:"In-process controls (IPC)"},
+    {id:"handoff_ds", fr:"Handoff vers Downstream", en:"Handoff to Downstream"}
+  ],
+  fill: [
+    {id:"hold_bulk", fr:"Hold bulk & cycles freeze/thaw", en:"Hold bulk & freeze/thaw cycles"},
+    {id:"aseptic_fill", fr:"Remplissage aseptique (flacons, seringues, cartouches)", en:"Aseptic filling (vials, syringes, cartridges)"},
+    {id:"ccc", fr:"Système contenant/fermeture & compatibilité", en:"Container/closure & compatibility"},
+    {id:"fit", fr:"Tests d’intégrité filtres", en:"Filter integrity tests"},
+    {id:"vi_aql", fr:"Inspection visuelle / AQL", en:"Visual inspection / AQL"},
+    {id:"cold_chain", fr:"Chaîne du froid & étiquetage", en:"Cold chain & labeling"}
+  ],
+  analytics: [
+    {id:"identity", fr:"Identité (p. ex. PCR/séquençage)", en:"Identity (e.g., PCR/sequencing)"},
+    {id:"potency", fr:"Puissance (infectivité, titres)", en:"Potency (infectivity, titers)"},
+    {id:"impurities", fr:"Impuretés (HCP, ADN résiduel, etc.)", en:"Impurities (HCP, residual DNA, etc.)"},
+    {id:"size_agg", fr:"Taille/agrégation (p. ex. DLS/TEM)", en:"Size/aggregation (e.g., DLS/TEM)"},
+    {id:"qPCR", fr:"Dosage (qPCR/ddPCR)", en:"Assay (qPCR/ddPCR)"},
+    {id:"stability_indic", fr:"Méthodes indicatrices de stabilité", en:"Stability-indicating methods"}
+  ],
+  qa: [
+    {id:"change_control", fr:"Change control", en:"Change control"},
+    {id:"deviation_capa", fr:"Déviations & CAPA", en:"Deviations & CAPA"},
+    {id:"training_qual", fr:"Qualification & formation", en:"Qualification & training"},
+    {id:"gxp_docs", fr:"Gestion documentaire GxP", en:"GxP document control"},
+    {id:"suppliers", fr:"Qualification fournisseurs & matières", en:"Supplier & material qualification"},
+    {id:"bmr", fr:"Revue des dossiers de lot", en:"Batch record review"}
+  ],
+  cmc: [
+    {id:"reg_strategy", fr:"Stratégie réglementaire", en:"Regulatory strategy"},
+    {id:"control_strategy", fr:"Control strategy", en:"Control strategy"},
+    {id:"specs_release", fr:"Spécifications & libération", en:"Specifications & release"},
+    {id:"comparability", fr:"Comparabilité (changements procédé)", en:"Comparability (process changes)"},
+    {id:"ppq", fr:"Validation / PPQ", en:"Validation / PPQ"},
+    {id:"proc_char", fr:"Caractérisation procédé", en:"Process characterization"}
+  ]
+};
+
+/* ===== Targeted taxonomy & scoring config ===== */
+const TA = (()=>{
+  const ADV = /adenovirus|adeno[-\s]?virus|ad5|ad26|adenoviral/i;
+  const SECBOOST = [
+    [/(materials?|methods?|methodologie|méthode|purification)/i, 1.5],
+    [/(results?|discussion)/i, 1.2]
+  ];
+  function cfg(must2, shouldGroups, exclude=[]){
+    return { must:[ADV, must2], should:shouldGroups, exclude, sectionBoost:SECBOOST };
+  }
+  return {
+    // Downstream
+    clarification: cfg(/clarifi|centrifug|depth\s?filter|floccul|turbid|harvest/i, [
+      [/depth\s?filter|clari|centrifug/i, 1.2],
+      [/floccul|polydadmac|turbidity/i, 1.0]
+    ], [/AAV|adeno[-\s]?associated|lentivirus|retrovirus/i]),
+    tff_df: cfg(/diafiltrat|ultra?filtrat|tff|membrane/i, [
+      [/tff|ultra?filtrat/i, 1.5],
+      [/diafiltrat|buffer exchange/i, 1.2],
+      [/membrane|cassette|NMWL|cut[\s-]?off/i, 1.0]
+    ]),
+    capture_chrom: cfg(/chromatograph|column|resin|ligand/i, [
+      [/affinity|AVB|heparin|monolith|membrane adsorber/i, 2.0],
+      [/anion exchange|AEX|quaternary amine|QA/i, 1.5],
+      [/cation exchange|CEX|carboxymethyl/i, 1.2]
+    ]),
+    polishing: cfg(/polish|ion\s?exchange|SEC|size exclusion|flow[-\s]?through/i, [
+      [/AEX|CEX|multimodal|hydrophobic/i, 1.4],
+      [/aggregate|host cell protein|DNA residual/i, 1.1]
+    ]),
+    formulation: cfg(/formulat|excipient|stability|buffer|surfactant|trehalose|sucrose/i, [
+      [/pH|osmol|surfactant|polysorbate/i, 1.2],
+      [/cryoprotect|stabilit/i, 1.1]
+    ]),
+    final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?μ?m/i, [
+      [/bioburden|sterility/i, 1.2]
+    ]),
+    // Upstream
+    cell_bank_seed: cfg(/cell\sbank|seed\s?train|master\s?cell\sbank/i, [
+      [/bank(?:e)?\s?cellulaire|seed\s?train/i, 1.2]
+    ]),
+    production_bioreactor: cfg(/bioreactor|bioréacteur|perfusion|fed[-\s]?batch|batch/i, [
+      [/perfusion|ATF|TFF\s?loop/i, 1.4],
+      [/sparg(ing)?|DO|pH control/i, 1.1]
+    ]),
+    infection_strategy: cfg(/infection|MOI|multiplicity/i, [
+      [/MOI|infection strategy/i, 1.4]
+    ]),
+    harvest_lysis: cfg(/harvest|lysi(s|e)|detergent|benzonase|nuclease/i, [
+      [/harvest|clarification/i, 1.1]
+    ]),
+    ipc: cfg(/in[-\s]?process|IPC|process control|en[-\s]?cours\sde\sprocédé/i, [
+      [/specification|limit|acceptance criteria/i, 1.0]
+    ]),
+    handoff_ds: cfg(/handoff|tech\s?transfer|transfer|intermediate/i, [
+      [/hold\s?time|storage|temperature/i, 1.0]
+    ]),
+    // Fill & Finish
+    hold_bulk: cfg(/hold\s?bulk|freeze\/?thaw|storage/i, [[/freeze|thaw|stability/i,1.2]]),
+    aseptic_fill: cfg(/aseptic|filling|vials?|syringes?|cartridges?/i, [[/grade\s?A|B|C|laminar|isolator/i,1.1]]),
+    ccc: cfg(/container|closure|compatib|extractable|leachable/i, [[/ELC|E&L|compatibility/i,1.2]]),
+    fit: cfg(/filter\s?integrity|bubble\s?point|diffusion/i, [[/integrity|sterile/i,1.2]]),
+    vi_aql: cfg(/visual|inspection|AQL/i, [[/defects?|cosmetic/i,1.0]]),
+    cold_chain: cfg(/cold\s?chain|refrigerated|frozen|label/i, [[/shipping|logistics/i,1.0]]),
+    // Analytical
+    identity: cfg(/identity|PCR|sequenc/i, [[/qPCR|sequencing|restriction/i,1.2]]),
+    potency: cfg(/potency|infectiv|titer|titre/i, [[/TCID50|plaque assay|FFU/i,1.4]]),
+    impurities: cfg(/impurit|HCP|host\s?cell\s?protein|residual\s?DNA/i, [[/BCA|PicoGreen|dd?PCR/i,1.2]]),
+    size_agg: cfg(/size|aggregation|DLS|TEM|SEC/i, [[/hydrodynamic|radius|aggregate/i,1.1]]),
+    qPCR: cfg(/qPCR|ddPCR|quantitative\s?PCR/i, [[/primers?|amplicon|standard curve/i,1.1]]),
+    stability_indic: cfg(/stability[-\s]?indicat|degradation|stress/i, [[/ICH|accelerated|long-term/i,1.2]]),
+    // QA
+    change_control: cfg(/change\s?control/i, [[/impact assessment|risk/i,1.1]]),
+    deviation_capa: cfg(/deviation|CAPA/i, [[/root cause|RCA|investigation/i,1.1]]),
+    training_qual: cfg(/training|qualification|competenc/i, [[/matrix|program/i,1.0]]),
+    gxp_docs: cfg(/GxP|GMP|documentation|SOP|record/i, [[/document control|revision|version/i,1.1]]),
+    suppliers: cfg(/supplier|vendor|qualification|material/i, [[/audit|certificate/i,1.0]]),
+    bmr: cfg(/batch\s?record|BMR|review/i, [[/deviation|reconciliation/i,1.0]]),
+    // CMC
+    reg_strategy: cfg(/regulator|CTA|IND|BLA|dossier/i, [[/strategy|pathway/i,1.0]]),
+    control_strategy: cfg(/control\s?strategy|CPP|CQA|design\s?space/i, [[/risk assessment|QbD/i,1.2]]),
+    specs_release: cfg(/specifications?|release|acceptance/i, [[/limits?|criteria/i,1.1]]),
+    comparability: cfg(/comparab|process\s?change/i, [[/pre|post|equivalence/i,1.0]]),
+    ppq: cfg(/PPQ|process\s?validation|conformance/i, [[/protocol|report|runs?/i,1.1]]),
+    proc_char: cfg(/process\s?characteri[sz]ation|DoE|design of experiments/i, [[/parameters?|responses?/i,1.1]])
+  };
+})();
+
+/* ========= setLang (re-rend sous-domaines) ========= */
 function setLang(newLang){
-  document.documentElement.setAttribute('lang', newLang); document.documentElement.dataset.lang=newLang;
-  for(const el of document.querySelectorAll('[data-i]')){const v=t(el.dataset.i); if(/<br\s*\/?>/.test(v)) el.innerHTML=v; else el.textContent=v;}
-  document.getElementById('year').textContent=new Date().getFullYear();
+  document.documentElement.setAttribute('lang', newLang);
+  document.documentElement.dataset.lang = newLang;
+
+  for(const el of document.querySelectorAll('[data-i]')){
+    const v = t(el.dataset.i);
+    if(/<br\s*\/?>|&nbsp;/.test(v)) el.innerHTML = v; else el.textContent = v;
+  }
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  if (state.request?.domain) {
+    buildDetailChoices(state.request.domain);
+    if ((state.request.details || []).length) confirmWrap.classList.remove('hide');
+  }
 }
 window.addEventListener('DOMContentLoaded',()=>{
   const btnFR=document.getElementById('btnFR'),btnEN=document.getElementById('btnEN');
@@ -478,14 +657,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   btnEN.onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
   setLang('fr'); document.getElementById('year').textContent=new Date().getFullYear();
 });
-
-/* ========= State ========= */
-const state={
-  request:{ biomolecule:null, domain:null, details:[] },
-  uploads:[],
-  literature:{ results:[], selected:[], citations:[] },
-  analysis:{ methodSections:"", onePager:"", overview:"", keyRisks:[] }
-};
 
 /* ========= DEMANDE (step1) logique ========= */
 const bioSelect=document.getElementById('bioSelect');
@@ -508,39 +679,56 @@ domainSelect.addEventListener('change',()=>{
   buildDetailChoices(state.request.domain);
   detailWrap.classList.remove('hide'); confirmWrap.classList.add('hide');
 });
-function buildDetailChoices(domain){
-  const MAP={
-    "Downstream":[
-      "Clarification",
-      "Concentration and Diafiltration",
-      "Capture by chromatography",
-      "Polishing",
-      "Formulation",
-      "Final Filtration"
-    ],
-    "Upstream":["Cell line & seed train","Production bioreactor","Harvest strategy"],
-    "Fill & Finish":["Filling strategy","Container/closure","Visual inspection"],
-    "Analytique":["Identity & potency","Impurities & residuals","Stability plan"],
-    "Assurance Qualité":["Change control","Deviation/CAPA","GxP documentation"],
-    "CMC":["Regulatory strategy","Comparability","Control strategy"]
-  };
-  const arr = MAP[domain]||[];
-  detailTitle.textContent = (domain==="Downstream") ? "Spécifiez le sous-domaine Downstream" : "Spécifiez votre besoin";
-  detailChoices.innerHTML='';
-  arr.forEach(lbl=>{
-    const id='det_'+lbl.replace(/\W+/g,'_');
-    const w=document.createElement('label'); w.className='source-item';
-    w.innerHTML=`<input type="checkbox" id="${id}" value="${lbl}" style="width:auto"><span>${lbl}</span>`;
-    detailChoices.appendChild(w);
-    w.querySelector('input').addEventListener('change',()=>{
-      const checks=[...detailChoices.querySelectorAll('input:checked')].map(i=>i.value);
-      state.request.details = checks;
-      confirmWrap.classList.toggle('hide', checks.length===0);
-      if(checks.length){
-        confirmText.textContent = `Parfait. Vous avez choisi : biomolécule = ${state.request.biomolecule}; domaine = ${state.request.domain}; sous-domaines = ${checks.join(', ')}. Je garde ces choix en mémoire et nous allons passer à la seconde partie du processus.`;
-      }
+
+/* ========= buildDetailChoices (i18n + IDs canoniques) ========= */
+function buildDetailChoices(domainLabel){
+  const key = getDomainKey(domainLabel);
+  const items = SUBDOMAINS[key] || [];
+  const langNow = (document.documentElement.dataset.lang || 'fr');
+
+  const titlePack = SUB_TITLES[key];
+  detailTitle.textContent = titlePack ? titlePack[langNow] : (langNow === 'fr' ? "Spécifiez votre besoin" : "Specify your need");
+
+  detailChoices.innerHTML = "";
+  confirmWrap.classList.add('hide');
+
+  const selectedIDs = new Set(state.request.details || []);
+
+  items.forEach(item=>{
+    const lbl = item[langNow];
+    const row = document.createElement('label');
+    row.className = 'source-item';
+    row.innerHTML = `<input type="checkbox" data-id="${item.id}" style="width:auto"><span>${lbl}</span>`;
+    const cb = row.querySelector('input');
+    cb.checked = selectedIDs.has(item.id);
+
+    cb.addEventListener('change', ()=>{
+      const ids = [...detailChoices.querySelectorAll('input:checked')].map(i=>i.dataset.id);
+      state.request.details = ids;
+
+      const visibleLabels = ids.map(id => {
+        // chercher dans tous les groupes
+        let found=null;
+        for(const arr of Object.values(SUBDOMAINS)){ const x=arr.find(z=>z.id===id); if(x){found=x;break;} }
+        return found ? found[langNow] : id;
+      });
+
+      const txtFR = `Parfait. Vous avez choisi : biomolécule = ${state.request.biomolecule}; domaine = ${state.request.domain}; sous-domaines = ${visibleLabels.join(', ')}. Je garde ces choix en mémoire et nous allons passer à la seconde partie du processus.`;
+      const txtEN = `Great. You selected: biomolecule = ${state.request.biomolecule}; domain = ${state.request.domain}; subdomains = ${visibleLabels.join(', ')}. I'll keep these choices in memory and we'll move to the second part of the process.`;
+
+      const hasSel = ids.length > 0;
+      confirmWrap.classList.toggle('hide', !hasSel);
+      confirmText.textContent = langNow === 'fr' ? txtFR : txtEN;
     });
+
+    detailChoices.appendChild(row);
   });
+
+  if((state.request.details||[]).length){
+    const evt = new Event('change');
+    const first = detailChoices.querySelector('input');
+    if(first) first.dispatchEvent(evt);
+  }
 }
 goToDocs.addEventListener('click',()=>{ showAppSub('step2'); });
 
@@ -550,18 +738,18 @@ const uploaderWrap=document.getElementById('uploaderWrap'); const drop=document.
 btnDocYes.onclick=()=>{uploaderWrap.classList.remove('hide');};
 btnDocNo.onclick=()=>{uploaderWrap.classList.add('hide');state.uploads=[];filesList.innerHTML='';};
 
-drop.addEventListener('click',(e)=>{e.preventDefault();input.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));});
-drop.addEventListener('dragover',(e)=>{e.preventDefault();drop.classList.add('drag');});
-drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));
-drop.addEventListener('drop',(e)=>{e.preventDefault();drop.classList.remove('drag');handleFiles(e.dataTransfer.files);});
-input.addEventListener('change',(e)=>handleFiles(e.target.files));
+drop?.addEventListener('click',(e)=>{e.preventDefault();input.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));});
+drop?.addEventListener('dragover',(e)=>{e.preventDefault();drop.classList.add('drag');});
+drop?.addEventListener('dragleave',()=>drop.classList.remove('drag'));
+drop?.addEventListener('drop',(e)=>{e.preventDefault();drop.classList.remove('drag');handleFiles(e.dataTransfer.files);});
+input?.addEventListener('change',(e)=>handleFiles(e.target.files));
 
 function handleFiles(files){
   state.uploads=[...files];
   filesList.innerHTML='';
   state.uploads.forEach(f=>{
-    const it=document.createElement('div'); it.className='file-item';
-    it.textContent=`${f.name} — ${(f.size/1024/1024).toFixed(2)} MB`;
+    const it=document.createElement('div'); it.className='source-item';
+    it.innerHTML=`<input type="checkbox" checked style="width:auto"><span>${f.name} — ${(f.size/1024/1024).toFixed(2)} MB</span>`;
     filesList.appendChild(it);
   });
 }
@@ -570,19 +758,19 @@ function handleFiles(files){
 const btnLitYes=document.getElementById('btnLitYes'), btnLitNo=document.getElementById('btnLitNo');
 const litModal=document.getElementById('litModal'), closeLitModal=document.getElementById('closeLitModal'), litResults=document.getElementById('litResults');
 btnLitYes.onclick=()=>{ openLitModalAndSearch(); };
-btnLitNo.onclick=()=>{ /* rien, on passe à l’analyse si souhaité */ };
+btnLitNo.onclick=()=>{ /* rien */ };
 closeLitModal.onclick=()=>{ litModal.classList.remove('open'); };
 
 function domainQuery(){
   const d=state.request.domain||'Downstream';
   const bm=(state.request.biomolecule||'Adenovirus');
   const m = {
-    "Downstream": `${bm} purification chromatography OR TFF OR diafiltration OR polishing OR formulation`,
-    "Upstream": `${bm} production bioreactor HEK293`,
-    "Fill & Finish": `${bm} fill finish aseptic filtration`,
-    "Analytique": `${bm} analytics potency identity impurities qPCR ELISA`,
-    "Assurance Qualité": `${bm} quality systems GxP documentation`,
-    "CMC": `${bm} CMC regulatory comparability control strategy`
+    "Downstream": `${bm} (chromatography OR TFF OR diafiltration OR polishing OR formulation OR filtration)`,
+    "Upstream": `${bm} (bioreactor OR perfusion OR seed train OR harvest OR lysis)`,
+    "Fill & Finish": `${bm} (aseptic filling OR container closure OR filter integrity OR visual inspection OR cold chain)`,
+    "Analytique": `${bm} (identity OR potency OR impurities OR aggregation OR qPCR OR stability)`,
+    "Assurance Qualité": `${bm} (GxP OR deviation OR CAPA OR document control OR supplier qualification OR batch record)`,
+    "CMC": `${bm} (control strategy OR specifications OR PPQ OR comparability OR process characterization)`
   };
   return m[d]||`${bm} purification`;
 }
@@ -590,7 +778,7 @@ async function openLitModalAndSearch(){
   litModal.classList.add('open');
   litResults.innerHTML='<div class="muted">Recherche…</div>';
   const q = domainQuery();
-  const url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+encodeURIComponent(q)+'&pageSize=10&format=json&sort_date:y')}`;
+  const url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+encodeURIComponent(q)+'&pageSize=12&format=json&sort_date:y')}`;
   try{
     const r=await fetch(url); const raw=await r.json(); const j=JSON.parse(raw.contents);
     const res=(j.resultList?.result)||[];
@@ -618,7 +806,7 @@ function renderLitResults(){
           </div>
         </div>
       </label>`;
-    const cb=el.querySelector('input'); cb.addEventListener('change',e=>{
+    el.querySelector('input').addEventListener('change',e=>{
       const i=+e.target.dataset.i;
       state.literature.results[i].selected = e.target.checked;
     });
@@ -628,11 +816,9 @@ function renderLitResults(){
 
 const runLitAnalysis=document.getElementById('runLitAnalysis');
 runLitAnalysis.onclick = async ()=>{
-  // Construire liste sélectionnée
   const chosen = state.literature.results.filter(x=>x.selected);
   if(!chosen.length){ alert('Sélectionnez au moins un article.'); return; }
 
-  // Résumés (~10 lignes) via HF si dispo, sinon fallback simple
   const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // remplace si dispo
   const HF_MODEL = "facebook/bart-large-cnn";
   async function summarize(text){
@@ -658,10 +844,9 @@ runLitAnalysis.onclick = async ()=>{
       }
     }catch(_){}
     const s = await summarize(abs);
-    out.push({meta:a, summary:s});
+    out.push({meta:a, abstract:abs||'', summary:s});
   }
 
-  // Alimente l’espace d’analyse (step3)
   state.literature.selected = out;
   litModal.classList.remove('open');
   buildWorkspace();
@@ -688,92 +873,301 @@ function buildWorkspace(){
     artList.appendChild(it);
   });
 
+  // Chips sous-domaines actifs
+  const chips = document.getElementById('sdChips'); chips.innerHTML='';
+  const ids = state.request.details||[];
+  const L = (id)=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return f; } return null; };
+  ids.forEach(id=>{
+    const item=L(id); if(!item) return;
+    const chip=document.createElement('button'); chip.className='chip active'; chip.dataset.id=id;
+    chip.textContent = item[lang()] || item.fr;
+    chip.onclick=()=>{ chip.classList.toggle('active'); renderTargeted(); };
+    chips.appendChild(chip);
+  });
+
   // Overview
   const ov=document.getElementById('overview');
   const d=state.request;
   ov.innerHTML = `
     <div class="pub-card">
       <div><strong>Contexte</strong></div>
-      <div class="muted">Biomolécule : ${esc(d.biomolecule||'-')} · Domaine : ${esc(d.domain||'-')} · Détails : ${esc((d.details||[]).join(', ')||'-')}</div>
+      <div class="muted">Biomolécule : ${esc(d.biomolecule||'-')} · Domaine : ${esc(d.domain||'-')} · Sous-domaines : ${esc((ids.map(x=>L(x)?.fr)||[]).join(', ')||'-')}</div>
     </div>
   `;
 
-  // Méthodologie + 1-pager depuis uploads + articles (rapide)
-  deepAnalyze();
+  targetedAnalyze().then(renderTargeted);
 }
 
-/* ========= Extraction locale & IA ========= */
+/* ========= Targeted Analyzer ========= */
 const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa)\b/gi;
 function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
+function norm(s){return (s||"").normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
+function windowsFromText(text, win=800, overlap=200){
+  const markers=[...text.matchAll(/\[\[PAGE:(\d+)\]\]/g)].map(m=>({idx:m.index,num:+m[1]}));
+  const clean=text.replace(/\[\[PAGE:\d+\]\]/g,'');
+  const out=[]; let i=0; const step = Math.max(64, win-overlap);
+  while(i<clean.length){
+    const slice=clean.slice(i, i+win);
+    // Section tag heuristic
+    const head = clean.slice(Math.max(0,i-200), i+80).toLowerCase();
+    let section=''; if(/materials?|méthodes?|methods?/.test(head)) section='methods';
+    else if(/results?/.test(head)) section='results';
+    else if(/discussion/.test(head)) section='discussion';
+    else if(/introduction/.test(head)) section='introduction';
+    else if(/formulation|chromatograph|filtration|tff|diafiltration/.test(head)) section='process';
 
-async function deepAnalyze(){
-  // 1) Récupération texte des documents internes
-  const texts=[];
-  for(const f of state.uploads){
-    const buf=await f.arrayBuffer(); const ext=f.name.toLowerCase().split('.').pop();
-    let t=''; if(ext==='pdf'){
-      const pdfjsLib=window['pdfjsLib']; pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      const pdf=await pdfjsLib.getDocument({data:buf}).promise; for(let i=1;i<=pdf.numPages;i++){ const page=await pdf.getPage(i); const c=await page.getTextContent(); t+=c.items.map(it=>it.str).join(' ')+' '; }
-    }else if(ext==='docx'){ const res=await window.mammoth.extractRawText({arrayBuffer:buf}); t=res.value||''; }
-    else if(ext==='txt'){ t=new TextDecoder().decode(new Uint8Array(buf)); }
-    texts.push(t);
+    // Page approx
+    const prev = markers.filter(m=>m.idx<=i).pop();
+    out.push({start:i, end:i+win, text:slice, section:section||'body', page:prev?prev.num:undefined});
+    i += step;
   }
-  const full = texts.join('\n\n');
-
-  // 2) Extraction “méthodo” heuristique
-  const terms = /(materials?|méthod|methods?|buffer|tampon|chromatograph|affinity|anion|cation|membrane|TFF|diafiltration|polish|formulation|filtration|QC|quality|analytics?)/i;
-  const sentences = (full||'').split(/(?<=[\.\!\?])\s+/).filter(s=>terms.test(s)).slice(0,120);
-  const extracted = sanitize(sentences.join('\n'));
-
-  // 3) Résumé 1 page (HF si dispo)
-  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; const HF_MODEL="facebook/bart-large-cnn";
-  async function summarize(t){ if(!HF_TOKEN.startsWith('hf_')) return (t||'').slice(0,1400);
-    try{const r=await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{method:'POST',headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({inputs:(t||'').slice(0,7000)})});const j=await r.json();return Array.isArray(j)&&j[0]?.summary_text?j[0].summary_text:(t||'').slice(0,1400);}catch(_){return (t||'').slice(0,1400);} }
-
-  const onepager = await summarize(full);
-
-  // 4) Points clés & risques (simple heuristique)
-  const bullets = [];
-  if(/chromatograph|affinity|AEX|CEX/i.test(full)) bullets.push("Chromatographie : vérifier la robustesse des étapes de capture/polishing (sélectivité, élution, charge).");
-  if(/TFF|diafiltration/i.test(full)) bullets.push("TFF/Diafiltration : contrôler le cisaillement et les volumes de DF (paramètres volontairement absents).");
-  if(/formulation/i.test(full)) bullets.push("Formulation : stabilité (pH, excipients) et compatibilité contenant/fermeture.");
-  if(/QC|quality|stability|release/i.test(full)) bullets.push("Qualité/Analytique : plan de stabilité & critères libératoires documentaires.");
-  if(!bullets.length) bullets.push("Vérifier la traçabilité documentaire et la cohérence des sections méthodologiques.");
-  bullets.splice(6);
-
-  // 5) Traçabilité (articles sélectionnés)
-  const trace = (state.literature.selected||[]).map((a,i)=>`[${i+1}] ${a.meta.title} (${a.meta.year}) — ${a.meta.journal}`).join('<br>');
-
-  // 6) Rendu UI
-  document.getElementById('methodSections').textContent = extracted || '(aucune section détectée)';
-  document.getElementById('onePager').textContent = sanitize(onepager||'');
-  const ul=document.getElementById('keyRisks'); ul.innerHTML=''; bullets.forEach(b=>{const li=document.createElement('li'); li.textContent=b; ul.appendChild(li);});
-  document.getElementById('trace').innerHTML = trace || '<span class="muted">(aucune)</span>';
+  return out;
+}
+function highlight(html, patterns){
+  if(!patterns.length) return html;
+  const rx = new RegExp('('+patterns.join('|')+')','gi');
+  return html.replace(rx, m=>`<mark>${m}</mark>`);
+}
+function closeCooccur(txt, rx1, rx2, max=50){
+  const arr=[]; let m;
+  while((m=rx1.exec(txt))){ arr.push(m.index); if(rx1.lastIndex===m.index) rx1.lastIndex++; }
+  let near=false; let n;
+  while((n=rx2.exec(txt))){
+    const pos=n.index; near = arr.some(i=>Math.abs(i-pos)<=max); if(near) break;
+    if(rx2.lastIndex===n.index) rx2.lastIndex++;
+  }
+  rx1.lastIndex=0; rx2.lastIndex=0;
+  return near;
+}
+function scoreWindow(win, cfg){
+  const txt = win.text;
+  // must
+  for(const r of cfg.must){ if(!r.test(txt)) return 0; }
+  let s=1.0;
+  for(const g of cfg.should){ const [pattern, w]=g; if(pattern.test(txt)) s+=w; }
+  // proximity: between adenovirus and domain core (second must)
+  if(cfg.must.length>=2 && closeCooccur(txt, new RegExp(cfg.must[0], 'i'), new RegExp(cfg.must[1], 'i'), 60)) s+=0.3;
+  for(const [sectRx,boost] of cfg.sectionBoost||[]){ if(sectRx.test(win.section)) s*=boost; }
+  for(const ex of cfg.exclude||[]){ if(ex.test(txt)) s-=0.6; }
+  return Math.max(0, s);
+}
+function buildPatternList(sdId){
+  const cfg = TA[sdId]; if(!cfg) return {cfg, mark:[]};
+  const marks=[];
+  cfg.must.forEach(r=>marks.push(r.source));
+  (cfg.should||[]).forEach(([r])=>marks.push(r.source));
+  return {cfg, mark:marks};
 }
 
-/* ========= Export PDF (workspace) ========= */
+async function extractTextFromFile(f){
+  const buf=await f.arrayBuffer(); const ext=f.name.toLowerCase().split('.').pop();
+  if(ext==='pdf'){
+    const pdfjsLib=window['pdfjsLib']; pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise; let out='';
+    for(let i=1;i<=pdf.numPages;i++){
+      const page=await pdf.getPage(i); const c=await page.getTextContent();
+      out += ` [[PAGE:${i}]] ` + c.items.map(it=>it.str).join(' ') + '\n';
+    }
+    return out.replace(/\s+/g,' ').trim();
+  }else if(ext==='docx'){
+    const res=await window.mammoth.extractRawText({arrayBuffer:buf});
+    return (res.value||'').replace(/\s+/g,' ').trim();
+  }else if(ext==='txt'){
+    return new TextDecoder().decode(new Uint8Array(buf)).replace(/\s+/g,' ').trim();
+  }
+  return '';
+}
+
+async function targetedAnalyze(){
+  // Reset
+  state.analysis.targeted = {};
+  const sdIds = state.request.details||[];
+  if(!sdIds.length) return;
+
+  // 1) Extract texts from uploads
+  const docTexts=[];
+  for(const f of state.uploads){ const t = await extractTextFromFile(f); docTexts.push({name:f.name, text:t}); }
+
+  // 2) Prepare per sdId
+  for(const sdId of sdIds){
+    const {cfg, mark} = buildPatternList(sdId);
+    if(!cfg){ continue; }
+    const results = { labelFR:'', labelEN:'', docs:[], papers:[], summary:'' };
+    // labels
+    for(const arr of Object.values(SUBDOMAINS)){ const m=arr.find(z=>z.id===sdId); if(m){ results.labelFR=m.fr; results.labelEN=m.en; break; } }
+
+    // 3) Score documents
+    for(const d of docTexts){
+      if(!d.text) continue;
+      const wins = windowsFromText(d.text, 850, 250);
+      const scored = wins.map(w=>({ ...w, score: scoreWindow(w, cfg) }))
+                         .filter(x=>x.score>0)
+                         .sort((a,b)=>b.score-a.score)
+                         .slice(0,8);
+      if(!scored.length) continue;
+      const avg = scored.slice(0,5).reduce((a,c)=>a+c.score,0)/Math.min(5,scored.length);
+      results.docs.push({
+        name:d.name, score:+avg.toFixed(2),
+        snippets: scored.map(s=>({
+          score:+s.score.toFixed(2),
+          section:s.section, page:s.page,
+          html: highlight(sanitize(s.text), mark)
+        }))
+      });
+    }
+    results.docs.sort((a,b)=>b.score-a.score);
+
+    // 4) Score literature (abstracts)
+    for(const p of (state.literature.selected||[])){
+      const abs = (p.abstract||'').replace(/\s+/g,' ');
+      if(!abs) continue;
+      const wins = windowsFromText(abs, 700, 200);
+      const scored = wins.map(w=>({ ...w, score: scoreWindow(w, cfg) }))
+                         .filter(x=>x.score>0)
+                         .sort((a,b)=>b.score-a.score)
+                         .slice(0,5);
+      if(!scored.length) continue;
+      const avg = scored.slice(0,3).reduce((a,c)=>a+c.score,0)/Math.min(3,scored.length);
+      const link = p.meta.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${p.meta.pmid}/` : (p.meta.pmcid?`https://europepmc.org/article/PMC/${p.meta.pmcid}`:'#');
+      results.papers.push({
+        title:p.meta.title, year:p.meta.year, journal:p.meta.journal, score:+avg.toFixed(2), link,
+        snippets: scored.map(s=>({ score:+s.score.toFixed(2), html:highlight(sanitize(s.text), mark) }))
+      });
+    }
+    results.papers.sort((a,b)=>b.score-a.score);
+
+    // 5) One-pager targeted (HF if available, else heuristic)
+    const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const HF_MODEL = "facebook/bart-large-cnn";
+    const baseText = [
+      ...results.docs.flatMap(d=>d.snippets.slice(0,3).map(s=>s.html.replace(/<[^>]+>/g,' '))),
+      ...results.papers.flatMap(p=>p.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' ')))
+    ].join(' ');
+    async function summarize(t){
+      if(!HF_TOKEN.startsWith('hf_')) return (t||'').split(/[\.\!\?]\s/).filter(x=>x.length>40).slice(0,12).join('. ') + '.';
+      try{
+        const r=await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{
+          method:'POST',headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},
+          body:JSON.stringify({inputs:(t||'').slice(0,7000)})
+        });
+        const j=await r.json();
+        return Array.isArray(j)&&j[0]?.summary_text ? j[0].summary_text : (t||'').slice(0,1400);
+      }catch(_){return (t||'').slice(0,1400);}
+    }
+    results.summary = sanitize(await summarize(baseText));
+
+    state.analysis.targeted[sdId] = results;
+  }
+}
+
+/* ========= Render targeted results ========= */
+function renderTargeted(){
+  const cont=document.getElementById('sdResults'); cont.innerHTML='';
+  const chips=[...document.querySelectorAll('#sdChips .chip')];
+  const activeIds = chips.filter(c=>c.classList.contains('active')).map(c=>c.dataset.id);
+  if(!activeIds.length){ cont.innerHTML='<div class="muted">Aucun sous-domaine actif.</div>'; return; }
+
+  activeIds.forEach(id=>{
+    const pack=state.analysis.targeted[id]; if(!pack) return;
+    const title = (lang()==='fr'?pack.labelFR:pack.labelEN) || id;
+    const sec=document.createElement('section'); sec.className='panel';
+    sec.innerHTML = `<h3>${esc(title)}</h3>`;
+
+    // DOCS
+    if(pack.docs.length){
+      const docsWrap=document.createElement('div');
+      docsWrap.innerHTML=`<div class="result-meta"><strong>Documents internes</strong></div>`;
+      pack.docs.forEach(d=>{
+        const card=document.createElement('div'); card.className='result-card';
+        card.innerHTML=`
+          <div><strong>${esc(d.name)}</strong></div>
+          <div class="bar"><span style="width:${Math.min(100, d.score*12)}%"></span></div>
+          ${d.snippets.map(s=>`
+            <div class="snip">
+              <div class="meta">score ${s.score}${s.page?` · page ${s.page}`:''}${s.section?` · ${s.section}`:''}</div>
+              <div>${s.html}</div>
+            </div>
+          `).join('')}
+        `;
+        docsWrap.appendChild(card);
+      });
+      sec.appendChild(docsWrap);
+    }
+
+    // PAPERS
+    if(pack.papers.length){
+      const papWrap=document.createElement('div');
+      papWrap.style.marginTop='10px';
+      papWrap.innerHTML=`<div class="result-meta"><strong>Littérature (Europe PMC / PubMed)</strong></div>`;
+      pack.papers.forEach(p=>{
+        const card=document.createElement('div'); card.className='result-card';
+        card.innerHTML=`
+          <div><strong>${esc(p.title)}</strong></div>
+          <div class="result-meta">${esc(p.journal||'')} · ${esc(p.year||'')}</div>
+          <div class="bar"><span style="width:${Math.min(100, p.score*12)}%"></span></div>
+          ${p.snippets.map(s=>`
+            <div class="snip">
+              <div class="meta">score ${s.score}</div>
+              <div>${s.html}</div>
+            </div>
+          `).join('')}
+          <div><a class="tag" href="${p.link}" target="_blank" rel="noopener">Ouvrir</a></div>
+        `;
+        papWrap.appendChild(card);
+      });
+      sec.appendChild(papWrap);
+    }
+
+    // SUMMARY
+    const sum=document.createElement('div'); sum.style.marginTop='10px';
+    sum.innerHTML=`
+      <div class="result-meta"><strong>Résumé ciblé (~1 page)</strong></div>
+      <pre class="code">${esc(pack.summary||'(vide)')}</pre>
+    `;
+    sec.appendChild(sum);
+
+    cont.appendChild(sec);
+  });
+}
+
+/* ========= Export PDF (targeted) ========= */
 document.getElementById('exportPdf').onclick = async ()=>{
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({unit:'pt',format:'a4'});
   const M=56, W=pdf.internal.pageSize.getWidth(), H=pdf.internal.pageSize.getHeight();
   pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F');
+
   try{ const r=await fetch('./assets/montes-biopharma-logo.jpg'); const b=await r.blob(); const data=await blobToDataURL(b); pdf.addImage(data,'JPEG',M,M-8,160,40,'','FAST'); }catch(e){}
-  setText(pdf,'#3A49FF',18,'bold'); pdf.text('Documentary protocol — Adenovirus', M+180, M+14);
+  setText(pdf,'#3A49FF',18,'bold'); pdf.text('Documentary protocol — Targeted analysis', M+180, M+14);
   pdf.setDrawColor(58,73,255); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
   let y=M+74;
+
+  // Overview
   y = putHeading(pdf,'Overview',y,13,'#3A49FF',M,W,H);
-  const d=state.request; y=putParagraph(pdf,`Biomolecule: ${d.biomolecule||'-'} · Domain: ${d.domain||'-'} · Details: ${(d.details||[]).join(', ')||'-'}`,y,M,W,H,11);
-  y = putHeading(pdf,'Extracted methodological sections',y,13,'#3A49FF',M,W,H);
-  y = putParagraph(pdf,(document.getElementById('methodSections').textContent||''),y,M,W,H,11);
-  y = putHeading(pdf,'One-page summary',y,13,'#3A49FF',M,W,H);
-  y = putParagraph(pdf,(document.getElementById('onePager').textContent||''),y,M,W,H,11);
-  y = putHeading(pdf,'Key points & risks',y,13,'#3A49FF',M,W,H);
-  const bullets=[...document.querySelectorAll('#keyRisks li')].map(li=>li.textContent);
-  for(const b of bullets){ y=putParagraph(pdf,'• '+b,y,M,W,H,11); }
-  y = putHeading(pdf,'Traceability',y,13,'#3A49FF',M,W,H);
-  const refs = (state.literature.selected||[]).map((a,i)=>`[${i+1}] ${a.meta.title} (${a.meta.year}) — ${a.meta.journal}`).join('\n');
-  y = putParagraph(pdf,refs||'(none)',y,M,W,H,11);
-  pdf.save('documentary-protocol.pdf');
+  const d=state.request;
+  y=putParagraph(pdf,`Biomolecule: ${d.biomolecule||'-'} · Domain: ${d.domain||'-'}`,y,M,W,H,11);
+
+  // Each subdomain
+  const activeIds = (state.request.details||[]);
+  for(const id of activeIds){
+    const pack=state.analysis.targeted[id]; if(!pack) continue;
+    const title=(lang()==='fr'?pack.labelFR:pack.labelEN)||id;
+    y = putHeading(pdf, title, y, 13, '#3A49FF', M,W,H);
+    // Summary
+    y = putParagraph(pdf, pack.summary||'(no summary)', y, M,W,H,11);
+    // Evidence (top 2 per doc/paper)
+    y = putParagraph(pdf, 'Evidences:', y, M,W,H,11);
+    for(const d of pack.docs.slice(0,3)){
+      y = putParagraph(pdf, `• ${d.name} [score ${d.score}]`, y, M,W,H,11);
+      for(const s of d.snippets.slice(0,2)){ y = putParagraph(pdf, `   - ${s.page?('p.'+s.page+' '):''}${s.section?(`[${s.section}] `:'')}${s.html.replace(/<[^>]+>/g,' ')}`, y, M,W,H,10); }
+    }
+    for(const p of pack.papers.slice(0,3)){
+      y = putParagraph(pdf, `• ${p.title} (${p.journal||''} ${p.year||''}) [score ${p.score}]`, y, M,W,H,11);
+      for(const s of p.snippets.slice(0,1)){ y = putParagraph(pdf, `   - ${s.html.replace(/<[^>]+>/g,' ')}`, y, M,W,H,10); }
+    }
+  }
+
+  pdf.save('documentary-protocol-targeted.pdf');
 };
 function setText(pdf,hex,size,weight){const [r,g,b]=hexToRGB(hex); pdf.setTextColor(r,g,b); pdf.setFont('helvetica', weight==='bold'?'bold':'normal'); pdf.setFontSize(size);}
 function putHeading(pdf,text,y,size,color,M,W,H){ if(y + size + 18 > H - M){ pdf.addPage(); y=M; } const [r,g,b]=hexToRGB(color); pdf.setTextColor(r,g,b); pdf.setFont('helvetica','bold'); pdf.setFontSize(size); pdf.text(text,M,y); pdf.setDrawColor(210,210,210); pdf.setLineWidth(.6); pdf.line(M,y+6,W-M,y+6); return y+18;}
