@@ -12,7 +12,7 @@
 <style>
 :root{
   --bg:#F6F7FB; --panel:#FFFFFF; --ink:#0F1226; --muted:#6C7392;
-  --primary:#3A49FF; --accent:#FF46A2; --border:#E6E9F4;
+  --primary:#3A49FF; --accent:#00FF6A; --border:#E6E9F4;
   --radius:18px; --shadow:0 10px 30px rgba(15,18,38,.06);
 }
 *{box-sizing:border-box}
@@ -21,6 +21,10 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Outfit,system-ui
 a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
 img{display:block;max-width:100%}
 .hide{display:none}
+
+/* Tabs (top) */
+.tab{display:none}
+.tab.active{display:block}
 
 /* Particles */
 #particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.85}
@@ -107,18 +111,23 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 
 /* Basic cards & tags used in modal/overview/uploader */
 .pub-card{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff;display:grid;gap:6px}
-.tag{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:999px;background:#fff;color:var(--ink}
+.tag{
+  font-size:11px;
+  padding:3px 8px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:#fff;
+  color:var(--ink);
+}
 
 /* Uploader block */
 .drop{display:grid;place-items:center;text-align:center;gap:8px;padding:22px;border:2px dashed var(--border);border-radius:12px;background:#fff}
 .drop.drag{border-color:var(--primary)}
 .file-list{display:grid;gap:10px;margin-top:10px}
 
-/* Tabs (top) */
-.tab{display:none}.tab.active{display:block}
-
 /* Subtabs (Application) */
-.app-sub{display:none}.app-sub.active{display:block}
+.app-sub{display:none}
+.app-sub.active{display:block}
 
 /* Ergonomic analysis workspace */
 .workspace{display:grid;gap:16px}
@@ -430,7 +439,6 @@ const xfade=document.getElementById('xfade');
 function openMenu(){menuDD.classList.add('open');menuBtn.setAttribute('aria-expanded','true');}
 function closeMenu(){menuDD.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}
 
-// robust: stopPropagation + contains
 menuBtn.addEventListener('click',(e)=>{
   e.preventDefault();
   e.stopPropagation();
@@ -449,7 +457,7 @@ function showTab(name){
     Object.values(tabs).forEach(t=>t.classList.remove('active'));
     (tabs[name]||tabs.intro).classList.add('active');
     closeMenu();
-    window.scrollTo({top:0,behavior:'auto'}); /* fix: 'instant' -> 'auto' */
+    window.scrollTo({top:0,behavior:'auto'});
     setTimeout(()=>xfade.classList.remove('show'), 260);
   },160);
 }
@@ -464,7 +472,7 @@ function showAppSub(key){
   setTimeout(()=>{
     Object.values(appSubs).forEach(s=>s.classList.remove('active'));
     (appSubs[key]||appSubs.step1).classList.add('active');
-    window.scrollTo({top:0,behavior:'auto'}); /* fix */
+    window.scrollTo({top:0,behavior:'auto'});
     setTimeout(()=>xfade.classList.remove('show'),260);
   },160);
 }
@@ -605,14 +613,7 @@ const SUBDOMAINS = {
   ]
 };
 function L_dom(key){
-  const map = {
-    downstream:'dom_downstream',
-    upstream:'dom_upstream',
-    fill:'dom_fill',
-    analytics:'dom_analytics',
-    qa:'dom_qa',
-    cmc:'dom_cmc'
-  };
+  const map = {downstream:'dom_downstream', upstream:'dom_upstream', fill:'dom_fill', analytics:'dom_analytics', qa:'dom_qa', cmc:'dom_cmc'};
   const k = map[key];
   return k ? t(k) : (key||'-');
 }
@@ -620,39 +621,15 @@ function L_dom(key){
 /* ========= Targeted taxonomy & scoring config ========= */
 const TA = (()=>{
   const ADV = /adenovirus|adeno[-\s]?virus|ad5|ad26|adenoviral/i;
-  const SECBOOST = [
-    [/(materials?|methods?|methodologie|méthode|purification)/i, 1.5],
-    [/(results?|discussion)/i, 1.2]
-  ];
-  function cfg(must2, shouldGroups, exclude=[]){
-    return { must:[ADV, must2], should:shouldGroups, exclude, sectionBoost:SECBOOST };
-  }
+  const SECBOOST = [[/(materials?|methods?|methodologie|méthode|purification)/i, 1.5],[/(results?|discussion)/i, 1.2]];
+  function cfg(must2, shouldGroups, exclude=[]){ return { must:[ADV, must2], should:shouldGroups, exclude, sectionBoost:SECBOOST }; }
   return {
-    clarification: cfg(/clarifi|centrifug|depth\s?filter|floccul|turbid|harvest/i, [
-      [/depth\s?filter|clari|centrifug/i, 1.2],
-      [/floccul|polydadmac|turbidity/i, 1.0]
-    ], [/AAV|adeno[-\s]?associated|lentivirus|retrovirus/i]),
-    tff_df: cfg(/diafiltrat|ultra?filtrat|tff|membrane/i, [
-      [/tff|ultra?filtrat/i, 1.5],
-      [/diafiltrat|buffer exchange/i, 1.2],
-      [/membrane|cassette|NMWL|cut[\s-]?off/i, 1.0]
-    ]),
-    capture_chrom: cfg(/chromatograph|column|resin|ligand/i, [
-      [/affinity|AVB|heparin|monolith|membrane adsorber/i, 2.0],
-      [/anion exchange|AEX|quaternary amine|QA/i, 1.5],
-      [/cation exchange|CEX|carboxymethyl/i, 1.2]
-    ]),
-    polishing: cfg(/polish|ion\s?exchange|SEC|size exclusion|flow[-\s]?through/i, [
-      [/AEX|CEX|multimodal|hydrophobic/i, 1.4],
-      [/aggregate|host cell protein|DNA residual/i, 1.1]
-    ]),
-    formulation: cfg(/formulat|excipient|stability|buffer|surfactant|trehalose|sucrose/i, [
-      [/pH|osmol|surfactant|polysorbate/i, 1.2],
-      [/cryoprotect|stabilit/i, 1.1]
-    ]),
-    final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?μ?m/i, [
-      [/bioburden|sterility/i, 1.2]
-    ]),
+    clarification: cfg(/clarifi|centrifug|depth\s?filter|floccul|turbid|harvest/i, [[/depth\s?filter|clari|centrifug/i, 1.2],[/floccul|polydadmac|turbidity/i, 1.0]], [/AAV|adeno[-\s]?associated|lentivirus|retrovirus/i]),
+    tff_df: cfg(/diafiltrat|ultra?filtrat|tff|membrane/i, [[/tff|ultra?filtrat/i, 1.5],[/diafiltrat|buffer exchange/i, 1.2],[/membrane|cassette|NMWL|cut[\s-]?off/i, 1.0]]),
+    capture_chrom: cfg(/chromatograph|column|resin|ligand/i, [[/affinity|AVB|heparin|monolith|membrane adsorber/i, 2.0],[/anion exchange|AEX|quaternary amine|QA/i, 1.5],[/cation exchange|CEX|carboxymethyl/i, 1.2]]),
+    polishing: cfg(/polish|ion\s?exchange|SEC|size exclusion|flow[-\s]?through/i, [[/AEX|CEX|multimodal|hydrophobic/i, 1.4],[/aggregate|host cell protein|DNA residual/i, 1.1]]),
+    formulation: cfg(/formulat|excipient|stability|buffer|surfactant|trehalose|sucrose/i, [[/pH|osmol|surfactant|polysorbate/i, 1.2],[/cryoprotect|stabilit/i, 1.1]]),
+    final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?μ?m/i, [[/bioburden|sterility/i, 1.2]]),
     cell_bank_seed: cfg(/cell\sbank|seed\s?train|master\s?cell\sbank/i, [[/seed\s?train/i,1.2]]),
     production_bioreactor: cfg(/bioreactor|bioréacteur|perfusion|fed[-\s]?batch|batch/i, [[/perfusion|ATF|TFF\s?loop/i,1.4]]),
     infection_strategy: cfg(/infection|MOI|multiplicity/i, [[/MOI|infection strategy/i,1.4]]),
@@ -700,8 +677,8 @@ const goToDocs=document.getElementById('goToDocs');
 
 /* ========= State ========= */
 const state={
-  request:{ biomolecule:null, domain:null, details:[] }, // domain is canonical key
-  uploads:[], // File[]
+  request:{ biomolecule:null, domain:null, details:[] },
+  uploads:[],
   literature:{ results:[], selected:[] },
   analysis:{ targeted:{} }
 };
@@ -711,23 +688,19 @@ function setLang(newLang){
   document.documentElement.setAttribute('lang', newLang);
   document.documentElement.dataset.lang = newLang;
 
-  // Replace all data-i texts
   for(const el of document.querySelectorAll('[data-i]')){
     const v = t(el.dataset.i);
     if(/<br\s*\/?>|&nbsp;/.test(v)) el.innerHTML = v; else el.textContent = v;
   }
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Rebuild domain select
   renderDomainOptions(state.request.domain);
 
-  // Rebuild subdomains if domain exists
   if (state.request.domain) {
     buildDetailChoices(state.request.domain);
     if ((state.request.details||[]).length) confirmWrap.classList.remove('hide');
   }
 
-  // Update contact mailto (fix: function now exists)
   updateMailto();
 }
 function renderDomainOptions(selectedKey){
@@ -752,7 +725,12 @@ function renderDomainOptions(selectedKey){
 }
 btnFR.onclick=()=>{setLang('fr');btnFR.classList.add('active');btnEN.classList.remove('active');};
 btnEN.onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
-window.addEventListener('DOMContentLoaded',()=>{ setLang('fr'); });
+window.addEventListener('DOMContentLoaded',()=>{
+  // Force initial tab state (intro visible only)
+  Object.values({intro:document.getElementById('tab-intro'),app:document.getElementById('tab-app'),contact:document.getElementById('tab-contact')})
+    .forEach((t,i)=>t.classList.toggle('active', i===0));
+  setLang('fr');
+});
 
 /* ========= Step 1 logic ========= */
 bioSelect.addEventListener('change',()=>{
@@ -761,7 +739,7 @@ bioSelect.addEventListener('change',()=>{
   detailWrap.classList.add('hide'); confirmWrap.classList.add('hide');
 });
 domainSelect.addEventListener('change',()=>{
-  const key = domainSelect.value || null; // canonical key
+  const key = domainSelect.value || null;
   state.request.domain = key;
   buildDetailChoices(key);
   detailWrap.classList.remove('hide'); confirmWrap.classList.add('hide');
@@ -935,7 +913,6 @@ document.getElementById('toWorkspace').onclick = ()=>{ buildWorkspace(); showApp
 
 /* ========= Workspace (step3) ========= */
 function buildWorkspace(){
-  // Sidebar sources internes
   const docList=document.getElementById('docList'); docList.innerHTML='';
   state.uploads.forEach(f=>{
     const it=document.createElement('div'); it.className='source-item';
@@ -943,7 +920,6 @@ function buildWorkspace(){
     docList.appendChild(it);
   });
 
-  // Sidebar articles
   const artList=document.getElementById('artList'); artList.innerHTML='';
   (state.literature.selected||[]).forEach((a,i)=>{
     const it=document.createElement('div'); it.className='source-item';
@@ -951,7 +927,6 @@ function buildWorkspace(){
     artList.appendChild(it);
   });
 
-  // Chips sous-domaines actifs
   const chips = document.getElementById('sdChips'); chips.innerHTML='';
   const ids = state.request.details||[];
   const L = (id)=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return (lang()==='fr'?f.fr:f.en); } return id; };
@@ -962,7 +937,6 @@ function buildWorkspace(){
     chips.appendChild(chip);
   });
 
-  // Overview (now fully translated)
   const ov=document.getElementById('overview');
   const d=state.request;
   ov.innerHTML = `
@@ -984,9 +958,9 @@ function windowsFromText(text, win=800, overlap=200){
   const out=[]; let i=0; const step = Math.max(64, win-overlap);
   while(i<clean.length){
     const slice=clean.slice(i, i+win);
-    // Section tag heuristic
     const head = clean.slice(Math.max(0,i-200), i+80).toLowerCase();
-    let section=''; if(/materials?|méthodes?|methods?/.test(head)) section='methods';
+    let section='';
+    if(/materials?|méthodes?|methods?/.test(head)) section='methods';
     else if(/results?/.test(head)) section='results';
     else if(/discussion/.test(head)) section='discussion';
     else if(/introduction/.test(head)) section='introduction';
@@ -1063,7 +1037,6 @@ async function targetedAnalyze(){
     const results = { labelFR:'', labelEN:'', docs:[], papers:[], summary:'' };
     for(const arr of Object.values(SUBDOMAINS)){ const m=arr.find(z=>z.id===sdId); if(m){ results.labelFR=m.fr; results.labelEN=m.en; break; } }
 
-    // Docs
     for(const d of docTexts){
       if(!d.text) continue;
       const wins = windowsFromText(d.text, 850, 250);
@@ -1084,7 +1057,6 @@ async function targetedAnalyze(){
     }
     results.docs.sort((a,b)=>b.score-a.score);
 
-    // Literature
     for(const p of (state.literature.selected||[])){
       const abs = (p.abstract||'').replace(/\s+/g,' ');
       if(!abs) continue;
@@ -1103,7 +1075,6 @@ async function targetedAnalyze(){
     }
     results.papers.sort((a,b)=>b.score-a.score);
 
-    // One-pager
     const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     const HF_MODEL = "facebook/bart-large-cnn";
     const baseText = [
@@ -1140,7 +1111,6 @@ function renderTargeted(){
     const sec=document.createElement('section'); sec.className='panel';
     sec.innerHTML = `<h3>${esc(title)}</h3>`;
 
-    // DOCS
     if(pack.docs.length){
       const docsWrap=document.createElement('div');
       docsWrap.innerHTML=`<div class="result-meta"><strong>${t('docsInternal')}</strong></div>`;
@@ -1161,7 +1131,6 @@ function renderTargeted(){
       sec.appendChild(docsWrap);
     }
 
-    // PAPERS
     if(pack.papers.length){
       const papWrap=document.createElement('div');
       papWrap.style.marginTop='10px';
@@ -1185,7 +1154,6 @@ function renderTargeted(){
       sec.appendChild(papWrap);
     }
 
-    // SUMMARY
     const sum=document.createElement('div'); sum.style.marginTop='10px';
     sum.innerHTML=`
       <div class="result-meta"><strong>${t('targetedSummary')}</strong></div>
@@ -1209,13 +1177,11 @@ document.getElementById('exportPdf').onclick = async ()=>{
   pdf.setDrawColor(58,73,255); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
   let y=M+74;
 
-  // Overview
   y = putHeading(pdf, t('pdfOverview'), y, 13, '#3A49FF', M,W,H);
   const d=state.request;
   const domainLabel = L_dom(d.domain||'downstream');
   y=putParagraph(pdf,`${t('biomolecule')}: ${d.biomolecule||'-'} · ${t('domain')}: ${domainLabel||'-'}`,y,M,W,H,11);
 
-  // Each subdomain
   const activeIds = (state.request.details||[]);
   for(const id of activeIds){
     const pack=state.analysis.targeted[id]; if(!pack) continue;
@@ -1242,7 +1208,7 @@ function hexToRGB(hex){const h=hex.replace('#','');const n=parseInt(h,16);return
 function blobToDataURL(blob){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(blob);});}
 document.getElementById('year').textContent=new Date().getFullYear();
 
-/* ========= Contact mailto (FIX) ========= */
+/* ========= Contact mailto ========= */
 function updateMailto(){
   const name = document.getElementById('c_name').value || '';
   const org  = document.getElementById('c_org').value || '';
