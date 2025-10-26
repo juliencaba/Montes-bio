@@ -207,38 +207,30 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
         <section class="block open">
           <header>
             <div>
-              <div class="overline">ANALYSE DE LA DEMANDE</div>
-              <h2>Votre besoin</h2>
+              <div class="overline" data-i="overlineStep1">ANALYSE DE LA DEMANDE</div>
+              <h2 data-i="step1Title">Votre besoin</h2>
             </div>
           </header>
           <div class="inner">
             <div class="grid">
               <!-- Q1 -->
               <div>
-                <label><strong>Quelle biomolécule voulez-vous produire ?</strong></label>
+                <label data-i="q1">Quelle biomolécule voulez-vous produire ?</label>
                 <select id="bioSelect">
-                  <option value="" selected disabled>— Sélectionner —</option>
+                  <option value="" selected disabled data-i="selectPlaceholder">— Sélectionner —</option>
                   <option value="Adenovirus">Adénovirus</option>
                 </select>
               </div>
 
               <!-- Q2 -->
               <div id="domainWrap" class="hide">
-                <label><strong>Quel est le domaine du pharmaceutique que vous souhaitez explorer ?</strong></label>
-                <select id="domainSelect">
-                  <option value="" selected disabled>— Sélectionner —</option>
-                  <option>Upstream</option>
-                  <option>Downstream</option>
-                  <option>Fill & Finish</option>
-                  <option>Analytique</option>
-                  <option>Assurance Qualité</option>
-                  <option>CMC</option>
-                </select>
+                <label data-i="q2">Quel est le domaine du pharmaceutique que vous souhaitez explorer ?</label>
+                <select id="domainSelect"></select>
               </div>
 
               <!-- Q3 (contextuel) -->
               <div id="detailWrap" class="hide">
-                <label><strong id="detailTitle">Spécifiez votre besoin</strong></label>
+                <label><strong id="detailTitle" data-i="detailTitleGeneric">Spécifiez votre besoin</strong></label>
                 <div id="detailChoices" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))"></div>
               </div>
 
@@ -247,7 +239,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
                   <p id="confirmText" class="muted"></p>
                 </div>
                 <div class="controls">
-                  <button class="btn primary" id="goToDocs">Passer à la suite</button>
+                  <button class="btn primary" id="goToDocs" data-i="goNext">Passer à la suite</button>
                 </div>
               </div>
             </div>
@@ -262,26 +254,26 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
         <section class="block open">
           <header>
             <div>
-              <div class="overline">DOCUMENTS & LITTÉRATURE</div>
-              <h2>Sources</h2>
+              <div class="overline" data-i="overlineStep2">DOCUMENTS & LITTÉRATURE</div>
+              <h2 data-i="step2Title">Sources</h2>
             </div>
           </header>
           <div class="inner">
             <!-- Question documents internes -->
             <div class="grid">
               <div>
-                <label><strong>Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?</strong></label>
+                <label data-i="qDocs">Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?</label>
                 <div class="controls">
-                  <button class="btn secondary" id="btnDocYes">Oui</button>
-                  <button class="btn secondary" id="btnDocNo">Non</button>
+                  <button class="btn secondary" id="btnDocYes" data-i="yes">Oui</button>
+                  <button class="btn secondary" id="btnDocNo" data-i="no">Non</button>
                 </div>
               </div>
               <div id="uploaderWrap" class="hide">
                 <div id="drop" class="drop" style="margin-top:6px">
                   <div>
-                    <strong>Déposez vos fichiers ici</strong>
-                    <div class="muted">ou cliquez pour sélectionner</div>
-                    <small>Acceptés : PDF, DOCX, TXT</small>
+                    <strong data-i="dropTitle">Déposez vos fichiers ici</strong>
+                    <div class="muted" data-i="dropHint">ou cliquez pour sélectionner</div>
+                    <small data-i="dropTypes">Acceptés : PDF, DOCX, TXT</small>
                   </div>
                   <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt" style="display:none">
                 </div>
@@ -290,15 +282,15 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 
               <!-- Question recherche littérature -->
               <div style="margin-top:10px">
-                <label><strong>Souhaitez-vous une recherche dans la littérature selon votre domaine ?</strong></label>
+                <label data-i="qLit">Souhaitez-vous une recherche dans la littérature selon votre domaine ?</label>
                 <div class="controls">
-                  <button class="btn secondary" id="btnLitYes">Oui</button>
-                  <button class="btn secondary" id="btnLitNo">Non</button>
+                  <button class="btn secondary" id="btnLitYes" data-i="yes">Oui</button>
+                  <button class="btn secondary" id="btnLitNo" data-i="no">Non</button>
                 </div>
               </div>
 
               <div class="controls" style="margin-top:8px">
-                <button class="btn primary" id="toWorkspace">Aller à l’analyse</button>
+                <button class="btn primary" id="toWorkspace" data-i="goAnalysis">Aller à l’analyse</button>
               </div>
             </div>
           </div>
@@ -309,12 +301,12 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
       <div id="litModal" class="modal" aria-hidden="true">
         <div class="modal-card">
           <header>
-            <h3 style="margin:0">Résultats littérature</h3>
-            <button class="icon-btn" id="closeLitModal">Fermer</button>
+            <h3 style="margin:0" data-i="litResultsTitle">Résultats littérature</h3>
+            <button class="icon-btn" id="closeLitModal" data-i="close">Fermer</button>
           </header>
           <div id="litResults"></div>
           <div class="controls" style="margin-top:10px">
-            <button class="btn primary" id="runLitAnalysis">Lancer l’analyse du contenu</button>
+            <button class="btn primary" id="runLitAnalysis" data-i="runContentAnalysis">Lancer l’analyse du contenu</button>
           </div>
         </div>
       </div>
@@ -326,27 +318,27 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
         <section class="block open">
           <header>
             <div>
-              <div class="overline">ANALYSE APPROFONDIE</div>
-              <h2>Espace d’analyse ciblée</h2>
+              <div class="overline" data-i="overlineStep3">ANALYSE APPROFONDIE</div>
+              <h2 data-i="step3Title">Espace d’analyse ciblée</h2>
             </div>
           </header>
           <div class="inner">
             <div class="workspace">
               <!-- Sidebar: sources -->
               <aside class="sidebar">
-                <h4>Sources internes</h4>
+                <h4 data-i="internalSources">Sources internes</h4>
                 <div id="docList"></div>
-                <h4 style="margin-top:12px">Articles sélectionnés</h4>
+                <h4 style="margin-top:12px" data-i="selectedArticles">Articles sélectionnés</h4>
                 <div id="artList"></div>
                 <hr class="sep">
-                <h4>Sous-domaines actifs</h4>
+                <h4 data-i="activeSubdomains">Sous-domaines actifs</h4>
                 <div id="sdChips" class="chips"></div>
               </aside>
 
               <!-- Main panels -->
               <div class="mainpanel">
                 <div class="panel">
-                  <h3>Vue d’ensemble</h3>
+                  <h3 data-i="overview">Vue d’ensemble</h3>
                   <div id="overview"></div>
                 </div>
 
@@ -354,7 +346,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
                 <div id="sdResults"></div>
 
                 <div class="controls" style="margin-top:6px">
-                  <button class="btn primary" id="exportPdf">Exporter le PDF</button>
+                  <button class="btn primary" id="exportPdf" data-i="exportPdfBtn">Exporter le PDF</button>
                 </div>
               </div>
             </div> <!-- /workspace -->
@@ -372,24 +364,24 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
       <section class="block open">
         <header>
           <div>
-            <div class="overline">PRISE DE CONTACT</div>
-            <h2>Discutons de votre projet</h2>
+            <div class="overline" data-i="overlineContact">PRISE DE CONTACT</div>
+            <h2 data-i="contactTitle">Discutons de votre projet</h2>
           </div>
         </header>
         <div class="inner">
-          <p class="muted">Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).</p>
+          <p class="muted" data-i="contactIntro">Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).</p>
           <div class="row row-2">
-            <div><label>Nom</label><input id="c_name" placeholder="Jane Doe"></div>
-            <div><label>Société</label><input id="c_org" placeholder="Montes BioPharma"></div>
+            <div><label data-i="labelName">Nom</label><input id="c_name" placeholder="Jane Doe"></div>
+            <div><label data-i="labelOrg">Société</label><input id="c_org" placeholder="Montes BioPharma"></div>
           </div>
           <div class="row" style="margin-top:8px">
-            <div><label>Email</label><input id="c_email" placeholder="you@company.com" type="email"></div>
+            <div><label data-i="labelEmail">Email</label><input id="c_email" placeholder="you@company.com" type="email"></div>
           </div>
           <div class="row" style="margin-top:8px">
-            <div><label>Message</label><textarea id="c_msg" rows="4" placeholder="Parlez-nous de votre projet…"></textarea></div>
+            <div><label data-i="labelMsg">Message</label><textarea id="c_msg" rows="4" placeholder="Parlez-nous de votre projet…"></textarea></div>
           </div>
           <div class="controls">
-            <a id="c_mailto" class="btn primary" href="#">Envoyer par e-mail</a>
+            <a id="c_mailto" class="btn primary" href="#" data-i="sendEmail">Envoyer par e-mail</a>
             <a class="btn secondary" href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
           </div>
         </div>
@@ -402,7 +394,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
   <div class="section" style="padding-top:20px;padding-bottom:28px">
     <div style="display:flex;justify-content:space-between;gap:10px;color:var(--muted)">
       <div>© <span id="year"></span> Montes BioPharma</div>
-      <div>Europe PMC / PubMed — Hugging Face (optionnel). Aucune instruction expérimentale.</div>
+      <div data-i="footerNote">Europe PMC / PubMed — Hugging Face (optionnel). Aucune instruction expérimentale.</div>
     </div>
   </div>
 </footer>
@@ -422,12 +414,24 @@ const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(20+38*mix), g=Math.round
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(${r},${g},${b},${a})`;cx.fill();}})();
 
 /* ========= Top menu & gradient transition ========= */
-const menuBtn=document.getElementById('menuBtn'); const menuDD=document.getElementById('menuDropdown'); const xfade=document.getElementById('xfade');
+const menuBtn=document.getElementById('menuBtn'); 
+const menuDD=document.getElementById('menuDropdown'); 
+const xfade=document.getElementById('xfade');
+
 function openMenu(){menuDD.classList.add('open');menuBtn.setAttribute('aria-expanded','true');}
 function closeMenu(){menuDD.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}
-menuBtn.addEventListener('click',(e)=>{e.stopPropagation();menuDD.classList.toggle('open');menuBtn.setAttribute('aria-expanded',menuDD.classList.contains('open'));});
-document.addEventListener('click',(e)=>{ if(!menuDD.contains(e.target) && e.target!==menuBtn) closeMenu();});
-document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeMenu();});
+
+// ✅ robust: stopPropagation + contains
+menuBtn.addEventListener('click',(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+  menuDD.classList.toggle('open');
+  menuBtn.setAttribute('aria-expanded', menuDD.classList.contains('open'));
+});
+document.addEventListener('click',(e)=>{
+  if (!menuDD.contains(e.target) && !menuBtn.contains(e.target)) closeMenu();
+});
+document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeMenu(); });
 
 const tabs={intro:document.getElementById('tab-intro'),app:document.getElementById('tab-app'),contact:document.getElementById('tab-contact')};
 function showTab(name){
@@ -441,7 +445,8 @@ function showTab(name){
   },160);
 }
 menuDD.querySelectorAll('.menu-item').forEach(it=>it.addEventListener('click',()=>showTab(it.dataset.tab)));
-document.getElementById('openMenuCta').onclick=openMenu; document.getElementById('openMenuLearn').onclick=openMenu;
+document.getElementById('openMenuCta').onclick = (e)=>{ e.stopPropagation(); openMenu(); };
+document.getElementById('openMenuLearn').onclick = (e)=>{ e.stopPropagation(); openMenu(); };
 
 /* ========= Subtabs (Application) with gradient ========= */
 const appSubs={ step1:document.getElementById('app-step1'), step2:document.getElementById('app-step2'), step3:document.getElementById('app-step3') };
@@ -455,47 +460,97 @@ function showAppSub(key){
   },160);
 }
 
-/* ========= i18n minimal (Intro) ========= */
-const I={ fr:{brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
-kicker:"ASSISTANT LITTÉRATURE",heroTitle:"No learning curve,<br/>no complications",
-heroSub:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
-introP1:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
-ctaOpenMenu:"Ouvrir le menu",ctaOpenLearn:"Que puis-je faire ?"},
-en:{brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
-kicker:"LITERATURE ASSISTANT",heroTitle:"No learning curve,<br/>no complications",
-heroSub:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
-introP1:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
-ctaOpenMenu:"Open menu",ctaOpenLearn:"What can I do?"}};
+/* ========= i18n (global) ========= */
+const I={
+  fr:{
+    brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
+    kicker:"ASSISTANT LITTÉRATURE",
+    heroTitle:"No learning curve,<br/>no complications",
+    heroSub:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
+    introP1:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
+    ctaOpenMenu:"Ouvrir le menu",ctaOpenLearn:"Que puis-je faire ?",
+    t1Badge:"Upload",t1Title:"Documents internes",t1Text:"PDF, DOCX, TXT — extraction locale, aucune donnée envoyée.",
+    t2Title:"Recherche d’articles",t2Text:"Fenêtre temporelle, mots-clés, open access. Liens PubMed.",
+    t3Title:"Synthèse des contenus",t3Text:"Résumé automatique (Hugging Face) des abstracts / texte intégral.",
+    t4Title:"Export documentaire",t4Text:"Protocole documentaire structuré (sans paramètres expérimentaux).",
+    overlineStep1:"ANALYSE DE LA DEMANDE",step1Title:"Votre besoin",
+    q1:"Quelle biomolécule voulez-vous produire ?",selectPlaceholder:"— Sélectionner —",
+    q2:"Quel est le domaine du pharmaceutique que vous souhaitez explorer ?",
+    detailTitleGeneric:"Spécifiez votre besoin",goNext:"Passer à la suite",
+    overlineStep2:"DOCUMENTS & LITTÉRATURE",step2Title:"Sources",qDocs:"Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?",
+    yes:"Oui",no:"Non",dropTitle:"Déposez vos fichiers ici",dropHint:"ou cliquez pour sélectionner",dropTypes:"Acceptés : PDF, DOCX, TXT",
+    qLit:"Souhaitez-vous une recherche dans la littérature selon votre domaine ?",goAnalysis:"Aller à l’analyse",
+    litResultsTitle:"Résultats littérature",close:"Fermer",runContentAnalysis:"Lancer l’analyse du contenu",
+    overlineStep3:"ANALYSE APPROFONDIE",step3Title:"Espace d’analyse ciblée",
+    internalSources:"Sources internes",selectedArticles:"Articles sélectionnés",activeSubdomains:"Sous-domaines actifs",
+    overview:"Vue d’ensemble",exportPdfBtn:"Exporter le PDF",
+    contactTitle:"Discutons de votre projet",overlineContact:"PRISE DE CONTACT",
+    contactIntro:"Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).",
+    labelName:"Nom",labelOrg:"Société",labelEmail:"Email",labelMsg:"Message",sendEmail:"Envoyer par e-mail",
+    footerNote:"Europe PMC / PubMed — Hugging Face (optionnel). Aucune instruction expérimentale.",
+    // Runtime texts
+    searching:"Recherche…", epmcError:"Erreur Europe PMC", open:"Ouvrir", selectAtLeastOne:"Sélectionnez au moins un article.",
+    ctx:"Contexte", noActiveSD:"Aucun sous-domaine actif.",
+    docsInternal:"Documents internes", literature:"Littérature (Europe PMC / PubMed)", targetedSummary:"Résumé ciblé (~1 page)",
+    // PDF
+    pdfTitle:"Protocole documentaire — Analyse ciblée", pdfOverview:"Vue d’ensemble", pdfEvidences:"Évidences",
+    // Domains (labels)
+    dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytique", dom_qa:"Assurance Qualité", dom_cmc:"CMC",
+    // Subdomain group titles
+    sdtitle_downstream:"Spécifiez les sous-domaines Downstream",
+    sdtitle_upstream:"Spécifiez les sous-domaines Upstream",
+    sdtitle_fill:"Spécifiez les sous-domaines Fill & Finish",
+    sdtitle_analytics:"Spécifiez les sous-domaines Analytiques",
+    sdtitle_qa:"Spécifiez les sous-domaines Assurance Qualité",
+    sdtitle_cmc:"Spécifiez les sous-domaines CMC"
+  },
+  en:{
+    brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
+    kicker:"LITERATURE ASSISTANT",
+    heroTitle:"No learning curve,<br/>no complications",
+    heroSub:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
+    introP1:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
+    ctaOpenMenu:"Open menu",ctaOpenLearn:"What can I do?",
+    t1Badge:"Upload",t1Title:"Internal documents",t1Text:"PDF, DOCX, TXT — local extraction, no data sent.",
+    t2Title:"Article search",t2Text:"Time window, keywords, open access. PubMed links.",
+    t3Title:"Content synthesis",t3Text:"Automatic summaries (Hugging Face) of abstracts / full text.",
+    t4Title:"PDF export",t4Text:"Structured documentary protocol (no experimental parameters).",
+    overlineStep1:"REQUEST ANALYSIS",step1Title:"Your need",
+    q1:"Which biomolecule do you want to produce?",selectPlaceholder:"— Select —",
+    q2:"Which pharmaceutical domain do you want to explore?",
+    detailTitleGeneric:"Specify your need",goNext:"Continue",
+    overlineStep2:"DOCUMENTS & LITERATURE",step2Title:"Sources",qDocs:"Do you have internal documents I can use to design the method?",
+    yes:"Yes",no:"No",dropTitle:"Drop your files here",dropHint:"or click to select",dropTypes:"Accepted: PDF, DOCX, TXT",
+    qLit:"Would you like a literature search based on your domain?",goAnalysis:"Go to analysis",
+    litResultsTitle:"Literature results",close:"Close",runContentAnalysis:"Run content analysis",
+    overlineStep3:"IN-DEPTH ANALYSIS",step3Title:"Targeted analysis workspace",
+    internalSources:"Internal sources",selectedArticles:"Selected articles",activeSubdomains:"Active subdomains",
+    overview:"Overview",exportPdfBtn:"Export PDF",
+    contactTitle:"Let's discuss your project",overlineContact:"GET IN TOUCH",
+    contactIntro:"Our expert scientists can help accelerate your process development (adenoviral vectors, purification, analytics, documentation).",
+    labelName:"Name",labelOrg:"Company",labelEmail:"Email",labelMsg:"Message",sendEmail:"Send Email",
+    footerNote:"Europe PMC / PubMed — Hugging Face (optional). No experimental instructions.",
+    // Runtime texts
+    searching:"Searching…", epmcError:"Europe PMC error", open:"Open", selectAtLeastOne:"Select at least one article.",
+    ctx:"Context", noActiveSD:"No active subdomains.",
+    docsInternal:"Internal documents", literature:"Literature (Europe PMC / PubMed)", targetedSummary:"Targeted summary (~1 page)",
+    // PDF
+    pdfTitle:"Documentary protocol — Targeted analysis", pdfOverview:"Overview", pdfEvidences:"Evidences",
+    // Domains (labels)
+    dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytical", dom_qa:"Quality Assurance", dom_cmc:"CMC",
+    // Subdomain group titles
+    sdtitle_downstream:"Specify Downstream subdomains",
+    sdtitle_upstream:"Specify Upstream subdomains",
+    sdtitle_fill:"Specify Fill & Finish subdomains",
+    sdtitle_analytics:"Specify Analytical subdomains",
+    sdtitle_qa:"Specify Quality Assurance subdomains",
+    sdtitle_cmc:"Specify CMC subdomains"
+  }
+};
 function lang(){return document.documentElement.dataset.lang||'fr';}
 function t(k){const L=I[lang()]||I.fr;return (L&&L[k])||(I.fr[k]||k);}
 
-/* ========= State ========= */
-const state={
-  request:{ biomolecule:null, domain:null, details:[] },   // details = IDs canoniques
-  uploads:[], // File[]
-  literature:{ results:[], selected:[] }, // selected: [{meta, abstract, summary}]
-  analysis:{ targeted:{} } // targeted[sdId] = { labelFR,labelEN, docs:[{name,score,snippets[]}], papers:[{title,score,snippets[],link}], summary }
-};
-
-/* ===== Sous-domaines i18n (IDs canoniques + libellés FR/EN) ===== */
-const DOMAIN_KEY = {
-  "Downstream":"downstream", "Upstream":"upstream",
-  "Fill & Finish":"fill",
-  "Analytique":"analytics", "Analytical":"analytics",
-  "Assurance Qualité":"qa", "Quality Assurance":"qa",
-  "CMC":"cmc"
-};
-function getDomainKey(label){ return DOMAIN_KEY[label] || label?.toLowerCase() || ""; }
-
-const SUB_TITLES = {
-  downstream: { fr:"Spécifiez les sous-domaines Downstream", en:"Specify Downstream subdomains" },
-  upstream:   { fr:"Spécifiez les sous-domaines Upstream",   en:"Specify Upstream subdomains" },
-  fill:       { fr:"Spécifiez les sous-domaines Fill & Finish", en:"Specify Fill & Finish subdomains" },
-  analytics:  { fr:"Spécifiez les sous-domaines Analytiques", en:"Specify Analytical subdomains" },
-  qa:         { fr:"Spécifiez les sous-domaines Assurance Qualité", en:"Specify Quality Assurance subdomains" },
-  cmc:        { fr:"Spécifiez les sous-domaines CMC", en:"Specify CMC subdomains" }
-};
-
+/* ========= Domains & Subdomains ========= */
 const SUBDOMAINS = {
   downstream: [
     {id:"clarification", fr:"Clarification", en:"Clarification"},
@@ -546,8 +601,19 @@ const SUBDOMAINS = {
     {id:"proc_char", fr:"Caractérisation procédé", en:"Process characterization"}
   ]
 };
+function L_dom(key){
+  const map = {
+    downstream:['dom_downstream'],
+    upstream:['dom_upstream'],
+    fill:['dom_fill'],
+    analytics:['dom_analytics'],
+    qa:['dom_qa'],
+    cmc:['dom_cmc']
+  };
+  const k = map[key]?.[0]; return k ? t(k) : key;
+}
 
-/* ===== Targeted taxonomy & scoring config ===== */
+/* ========= Targeted taxonomy & scoring config ========= */
 const TA = (()=>{
   const ADV = /adenovirus|adeno[-\s]?virus|ad5|ad26|adenoviral/i;
   const SECBOOST = [
@@ -558,7 +624,6 @@ const TA = (()=>{
     return { must:[ADV, must2], should:shouldGroups, exclude, sectionBoost:SECBOOST };
   }
   return {
-    // Downstream
     clarification: cfg(/clarifi|centrifug|depth\s?filter|floccul|turbid|harvest/i, [
       [/depth\s?filter|clari|centrifug/i, 1.2],
       [/floccul|polydadmac|turbidity/i, 1.0]
@@ -584,81 +649,41 @@ const TA = (()=>{
     final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?μ?m/i, [
       [/bioburden|sterility/i, 1.2]
     ]),
-    // Upstream
-    cell_bank_seed: cfg(/cell\sbank|seed\s?train|master\s?cell\sbank/i, [
-      [/bank(?:e)?\s?cellulaire|seed\s?train/i, 1.2]
-    ]),
-    production_bioreactor: cfg(/bioreactor|bioréacteur|perfusion|fed[-\s]?batch|batch/i, [
-      [/perfusion|ATF|TFF\s?loop/i, 1.4],
-      [/sparg(ing)?|DO|pH control/i, 1.1]
-    ]),
-    infection_strategy: cfg(/infection|MOI|multiplicity/i, [
-      [/MOI|infection strategy/i, 1.4]
-    ]),
-    harvest_lysis: cfg(/harvest|lysi(s|e)|detergent|benzonase|nuclease/i, [
-      [/harvest|clarification/i, 1.1]
-    ]),
-    ipc: cfg(/in[-\s]?process|IPC|process control|en[-\s]?cours\sde\sprocédé/i, [
-      [/specification|limit|acceptance criteria/i, 1.0]
-    ]),
-    handoff_ds: cfg(/handoff|tech\s?transfer|transfer|intermediate/i, [
-      [/hold\s?time|storage|temperature/i, 1.0]
-    ]),
-    // Fill & Finish
+    cell_bank_seed: cfg(/cell\sbank|seed\s?train|master\s?cell\sbank/i, [[/seed\s?train/i,1.2]]),
+    production_bioreactor: cfg(/bioreactor|bioréacteur|perfusion|fed[-\s]?batch|batch/i, [[/perfusion|ATF|TFF\s?loop/i,1.4]]),
+    infection_strategy: cfg(/infection|MOI|multiplicity/i, [[/MOI|infection strategy/i,1.4]]),
+    harvest_lysis: cfg(/harvest|lysi(s|e)|detergent|benzonase|nuclease/i, [[/harvest|clarification/i,1.1]]),
+    ipc: cfg(/in[-\s]?process|IPC|process control|en[-\s]?cours\sde\sprocédé/i, [[/specification|criteria/i,1.0]]),
+    handoff_ds: cfg(/handoff|tech\s?transfer|transfer|intermediate/i, [[/hold\s?time|storage/i,1.0]]),
     hold_bulk: cfg(/hold\s?bulk|freeze\/?thaw|storage/i, [[/freeze|thaw|stability/i,1.2]]),
-    aseptic_fill: cfg(/aseptic|filling|vials?|syringes?|cartridges?/i, [[/grade\s?A|B|C|laminar|isolator/i,1.1]]),
-    ccc: cfg(/container|closure|compatib|extractable|leachable/i, [[/ELC|E&L|compatibility/i,1.2]]),
+    aseptic_fill: cfg(/aseptic|filling|vials?|syringes?|cartridges?/i, [[/grade\s?A|B|C|isolator/i,1.1]]),
+    ccc: cfg(/container|closure|compatib|extractable|leachable/i, [[/compatibility|E&L/i,1.2]]),
     fit: cfg(/filter\s?integrity|bubble\s?point|diffusion/i, [[/integrity|sterile/i,1.2]]),
     vi_aql: cfg(/visual|inspection|AQL/i, [[/defects?|cosmetic/i,1.0]]),
     cold_chain: cfg(/cold\s?chain|refrigerated|frozen|label/i, [[/shipping|logistics/i,1.0]]),
-    // Analytical
-    identity: cfg(/identity|PCR|sequenc/i, [[/qPCR|sequencing|restriction/i,1.2]]),
+    identity: cfg(/identity|PCR|sequenc/i, [[/qPCR|sequencing/i,1.2]]),
     potency: cfg(/potency|infectiv|titer|titre/i, [[/TCID50|plaque assay|FFU/i,1.4]]),
     impurities: cfg(/impurit|HCP|host\s?cell\s?protein|residual\s?DNA/i, [[/BCA|PicoGreen|dd?PCR/i,1.2]]),
-    size_agg: cfg(/size|aggregation|DLS|TEM|SEC/i, [[/hydrodynamic|radius|aggregate/i,1.1]]),
-    qPCR: cfg(/qPCR|ddPCR|quantitative\s?PCR/i, [[/primers?|amplicon|standard curve/i,1.1]]),
-    stability_indic: cfg(/stability[-\s]?indicat|degradation|stress/i, [[/ICH|accelerated|long-term/i,1.2]]),
-    // QA
+    size_agg: cfg(/size|aggregation|DLS|TEM|SEC/i, [[/hydrodynamic|aggregate/i,1.1]]),
+    qPCR: cfg(/qPCR|ddPCR|quantitative\s?PCR/i, [[/primers?|amplicon/i,1.1]]),
+    stability_indic: cfg(/stability[-\s]?indicat|degradation|stress/i, [[/ICH|accelerated/i,1.2]]),
     change_control: cfg(/change\s?control/i, [[/impact assessment|risk/i,1.1]]),
-    deviation_capa: cfg(/deviation|CAPA/i, [[/root cause|RCA|investigation/i,1.1]]),
-    training_qual: cfg(/training|qualification|competenc/i, [[/matrix|program/i,1.0]]),
-    gxp_docs: cfg(/GxP|GMP|documentation|SOP|record/i, [[/document control|revision|version/i,1.1]]),
+    deviation_capa: cfg(/deviation|CAPA/i, [[/root cause|investigation/i,1.1]]),
+    training_qual: cfg(/training|qualification|competenc/i, [[/program|matrix/i,1.0]]),
+    gxp_docs: cfg(/GxP|GMP|documentation|SOP|record/i, [[/document control|revision/i,1.1]]),
     suppliers: cfg(/supplier|vendor|qualification|material/i, [[/audit|certificate/i,1.0]]),
     bmr: cfg(/batch\s?record|BMR|review/i, [[/deviation|reconciliation/i,1.0]]),
-    // CMC
     reg_strategy: cfg(/regulator|CTA|IND|BLA|dossier/i, [[/strategy|pathway/i,1.0]]),
     control_strategy: cfg(/control\s?strategy|CPP|CQA|design\s?space/i, [[/risk assessment|QbD/i,1.2]]),
     specs_release: cfg(/specifications?|release|acceptance/i, [[/limits?|criteria/i,1.1]]),
-    comparability: cfg(/comparab|process\s?change/i, [[/pre|post|equivalence/i,1.0]]),
+    comparability: cfg(/comparab|process\s?change/i, [[/equivalence|pre|post/i,1.0]]),
     ppq: cfg(/PPQ|process\s?validation|conformance/i, [[/protocol|report|runs?/i,1.1]]),
     proc_char: cfg(/process\s?characteri[sz]ation|DoE|design of experiments/i, [[/parameters?|responses?/i,1.1]])
   };
 })();
 
-/* ========= setLang (re-rend sous-domaines) ========= */
-function setLang(newLang){
-  document.documentElement.setAttribute('lang', newLang);
-  document.documentElement.dataset.lang = newLang;
-
-  for(const el of document.querySelectorAll('[data-i]')){
-    const v = t(el.dataset.i);
-    if(/<br\s*\/?>|&nbsp;/.test(v)) el.innerHTML = v; else el.textContent = v;
-  }
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  if (state.request?.domain) {
-    buildDetailChoices(state.request.domain);
-    if ((state.request.details || []).length) confirmWrap.classList.remove('hide');
-  }
-}
-window.addEventListener('DOMContentLoaded',()=>{
-  const btnFR=document.getElementById('btnFR'),btnEN=document.getElementById('btnEN');
-  btnFR.onclick=()=>{setLang('fr');btnFR.classList.add('active');btnEN.classList.remove('active');};
-  btnEN.onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
-  setLang('fr'); document.getElementById('year').textContent=new Date().getFullYear();
-});
-
-/* ========= DEMANDE (step1) logique ========= */
+/* ========= DOM refs ========= */
+const btnFR=document.getElementById('btnFR'),btnEN=document.getElementById('btnEN');
 const bioSelect=document.getElementById('bioSelect');
 const domainWrap=document.getElementById('domainWrap');
 const domainSelect=document.getElementById('domainSelect');
@@ -669,33 +694,84 @@ const confirmWrap=document.getElementById('confirmWrap');
 const confirmText=document.getElementById('confirmText');
 const goToDocs=document.getElementById('goToDocs');
 
+/* ========= State ========= */
+const state={
+  request:{ biomolecule:null, domain:null, details:[] }, // domain is canonical key
+  uploads:[], // File[]
+  literature:{ results:[], selected:[] },
+  analysis:{ targeted:{} }
+};
+
+/* ========= Language switching ========= */
+function setLang(newLang){
+  document.documentElement.setAttribute('lang', newLang);
+  document.documentElement.dataset.lang = newLang;
+
+  // 1) Replace all data-i texts
+  for(const el of document.querySelectorAll('[data-i]')){
+    const v = t(el.dataset.i);
+    if(/<br\s*\/?>|&nbsp;/.test(v)) el.innerHTML = v; else el.textContent = v;
+  }
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // 2) (Re)render domain options with preserved selection
+  renderDomainOptions(state.request.domain);
+
+  // 3) Rebuild subdomain choices if domain exists
+  if (state.request.domain) {
+    buildDetailChoices(state.request.domain);
+    if ((state.request.details||[]).length) confirmWrap.classList.remove('hide');
+  }
+
+  // 4) Update Contact mailto (subject placeholder)
+  updateMailto();
+}
+function renderDomainOptions(selectedKey){
+  const options = [
+    {key:'', label: t('selectPlaceholder')},
+    {key:'upstream', label: t('dom_upstream')},
+    {key:'downstream', label: t('dom_downstream')},
+    {key:'fill', label: t('dom_fill')},
+    {key:'analytics', label: t('dom_analytics')},
+    {key:'qa', label: t('dom_qa')},
+    {key:'cmc', label: t('dom_cmc')}
+  ];
+  domainSelect.innerHTML='';
+  options.forEach((o,i)=>{
+    const opt=document.createElement('option');
+    opt.value=o.key;
+    opt.textContent = i===0 ? `— ${o.label} —` : o.label;
+    if(selectedKey && o.key===selectedKey) opt.selected=true;
+    if(i===0) opt.disabled=true;
+    domainSelect.appendChild(opt);
+  });
+}
+btnFR.onclick=()=>{setLang('fr');btnFR.classList.add('active');btnEN.classList.remove('active');};
+btnEN.onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
+window.addEventListener('DOMContentLoaded',()=>{ setLang('fr'); });
+
+/* ========= Step 1 logic ========= */
 bioSelect.addEventListener('change',()=>{
   state.request.biomolecule = bioSelect.value || null;
   domainWrap.classList.remove('hide');
   detailWrap.classList.add('hide'); confirmWrap.classList.add('hide');
 });
 domainSelect.addEventListener('change',()=>{
-  state.request.domain = domainSelect.value || null;
-  buildDetailChoices(state.request.domain);
+  const key = domainSelect.value || null; // canonical key
+  state.request.domain = key;
+  buildDetailChoices(key);
   detailWrap.classList.remove('hide'); confirmWrap.classList.add('hide');
 });
-
-/* ========= buildDetailChoices (i18n + IDs canoniques) ========= */
-function buildDetailChoices(domainLabel){
-  const key = getDomainKey(domainLabel);
-  const items = SUBDOMAINS[key] || [];
-  const langNow = (document.documentElement.dataset.lang || 'fr');
-
-  const titlePack = SUB_TITLES[key];
-  detailTitle.textContent = titlePack ? titlePack[langNow] : (langNow === 'fr' ? "Spécifiez votre besoin" : "Specify your need");
-
+function buildDetailChoices(domainKey){
+  const items = SUBDOMAINS[domainKey] || [];
+  const titleKey = 'sdtitle_' + domainKey;
+  detailTitle.textContent = I[lang()][titleKey] || t('detailTitleGeneric');
   detailChoices.innerHTML = "";
   confirmWrap.classList.add('hide');
 
   const selectedIDs = new Set(state.request.details || []);
-
   items.forEach(item=>{
-    const lbl = item[langNow];
+    const lbl = (lang()==='fr'?item.fr:item.en);
     const row = document.createElement('label');
     row.className = 'source-item';
     row.innerHTML = `<input type="checkbox" data-id="${item.id}" style="width:auto"><span>${lbl}</span>`;
@@ -707,18 +783,16 @@ function buildDetailChoices(domainLabel){
       state.request.details = ids;
 
       const visibleLabels = ids.map(id => {
-        // chercher dans tous les groupes
-        let found=null;
-        for(const arr of Object.values(SUBDOMAINS)){ const x=arr.find(z=>z.id===id); if(x){found=x;break;} }
-        return found ? found[langNow] : id;
+        for(const arr of Object.values(SUBDOMAINS)){ const f=arr.find(z=>z.id===id); if(f) return (lang()==='fr'?f.fr:f.en); }
+        return id;
       });
 
-      const txtFR = `Parfait. Vous avez choisi : biomolécule = ${state.request.biomolecule}; domaine = ${state.request.domain}; sous-domaines = ${visibleLabels.join(', ')}. Je garde ces choix en mémoire et nous allons passer à la seconde partie du processus.`;
-      const txtEN = `Great. You selected: biomolecule = ${state.request.biomolecule}; domain = ${state.request.domain}; subdomains = ${visibleLabels.join(', ')}. I'll keep these choices in memory and we'll move to the second part of the process.`;
+      const txtFR = `Parfait. Vous avez choisi : biomolécule = ${state.request.biomolecule}; domaine = ${L_dom(state.request.domain)}; sous-domaines = ${visibleLabels.join(', ')}. Je garde ces choix en mémoire et nous allons passer à la seconde partie du processus.`;
+      const txtEN = `Great. You selected: biomolecule = ${state.request.biomolecule}; domain = ${L_dom(state.request.domain)}; subdomains = ${visibleLabels.join(', ')}. I'll keep these choices in memory and we'll move to the second part of the process.`;
 
       const hasSel = ids.length > 0;
       confirmWrap.classList.toggle('hide', !hasSel);
-      confirmText.textContent = langNow === 'fr' ? txtFR : txtEN;
+      confirmText.textContent = (lang()==='fr') ? txtFR : txtEN;
     });
 
     detailChoices.appendChild(row);
@@ -732,7 +806,7 @@ function buildDetailChoices(domainLabel){
 }
 goToDocs.addEventListener('click',()=>{ showAppSub('step2'); });
 
-/* ========= DOCUMENTS & LITTÉRATURE (step2) ========= */
+/* ========= Step 2: Documents & Literature ========= */
 const btnDocYes=document.getElementById('btnDocYes'), btnDocNo=document.getElementById('btnDocNo');
 const uploaderWrap=document.getElementById('uploaderWrap'); const drop=document.getElementById('drop'); const input=document.getElementById('fileInput'); const filesList=document.getElementById('filesList');
 btnDocYes.onclick=()=>{uploaderWrap.classList.remove('hide');};
@@ -743,7 +817,6 @@ drop?.addEventListener('dragover',(e)=>{e.preventDefault();drop.classList.add('d
 drop?.addEventListener('dragleave',()=>drop.classList.remove('drag'));
 drop?.addEventListener('drop',(e)=>{e.preventDefault();drop.classList.remove('drag');handleFiles(e.dataTransfer.files);});
 input?.addEventListener('change',(e)=>handleFiles(e.target.files));
-
 function handleFiles(files){
   state.uploads=[...files];
   filesList.innerHTML='';
@@ -754,29 +827,29 @@ function handleFiles(files){
   });
 }
 
-/* === Littérature === */
+/* === Literature === */
 const btnLitYes=document.getElementById('btnLitYes'), btnLitNo=document.getElementById('btnLitNo');
 const litModal=document.getElementById('litModal'), closeLitModal=document.getElementById('closeLitModal'), litResults=document.getElementById('litResults');
 btnLitYes.onclick=()=>{ openLitModalAndSearch(); };
-btnLitNo.onclick=()=>{ /* rien */ };
+btnLitNo.onclick=()=>{};
 closeLitModal.onclick=()=>{ litModal.classList.remove('open'); };
 
 function domainQuery(){
-  const d=state.request.domain||'Downstream';
-  const bm=(state.request.biomolecule||'Adenovirus');
-  const m = {
-    "Downstream": `${bm} (chromatography OR TFF OR diafiltration OR polishing OR formulation OR filtration)`,
-    "Upstream": `${bm} (bioreactor OR perfusion OR seed train OR harvest OR lysis)`,
-    "Fill & Finish": `${bm} (aseptic filling OR container closure OR filter integrity OR visual inspection OR cold chain)`,
-    "Analytique": `${bm} (identity OR potency OR impurities OR aggregation OR qPCR OR stability)`,
-    "Assurance Qualité": `${bm} (GxP OR deviation OR CAPA OR document control OR supplier qualification OR batch record)`,
-    "CMC": `${bm} (control strategy OR specifications OR PPQ OR comparability OR process characterization)`
+  const key = state.request.domain || 'downstream';
+  const bm = (state.request.biomolecule||'Adenovirus');
+  const q = {
+    downstream: `${bm} (chromatography OR TFF OR diafiltration OR polishing OR formulation OR filtration)`,
+    upstream: `${bm} (bioreactor OR perfusion OR seed train OR harvest OR lysis)`,
+    fill: `${bm} (aseptic filling OR container closure OR filter integrity OR visual inspection OR cold chain)`,
+    analytics: `${bm} (identity OR potency OR impurities OR aggregation OR qPCR OR stability)`,
+    qa: `${bm} (GxP OR deviation OR CAPA OR document control OR supplier qualification OR batch record)`,
+    cmc: `${bm} (control strategy OR specifications OR PPQ OR comparability OR process characterization)`
   };
-  return m[d]||`${bm} purification`;
+  return q[key] || `${bm} purification`;
 }
 async function openLitModalAndSearch(){
   litModal.classList.add('open');
-  litResults.innerHTML='<div class="muted">Recherche…</div>';
+  litResults.innerHTML=`<div class="muted">${t('searching')}</div>`;
   const q = domainQuery();
   const url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+encodeURIComponent(q)+'&pageSize=12&format=json&sort_date:y')}`;
   try{
@@ -787,8 +860,9 @@ async function openLitModalAndSearch(){
       authors:(x.authorString||'').split(', ').slice(0,6), oa:(x.isOpenAccess==="Y"||x.openAccess=="Y"||x.openAccess)
     }));
     renderLitResults();
-  }catch(e){ litResults.innerHTML='<div class="muted">Erreur Europe PMC</div>'; }
+  }catch(e){ litResults.innerHTML=`<div class="muted">${t('epmcError')}</div>`; }
 }
+function esc(s){return (s||'').replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
 function renderLitResults(){
   litResults.innerHTML='';
   state.literature.results.forEach((a,idx)=>{
@@ -802,7 +876,7 @@ function renderLitResults(){
           <div class="muted">${esc(a.journal)} · ${esc(a.year||'—')}</div>
           <div class="muted">${esc(a.authors.join(', '))}</div>
           <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
-            <a class="tag" href="${link}" target="_blank" rel="noopener">Ouvrir</a>
+            <a class="tag" href="${link}" target="_blank" rel="noopener">${t('open')}</a>
           </div>
         </div>
       </label>`;
@@ -817,7 +891,7 @@ function renderLitResults(){
 const runLitAnalysis=document.getElementById('runLitAnalysis');
 runLitAnalysis.onclick = async ()=>{
   const chosen = state.literature.results.filter(x=>x.selected);
-  if(!chosen.length){ alert('Sélectionnez au moins un article.'); return; }
+  if(!chosen.length){ alert(t('selectAtLeastOne')); return; }
 
   const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // remplace si dispo
   const HF_MODEL = "facebook/bart-large-cnn";
@@ -876,11 +950,10 @@ function buildWorkspace(){
   // Chips sous-domaines actifs
   const chips = document.getElementById('sdChips'); chips.innerHTML='';
   const ids = state.request.details||[];
-  const L = (id)=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return f; } return null; };
+  const L = (id)=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return (lang()==='fr'?f.fr:f.en); } return id; };
   ids.forEach(id=>{
-    const item=L(id); if(!item) return;
     const chip=document.createElement('button'); chip.className='chip active'; chip.dataset.id=id;
-    chip.textContent = item[lang()] || item.fr;
+    chip.textContent = L(id);
     chip.onclick=()=>{ chip.classList.toggle('active'); renderTargeted(); };
     chips.appendChild(chip);
   });
@@ -890,8 +963,8 @@ function buildWorkspace(){
   const d=state.request;
   ov.innerHTML = `
     <div class="pub-card">
-      <div><strong>Contexte</strong></div>
-      <div class="muted">Biomolécule : ${esc(d.biomolecule||'-')} · Domaine : ${esc(d.domain||'-')} · Sous-domaines : ${esc((ids.map(x=>L(x)?.fr)||[]).join(', ')||'-')}</div>
+      <div><strong>${t('ctx')}</strong></div>
+      <div class="muted">Biomolecule : ${esc(d.biomolecule||'-')} · ${t('dom_'+(d.domain||'downstream'))} : ${esc(L_dom(d.domain)||'-')}</div>
     </div>
   `;
 
@@ -901,7 +974,6 @@ function buildWorkspace(){
 /* ========= Targeted Analyzer ========= */
 const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa)\b/gi;
 function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
-function norm(s){return (s||"").normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
 function windowsFromText(text, win=800, overlap=200){
   const markers=[...text.matchAll(/\[\[PAGE:(\d+)\]\]/g)].map(m=>({idx:m.index,num:+m[1]}));
   const clean=text.replace(/\[\[PAGE:\d+\]\]/g,'');
@@ -916,9 +988,8 @@ function windowsFromText(text, win=800, overlap=200){
     else if(/introduction/.test(head)) section='introduction';
     else if(/formulation|chromatograph|filtration|tff|diafiltration/.test(head)) section='process';
 
-    // Page approx
     const prev = markers.filter(m=>m.idx<=i).pop();
-    out.push({start:i, end:i+win, text:slice, section:section||'body', page:prev?prev.num:undefined});
+    out.push({start:i, end:i+win, text:sanitize(slice), section:section||'body', page:prev?prev.num:undefined});
     i += step;
   }
   return out;
@@ -941,11 +1012,9 @@ function closeCooccur(txt, rx1, rx2, max=50){
 }
 function scoreWindow(win, cfg){
   const txt = win.text;
-  // must
   for(const r of cfg.must){ if(!r.test(txt)) return 0; }
   let s=1.0;
   for(const g of cfg.should){ const [pattern, w]=g; if(pattern.test(txt)) s+=w; }
-  // proximity: between adenovirus and domain core (second must)
   if(cfg.must.length>=2 && closeCooccur(txt, new RegExp(cfg.must[0], 'i'), new RegExp(cfg.must[1], 'i'), 60)) s+=0.3;
   for(const [sectRx,boost] of cfg.sectionBoost||[]){ if(sectRx.test(win.section)) s*=boost; }
   for(const ex of cfg.exclude||[]){ if(ex.test(txt)) s-=0.6; }
@@ -958,7 +1027,6 @@ function buildPatternList(sdId){
   (cfg.should||[]).forEach(([r])=>marks.push(r.source));
   return {cfg, mark:marks};
 }
-
 async function extractTextFromFile(f){
   const buf=await f.arrayBuffer(); const ext=f.name.toLowerCase().split('.').pop();
   if(ext==='pdf'){
@@ -977,26 +1045,21 @@ async function extractTextFromFile(f){
   }
   return '';
 }
-
 async function targetedAnalyze(){
-  // Reset
   state.analysis.targeted = {};
   const sdIds = state.request.details||[];
   if(!sdIds.length) return;
 
-  // 1) Extract texts from uploads
   const docTexts=[];
   for(const f of state.uploads){ const t = await extractTextFromFile(f); docTexts.push({name:f.name, text:t}); }
 
-  // 2) Prepare per sdId
   for(const sdId of sdIds){
     const {cfg, mark} = buildPatternList(sdId);
     if(!cfg){ continue; }
     const results = { labelFR:'', labelEN:'', docs:[], papers:[], summary:'' };
-    // labels
     for(const arr of Object.values(SUBDOMAINS)){ const m=arr.find(z=>z.id===sdId); if(m){ results.labelFR=m.fr; results.labelEN=m.en; break; } }
 
-    // 3) Score documents
+    // Docs
     for(const d of docTexts){
       if(!d.text) continue;
       const wins = windowsFromText(d.text, 850, 250);
@@ -1011,32 +1074,32 @@ async function targetedAnalyze(){
         snippets: scored.map(s=>({
           score:+s.score.toFixed(2),
           section:s.section, page:s.page,
-          html: highlight(sanitize(s.text), mark)
+          html: highlight(s.text, mark)
         }))
       });
     }
     results.docs.sort((a,b)=>b.score-a.score);
 
-    // 4) Score literature (abstracts)
+    // Literature
     for(const p of (state.literature.selected||[])){
       const abs = (p.abstract||'').replace(/\s+/g,' ');
       if(!abs) continue;
       const wins = windowsFromText(abs, 700, 200);
       const scored = wins.map(w=>({ ...w, score: scoreWindow(w, cfg) }))
-                         .filter(x=>x.score>0)
-                         .sort((a,b)=>b.score-a.score)
-                         .slice(0,5);
-      if(!scored.length) continue;
-      const avg = scored.slice(0,3).reduce((a,c)=>a+c.score,0)/Math.min(3,scored.length);
+                         .filter(x=>x.score>0);
+      scored.sort((a,b)=>b.score-a.score);
+      const top = scored.slice(0,5);
+      if(!top.length) continue;
+      const avg = top.slice(0,3).reduce((a,c)=>a+c.score,0)/Math.min(3,top.length);
       const link = p.meta.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${p.meta.pmid}/` : (p.meta.pmcid?`https://europepmc.org/article/PMC/${p.meta.pmcid}`:'#');
       results.papers.push({
         title:p.meta.title, year:p.meta.year, journal:p.meta.journal, score:+avg.toFixed(2), link,
-        snippets: scored.map(s=>({ score:+s.score.toFixed(2), html:highlight(sanitize(s.text), mark) }))
+        snippets: top.map(s=>({ score:+s.score.toFixed(2), html:highlight(s.text, mark) }))
       });
     }
     results.papers.sort((a,b)=>b.score-a.score);
 
-    // 5) One-pager targeted (HF if available, else heuristic)
+    // One-pager
     const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     const HF_MODEL = "facebook/bart-large-cnn";
     const baseText = [
@@ -1065,7 +1128,7 @@ function renderTargeted(){
   const cont=document.getElementById('sdResults'); cont.innerHTML='';
   const chips=[...document.querySelectorAll('#sdChips .chip')];
   const activeIds = chips.filter(c=>c.classList.contains('active')).map(c=>c.dataset.id);
-  if(!activeIds.length){ cont.innerHTML='<div class="muted">Aucun sous-domaine actif.</div>'; return; }
+  if(!activeIds.length){ cont.innerHTML=`<div class="muted">${t('noActiveSD')}</div>`; return; }
 
   activeIds.forEach(id=>{
     const pack=state.analysis.targeted[id]; if(!pack) return;
@@ -1076,7 +1139,7 @@ function renderTargeted(){
     // DOCS
     if(pack.docs.length){
       const docsWrap=document.createElement('div');
-      docsWrap.innerHTML=`<div class="result-meta"><strong>Documents internes</strong></div>`;
+      docsWrap.innerHTML=`<div class="result-meta"><strong>${t('docsInternal')}</strong></div>`;
       pack.docs.forEach(d=>{
         const card=document.createElement('div'); card.className='result-card';
         card.innerHTML=`
@@ -1098,7 +1161,7 @@ function renderTargeted(){
     if(pack.papers.length){
       const papWrap=document.createElement('div');
       papWrap.style.marginTop='10px';
-      papWrap.innerHTML=`<div class="result-meta"><strong>Littérature (Europe PMC / PubMed)</strong></div>`;
+      papWrap.innerHTML=`<div class="result-meta"><strong>${t('literature')}</strong></div>`;
       pack.papers.forEach(p=>{
         const card=document.createElement('div'); card.className='result-card';
         card.innerHTML=`
@@ -1111,7 +1174,7 @@ function renderTargeted(){
               <div>${s.html}</div>
             </div>
           `).join('')}
-          <div><a class="tag" href="${p.link}" target="_blank" rel="noopener">Ouvrir</a></div>
+          <div><a class="tag" href="${p.link}" target="_blank" rel="noopener">${t('open')}</a></div>
         `;
         papWrap.appendChild(card);
       });
@@ -1121,8 +1184,8 @@ function renderTargeted(){
     // SUMMARY
     const sum=document.createElement('div'); sum.style.marginTop='10px';
     sum.innerHTML=`
-      <div class="result-meta"><strong>Résumé ciblé (~1 page)</strong></div>
-      <pre class="code">${esc(pack.summary||'(vide)')}</pre>
+      <div class="result-meta"><strong>${t('targetedSummary')}</strong></div>
+      <pre class="code">${esc(pack.summary||'(empty)')}</pre>
     `;
     sec.appendChild(sum);
 
@@ -1130,7 +1193,7 @@ function renderTargeted(){
   });
 }
 
-/* ========= Export PDF (targeted) ========= */
+/* ========= Export PDF (i18n) ========= */
 document.getElementById('exportPdf').onclick = async ()=>{
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({unit:'pt',format:'a4'});
@@ -1138,14 +1201,15 @@ document.getElementById('exportPdf').onclick = async ()=>{
   pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F');
 
   try{ const r=await fetch('./assets/montes-biopharma-logo.jpg'); const b=await r.blob(); const data=await blobToDataURL(b); pdf.addImage(data,'JPEG',M,M-8,160,40,'','FAST'); }catch(e){}
-  setText(pdf,'#3A49FF',18,'bold'); pdf.text('Documentary protocol — Targeted analysis', M+180, M+14);
+  setText(pdf,'#3A49FF',18,'bold'); pdf.text(t('pdfTitle'), M+180, M+14);
   pdf.setDrawColor(58,73,255); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
   let y=M+74;
 
   // Overview
-  y = putHeading(pdf,'Overview',y,13,'#3A49FF',M,W,H);
+  y = putHeading(pdf, t('pdfOverview'), y, 13, '#3A49FF', M,W,H);
   const d=state.request;
-  y=putParagraph(pdf,`Biomolecule: ${d.biomolecule||'-'} · Domain: ${d.domain||'-'}`,y,M,W,H,11);
+  const domainLabel = L_dom(d.domain||'downstream');
+  y=putParagraph(pdf,`Biomolecule: ${d.biomolecule||'-'} · Domain: ${domainLabel||'-'}`,y,M,W,H,11);
 
   // Each subdomain
   const activeIds = (state.request.details||[]);
@@ -1153,10 +1217,8 @@ document.getElementById('exportPdf').onclick = async ()=>{
     const pack=state.analysis.targeted[id]; if(!pack) continue;
     const title=(lang()==='fr'?pack.labelFR:pack.labelEN)||id;
     y = putHeading(pdf, title, y, 13, '#3A49FF', M,W,H);
-    // Summary
     y = putParagraph(pdf, pack.summary||'(no summary)', y, M,W,H,11);
-    // Evidence (top 2 per doc/paper)
-    y = putParagraph(pdf, 'Evidences:', y, M,W,H,11);
+    y = putParagraph(pdf, t('pdfEvidences')+':', y, M,W,H,11);
     for(const d of pack.docs.slice(0,3)){
       y = putParagraph(pdf, `• ${d.name} [score ${d.score}]`, y, M,W,H,11);
       for(const s of d.snippets.slice(0,2)){ y = putParagraph(pdf, `   - ${s.page?('p.'+s.page+' '):''}${s.section?(`[${s.section}] `:'')}${s.html.replace(/<[^>]+>/g,' ')}`, y, M,W,H,10); }
@@ -1167,16 +1229,13 @@ document.getElementById('exportPdf').onclick = async ()=>{
     }
   }
 
-  pdf.save('documentary-protocol-targeted.pdf');
+  pdf.save((lang()==='fr'?'protocole-documentaire-analyse-ciblee.pdf':'documentary-protocol-targeted.pdf'));
 };
 function setText(pdf,hex,size,weight){const [r,g,b]=hexToRGB(hex); pdf.setTextColor(r,g,b); pdf.setFont('helvetica', weight==='bold'?'bold':'normal'); pdf.setFontSize(size);}
 function putHeading(pdf,text,y,size,color,M,W,H){ if(y + size + 18 > H - M){ pdf.addPage(); y=M; } const [r,g,b]=hexToRGB(color); pdf.setTextColor(r,g,b); pdf.setFont('helvetica','bold'); pdf.setFontSize(size); pdf.text(text,M,y); pdf.setDrawColor(210,210,210); pdf.setLineWidth(.6); pdf.line(M,y+6,W-M,y+6); return y+18;}
 function putParagraph(pdf,text,y,M,W,H,size=11){ pdf.setTextColor(0,0,0); pdf.setFont('helvetica','normal'); pdf.setFontSize(size); const chunks=pdf.splitTextToSize(text,W-2*M); for(const ln of chunks){ if(y>H-M){ pdf.addPage(); y=M; } pdf.text(ln,M,y); y+=14; } return y+4;}
 function hexToRGB(hex){const h=hex.replace('#','');const n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];}
 function blobToDataURL(blob){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(blob);});}
-
-/* ========= Utils ========= */
-function esc(s){return (s||'').replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>
 </body>
