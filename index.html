@@ -6,9 +6,8 @@
 <title>Montes BioPharma — Assistant Littérature</title>
 <meta name="color-scheme" content="light"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- pdf.js -->
+<!-- pdf.js / mammoth.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
-<!-- mammoth.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" crossorigin="anonymous"></script>
 
 <style>
@@ -32,37 +31,45 @@ img{display:block;max-width:100%}
 /* ===== Particles ===== */
 #particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.75}
 
-/* ===== Header (glass + hamburger) ===== */
+/* ===== Header ===== */
 header{
   position:sticky;top:0;z-index:40;backdrop-filter:saturate(180%) blur(10px);
   background:rgba(255,255,255,.7); border-bottom:1px solid var(--border);
 }
-.nav{
-  max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px;
-}
+.nav{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
 .logo{height:40px;width:auto}
 .brand{font-weight:800;letter-spacing:.02em;color:var(--ink)}
-.lang{margin-left:auto;display:flex;gap:8px}
-.lang button,.hamburger{
+.lang{margin-left:auto;display:flex;gap:8px;align-items:center}
+
+/* Hamburger + dropdown menu */
+.icon-btn{
   appearance:none;border:1px solid var(--border);background:#fff;color:var(--ink);
-  padding:8px 14px;border-radius:999px;cursor:pointer;font-weight:600;transition:all .2s ease;
+  padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:10px;
 }
-.lang button.active,.lang button:hover{border-color:var(--primary)}
-.hamburger{display:inline-flex;align-items:center;gap:8px}
-.hamburger span{width:16px;height:2px;background:#3A49FF;display:inline-block;box-shadow:0 5px 0 #3A49FF,0 -5px 0 #3A49FF;border-radius:2px}
-
-/* ===== Off-canvas menu ===== */
-.drawer{
-  position:fixed;top:0;right:0;width:min(92vw,360px);height:100vh;background:#fff;border-left:1px solid var(--border);
-  transform:translateX(100%);transition:transform .28s ease;z-index:60;box-shadow:-8px 0 24px rgba(15,18,38,.12);
-  display:flex;flex-direction:column
+#menuBtn .bars{position:relative;width:18px;height:12px}
+#menuBtn .bars::before,#menuBtn .bars::after,#menuBtn .bar{
+  content:"";position:absolute;left:0;right:0;height:2px;background:#3A49FF;border-radius:2px
 }
-.drawer.open{transform:translateX(0)}
-.drawer header{border-bottom:1px solid var(--border);padding:16px 18px;background:#fff}
-.drawer .links{padding:14px 18px;display:grid;gap:8px}
-.drawer a{padding:10px 12px;border-radius:12px;border:1px solid #E0E5FF;background:#FBFCFF;color:#3c44c9;font-weight:600}
+#menuBtn .bar{top:5px}
+#menuBtn .bars::before{top:0}
+#menuBtn .bars::after{bottom:0}
 
-/* ===== Hero ===== */
+/* Dropdown */
+#menuDropdown{
+  position:absolute;right:20px;top:56px;z-index:60;min-width:220px;
+  background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 14px 36px rgba(15,18,38,.12);
+  display:none;overflow:hidden;
+}
+#menuDropdown.open{display:block}
+.menu-item{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;
+  border-bottom:1px solid var(--border);background:#fff
+}
+.menu-item:last-child{border-bottom:none}
+.menu-item:hover{background:#F6F8FF}
+.menu-item .dot{width:8px;height:8px;border-radius:50%;background:#C8CEFF}
+
+/* ===== Hero & tiles (for Intro tab) ===== */
 .hero{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:56px 20px 18px}
 .kicker{color:var(--accent);font-weight:800;letter-spacing:.28em;font-size:13px;text-transform:uppercase}
 h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04;color:var(--primary);text-transform:uppercase;font-weight:800}
@@ -78,7 +85,6 @@ h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04
 .btn.ghost{background:#fff;color:var(--primary);border-color:var(--primary)}
 .btn.flat{background:#fff;color:#111;border-color:#E0E5FF}
 
-/* ===== Services tiles ===== */
 .services{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:14px 20px 8px}
 .tiles{display:grid;gap:16px}
 @media(min-width:880px){.tiles{grid-template-columns:repeat(4,1fr)}}
@@ -91,7 +97,7 @@ h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04
 .tile h3{margin:10px 0 6px;color:#0F1226}
 .tile p{margin:0;color:var(--muted);font-size:14px}
 
-/* ===== Sections / Cards ===== */
+/* ===== Sections / Cards (for App tab) ===== */
 .section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:22px 20px 10px}
 .cards{display:grid;gap:18px}
 @media(min-width:880px){.cards{grid-template-columns:1fr 1fr}}
@@ -125,7 +131,7 @@ input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4p
   transition:transform .12s ease, box-shadow .12s ease;
 }
 .pub-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,18,38,.08)}
-.tag{font-size:11px;padding:4px 10px;border:1px solid #E0E5FF;border-radius:999px;background:#fff;color:var(--primary);font-weight:700;letter-spacing:.02em}
+.tag{font-size:11px;padding:4px 10px;border:1px solid #E0E5FF;border-radius:999px;background:#fff;color:#3A49FF;font-weight:700;letter-spacing:.02em}
 
 /* Upload */
 .drop{display:grid;place-items:center;text-align:center;gap:8px;padding:26px;border:2px dashed #CBD3FF;border-radius:16px;background:#FBFCFF;color:var(--muted)}
@@ -144,6 +150,10 @@ footer{position:relative;z-index:1;margin-top:36px;background:#fff;border-top:1p
 .footer-title{color:var(--accent);font-weight:800;letter-spacing:.22em;font-size:12px;margin-bottom:12px;text-transform:uppercase}
 .footer-col a{display:block;margin:6px 0;color:#3c44c9}
 .footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:14px;margin-top:18px}
+
+/* Tabs (3 pages) */
+.tab{display:none}
+.tab.active{display:block}
 </style>
 </head>
 
@@ -155,227 +165,256 @@ footer{position:relative;z-index:1;margin-top:36px;background:#fff;border-top:1p
   <div class="nav">
     <img src="./assets/montes-biopharma-logo.svg" alt="Montes BioPharma" class="logo">
     <div class="brand" data-i="brand">Montes BioPharma</div>
-    <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-      <button class="hamburger" id="openDrawer" aria-label="Menu">
-        <span></span><b data-i="menu">Menu</b>
+
+    <div class="lang">
+      <button id="menuBtn" class="icon-btn" aria-haspopup="true" aria-expanded="false" aria-controls="menuDropdown" title="Menu">
+        <span class="bars" aria-hidden="true"><span class="bar"></span></span>
+        <span class="sr-only" style="position:absolute;left:-9999px" data-i="menu">Menu</span>
       </button>
-      <div class="lang">
-        <button id="btnFR" class="active">FR</button>
-        <button id="btnEN">EN</button>
+      <div id="menuDropdown" role="menu" aria-labelledby="menuBtn">
+        <div class="menu-item" data-tab="intro" role="menuitem"><span class="dot"></span><span data-i="navIntro">Introduction</span></div>
+        <div class="menu-item" data-tab="app" role="menuitem"><span class="dot"></span><span data-i="navApp">Application</span></div>
+        <div class="menu-item" data-tab="contact" role="menuitem"><span class="dot"></span><span data-i="navContact">Contact</span></div>
       </div>
+
+      <button id="btnFR" class="icon-btn active">FR</button>
+      <button id="btnEN" class="icon-btn">EN</button>
     </div>
   </div>
 </header>
 
-<!-- ===== Drawer ===== -->
-<aside class="drawer" id="drawer">
-  <header style="display:flex;align-items:center;justify-content:space-between">
-    <strong data-i="brand">Montes BioPharma</strong>
-    <button class="hamburger" id="closeDrawer"><span></span><b data-i="close">Fermer</b></button>
-  </header>
-  <nav class="links">
-    <a href="#blk0" data-i="mCompliance">Conformité</a>
-    <a href="#blk1" data-i="mParams">Paramètres</a>
-    <a href="#blk2" data-i="mSearch">Recherche</a>
-    <a href="#blk3" data-i="mResults">Résultats</a>
-    <a href="#blk4" data-i="mAI">Analyse IA</a>
-    <a href="#blk5" data-i="mPreview">Aperçu & PDF</a>
-  </nav>
-</aside>
+<!-- ===== Tab 1: INTRO ===== -->
+<section id="tab-intro" class="tab active" aria-labelledby="navIntro">
+  <section class="hero">
+    <div class="kicker" data-i="kicker">ASSISTANT LITTÉRATURE</div>
+    <h1 class="hero-title" data-i="heroTitle">No learning curve,<br/>no complications</h1>
+    <p class="hero-sub" data-i="heroSub">
+      <span data-i="introP1">Recherche d’articles (Europe PMC), upload de documents internes, analyse de contenu par IA, et création de protocoles documentaires pour la production d’adénovirus.</span>
+      <br/><span data-i="introP2">Interface clinique, lumineuse, export PDF, aucune donnée envoyée côté serveur pour l’extraction locale.</span>
+    </p>
+    <div class="cta">
+      <button class="btn primary" id="openMenuCta" data-i="ctaOpenMenu">Ouvrir le menu</button>
+      <button class="btn ghost" id="openMenuLearn" data-i="ctaOpenLearn">Que puis-je faire ?</button>
+    </div>
+  </section>
 
-<!-- ===== Hero ===== -->
-<section class="hero">
-  <div class="kicker" data-i="kicker">ASSISTANT LITTÉRATURE</div>
-  <h1 class="hero-title" data-i="heroTitle">No learning curve,<br/>no complications</h1>
-  <p class="hero-sub" data-i="heroSub">
-    Analyse Europe&nbsp;PMC, extraction locale PDF/DOCX, synthèse IA et export PDF — dans une interface clinique et lumineuse.
-  </p>
-  <div class="cta">
-    <a class="btn primary" href="#blk0" data-i="ctaStart">Commencer</a>
-    <a class="btn ghost" href="#blk3" data-i="ctaResults">Voir les résultats</a>
-  </div>
+  <section class="services">
+    <div class="tiles">
+      <div class="tile">
+        <span class="badge" data-i="t1Badge">Upload</span>
+        <h3 data-i="t1Title">Documents internes</h3>
+        <p data-i="t1Text">PDF, DOCX, TXT — extraction locale dans votre navigateur (aucun envoi).</p>
+      </div>
+      <div class="tile">
+        <span class="badge" data-i="t2Badge">Europe PMC</span>
+        <h3 data-i="t2Title">Recherche d’articles</h3>
+        <p data-i="t2Text">Fenêtre temporelle, mots-clés, open access. Résultats enrichis et liens PubMed.</p>
+      </div>
+      <div class="tile">
+        <span class="badge" data-i="t3Badge">AI</span>
+        <h3 data-i="t3Title">Synthèse des contenus</h3>
+        <p data-i="t3Text">Résumé automatique (Hugging Face) d’abstracts et texte intégral. Sections méthodologiques extraites.</p>
+      </div>
+      <div class="tile">
+        <span class="badge" data-i="t4Badge">PDF</span>
+        <h3 data-i="t4Title">Export documentaire</h3>
+        <p data-i="t4Text">Protocole documentaire structuré, lisible et partageable (sans paramètres expérimentaux).</p>
+      </div>
+    </div>
+  </section>
 </section>
 
-<!-- ===== Services tiles ===== -->
-<section class="services">
-  <div class="tiles">
-    <div class="tile">
-      <span class="badge" data-i="t1Badge">Upload</span>
-      <h3 data-i="t1Title">Documents internes</h3>
-      <p data-i="t1Text">PDF, DOCX, TXT — extraction locale dans votre navigateur (aucun envoi).</p>
-    </div>
-    <div class="tile">
-      <span class="badge" data-i="t2Badge">Search</span>
-      <h3 data-i="t2Title">Europe&nbsp;PMC</h3>
-      <p data-i="t2Text">Fenêtre temporelle, mots-clés, open access. Résultats enrichis.</p>
-    </div>
-    <div class="tile">
-      <span class="badge" data-i="t3Badge">AI</span>
-      <h3 data-i="t3Title">Synthèse</h3>
-      <p data-i="t3Text">Résumé automatique (Hugging&nbsp;Face) des abstracts/texte intégral.</p>
-    </div>
-    <div class="tile">
-      <span class="badge" data-i="t4Badge">PDF</span>
-      <h3 data-i="t4Title">Export</h3>
-      <p data-i="t4Text">Protocole documentaire propre, lisible et partageable.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ===== MAIN ===== -->
-<main>
-  <div class="section">
-    <div class="cards">
-      <!-- Bloc 1 : Conformité + Upload -->
-      <section id="blk0" class="block open">
-        <header>
-          <div>
-            <div class="overline" data-i="s1Title">CONTEXTE & CONFORMITÉ</div>
-            <h2 data-i="s1Sub">Usage pro uniquement</h2>
-          </div>
-        </header>
-        <div class="inner">
-          <label class="kv" style="display:flex;gap:10px;align-items:center">
-            <input type="checkbox" id="compliance" style="width:auto">
-            <span data-i="s1Check">Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.</span>
-          </label>
-          <hr class="sep">
-          <h3 class="overline" data-i="s6Title">DOCUMENTS INTERNES (ANALYSE LOCALE)</h3>
-          <p class="muted" data-i="s6Text">Déposez des fichiers PDF, DOCX ou TXT. Texte extrait localement. La synthèse peut utiliser Hugging Face.</p>
-          <div id="drop" class="drop">
+<!-- ===== Tab 2: APP (structure inchangée blk0 → blk5) ===== -->
+<section id="tab-app" class="tab" aria-labelledby="navApp">
+  <main>
+    <div class="section">
+      <div class="cards">
+        <!-- Bloc 1 : Conformité + Upload -->
+        <section id="blk0" class="block open">
+          <header>
             <div>
-              <strong data-i="s6DropTitle">Déposez vos fichiers ici</strong>
-              <div class="muted" data-i="s6DropHint">ou cliquez pour sélectionner</div>
-              <small data-i="s6DropTypes">Acceptés : PDF, DOCX, TXT</small>
+              <div class="overline" data-i="s1Title">CONTEXTE & CONFORMITÉ</div>
+              <h2 data-i="s1Sub">Usage pro uniquement</h2>
             </div>
-            <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt" style="display:none">
+          </header>
+          <div class="inner">
+            <label class="kv" style="display:flex;gap:10px;align-items:center">
+              <input type="checkbox" id="compliance" style="width:auto">
+              <span data-i="s1Check">Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.</span>
+            </label>
+            <hr class="sep">
+            <h3 class="overline" data-i="s6Title">DOCUMENTS INTERNES (ANALYSE LOCALE)</h3>
+            <p class="muted" data-i="s6Text">Déposez des fichiers PDF, DOCX ou TXT. Texte extrait localement. La synthèse peut utiliser Hugging Face.</p>
+            <div id="drop" class="drop">
+              <div>
+                <strong data-i="s6DropTitle">Déposez vos fichiers ici</strong>
+                <div class="muted" data-i="s6DropHint">ou cliquez pour sélectionner</div>
+                <small data-i="s6DropTypes">Acceptés : PDF, DOCX, TXT</small>
+              </div>
+              <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt" style="display:none">
+            </div>
+            <div class="file-list" id="filesList"></div>
+            <div class="controls">
+              <button class="btn primary" id="runLocal" data-i="btnAnalyze">Analyser</button>
+              <button class="btn secondary" data-open="#blk1" data-i="btnContinue">Continuer</button>
+            </div>
           </div>
-          <div class="file-list" id="filesList"></div>
-          <div class="controls">
-            <button class="btn primary" id="runLocal" data-i="btnAnalyze">Analyser</button>
-            <button class="btn secondary" data-open="#blk1" data-i="btnContinue">Continuer</button>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Bloc 2 : Paramètres -->
-      <section id="blk1" class="block">
+        <!-- Bloc 2 : Paramètres -->
+        <section id="blk1" class="block">
+          <header>
+            <div>
+              <div class="overline" data-i="s2Title">PARAMÈTRES & TECHNIQUES</div>
+              <h2 data-i="s2Sub">Contexte scientifique</h2>
+            </div>
+          </header>
+          <div class="inner">
+            <div class="row row-3">
+              <div><label data-i="labVector">Vecteur</label><input id="vector" placeholder="Adenovirus"></div>
+              <div><label data-i="labSerotype">Sérotype</label><input id="serotype" placeholder="Ad5"></div>
+              <div><label data-i="labCellLine">Lignée cellulaire</label><input id="cellLine" placeholder="HEK293 / PER.C6"></div>
+            </div>
+            <div class="row" style="margin-top:8px">
+              <div><label data-i="labKeywords">Mots-clés complémentaires</label><input id="keywords" placeholder="chromatography, anion exchange, membrane, affinity"></div>
+            </div>
+            <div class="grid" style="margin-top:10px">
+              <strong class="overline" data-i="techTitle">TECHNIQUES DOWNSTREAM</strong>
+              <label><input type="checkbox" class="tech" value="Clarification"> <span data-i="tClarif">Clarification</span></label>
+              <label><input type="checkbox" class="tech" value="Capture"> <span data-i="tCapture">Capture (affinité / AEX)</span></label>
+              <label><input type="checkbox" class="tech" value="Polishing"> <span data-i="tPolishing">Polishing</span></label>
+              <label><input type="checkbox" class="tech" value="TFF"> <span data-i="tTFF">TFF (Concentration / Diafiltration)</span></label>
+              <label><input type="checkbox" class="tech" value="QC"> <span data-i="tQC">Contrôles qualité (attributs)</span></label>
+              <label><input type="checkbox" class="tech" value="Formulation"> <span data-i="tForm">Formulation / Documentation</span></label>
+            </div>
+            <div class="controls">
+              <button class="btn secondary" data-open="#blk2" data-i="btnContinue">Continuer</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bloc 3 : Recherche -->
+        <section id="blk2" class="block">
+          <header>
+            <div>
+              <div class="overline" data-i="searchTitle">RECHERCHE LITTÉRATURE</div>
+              <h2>Europe PMC</h2>
+            </div>
+            <small class="muted">OA + abstracts</small>
+          </header>
+          <div class="inner">
+            <div class="row row-2">
+              <div>
+                <label data-i="labYears">Fenêtre (années)</label>
+                <select id="yearsWindow"><option value="1">1</option><option value="2" selected>2</option><option value="5">5</option><option value="10">10</option></select>
+              </div>
+              <div>
+                <label data-i="labMax">Nombre max. d’articles</label>
+                <select id="retMax"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="50">50</option></select>
+              </div>
+            </div>
+            <label class="kv" style="margin-top:8px;display:flex;gap:10px;align-items:center">
+              <input type="checkbox" id="onlyOA" checked style="width:auto">
+              <span data-i="labOA">Uniquement open access (texte intégral)</span>
+            </label>
+            <div class="controls">
+              <button class="btn primary" id="runSearch" data-i="btnSearch">Lancer la recherche</button>
+              <button class="btn secondary" data-open="#blk3" data-i="btnContinue">Continuer</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bloc 4 : Résultats -->
+        <section id="blk3" class="block">
+          <header>
+            <div>
+              <div class="overline" data-i="s3Title">RÉSULTATS LITTÉRATURE</div>
+              <h2>Europe PMC</h2>
+            </div>
+            <small id="searchInfo" class="muted"></small>
+          </header>
+          <div class="inner">
+            <div id="results" class="grid"></div>
+            <div class="controls">
+              <button class="btn secondary" data-open="#blk4" data-i="btnContinue">Continuer</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bloc 5 : Analyse IA -->
+        <section id="blk4" class="block">
+          <header>
+            <div>
+              <div class="overline" data-i="s4Title">ANALYSE IA</div>
+              <h2 data-i="s4Sub">Articles sélectionnés</h2>
+            </div>
+            <small id="selInfo" class="muted"></small>
+          </header>
+          <div class="inner">
+            <p class="muted" data-i="s4Text">Sélectionne au moins 1 article puis lance l’analyse. Résumé automatique (Hugging Face).</p>
+            <div id="selectedList" class="grid"></div>
+            <div class="controls">
+              <button class="btn primary" id="analyzeBtn" data-i="btnAnalyze">Analyser</button>
+              <button class="btn secondary" data-open="#blk5" data-i="btnContinue">Continuer</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bloc 6 : Aperçu & PDF -->
+        <section id="blk5" class="block open">
+          <header>
+            <div>
+              <div class="overline" data-i="s5Title">APERÇU & EXPORT PDF</div>
+              <h2 data-i="s5Sub">Protocole documentaire</h2>
+            </div>
+          </header>
+          <div class="inner">
+            <div class="kv"><div class="muted" data-i="safety">Note : sortie documentaire basée littérature. Aucun paramètre expérimental.</div></div>
+            <pre id="preview"></pre>
+            <div class="controls">
+              <button class="btn primary" id="exportPdf" data-i="btnPdf">Exporter le PDF</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ===== Tab 3: CONTACT ===== -->
+<section id="tab-contact" class="tab" aria-labelledby="navContact">
+  <section class="section">
+    <div class="cards">
+      <section class="block open">
         <header>
           <div>
-            <div class="overline" data-i="s2Title">PARAMÈTRES & TECHNIQUES</div>
-            <h2 data-i="s2Sub">Contexte scientifique</h2>
+            <div class="overline" data-i="cTitle">PRISE DE CONTACT</div>
+            <h2 data-i="cSub">Discutons de votre projet</h2>
           </div>
         </header>
         <div class="inner">
-          <div class="row row-3">
-            <div><label data-i="labVector">Vecteur</label><input id="vector" placeholder="Adenovirus"></div>
-            <div><label data-i="labSerotype">Sérotype</label><input id="serotype" placeholder="Ad5"></div>
-            <div><label data-i="labCellLine">Lignée cellulaire</label><input id="cellLine" placeholder="HEK293 / PER.C6"></div>
+          <p class="muted" data-i="cLead">
+            Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).
+          </p>
+          <div class="row row-2">
+            <div><label data-i="cName">Nom</label><input id="c_name" placeholder="Jane Doe"></div>
+            <div><label data-i="cOrg">Société</label><input id="c_org" placeholder="Montes BioPharma"></div>
           </div>
           <div class="row" style="margin-top:8px">
-            <div><label data-i="labKeywords">Mots-clés complémentaires</label><input id="keywords" placeholder="chromatography, anion exchange, membrane, affinity"></div>
+            <div><label>Email</label><input id="c_email" placeholder="you@company.com" type="email"></div>
           </div>
-          <div class="grid" style="margin-top:10px">
-            <strong class="overline" data-i="techTitle">TECHNIQUES DOWNSTREAM</strong>
-            <label><input type="checkbox" class="tech" value="Clarification"> <span data-i="tClarif">Clarification</span></label>
-            <label><input type="checkbox" class="tech" value="Capture"> <span data-i="tCapture">Capture (affinité / AEX)</span></label>
-            <label><input type="checkbox" class="tech" value="Polishing"> <span data-i="tPolishing">Polishing</span></label>
-            <label><input type="checkbox" class="tech" value="TFF"> <span data-i="tTFF">TFF (Concentration / Diafiltration)</span></label>
-            <label><input type="checkbox" class="tech" value="QC"> <span data-i="tQC">Contrôles qualité (attributs)</span></label>
-            <label><input type="checkbox" class="tech" value="Formulation"> <span data-i="tForm">Formulation / Documentation</span></label>
+          <div class="row" style="margin-top:8px">
+            <div><label data-i="cMsg">Message</label><textarea id="c_msg" rows="4" placeholder="Tell us about your project..."></textarea></div>
           </div>
           <div class="controls">
-            <button class="btn secondary" data-open="#blk2" data-i="btnContinue">Continuer</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Bloc 3 : Recherche -->
-      <section id="blk2" class="block">
-        <header>
-          <div>
-            <div class="overline" data-i="searchTitle">RECHERCHE LITTÉRATURE</div>
-            <h2>Europe PMC</h2>
-          </div>
-          <small class="muted">OA + abstracts</small>
-        </header>
-        <div class="inner">
-          <div class="row row-2">
-            <div>
-              <label data-i="labYears">Fenêtre (années)</label>
-              <select id="yearsWindow"><option value="1">1</option><option value="2" selected>2</option><option value="5">5</option><option value="10">10</option></select>
-            </div>
-            <div>
-              <label data-i="labMax">Nombre max. d’articles</label>
-              <select id="retMax"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="50">50</option></select>
-            </div>
-          </div>
-          <label class="kv" style="margin-top:8px;display:flex;gap:10px;align-items:center">
-            <input type="checkbox" id="onlyOA" checked style="width:auto">
-            <span data-i="labOA">Uniquement open access (texte intégral)</span>
-          </label>
-          <div class="controls">
-            <button class="btn primary" id="runSearch" data-i="btnSearch">Lancer la recherche</button>
-            <button class="btn secondary" data-open="#blk3" data-i="btnContinue">Continuer</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Bloc 4 : Résultats -->
-      <section id="blk3" class="block">
-        <header>
-          <div>
-            <div class="overline" data-i="s3Title">RÉSULTATS LITTÉRATURE</div>
-            <h2>Europe PMC</h2>
-          </div>
-          <small id="searchInfo" class="muted"></small>
-        </header>
-        <div class="inner">
-          <div id="results" class="grid"></div>
-          <div class="controls">
-            <button class="btn secondary" data-open="#blk4" data-i="btnContinue">Continuer</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Bloc 5 : Analyse IA -->
-      <section id="blk4" class="block">
-        <header>
-          <div>
-            <div class="overline" data-i="s4Title">ANALYSE IA</div>
-            <h2 data-i="s4Sub">Articles sélectionnés</h2>
-          </div>
-          <small id="selInfo" class="muted"></small>
-        </header>
-        <div class="inner">
-          <p class="muted" data-i="s4Text">Sélectionne au moins 1 article puis lance l’analyse. Résumé automatique (Hugging Face).</p>
-          <div id="selectedList" class="grid"></div>
-          <div class="controls">
-            <button class="btn primary" id="analyzeBtn" data-i="btnAnalyze">Analyser</button>
-            <button class="btn secondary" data-open="#blk5" data-i="btnContinue">Continuer</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Bloc 6 : Aperçu & PDF -->
-      <section id="blk5" class="block open">
-        <header>
-          <div>
-            <div class="overline" data-i="s5Title">APERÇU & EXPORT PDF</div>
-            <h2 data-i="s5Sub">Protocole documentaire</h2>
-          </div>
-        </header>
-        <div class="inner">
-          <div class="kv"><div class="muted" data-i="safety">Note : sortie documentaire basée littérature. Aucun paramètre expérimental.</div></div>
-          <pre id="preview"></pre>
-          <div class="controls">
-            <button class="btn primary" id="exportPdf" data-i="btnPdf">Exporter le PDF</button>
+            <a id="c_mailto" class="btn primary" href="#" data-i="cSend">Envoyer par e-mail</a>
+            <a class="btn secondary" href="https://www.linkedin.com" target="_blank" rel="noopener" data-i="cLinkedIn">LinkedIn</a>
           </div>
         </div>
       </section>
     </div>
-  </div>
-</main>
+  </section>
+</section>
 
 <!-- ===== FOOTER ===== -->
 <footer>
@@ -383,12 +422,7 @@ footer{position:relative;z-index:1;margin-top:36px;background:#fff;border-top:1p
     <div class="footer-grid">
       <div class="footer-col">
         <div class="footer-title" data-i="fMenu">MENU</div>
-        <a href="#blk0" data-i="mCompliance">Conformité</a>
-        <a href="#blk1" data-i="mParams">Paramètres</a>
-        <a href="#blk2" data-i="mSearch">Recherche</a>
-        <a href="#blk3" data-i="mResults">Résultats</a>
-        <a href="#blk4" data-i="mAI">Analyse IA</a>
-        <a href="#blk5" data-i="mPreview">Aperçu & PDF</a>
+        <span class="muted" data-i="fHint">Utilisez le bouton en haut à droite pour ouvrir le menu.</span>
       </div>
       <div class="footer-col">
         <div class="footer-title" data-i="fLegal">LEGAL</div>
@@ -402,7 +436,7 @@ footer{position:relative;z-index:1;margin-top:36px;background:#fff;border-top:1p
       </div>
       <div class="footer-col">
         <div class="footer-title" data-i="fContact">CONTACT</div>
-        <div>Montes BioPharma</div><div data-i="fCity">Bruxelles — Belgique</div><div class="muted">contact@montes.bio</div>
+        <div>Montes BioPharma</div><div class="muted" data-i="fCity">Bruxelles — Belgique</div><div class="muted">contact@montes.bio</div>
       </div>
     </div>
     <div class="footer-bottom">
@@ -428,32 +462,63 @@ if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
 const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(20+38*mix), g=Math.round(150+100*(1-mix)), b=Math.round(255-40*(1-mix));
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(${r},${g},${b},${a})`;cx.fill();}})();
 
-/* =================== Drawer =================== */
-const drawer=document.getElementById('drawer');
-document.getElementById('openDrawer').onclick=()=>drawer.classList.add('open');
-document.getElementById('closeDrawer').onclick=()=>drawer.classList.remove('open');
-drawer.addEventListener('click',e=>{ if(e.target.tagName==='A') drawer.classList.remove('open'); });
+/* =================== Dropdown menu (onglets) =================== */
+const menuBtn = document.getElementById('menuBtn');
+const menuDD  = document.getElementById('menuDropdown');
+function openMenu(){menuDD.classList.add('open');menuBtn.setAttribute('aria-expanded','true');}
+function closeMenu(){menuDD.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}
+menuBtn.addEventListener('click',(e)=>{e.stopPropagation();menuDD.classList.toggle('open');menuBtn.setAttribute('aria-expanded', menuDD.classList.contains('open'));});
+document.addEventListener('click',(e)=>{ if(!menuDD.contains(e.target) && e.target!==menuBtn) closeMenu();});
+document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeMenu();});
+
+/* Tabs show/hide (only via menu) */
+const tabs = {
+  intro: document.getElementById('tab-intro'),
+  app: document.getElementById('tab-app'),
+  contact: document.getElementById('tab-contact')
+};
+function showTab(name){
+  Object.keys(tabs).forEach(k=>tabs[k].classList.remove('active'));
+  (tabs[name]||tabs.intro).classList.add('active');
+  // Optionnel: hash en URL (utile pour partager), mais on n'ajoute pas d'autres triggers UI
+  history.replaceState(null,'',`#${name}`);
+  closeMenu();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+menuDD.querySelectorAll('.menu-item').forEach(it=>{
+  it.addEventListener('click',()=>{showTab(it.dataset.tab);});
+});
+// CTA Intro → ouvre juste le menu (ne change pas d’onglet)
+document.getElementById('openMenuCta').onclick = openMenu;
+document.getElementById('openMenuLearn').onclick = openMenu;
+// Au chargement, si un hash est présent (#intro/#app/#contact), on l’applique (utile pour lien partagé)
+window.addEventListener('DOMContentLoaded',()=>{
+  const h=(location.hash||'').replace('#','');
+  if(['intro','app','contact'].includes(h)) showTab(h);
+});
 
 /* =================== i18n =================== */
 const I={
   fr:{
-    brand:"Montes BioPharma", menu:"Menu", close:"Fermer",
+    brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
     kicker:"ASSISTANT LITTÉRATURE",
     heroTitle:"No learning curve,<br/>no complications",
     heroSub:"Analyse Europe&nbsp;PMC, extraction locale PDF/DOCX, synthèse IA et export PDF — dans une interface clinique et lumineuse.",
-    ctaStart:"Commencer", ctaResults:"Voir les résultats",
+    introP1:"Recherche d’articles (Europe PMC), upload de documents internes, analyse de contenu par IA, et création de protocoles documentaires pour la production d’adénovirus.",
+    introP2:"Interface clinique, lumineuse, export PDF, aucune donnée envoyée côté serveur pour l’extraction locale.",
+    ctaOpenMenu:"Ouvrir le menu", ctaOpenLearn:"Que puis-je faire ?",
 
     t1Badge:"Upload", t1Title:"Documents internes", t1Text:"PDF, DOCX, TXT — extraction locale dans votre navigateur (aucun envoi).",
-    t2Badge:"Recherche", t2Title:"Europe PMC", t2Text:"Fenêtre temporelle, mots-clés, open access. Résultats enrichis.",
-    t3Badge:"IA", t3Title:"Synthèse", t3Text:"Résumé automatique (Hugging Face) des abstracts/texte intégral.",
-    t4Badge:"PDF", t4Title:"Export", t4Text:"Protocole documentaire propre, lisible et partageable.",
+    t2Badge:"Europe PMC", t2Title:"Recherche d’articles", t2Text:"Fenêtre temporelle, mots-clés, open access. Résultats enrichis et liens PubMed.",
+    t3Badge:"AI", t3Title:"Synthèse des contenus", t3Text:"Résumé automatique (Hugging Face) d’abstracts et texte intégral. Sections méthodologiques extraites.",
+    t4Badge:"PDF", t4Title:"Export documentaire", t4Text:"Protocole documentaire structuré, lisible et partageable (sans paramètres expérimentaux).",
 
+    /* App blocs */
     s1Title:"CONTEXTE & CONFORMITÉ", s1Sub:"Usage pro uniquement",
     s1Check:"Je confirme être un professionnel habilité et m’appuyer sur des SOP internes validées.",
     s2Title:"PARAMÈTRES & TECHNIQUES", s2Sub:"Contexte scientifique",
     techTitle:"TECHNIQUES DOWNSTREAM",
     tClarif:"Clarification", tCapture:"Capture (affinité / AEX)", tPolishing:"Polishing", tTFF:"TFF (Concentration / Diafiltration)", tQC:"Contrôles qualité (attributs)", tForm:"Formulation / Documentation",
-
     searchTitle:"RECHERCHE LITTÉRATURE",
     labVector:"Vecteur", labSerotype:"Sérotype", labCellLine:"Lignée cellulaire", labKeywords:"Mots-clés complémentaires",
     labYears:"Fenêtre (années)", labMax:"Nombre max. d’articles", labOA:"Uniquement open access (texte intégral)", btnSearch:"Lancer la recherche",
@@ -462,34 +527,40 @@ const I={
     btnAnalyze:"Analyser", btnContinue:"Continuer",
     s5Title:"APERÇU & EXPORT PDF", s5Sub:"Protocole documentaire", btnPdf:"Exporter le PDF",
     safety:"Note : sortie documentaire basée littérature. Aucun paramètre expérimental.",
-    mCompliance:"Conformité", mParams:"Paramètres", mSearch:"Recherche", mResults:"Résultats", mAI:"Analyse IA", mPreview:"Aperçu & PDF",
-    fMenu:"MENU", fLegal:"LEGAL", fSocial:"SOCIAL", fContact:"CONTACT", fMentions:"Mentions légales", fPrivacy:"Confidentialité", fCookies:"Cookies", fCity:"Bruxelles — Belgique",
+
+    /* Contact */
+    cTitle:"PRISE DE CONTACT", cSub:"Discutons de votre projet", cLead:"Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).",
+    cName:"Nom", cOrg:"Société", cMsg:"Message", cSend:"Envoyer par e-mail", cLinkedIn:"LinkedIn",
+
+    /* Footer */
+    fMenu:"MENU", fHint:"Utilisez le bouton en haut à droite pour ouvrir le menu.",
+    fLegal:"LEGAL", fSocial:"SOCIAL", fContact:"CONTACT", fMentions:"Mentions légales", fPrivacy:"Confidentialité", fCookies:"Cookies", fCity:"Bruxelles — Belgique",
     fFoot:"Europe PMC / PubMed — Hugging Face (optionnel). Aucune instruction expérimentale.",
 
-    // Dynamiques
+    /* Dynamiques */
     d_searching:"Recherche…", d_open:"Voir", d_noSel:"Aucune sélection.", d_ai:"Analyse IA…", d_none:"(aucun)",
-    d_alert_compliance:"Merci de confirmer la conformité.",
-    d_alert_need1:"Sélectionne au moins 1 article.", d_alert_needTech:"Sélectionne au moins une technique.",
-    d_nofile:"Aucun fichier."
+    d_alert_compliance:"Merci de confirmer la conformité.", d_alert_need1:"Sélectionne au moins 1 article.", d_alert_needTech:"Sélectionne au moins une technique.", d_nofile:"Aucun fichier."
   },
   en:{
-    brand:"Montes BioPharma", menu:"Menu", close:"Close",
+    brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
     kicker:"LITERATURE ASSISTANT",
     heroTitle:"No learning curve,<br/>no complications",
     heroSub:"Europe PMC analysis, local PDF/DOCX extraction, AI synthesis and PDF export — in a clean, clinical interface.",
-    ctaStart:"Get started", ctaResults:"See results",
+    introP1:"Article search (Europe PMC), internal document upload, AI content analysis, and creation of documentary protocols for adenovirus production.",
+    introP2:"Clean, clinical UI. PDF export. No server upload for local extraction.",
+    ctaOpenMenu:"Open menu", ctaOpenLearn:"What can I do?",
 
     t1Badge:"Upload", t1Title:"Internal documents", t1Text:"PDF, DOCX, TXT — extracted locally in your browser (no upload).",
-    t2Badge:"Search", t2Title:"Europe PMC", t2Text:"Time window, keywords, open access. Enriched results.",
-    t3Badge:"AI", t3Title:"Synthesis", t3Text:"Automatic summaries (Hugging Face) from abstracts/full text.",
-    t4Badge:"PDF", t4Title:"Export", t4Text:"Clean, readable, shareable documentary protocol.",
+    t2Badge:"Europe PMC", t2Title:"Article search", t2Text:"Time window, keywords, open access. Enriched results and PubMed links.",
+    t3Badge:"AI", t3Title:"Content synthesis", t3Text:"Automatic summaries (Hugging Face) from abstracts and full text. Method sections extracted.",
+    t4Badge:"PDF", t4Title:"Document export", t4Text:"Structured, readable, shareable documentary protocol (no experimental parameters).",
 
+    /* App blocs */
     s1Title:"CONTEXT & COMPLIANCE", s1Sub:"Professional use only",
     s1Check:"I confirm I am a qualified professional and rely on validated internal SOPs.",
     s2Title:"PARAMETERS & TECHNIQUES", s2Sub:"Scientific context",
     techTitle:"DOWNSTREAM TECHNIQUES",
     tClarif:"Clarification", tCapture:"Capture (affinity / AEX)", tPolishing:"Polishing", tTFF:"TFF (Concentration / Diafiltration)", tQC:"Quality controls (attributes)", tForm:"Formulation / Documentation",
-
     searchTitle:"LITERATURE SEARCH",
     labVector:"Vector", labSerotype:"Serotype", labCellLine:"Cell line", labKeywords:"Additional keywords",
     labYears:"Recency (years)", labMax:"Max articles", labOA:"Open access only (full text)", btnSearch:"Run search",
@@ -498,15 +569,19 @@ const I={
     btnAnalyze:"Analyze", btnContinue:"Continue",
     s5Title:"PREVIEW & PDF EXPORT", s5Sub:"Documentary protocol", btnPdf:"Export PDF",
     safety:"Note: literature-based documentary output. No experimental parameters.",
-    mCompliance:"Compliance", mParams:"Parameters", mSearch:"Search", mResults:"Results", mAI:"AI analysis", mPreview:"Preview & PDF",
-    fMenu:"MENU", fLegal:"LEGAL", fSocial:"SOCIAL", fContact:"CONTACT", fMentions:"Imprint", fPrivacy:"Privacy", fCookies:"Cookies", fCity:"Brussels — Belgium",
+
+    /* Contact */
+    cTitle:"GET IN TOUCH", cSub:"Let's discuss your project", cLead:"Our expert scientists can help accelerate your process development (adenoviral vectors, purification, analytics, documentation).",
+    cName:"Name", cOrg:"Company", cMsg:"Message", cSend:"Send email", cLinkedIn:"LinkedIn",
+
+    /* Footer */
+    fMenu:"MENU", fHint:"Use the top-right button to open the menu.",
+    fLegal:"LEGAL", fSocial:"SOCIAL", fContact:"CONTACT", fMentions:"Imprint", fPrivacy:"Privacy", fCookies:"Cookies", fCity:"Brussels — Belgium",
     fFoot:"Europe PMC / PubMed — Hugging Face (optional). No experimental instructions.",
 
-    // Dynamics
+    /* Dynamics */
     d_searching:"Searching…", d_open:"Open", d_noSel:"No selection.", d_ai:"AI analysis…", d_none:"(none)",
-    d_alert_compliance:"Please confirm compliance.",
-    d_alert_need1:"Select at least 1 article.", d_alert_needTech:"Select at least one technique.",
-    d_nofile:"No file."
+    d_alert_compliance:"Please confirm compliance.", d_alert_need1:"Select at least 1 article.", d_alert_needTech:"Select at least one technique.", d_nofile:"No file."
   }
 };
 function lang(){return document.documentElement.dataset.lang||'fr';}
@@ -514,18 +589,16 @@ function t(k){const L=I[lang()]||I.fr;return (L&&L[k])||(I.fr[k]||k);}
 function setLang(newLang){
   document.documentElement.setAttribute('lang', newLang); document.documentElement.dataset.lang=newLang;
   for(const el of document.querySelectorAll('[data-i]')){const v=t(el.dataset.i); if(/<br\s*\/?>|&nbsp;/.test(v)) el.innerHTML=v; else el.textContent=v;}
-  // Year refresh
   document.getElementById('year').textContent=new Date().getFullYear();
 }
 window.addEventListener('DOMContentLoaded', () => {
   const btnFR=document.getElementById('btnFR'), btnEN=document.getElementById('btnEN');
   btnFR.onclick=()=>{setLang('fr');btnFR.classList.add('active');btnEN.classList.remove('active');};
   btnEN.onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
-  setLang('fr');
-  document.getElementById('year').textContent=new Date().getFullYear();
+  setLang('fr'); document.getElementById('year').textContent=new Date().getFullYear();
 });
 
-/* =================== Accordéon + navigation =================== */
+/* =================== Accordéon & navigation inter-blocs =================== */
 for(const blk of document.querySelectorAll('.block')){
   const head=blk.querySelector('header');
   head.addEventListener('click', (e)=>{
