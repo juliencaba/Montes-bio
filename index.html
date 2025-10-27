@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Montes BioPharma — Assistant Littérature</title>
 <meta name="color-scheme" content="light"/>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<!-- pdf.js & mammoth for local text extraction -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" crossorigin="anonymous"></script>
-
 <style>
 :root{
   --bg:#F6F7FB; --panel:#FFFFFF; --ink:#0F1226; --muted:#6C7392;
@@ -22,37 +23,38 @@ a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
 img{display:block;max-width:100%}
 .hide{display:none}
 
-/* Tabs (top) */
+/* ===== Tabs (CRUCIAL) ===== */
 .tab{display:none}
 .tab.active{display:block}
 
-/* Particles */
+/* ===== Particles ===== */
 #particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.85}
 
-/* Header */
+/* ===== Header + Menu ===== */
 header{position:sticky;top:0;z-index:40;backdrop-filter:saturate(180%) blur(10px);background:rgba(255,255,255,.7);border-bottom:1px solid var(--border)}
 .nav{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
 .logo{height:40px;width:auto}
 .brand{font-weight:800;letter-spacing:.02em;color:var(--ink)}
-.lang{margin-left:auto;display:flex;gap:8px;align-items:center}
+.lang{margin-left:auto;display:flex;gap:8px;align-items:center;position:relative}
 .icon-btn{appearance:none;border:1px solid var(--border);background:#fff;color:var(--ink);padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:10px}
 #menuBtn .bars{position:relative;width:18px;height:12px}
 #menuBtn .bars::before,#menuBtn .bars::after,#menuBtn .bar{content:"";position:absolute;left:0;right:0;height:2px;background:#3A49FF;border-radius:2px}
 #menuBtn .bar{top:5px}#menuBtn .bars::before{top:0}#menuBtn .bars::after{bottom:0}
 
-/* Dropdown menu (top) */
-#menuDropdown{position:absolute;right:20px;top:56px;z-index:60;min-width:220px;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 14px 36px rgba(15,18,38,.12);display:none;overflow:hidden}
+/* Dropdown menu */
+#menuDropdown{position:absolute;right:0;top:48px;z-index:100;min-width:220px;background:#fff;border:1px solid var(--border);
+  border-radius:14px;box-shadow:0 14px 36px rgba(15,18,38,.12);display:none;overflow:hidden}
 #menuDropdown.open{display:block}
 .menu-item{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;border-bottom:1px solid var(--border);background:#fff}
 .menu-item:last-child{border-bottom:none}
 .menu-item:hover{background:#F6F8FF}
 .menu-item .dot{width:8px;height:8px;border-radius:50%;background:#C8CEFF}
 
-/* Gradient transition overlay */
+/* Gradient page transition */
 #xfade{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0;background:radial-gradient(1200px 800px at 50% 50%, rgba(58,73,255,.18), rgba(0,0,0,0));transition:opacity .45s ease}
 #xfade.show{opacity:1}
 
-/* Hero + tiles (Intro) */
+/* ===== Intro (hero + tiles) ===== */
 .hero{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:56px 20px 18px}
 .kicker{color:var(--accent);font-weight:800;letter-spacing:.28em;font-size:13px;text-transform:uppercase}
 h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04;color:var(--primary);text-transform:uppercase;font-weight:800}
@@ -76,7 +78,7 @@ h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04
 .tile h3{margin:10px 0 6px;color:#0F1226}
 .tile p{margin:0;color:var(--muted);font-size:14px}
 
-/* Sections / Cards */
+/* ===== Sections / Cards ===== */
 .section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:22px 20px 10px}
 .cards{display:grid;gap:18px}
 @media(min-width:880px){.cards{grid-template-columns:1fr 1fr}}
@@ -109,7 +111,7 @@ input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4p
 .snip mark{padding:0 2px;border-radius:4px;background:#FFF59D}
 pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:12px}
 
-/* Basic cards & tags used in modal/overview/uploader */
+/* Basic cards & tags used across */
 .pub-card{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff;display:grid;gap:6px}
 .tag{
   font-size:11px;
@@ -120,7 +122,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
   color:var(--ink);
 }
 
-/* Uploader block */
+/* Uploader */
 .drop{display:grid;place-items:center;text-align:center;gap:8px;padding:22px;border:2px dashed var(--border);border-radius:12px;background:#fff}
 .drop.drag{border-color:var(--primary)}
 .file-list{display:grid;gap:10px;margin-top:10px}
@@ -129,7 +131,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 .app-sub{display:none}
 .app-sub.active{display:block}
 
-/* Ergonomic analysis workspace */
+/* Workspace */
 .workspace{display:grid;gap:16px}
 @media(min-width:1100px){.workspace{grid-template-columns:320px 1fr}}
 .sidebar{border:1px solid var(--border);border-radius:16px;background:#fff;padding:12px;height:100%}
@@ -147,7 +149,6 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 .modal-card header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 </style>
 </head>
-
 <body>
 <canvas id="particlesCanvas"></canvas>
 <div id="xfade"></div>
@@ -161,22 +162,25 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
     <div class="brand" data-i="brand">Montes BioPharma</div>
 
     <div class="lang">
+      <!-- bouton hamburger -->
       <button id="menuBtn" class="icon-btn" aria-haspopup="true" aria-expanded="false" aria-controls="menuDropdown" title="Menu">
         <span class="bars" aria-hidden="true"><span class="bar"></span></span>
         <span class="sr-only" style="position:absolute;left:-9999px" data-i="menu">Menu</span>
       </button>
+      <!-- dropdown -->
       <div id="menuDropdown" role="menu" aria-labelledby="menuBtn">
         <div class="menu-item" data-tab="intro" role="menuitem"><span class="dot"></span><span data-i="navIntro">Introduction</span></div>
         <div class="menu-item" data-tab="app" role="menuitem"><span class="dot"></span><span data-i="navApp">Application</span></div>
         <div class="menu-item" data-tab="contact" role="menuitem"><span class="dot"></span><span data-i="navContact">Contact</span></div>
       </div>
+      <!-- langues -->
       <button id="btnFR" class="icon-btn active">FR</button>
       <button id="btnEN" class="icon-btn">EN</button>
     </div>
   </div>
 </header>
 
-<!-- ===== Tab 1: INTRO ===== -->
+<!-- ===== TAB 1: INTRO ===== -->
 <section id="tab-intro" class="tab active" aria-labelledby="navIntro">
   <section class="hero">
     <div class="kicker" data-i="kicker">ASSISTANT LITTÉRATURE</div>
@@ -216,10 +220,10 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
   </section>
 </section>
 
-<!-- ===== Tab 2: APPLICATION ===== -->
+<!-- ===== TAB 2: APPLICATION ===== -->
 <section id="tab-app" class="tab" aria-labelledby="navApp">
   <div class="section">
-    <!-- Subtab 1: DEMANDE -->
+    <!-- SUBTAB 1: DEMANDE -->
     <section id="app-step1" class="app-sub active">
       <div class="cards">
         <section class="block open">
@@ -239,19 +243,16 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
                   <option value="Adenovirus">Adénovirus</option>
                 </select>
               </div>
-
               <!-- Q2 -->
               <div id="domainWrap" class="hide">
                 <label data-i="q2">Quel est le domaine du pharmaceutique que vous souhaitez explorer ?</label>
                 <select id="domainSelect"></select>
               </div>
-
-              <!-- Q3 (contextuel) -->
+              <!-- Q3 -->
               <div id="detailWrap" class="hide">
                 <label><strong id="detailTitle" data-i="detailTitleGeneric">Spécifiez votre besoin</strong></label>
                 <div id="detailChoices" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))"></div>
               </div>
-
               <div id="confirmWrap" class="hide">
                 <div class="panel" style="border:1px dashed var(--border)">
                   <p id="confirmText" class="muted"></p>
@@ -266,7 +267,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
       </div>
     </section>
 
-    <!-- Subtab 2: DOCUMENTS & LITTÉRATURE -->
+    <!-- SUBTAB 2: DOCUMENTS & LITTERATURE -->
     <section id="app-step2" class="app-sub">
       <div class="cards">
         <section class="block open">
@@ -277,7 +278,6 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
             </div>
           </header>
           <div class="inner">
-            <!-- Question documents internes -->
             <div class="grid">
               <div>
                 <label data-i="qDocs">Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?</label>
@@ -298,7 +298,6 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
                 <div class="file-list" id="filesList"></div>
               </div>
 
-              <!-- Question recherche littérature -->
               <div style="margin-top:10px">
                 <label data-i="qLit">Souhaitez-vous une recherche dans la littérature selon votre domaine ?</label>
                 <div class="controls">
@@ -315,7 +314,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
         </section>
       </div>
 
-      <!-- Modal résultats Europe PMC -->
+      <!-- Modal Europe PMC -->
       <div id="litModal" class="modal" aria-hidden="true">
         <div class="modal-card">
           <header>
@@ -330,7 +329,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
       </div>
     </section>
 
-    <!-- Subtab 3: ANALYSE APPROFONDIE (ciblée) -->
+    <!-- SUBTAB 3: ANALYSE -->
     <section id="app-step3" class="app-sub">
       <div class="cards">
         <section class="block open">
@@ -342,7 +341,6 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
           </header>
           <div class="inner">
             <div class="workspace">
-              <!-- Sidebar: sources -->
               <aside class="sidebar">
                 <h4 data-i="internalSources">Sources internes</h4>
                 <div id="docList"></div>
@@ -353,21 +351,19 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
                 <div id="sdChips" class="chips"></div>
               </aside>
 
-              <!-- Main panels -->
               <div class="mainpanel">
                 <div class="panel">
                   <h3 data-i="overview">Vue d’ensemble</h3>
                   <div id="overview"></div>
                 </div>
 
-                <!-- Contenu ciblé par sous-domaine -->
                 <div id="sdResults"></div>
 
                 <div class="controls" style="margin-top:6px">
                   <button class="btn primary" id="exportPdf" data-i="exportPdfBtn">Exporter le PDF</button>
                 </div>
               </div>
-            </div> <!-- /workspace -->
+            </div>
           </div>
         </section>
       </div>
@@ -375,7 +371,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
   </div>
 </section>
 
-<!-- ===== Tab 3: CONTACT ===== -->
+<!-- ===== TAB 3: CONTACT ===== -->
 <section id="tab-contact" class="tab" aria-labelledby="navContact">
   <section class="section">
     <div class="cards">
@@ -417,39 +413,33 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
   </div>
 </footer>
 
+<!-- jsPDF -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
 <script>
-/* ========= Particles ========= */
+/* ===== Particles (visible) ===== */
 const cv=document.getElementById('particlesCanvas'),cx=cv.getContext('2d');let W,H,PTS=[];
 function size(){W=cv.width=innerWidth;H=cv.height=innerHeight} size(); addEventListener('resize',size);
 function R(a,b){return a+Math.random()*(b-a)}
-function spawn(){return{x:R(0,W),y:R(0,H),vx:R(-.05,.05),vy:-R(.02,.07),r:R(1.2,3.0),t:R(0,6.28),tw:R(.8,1.3)}}
-PTS=Array.from({length:Math.min(300,Math.round((W*H)/12000))},spawn);
+function spawn(){return{x:R(0,W),y:R(0,H),vx:R(-.05,.05),vy:-R(.02,.07),r:R(1.3,3.1),t:R(0,6.28),tw:R(.8,1.3)}}
+PTS=Array.from({length:Math.min(320,Math.round((W*H)/12000))},spawn);
 (function loop(){requestAnimationFrame(loop);cx.clearRect(0,0,W,H);
-for(const p of PTS){p.t+=.016;const a=.18+.5*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.vx+Math.sin(p.t*.35)*.03;p.y+=p.vy;
+for(const p of PTS){p.t+=.016;const a=.2+.5*Math.abs(Math.sin(p.t))*p.tw;p.x+=p.vx+Math.sin(p.t*.35)*.03;p.y+=p.vy;
 if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
 const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(20+38*mix), g=Math.round(170+70*(1-mix)), b=Math.round(255-30*(1-mix));
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(${r},${g},${b},${a})`;cx.fill();}})();
 
-/* ========= Top menu & gradient transition ========= */
-const menuBtn=document.getElementById('menuBtn'); 
-const menuDD=document.getElementById('menuDropdown'); 
-const xfade=document.getElementById('xfade');
-
+/* ===== Menu hamburger + tabs (corrigé) ===== */
+const menuBtn=document.getElementById('menuBtn');
+const menuDD=document.getElementById('menuDropdown');
 function openMenu(){menuDD.classList.add('open');menuBtn.setAttribute('aria-expanded','true');}
 function closeMenu(){menuDD.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}
-
-menuBtn.addEventListener('click',(e)=>{
-  e.preventDefault();
-  e.stopPropagation();
-  menuDD.classList.toggle('open');
-  menuBtn.setAttribute('aria-expanded', menuDD.classList.contains('open'));
-});
-document.addEventListener('click',(e)=>{
-  if (!menuDD.contains(e.target) && !menuBtn.contains(e.target)) closeMenu();
-});
+menuBtn.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();menuDD.classList.toggle('open');menuBtn.setAttribute('aria-expanded',menuDD.classList.contains('open'));});
+document.addEventListener('click',(e)=>{ if(!menuDD.contains(e.target) && !menuBtn.contains(e.target)) closeMenu(); });
 document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeMenu(); });
+document.getElementById('openMenuCta').onclick=(e)=>{e.stopPropagation();openMenu();};
+document.getElementById('openMenuLearn').onclick=(e)=>{e.stopPropagation();openMenu();};
 
+const xfade=document.getElementById('xfade');
 const tabs={intro:document.getElementById('tab-intro'),app:document.getElementById('tab-app'),contact:document.getElementById('tab-contact')};
 function showTab(name){
   xfade.classList.add('show');
@@ -458,14 +448,12 @@ function showTab(name){
     (tabs[name]||tabs.intro).classList.add('active');
     closeMenu();
     window.scrollTo({top:0,behavior:'auto'});
-    setTimeout(()=>xfade.classList.remove('show'), 260);
+    setTimeout(()=>xfade.classList.remove('show'),260);
   },160);
 }
 menuDD.querySelectorAll('.menu-item').forEach(it=>it.addEventListener('click',()=>showTab(it.dataset.tab)));
-document.getElementById('openMenuCta').onclick = (e)=>{ e.stopPropagation(); openMenu(); };
-document.getElementById('openMenuLearn').onclick = (e)=>{ e.stopPropagation(); openMenu(); };
 
-/* ========= Subtabs (Application) with gradient ========= */
+/* ===== Subtabs (Application) ===== */
 const appSubs={ step1:document.getElementById('app-step1'), step2:document.getElementById('app-step2'), step3:document.getElementById('app-step3') };
 function showAppSub(key){
   xfade.classList.add('show');
@@ -477,91 +465,83 @@ function showAppSub(key){
   },160);
 }
 
-/* ========= i18n (global) ========= */
+/* ===== i18n ===== */
 const I={
-  fr:{
-    brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
-    kicker:"ASSISTANT LITTÉRATURE",
-    heroTitle:"No learning curve,<br/>no complications",
-    heroSub:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
-    introP1:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
-    ctaOpenMenu:"Ouvrir le menu",ctaOpenLearn:"Que puis-je faire ?",
-    t1Badge:"Upload",t1Title:"Documents internes",t1Text:"PDF, DOCX, TXT — extraction locale, aucune donnée envoyée.",
-    t2Title:"Recherche d’articles",t2Text:"Fenêtre temporelle, mots-clés, open access. Liens PubMed.",
-    t3Title:"Synthèse des contenus",t3Text:"Résumé automatique (Hugging Face) des abstracts / texte intégral.",
-    t4Title:"Export documentaire",t4Text:"Protocole documentaire structuré (sans paramètres expérimentaux).",
-    overlineStep1:"ANALYSE DE LA DEMANDE",step1Title:"Votre besoin",
-    q1:"Quelle biomolécule voulez-vous produire ?",selectPlaceholder:"— Sélectionner —",
-    q2:"Quel est le domaine du pharmaceutique que vous souhaitez explorer ?",
-    detailTitleGeneric:"Spécifiez votre besoin",goNext:"Passer à la suite",
-    overlineStep2:"DOCUMENTS & LITTÉRATURE",step2Title:"Sources",qDocs:"Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?",
-    yes:"Oui",no:"Non",dropTitle:"Déposez vos fichiers ici",dropHint:"ou cliquez pour sélectionner",dropTypes:"Acceptés : PDF, DOCX, TXT",
-    qLit:"Souhaitez-vous une recherche dans la littérature selon votre domaine ?",goAnalysis:"Aller à l’analyse",
-    litResultsTitle:"Résultats littérature",close:"Fermer",runContentAnalysis:"Lancer l’analyse du contenu",
-    overlineStep3:"ANALYSE APPROFONDIE",step3Title:"Espace d’analyse ciblée",
-    internalSources:"Sources internes",selectedArticles:"Articles sélectionnés",activeSubdomains:"Sous-domaines actifs",
-    overview:"Vue d’ensemble",exportPdfBtn:"Exporter le PDF",
-    contactTitle:"Discutons de votre projet",overlineContact:"PRISE DE CONTACT",
-    contactIntro:"Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).",
-    labelName:"Nom",labelOrg:"Société",labelEmail:"Email",labelMsg:"Message",sendEmail:"Envoyer par e-mail",
-    footerNote:"Europe PMC / PubMed — Hugging Face (optionnel). Aucune instruction expérimentale.",
-    searching:"Recherche…", epmcError:"Erreur Europe PMC", open:"Ouvrir", selectAtLeastOne:"Sélectionnez au moins un article.",
-    ctx:"Contexte", noActiveSD:"Aucun sous-domaine actif.",
-    docsInternal:"Documents internes", literature:"Littérature (Europe PMC / PubMed)", targetedSummary:"Résumé ciblé (~1 page)",
-    pdfTitle:"Protocole documentaire — Analyse ciblée", pdfOverview:"Vue d’ensemble", pdfEvidences:"Évidences",
-    dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytique", dom_qa:"Assurance Qualité", dom_cmc:"CMC",
-    sdtitle_downstream:"Spécifiez les sous-domaines Downstream",
-    sdtitle_upstream:"Spécifiez les sous-domaines Upstream",
-    sdtitle_fill:"Spécifiez les sous-domaines Fill & Finish",
-    sdtitle_analytics:"Spécifiez les sous-domaines Analytiques",
-    sdtitle_qa:"Spécifiez les sous-domaines Assurance Qualité",
-    sdtitle_cmc:"Spécifiez les sous-domaines CMC",
-    biomolecule:"Biomolécule", domain:"Domaine"
+  fr:{brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
+      kicker:"ASSISTANT LITTÉRATURE",heroTitle:"No learning curve,<br/>no complications",heroSub:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
+      introP1:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
+      ctaOpenMenu:"Ouvrir le menu",ctaOpenLearn:"Que puis-je faire ?",t1Badge:"Upload",t1Title:"Documents internes",t1Text:"PDF, DOCX, TXT — extraction locale, aucune donnée envoyée.",
+      t2Title:"Recherche d’articles",t2Text:"Fenêtre temporelle, mots-clés, open access. Liens PubMed.",t3Title:"Synthèse des contenus",t3Text:"Résumé automatique (Hugging Face) des abstracts / texte intégral.",
+      t4Title:"Export documentaire",t4Text:"Protocole documentaire structuré (sans paramètres expérimentaux).",
+      overlineStep1:"ANALYSE DE LA DEMANDE",step1Title:"Votre besoin",q1:"Quelle biomolécule voulez-vous produire ?",selectPlaceholder:"— Sélectionner —",
+      q2:"Quel est le domaine du pharmaceutique que vous souhaitez explorer ?",detailTitleGeneric:"Spécifiez votre besoin",goNext:"Passer à la suite",
+      overlineStep2:"DOCUMENTS & LITTÉRATURE",step2Title:"Sources",qDocs:"Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?",
+      yes:"Oui",no:"Non",dropTitle:"Déposez vos fichiers ici",dropHint:"ou cliquez pour sélectionner",dropTypes:"Acceptés : PDF, DOCX, TXT",
+      qLit:"Souhaitez-vous une recherche dans la littérature selon votre domaine ?",goAnalysis:"Aller à l’analyse",
+      litResultsTitle:"Résultats littérature",close:"Fermer",runContentAnalysis:"Lancer l’analyse du contenu",
+      overlineStep3:"ANALYSE APPROFONDIE",step3Title:"Espace d’analyse ciblée",internalSources:"Sources internes",selectedArticles:"Articles sélectionnés",
+      activeSubdomains:"Sous-domaines actifs",overview:"Vue d’ensemble",exportPdfBtn:"Exporter le PDF",
+      contactTitle:"Discutons de votre projet",overlineContact:"PRISE DE CONTACT",
+      contactIntro:"Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).",
+      labelName:"Nom",labelOrg:"Société",labelEmail:"Email",labelMsg:"Message",sendEmail:"Envoyer par e-mail",
+      footerNote:"Europe PMC / PubMed — Hugging Face (optionnel). Aucune instruction expérimentale.",
+      searching:"Recherche…", epmcError:"Erreur Europe PMC", open:"Ouvrir", selectAtLeastOne:"Sélectionnez au moins un article.",
+      ctx:"Contexte", noActiveSD:"Aucun sous-domaine actif.",
+      docsInternal:"Documents internes", literature:"Littérature (Europe PMC / PubMed)", targetedSummary:"Résumé ciblé (~1 page)",
+      pdfTitle:"Protocole documentaire — Analyse ciblée", pdfOverview:"Vue d’ensemble", pdfEvidences:"Évidences",
+      dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytique", dom_qa:"Assurance Qualité", dom_cmc:"CMC",
+      sdtitle_downstream:"Spécifiez les sous-domaines Downstream", sdtitle_upstream:"Spécifiez les sous-domaines Upstream", sdtitle_fill:"Spécifiez les sous-domaines Fill & Finish",
+      sdtitle_analytics:"Spécifiez les sous-domaines Analytiques", sdtitle_qa:"Spécifiez les sous-domaines Assurance Qualité", sdtitle_cmc:"Spécifiez les sous-domaines CMC",
+      biomolecule:"Biomolécule", domain:"Domaine"
   },
-  en:{
-    brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
-    kicker:"LITERATURE ASSISTANT",
-    heroTitle:"No learning curve,<br/>no complications",
-    heroSub:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
-    introP1:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
-    ctaOpenMenu:"Open menu",ctaOpenLearn:"What can I do?",
-    t1Badge:"Upload",t1Title:"Internal documents",t1Text:"PDF, DOCX, TXT — local extraction, no data sent.",
-    t2Title:"Article search",t2Text:"Time window, keywords, open access. PubMed links.",
-    t3Title:"Content synthesis",t3Text:"Automatic summaries (Hugging Face) of abstracts / full text.",
-    t4Title:"PDF export",t4Text:"Structured documentary protocol (no experimental parameters).",
-    overlineStep1:"REQUEST ANALYSIS",step1Title:"Your need",
-    q1:"Which biomolecule do you want to produce?",selectPlaceholder:"— Select —",
-    q2:"Which pharmaceutical domain do you want to explore?",
-    detailTitleGeneric:"Specify your need",goNext:"Continue",
-    overlineStep2:"DOCUMENTS & LITERATURE",step2Title:"Sources",qDocs:"Do you have internal documents I can use to design the method?",
-    yes:"Yes",no:"No",dropTitle:"Drop your files here",dropHint:"or click to select",dropTypes:"Accepted: PDF, DOCX, TXT",
-    qLit:"Would you like a literature search based on your domain?",goAnalysis:"Go to analysis",
-    litResultsTitle:"Literature results",close:"Close",runContentAnalysis:"Run content analysis",
-    overlineStep3:"IN-DEPTH ANALYSIS",step3Title:"Targeted analysis workspace",
-    internalSources:"Internal sources",selectedArticles:"Selected articles",activeSubdomains:"Active subdomains",
-    overview:"Overview",exportPdfBtn:"Export PDF",
-    contactTitle:"Let's discuss your project",overlineContact:"GET IN TOUCH",
-    contactIntro:"Our expert scientists can help accelerate your process development (adenoviral vectors, purification, analytics, documentation).",
-    labelName:"Name",labelOrg:"Company",labelEmail:"Email",labelMsg:"Message",sendEmail:"Send Email",
-    footerNote:"Europe PMC / PubMed — Hugging Face (optional). No experimental instructions.",
-    searching:"Searching…", epmcError:"Europe PMC error", open:"Open", selectAtLeastOne:"Select at least one article.",
-    ctx:"Context", noActiveSD:"No active subdomains.",
-    docsInternal:"Internal documents", literature:"Literature (Europe PMC / PubMed)", targetedSummary:"Targeted summary (~1 page)",
-    pdfTitle:"Documentary protocol — Targeted analysis", pdfOverview:"Overview", pdfEvidences:"Evidences",
-    dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytical", dom_qa:"Quality Assurance", dom_cmc:"CMC",
-    sdtitle_downstream:"Specify Downstream subdomains",
-    sdtitle_upstream:"Specify Upstream subdomains",
-    sdtitle_fill:"Specify Fill & Finish subdomains",
-    sdtitle_analytics:"Specify Analytical subdomains",
-    sdtitle_qa:"Specify Quality Assurance subdomains",
-    sdtitle_cmc:"Specify CMC subdomains",
-    biomolecule:"Biomolecule", domain:"Domain"
+  en:{brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
+      kicker:"LITERATURE ASSISTANT",heroTitle:"No learning curve,<br/>no complications",heroSub:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
+      introP1:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
+      ctaOpenMenu:"Open menu",ctaOpenLearn:"What can I do?",t1Badge:"Upload",t1Title:"Internal documents",t1Text:"PDF, DOCX, TXT — local extraction, no data sent.",
+      t2Title:"Article search",t2Text:"Time window, keywords, open access. PubMed links.",t3Title:"Content synthesis",t3Text:"Automatic summaries (Hugging Face) of abstracts / full text.",
+      t4Title:"PDF export",t4Text:"Structured documentary protocol (no experimental parameters).",
+      overlineStep1:"REQUEST ANALYSIS",step1Title:"Your need",q1:"Which biomolecule do you want to produce?",selectPlaceholder:"— Select —",
+      q2:"Which pharmaceutical domain do you want to explore?",detailTitleGeneric:"Specify your need",goNext:"Continue",
+      overlineStep2:"DOCUMENTS & LITERATURE",step2Title:"Sources",qDocs:"Do you have internal documents I can use to design the method?",
+      yes:"Yes",no:"No",dropTitle:"Drop your files here",dropHint:"or click to select",dropTypes:"Accepted: PDF, DOCX, TXT",
+      qLit:"Would you like a literature search based on your domain?",goAnalysis:"Go to analysis",
+      litResultsTitle:"Literature results",close:"Close",runContentAnalysis:"Run content analysis",
+      overlineStep3:"IN-DEPTH ANALYSIS",step3Title:"Targeted analysis workspace",internalSources:"Internal sources",selectedArticles:"Selected articles",
+      activeSubdomains:"Active subdomains",overview:"Overview",exportPdfBtn:"Export PDF",
+      contactTitle:"Let's discuss your project",overlineContact:"GET IN TOUCH",
+      contactIntro:"Our expert scientists can help accelerate your process development (adenoviral vectors, purification, analytics, documentation).",
+      labelName:"Name",labelOrg:"Company",labelEmail:"Email",labelMsg:"Message",sendEmail:"Send Email",
+      footerNote:"Europe PMC / PubMed — Hugging Face (optional). No experimental instructions.",
+      searching:"Searching…", epmcError:"Europe PMC error", open:"Open", selectAtLeastOne:"Select at least one article.",
+      ctx:"Context", noActiveSD:"No active subdomains.",
+      docsInternal:"Internal documents", literature:"Literature (Europe PMC / PubMed)", targetedSummary:"Targeted summary (~1 page)",
+      pdfTitle:"Documentary protocol — Targeted analysis", pdfOverview:"Overview", pdfEvidences:"Evidences",
+      dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytical", dom_qa:"Quality Assurance", dom_cmc:"CMC",
+      sdtitle_downstream:"Specify Downstream subdomains", sdtitle_upstream:"Specify Upstream subdomains", sdtitle_fill:"Specify Fill & Finish subdomains",
+      sdtitle_analytics:"Specify Analytical subdomains", sdtitle_qa:"Specify Quality Assurance subdomains", sdtitle_cmc:"Specify CMC subdomains",
+      biomolecule:"Biomolecule", domain:"Domain"
   }
 };
 function lang(){return document.documentElement.dataset.lang||'fr';}
 function t(k){const L=I[lang()]||I.fr;return (L&&L[k])||(I.fr[k]||k);}
 
-/* ========= Domains & Subdomains ========= */
+const btnFR=document.getElementById('btnFR'), btnEN=document.getElementById('btnEN');
+btnFR.onclick=()=>{setLang('fr');btnFR.classList.add('active');btnEN.classList.remove('active');};
+btnEN.onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
+
+function setLang(newLang){
+  document.documentElement.setAttribute('lang', newLang);
+  document.documentElement.dataset.lang = newLang;
+  for(const el of document.querySelectorAll('[data-i]')){
+    const v = t(el.dataset.i);
+    if(/<br\s*\/?>|&nbsp;/.test(v)) el.innerHTML = v; else el.textContent = v;
+  }
+  renderDomainOptions(state.request.domain);
+  if(state.request.domain){ buildDetailChoices(state.request.domain); }
+  updateMailto();
+}
+
+/* ===== Domains & Subdomains ===== */
 const SUBDOMAINS = {
   downstream: [
     {id:"clarification", fr:"Clarification", en:"Clarification"},
@@ -618,53 +598,7 @@ function L_dom(key){
   return k ? t(k) : (key||'-');
 }
 
-/* ========= Targeted taxonomy & scoring config ========= */
-const TA = (()=>{
-  const ADV = /adenovirus|adeno[-\s]?virus|ad5|ad26|adenoviral/i;
-  const SECBOOST = [[/(materials?|methods?|methodologie|méthode|purification)/i, 1.5],[/(results?|discussion)/i, 1.2]];
-  function cfg(must2, shouldGroups, exclude=[]){ return { must:[ADV, must2], should:shouldGroups, exclude, sectionBoost:SECBOOST }; }
-  return {
-    clarification: cfg(/clarifi|centrifug|depth\s?filter|floccul|turbid|harvest/i, [[/depth\s?filter|clari|centrifug/i, 1.2],[/floccul|polydadmac|turbidity/i, 1.0]], [/AAV|adeno[-\s]?associated|lentivirus|retrovirus/i]),
-    tff_df: cfg(/diafiltrat|ultra?filtrat|tff|membrane/i, [[/tff|ultra?filtrat/i, 1.5],[/diafiltrat|buffer exchange/i, 1.2],[/membrane|cassette|NMWL|cut[\s-]?off/i, 1.0]]),
-    capture_chrom: cfg(/chromatograph|column|resin|ligand/i, [[/affinity|AVB|heparin|monolith|membrane adsorber/i, 2.0],[/anion exchange|AEX|quaternary amine|QA/i, 1.5],[/cation exchange|CEX|carboxymethyl/i, 1.2]]),
-    polishing: cfg(/polish|ion\s?exchange|SEC|size exclusion|flow[-\s]?through/i, [[/AEX|CEX|multimodal|hydrophobic/i, 1.4],[/aggregate|host cell protein|DNA residual/i, 1.1]]),
-    formulation: cfg(/formulat|excipient|stability|buffer|surfactant|trehalose|sucrose/i, [[/pH|osmol|surfactant|polysorbate/i, 1.2],[/cryoprotect|stabilit/i, 1.1]]),
-    final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?μ?m/i, [[/bioburden|sterility/i, 1.2]]),
-    cell_bank_seed: cfg(/cell\sbank|seed\s?train|master\s?cell\sbank/i, [[/seed\s?train/i,1.2]]),
-    production_bioreactor: cfg(/bioreactor|bioréacteur|perfusion|fed[-\s]?batch|batch/i, [[/perfusion|ATF|TFF\s?loop/i,1.4]]),
-    infection_strategy: cfg(/infection|MOI|multiplicity/i, [[/MOI|infection strategy/i,1.4]]),
-    harvest_lysis: cfg(/harvest|lysi(s|e)|detergent|benzonase|nuclease/i, [[/harvest|clarification/i,1.1]]),
-    ipc: cfg(/in[-\s]?process|IPC|process control|en[-\s]?cours\sde\sprocédé/i, [[/specification|criteria/i,1.0]]),
-    handoff_ds: cfg(/handoff|tech\s?transfer|transfer|intermediate/i, [[/hold\s?time|storage/i,1.0]]),
-    hold_bulk: cfg(/hold\s?bulk|freeze\/?thaw|storage/i, [[/freeze|thaw|stability/i,1.2]]),
-    aseptic_fill: cfg(/aseptic|filling|vials?|syringes?|cartridges?/i, [[/grade\s?A|B|C|isolator/i,1.1]]),
-    ccc: cfg(/container|closure|compatib|extractable|leachable/i, [[/compatibility|E&L/i,1.2]]),
-    fit: cfg(/filter\s?integrity|bubble\s?point|diffusion/i, [[/integrity|sterile/i,1.2]]),
-    vi_aql: cfg(/visual|inspection|AQL/i, [[/defects?|cosmetic/i,1.0]]),
-    cold_chain: cfg(/cold\s?chain|refrigerated|frozen|label/i, [[/shipping|logistics/i,1.0]]),
-    identity: cfg(/identity|PCR|sequenc/i, [[/qPCR|sequencing/i,1.2]]),
-    potency: cfg(/potency|infectiv|titer|titre/i, [[/TCID50|plaque assay|FFU/i,1.4]]),
-    impurities: cfg(/impurit|HCP|host\s?cell\s?protein|residual\s?DNA/i, [[/BCA|PicoGreen|dd?PCR/i,1.2]]),
-    size_agg: cfg(/size|aggregation|DLS|TEM|SEC/i, [[/hydrodynamic|aggregate/i,1.1]]),
-    qPCR: cfg(/qPCR|ddPCR|quantitative\s?PCR/i, [[/primers?|amplicon/i,1.1]]),
-    stability_indic: cfg(/stability[-\s]?indicat|degradation|stress/i, [[/ICH|accelerated/i,1.2]]),
-    change_control: cfg(/change\s?control/i, [[/impact assessment|risk/i,1.1]]),
-    deviation_capa: cfg(/deviation|CAPA/i, [[/root cause|investigation/i,1.1]]),
-    training_qual: cfg(/training|qualification|competenc/i, [[/program|matrix/i,1.0]]),
-    gxp_docs: cfg(/GxP|GMP|documentation|SOP|record/i, [[/document control|revision/i,1.1]]),
-    suppliers: cfg(/supplier|vendor|qualification|material/i, [[/audit|certificate/i,1.0]]),
-    bmr: cfg(/batch\s?record|BMR|review/i, [[/deviation|reconciliation/i,1.0]]),
-    reg_strategy: cfg(/regulator|CTA|IND|BLA|dossier/i, [[/strategy|pathway/i,1.0]]),
-    control_strategy: cfg(/control\s?strategy|CPP|CQA|design\s?space/i, [[/risk assessment|QbD/i,1.2]]),
-    specs_release: cfg(/specifications?|release|acceptance/i, [[/limits?|criteria/i,1.1]]),
-    comparability: cfg(/comparab|process\s?change/i, [[/equivalence|pre|post/i,1.0]]),
-    ppq: cfg(/PPQ|process\s?validation|conformance/i, [[/protocol|report|runs?/i,1.1]]),
-    proc_char: cfg(/process\s?characteri[sz]ation|DoE|design of experiments/i, [[/parameters?|responses?/i,1.1]])
-  };
-})();
-
-/* ========= DOM refs ========= */
-const btnFR=document.getElementById('btnFR'),btnEN=document.getElementById('btnEN');
+/* ===== DOM refs & State ===== */
 const bioSelect=document.getElementById('bioSelect');
 const domainWrap=document.getElementById('domainWrap');
 const domainSelect=document.getElementById('domainSelect');
@@ -675,34 +609,9 @@ const confirmWrap=document.getElementById('confirmWrap');
 const confirmText=document.getElementById('confirmText');
 const goToDocs=document.getElementById('goToDocs');
 
-/* ========= State ========= */
-const state={
-  request:{ biomolecule:null, domain:null, details:[] },
-  uploads:[],
-  literature:{ results:[], selected:[] },
-  analysis:{ targeted:{} }
-};
+const state={ request:{ biomolecule:null, domain:null, details:[] }, uploads:[], literature:{results:[],selected:[]}, analysis:{targeted:{}} };
 
-/* ========= Language switching ========= */
-function setLang(newLang){
-  document.documentElement.setAttribute('lang', newLang);
-  document.documentElement.dataset.lang = newLang;
-
-  for(const el of document.querySelectorAll('[data-i]')){
-    const v = t(el.dataset.i);
-    if(/<br\s*\/?>|&nbsp;/.test(v)) el.innerHTML = v; else el.textContent = v;
-  }
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  renderDomainOptions(state.request.domain);
-
-  if (state.request.domain) {
-    buildDetailChoices(state.request.domain);
-    if ((state.request.details||[]).length) confirmWrap.classList.remove('hide');
-  }
-
-  updateMailto();
-}
+/* ===== Language initialization ===== */
 function renderDomainOptions(selectedKey){
   const options = [
     {key:'', label: t('selectPlaceholder')},
@@ -723,16 +632,14 @@ function renderDomainOptions(selectedKey){
     domainSelect.appendChild(opt);
   });
 }
-btnFR.onclick=()=>{setLang('fr');btnFR.classList.add('active');btnEN.classList.remove('active');};
-btnEN.onclick=()=>{setLang('en');btnEN.classList.add('active');btnFR.classList.remove('active');};
 window.addEventListener('DOMContentLoaded',()=>{
-  // Force initial tab state (intro visible only)
-  Object.values({intro:document.getElementById('tab-intro'),app:document.getElementById('tab-app'),contact:document.getElementById('tab-contact')})
-    .forEach((t,i)=>t.classList.toggle('active', i===0));
+  // Force initial tabs state
+  Object.values(tabs).forEach(t=>t.classList.remove('active'));
+  tabs.intro.classList.add('active');
   setLang('fr');
 });
 
-/* ========= Step 1 logic ========= */
+/* ===== Step 1 logic ===== */
 bioSelect.addEventListener('change',()=>{
   state.request.biomolecule = bioSelect.value || null;
   domainWrap.classList.remove('hide');
@@ -781,14 +688,13 @@ function buildDetailChoices(domainKey){
   });
 
   if((state.request.details||[]).length){
-    const evt = new Event('change');
     const first = detailChoices.querySelector('input');
-    if(first) first.dispatchEvent(evt);
+    if(first){ first.dispatchEvent(new Event('change')); }
   }
 }
 goToDocs.addEventListener('click',()=>{ showAppSub('step2'); });
 
-/* ========= Step 2: Documents & Literature ========= */
+/* ===== Step 2: Documents & Literature ===== */
 const btnDocYes=document.getElementById('btnDocYes'), btnDocNo=document.getElementById('btnDocNo');
 const uploaderWrap=document.getElementById('uploaderWrap'); const drop=document.getElementById('drop'); const input=document.getElementById('fileInput'); const filesList=document.getElementById('filesList');
 btnDocYes.onclick=()=>{uploaderWrap.classList.remove('hide');};
@@ -809,7 +715,7 @@ function handleFiles(files){
   });
 }
 
-/* === Literature === */
+/* Literature (Europe PMC via AllOrigins) */
 const btnLitYes=document.getElementById('btnLitYes'), btnLitNo=document.getElementById('btnLitNo');
 const litModal=document.getElementById('litModal'), closeLitModal=document.getElementById('closeLitModal'), litResults=document.getElementById('litResults');
 btnLitYes.onclick=()=>{ openLitModalAndSearch(); };
@@ -870,12 +776,11 @@ function renderLitResults(){
   });
 }
 
-const runLitAnalysis=document.getElementById('runLitAnalysis');
-runLitAnalysis.onclick = async ()=>{
+document.getElementById('runLitAnalysis').onclick = async ()=>{
   const chosen = state.literature.results.filter(x=>x.selected);
   if(!chosen.length){ alert(t('selectAtLeastOne')); return; }
 
-  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // remplace si dispo
+  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // optionnel
   const HF_MODEL = "facebook/bart-large-cnn";
   async function summarize(text){
     if(!HF_TOKEN.startsWith('hf_')) return (text||'').slice(0,1200);
@@ -911,45 +816,7 @@ runLitAnalysis.onclick = async ()=>{
 
 document.getElementById('toWorkspace').onclick = ()=>{ buildWorkspace(); showAppSub('step3'); };
 
-/* ========= Workspace (step3) ========= */
-function buildWorkspace(){
-  const docList=document.getElementById('docList'); docList.innerHTML='';
-  state.uploads.forEach(f=>{
-    const it=document.createElement('div'); it.className='source-item';
-    it.innerHTML=`<input type="checkbox" checked style="width:auto"><span>${esc(f.name||'Document')}</span>`;
-    docList.appendChild(it);
-  });
-
-  const artList=document.getElementById('artList'); artList.innerHTML='';
-  (state.literature.selected||[]).forEach((a,i)=>{
-    const it=document.createElement('div'); it.className='source-item';
-    it.innerHTML=`<input type="checkbox" checked data-i="${i}" style="width:auto"><span>${esc(a.meta.title||'Article')}</span>`;
-    artList.appendChild(it);
-  });
-
-  const chips = document.getElementById('sdChips'); chips.innerHTML='';
-  const ids = state.request.details||[];
-  const L = (id)=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return (lang()==='fr'?f.fr:f.en); } return id; };
-  ids.forEach(id=>{
-    const chip=document.createElement('button'); chip.className='chip active'; chip.dataset.id=id;
-    chip.textContent = L(id);
-    chip.onclick=()=>{ chip.classList.toggle('active'); renderTargeted(); };
-    chips.appendChild(chip);
-  });
-
-  const ov=document.getElementById('overview');
-  const d=state.request;
-  ov.innerHTML = `
-    <div class="pub-card">
-      <div><strong>${t('ctx')}</strong></div>
-      <div class="muted">${t('biomolecule')}: ${esc(d.biomolecule||'-')} · ${t('domain')}: ${esc(L_dom(d.domain)||'-')}</div>
-    </div>
-  `;
-
-  targetedAnalyze().then(renderTargeted);
-}
-
-/* ========= Targeted Analyzer ========= */
+/* ===== Targeted analysis engine ===== */
 const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa)\b/gi;
 function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
 function windowsFromText(text, win=800, overlap=200){
@@ -1008,7 +875,6 @@ function buildPatternList(sdId){
 async function extractTextFromFile(f){
   const buf=await f.arrayBuffer(); const ext=f.name.toLowerCase().split('.').pop();
   if(ext==='pdf'){
-    const pdfjsLib=window['pdfjsLib']; pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     const pdf=await pdfjsLib.getDocument({data:buf}).promise; let out='';
     for(let i=1;i<=pdf.numPages;i++){
       const page=await pdf.getPage(i); const c=await page.getTextContent();
@@ -1023,6 +889,50 @@ async function extractTextFromFile(f){
   }
   return '';
 }
+const TA=(()=>{ // taxonomy config
+  const ADV = /adenovirus|adeno[-\s]?virus|ad5|ad26|adenoviral/i;
+  const SECBOOST = [[/(materials?|methods?|méthodes?)/i, 1.5],[/(results?|discussion)/i, 1.2]];
+  function cfg(must2, shouldGroups, exclude=[]){ return { must:[ADV, must2], should:shouldGroups, exclude, sectionBoost:SECBOOST }; }
+  return {
+    clarification: cfg(/clarifi|centrifug|depth\s?filter|floccul|turbid|harvest/i, [[/depth\s?filter|clari|centrifug/i, 1.2],[/floccul|polydadmac|turbidity/i, 1.0]], [/AAV|adeno[-\s]?associated|lentivirus|retrovirus/i]),
+    tff_df: cfg(/diafiltrat|ultra?filtrat|tff|membrane/i, [[/tff|ultra?filtrat/i, 1.5],[/diafiltrat|buffer exchange/i, 1.2],[/membrane|cassette|NMWL|cut[\s-]?off/i, 1.0]]),
+    capture_chrom: cfg(/chromatograph|column|resin|ligand/i, [[/affinity|AVB|heparin|monolith|membrane adsorber/i, 2.0],[/anion exchange|AEX|quaternary amine|QA/i, 1.5],[/cation exchange|CEX|carboxymethyl/i, 1.2]]),
+    polishing: cfg(/polish|ion\s?exchange|SEC|size exclusion|flow[-\s]?through/i, [[/AEX|CEX|multimodal|hydrophobic/i, 1.4],[/aggregate|host cell protein|DNA residual/i, 1.1]]),
+    formulation: cfg(/formulat|excipient|stability|buffer|surfactant|trehalose|sucrose/i, [[/pH|osmol|surfactant|polysorbate/i, 1.2],[/cryoprotect|stabilit/i, 1.1]]),
+    final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?μ?m/i, [[/bioburden|sterility/i, 1.2]]),
+    cell_bank_seed: cfg(/cell\sbank|seed\s?train|master\s?cell\sbank/i, [[/seed\s?train/i,1.2]]),
+    production_bioreactor: cfg(/bioreactor|bioréacteur|perfusion|fed[-\s]?batch|batch/i, [[/perfusion|ATF|TFF\s?loop/i,1.4]]),
+    infection_strategy: cfg(/infection|MOI|multiplicity/i, [[/MOI|infection strategy/i,1.4]]),
+    harvest_lysis: cfg(/harvest|lysi(s|e)|detergent|benzonase|nuclease/i, [[/harvest|clarification/i,1.1]]),
+    ipc: cfg(/in[-\s]?process|IPC|process control|en[-\s]?cours\sde\sprocédé/i, [[/specification|criteria/i,1.0]]),
+    handoff_ds: cfg(/handoff|tech\s?transfer|transfer|intermediate/i, [[/hold\s?time|storage/i,1.0]]),
+    hold_bulk: cfg(/hold\s?bulk|freeze\/?thaw|storage/i, [[/freeze|thaw|stability/i,1.2]]),
+    aseptic_fill: cfg(/aseptic|filling|vials?|syringes?|cartridges?/i, [[/grade\s?A|B|C|isolator/i,1.1]]),
+    ccc: cfg(/container|closure|compatib|extractable|leachable/i, [[/compatibility|E&L/i,1.2]]),
+    fit: cfg(/filter\s?integrity|bubble\s?point|diffusion/i, [[/integrity|sterile/i,1.2]]),
+    vi_aql: cfg(/visual|inspection|AQL/i, [[/defects?|cosmetic/i,1.0]]),
+    cold_chain: cfg(/cold\s?chain|refrigerated|frozen|label/i, [[/shipping|logistics/i,1.0]]),
+    identity: cfg(/identity|PCR|sequenc/i, [[/qPCR|sequencing/i,1.2]]),
+    potency: cfg(/potency|infectiv|titer|titre/i, [[/TCID50|plaque assay|FFU/i,1.4]]),
+    impurities: cfg(/impurit|HCP|host\s?cell\s?protein|residual\s?DNA/i, [[/BCA|PicoGreen|dd?PCR/i,1.2]]),
+    size_agg: cfg(/size|aggregation|DLS|TEM|SEC/i, [[/hydrodynamic|aggregate/i,1.1]]),
+    qPCR: cfg(/qPCR|ddPCR|quantitative\s?PCR/i, [[/primers?|amplicon/i,1.1]]),
+    stability_indic: cfg(/stability[-\s]?indicat|degradation|stress/i, [[/ICH|accelerated/i,1.2]]),
+    change_control: cfg(/change\s?control/i, [[/impact assessment|risk/i,1.1]]),
+    deviation_capa: cfg(/deviation|CAPA/i, [[/root cause|investigation/i,1.1]]),
+    training_qual: cfg(/training|qualification|competenc/i, [[/program|matrix/i,1.0]]),
+    gxp_docs: cfg(/GxP|GMP|documentation|SOP|record/i, [[/document control|revision/i,1.1]]),
+    suppliers: cfg(/supplier|vendor|qualification|material/i, [[/audit|certificate/i,1.0]]),
+    bmr: cfg(/batch\s?record|BMR|review/i, [[/deviation|reconciliation/i,1.0]]),
+    reg_strategy: cfg(/regulator|CTA|IND|BLA|dossier/i, [[/strategy|pathway/i,1.0]]),
+    control_strategy: cfg(/control\s?strategy|CPP|CQA|design\s?space/i, [[/risk assessment|QbD/i,1.2]]),
+    specs_release: cfg(/specifications?|release|acceptance/i, [[/limits?|criteria/i,1.1]]),
+    comparability: cfg(/comparab|process\s?change/i, [[/equivalence|pre|post/i,1.0]]),
+    ppq: cfg(/PPQ|process\s?validation|conformance/i, [[/protocol|report|runs?/i,1.1]]),
+    proc_char: cfg(/process\s?characteri[sz]ation|DoE|design of experiments/i, [[/parameters?|responses?/i,1.1]])
+  };
+})();
+
 async function targetedAnalyze(){
   state.analysis.targeted = {};
   const sdIds = state.request.details||[];
@@ -1098,7 +1008,7 @@ async function targetedAnalyze(){
   }
 }
 
-/* ========= Render targeted results ========= */
+/* ===== Render workspace ===== */
 function renderTargeted(){
   const cont=document.getElementById('sdResults'); cont.innerHTML='';
   const chips=[...document.querySelectorAll('#sdChips .chip')];
@@ -1164,8 +1074,44 @@ function renderTargeted(){
     cont.appendChild(sec);
   });
 }
+function buildWorkspace(){
+  const docList=document.getElementById('docList'); docList.innerHTML='';
+  state.uploads.forEach(f=>{
+    const it=document.createElement('div'); it.className='source-item';
+    it.innerHTML=`<input type="checkbox" checked style="width:auto"><span>${esc(f.name||'Document')}</span>`;
+    docList.appendChild(it);
+  });
 
-/* ========= Export PDF (i18n) ========= */
+  const artList=document.getElementById('artList'); artList.innerHTML='';
+  (state.literature.selected||[]).forEach((a,i)=>{
+    const it=document.createElement('div'); it.className='source-item';
+    it.innerHTML=`<input type="checkbox" checked data-i="${i}" style="width:auto"><span>${esc(a.meta.title||'Article')}</span>`;
+    artList.appendChild(it);
+  });
+
+  const chips = document.getElementById('sdChips'); chips.innerHTML='';
+  const ids = state.request.details||[];
+  const L = (id)=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return (lang()==='fr'?f.fr:f.en); } return id; };
+  ids.forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip active'; chip.dataset.id=id;
+    chip.textContent = L(id);
+    chip.onclick=()=>{ chip.classList.toggle('active'); renderTargeted(); };
+    chips.appendChild(chip);
+  });
+
+  const ov=document.getElementById('overview');
+  const d=state.request;
+  ov.innerHTML = `
+    <div class="pub-card">
+      <div><strong>${t('ctx')}</strong></div>
+      <div class="muted">${t('biomolecule')}: ${esc(d.biomolecule||'-')} · ${t('domain')}: ${esc(L_dom(d.domain)||'-')}</div>
+    </div>
+  `;
+
+  targetedAnalyze().then(renderTargeted);
+}
+
+/* ===== Export PDF ===== */
 document.getElementById('exportPdf').onclick = async ()=>{
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({unit:'pt',format:'a4'});
@@ -1178,8 +1124,7 @@ document.getElementById('exportPdf').onclick = async ()=>{
   let y=M+74;
 
   y = putHeading(pdf, t('pdfOverview'), y, 13, '#3A49FF', M,W,H);
-  const d=state.request;
-  const domainLabel = L_dom(d.domain||'downstream');
+  const d=state.request; const domainLabel = L_dom(d.domain||'downstream');
   y=putParagraph(pdf,`${t('biomolecule')}: ${d.biomolecule||'-'} · ${t('domain')}: ${domainLabel||'-'}`,y,M,W,H,11);
 
   const activeIds = (state.request.details||[]);
@@ -1202,13 +1147,13 @@ document.getElementById('exportPdf').onclick = async ()=>{
   pdf.save((lang()==='fr'?'protocole-documentaire-analyse-ciblee.pdf':'documentary-protocol-targeted.pdf'));
 };
 function setText(pdf,hex,size,weight){const [r,g,b]=hexToRGB(hex); pdf.setTextColor(r,g,b); pdf.setFont('helvetica', weight==='bold'?'bold':'normal'); pdf.setFontSize(size);}
-function putHeading(pdf,text,y,size,color,M,W,H){ if(y + size + 18 > H - M){ pdf.addPage(); y=M; } const [r,g,b]=hexToRGB(color); pdf.setTextColor(r,g,b); pdf.setFont('helvetica','bold'); pdf.setFontSize(size); pdf.text(text,M,y); pdf.setDrawColor(210,210,210); pdf.setLineWidth(.6); pdf.line(M,y+6,W-M,y+6); return y+18;}
+function putHeading(pdf,text,y,size,color,M,W,H){ if(y + size + 18 > H - M){ pdf.addPage(); y=M; } const [r,g,b]=hexToRGB(color); pdf.setTextColor(r,g<b?0:g,b); pdf.setTextColor(r,g,b); pdf.setFont('helvetica','bold'); pdf.setFontSize(size); pdf.text(text,M,y); pdf.setDrawColor(210,210,210); pdf.setLineWidth(.6); pdf.line(M,y+6,W-M,y+6); return y+18;}
 function putParagraph(pdf,text,y,M,W,H,size=11){ pdf.setTextColor(0,0,0); pdf.setFont('helvetica','normal'); pdf.setFontSize(size); const chunks=pdf.splitTextToSize(text,W-2*M); for(const ln of chunks){ if(y>H-M){ pdf.addPage(); y=M; } pdf.text(ln,M,y); y+=14; } return y+4;}
 function hexToRGB(hex){const h=hex.replace('#','');const n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];}
 function blobToDataURL(blob){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(blob);});}
 document.getElementById('year').textContent=new Date().getFullYear();
 
-/* ========= Contact mailto ========= */
+/* ===== Contact mailto ===== */
 function updateMailto(){
   const name = document.getElementById('c_name').value || '';
   const org  = document.getElementById('c_org').value || '';
@@ -1220,10 +1165,7 @@ function updateMailto(){
   );
   document.getElementById('c_mailto').href = `mailto:info@montes-biopharma.com?subject=${subject}&body=${body}`;
 }
-['c_name','c_org','c_email','c_msg'].forEach(id=>{
-  const el=document.getElementById(id);
-  el.addEventListener('input', updateMailto);
-});
+['c_name','c_org','c_email','c_msg'].forEach(id=>document.getElementById(id).addEventListener('input', updateMailto));
 updateMailto();
 </script>
 </body>
