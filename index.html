@@ -13,7 +13,7 @@
 <style>
 :root{
   --bg:#F6F7FB; --panel:#FFFFFF; --ink:#0F1226; --muted:#6C7392;
-  --primary:#3A49FF; --accent:#00FF6A; --border:#E6E9F4;
+  --primary:#3A49FF; --accent:#00FF6A; --border:#E6E9F4; --blueDeep:#0D2A5A;
   --radius:18px; --shadow:0 10px 30px rgba(15,18,38,.06);
 }
 *{box-sizing:border-box}
@@ -35,40 +35,36 @@ header{position:sticky;top:0;z-index:40;backdrop-filter:saturate(180%) blur(10px
 .nav{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
 .logo{height:40px;width:auto}
 .brand{font-weight:800;letter-spacing:.02em;color:var(--ink)}
-.lang{margin-left:auto;display:flex;gap:8px;align-items:center}
+.lang{margin-left:auto;display:flex;gap:8px;align-items:center;position:relative}
 .icon-btn{appearance:none;border:1px solid var(--border);background:#fff;color:var(--ink);padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:10px}
 #menuBtn .bars{position:relative;width:18px;height:12px}
 #menuBtn .bars::before,#menuBtn .bars::after,#menuBtn .bar{content:"";position:absolute;left:0;right:0;height:2px;background:#3A49FF;border-radius:2px}
 #menuBtn .bar{top:5px}#menuBtn .bars::before{top:0}#menuBtn .bars::after{bottom:0}
 
-/* ===== Drawer (right sidebar menu) ===== */
-#drawerBackdrop{
-  position:fixed;inset:0;background:rgba(5,8,20,.45);
-  opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:80;
+/* ===== RIGHT DRAWER MENU ===== */
+#drawerMask{position:fixed;inset:0;background:rgba(5,8,20,.38);backdrop-filter:blur(2px);z-index:80;opacity:0;pointer-events:none;transition:opacity .25s ease}
+#drawerMask.open{opacity:1;pointer-events:auto}
+#sideMenu{
+  position:fixed;top:0;right:0;height:100%;width:min(86vw,360px);
+  transform:translateX(100%);transition:transform .28s ease;
+  background:linear-gradient(180deg,#264a9b,#0D2A5A); /* bleu */
+  color:#fff;z-index:90;display:flex;flex-direction:column
 }
-#drawer{
-  position:fixed;top:0;right:-360px;height:100vh;width:min(360px,86vw);
-  background:linear-gradient(180deg,#3A49FF,#2F3CE8);
-  color:#fff;border-left:1px solid rgba(255,255,255,.22);
-  box-shadow:-18px 0 44px rgba(15,18,38,.28);z-index:90;
-  display:flex;flex-direction:column;transition:right .32s ease;
+#sideMenu.open{transform:translateX(0)}
+.side-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.15)}
+.side-title{font-weight:800;letter-spacing:.04em}
+.side-close{appearance:none;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
+.side-body{padding:14px 18px;display:grid;gap:12px}
+.side-link{
+  display:flex;align-items:center;gap:10px;padding:14px 12px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.18);cursor:pointer;background:rgba(255,255,255,.04);
+  text-transform:uppercase;font-weight:800;letter-spacing:.06em;
+  color:var(--accent); /* vert fluo */
 }
-#drawer.open{right:0}
-#drawerBackdrop.open{opacity:1;pointer-events:auto}
-.drawer-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.22)}
-.drawer-title{font-weight:800;letter-spacing:.06em;text-transform:uppercase}
-.drawer-content{padding:14px 12px;display:grid;gap:10px;overflow:auto}
-.drawer-link{
-  display:flex;align-items:center;gap:12px;padding:14px 14px;border-radius:14px;
-  background:rgba(0,0,0,.08);border:1px solid rgba(255,255,255,.18);
-  color:var(--accent); /* VERT FLUO */
-  font-weight:800; letter-spacing:.02em; text-transform:uppercase;
-  cursor:pointer; user-select:none;
-}
-.drawer-link:hover{background:rgba(0,0,0,.14)}
-.drawer-dot{width:8px;height:8px;border-radius:999px;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.side-link:hover{background:rgba(255,255,255,.09)}
+.side-note{color:rgba(255,255,255,.75);font-size:12px;margin-top:8px}
 
-/* ===== Gradient page transition ===== */
+/* Gradient page transition */
 #xfade{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0;background:radial-gradient(1200px 800px at 50% 50%, rgba(58,73,255,.18), rgba(0,0,0,0));transition:opacity .45s ease}
 #xfade.show{opacity:1}
 
@@ -129,7 +125,7 @@ input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4p
 .snip mark{padding:0 2px;border-radius:4px;background:#FFF59D}
 pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:12px}
 
-/* Basic cards & tags used across */
+/* Basic cards & tags */
 .pub-card{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff;display:grid;gap:6px}
 .tag{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:999px;background:#fff;color:var(--ink)}
 
@@ -164,6 +160,21 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 <canvas id="particlesCanvas"></canvas>
 <div id="xfade"></div>
 
+<!-- Drawer mask + Side menu -->
+<div id="drawerMask" aria-hidden="true"></div>
+<aside id="sideMenu" aria-hidden="true" aria-label="Main menu">
+  <div class="side-head">
+    <div class="side-title" data-i="menu">Menu</div>
+    <button class="side-close" id="sideCloseBtn" aria-label="Close">✕</button>
+  </div>
+  <div class="side-body">
+    <button class="side-link" data-tab="intro"><span data-i="navIntro">Introduction</span></button>
+    <button class="side-link" data-tab="app"><span data-i="navApp">Application</span></button>
+    <button class="side-link" data-tab="contact"><span data-i="navContact">Contact</span></button>
+    <div class="side-note">© <span id="year2"></span> Montes BioPharma</div>
+  </div>
+</aside>
+
 <header>
   <div class="nav">
     <picture>
@@ -174,7 +185,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 
     <div class="lang">
       <!-- bouton hamburger -->
-      <button id="menuBtn" class="icon-btn" aria-haspopup="true" aria-expanded="false" aria-controls="drawer" title="Menu">
+      <button id="menuBtn" class="icon-btn" aria-haspopup="true" aria-expanded="false" aria-controls="sideMenu" title="Menu">
         <span class="bars" aria-hidden="true"><span class="bar"></span></span>
         <span class="sr-only" style="position:absolute;left:-9999px" data-i="menu">Menu</span>
       </button>
@@ -184,26 +195,6 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
     </div>
   </div>
 </header>
-
-<!-- DRAWER (right sidebar) -->
-<div id="drawerBackdrop" aria-hidden="true"></div>
-<aside id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
-  <div class="drawer-head">
-    <div id="drawerTitle" class="drawer-title" data-i="menu">Menu</div>
-    <button id="drawerClose" class="icon-btn" aria-label="Close">✕</button>
-  </div>
-  <div class="drawer-content">
-    <div class="drawer-link" data-tab="intro">
-      <span class="drawer-dot"></span><span data-i="navIntro">Introduction</span>
-    </div>
-    <div class="drawer-link" data-tab="app">
-      <span class="drawer-dot"></span><span data-i="navApp">Application</span>
-    </div>
-    <div class="drawer-link" data-tab="contact">
-      <span class="drawer-dot"></span><span data-i="navContact">Contact</span>
-    </div>
-  </div>
-</aside>
 
 <!-- ===== TAB 1: INTRO ===== -->
 <section id="tab-intro" class="tab active" aria-labelledby="navIntro">
@@ -292,7 +283,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
       </div>
     </section>
 
-    <!-- SUBTAB 2: DOCUMENTS & LITTÉRATURE -->
+    <!-- SUBTAB 2: DOCUMENTS & LITTERATURE -->
     <section id="app-step2" class="app-sub">
       <div class="cards">
         <section class="block open">
@@ -453,24 +444,25 @@ if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
 const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(20+38*mix), g=Math.round(170+70*(1-mix)), b=Math.round(255-30*(1-mix));
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(${r},${g},${b},${a})`;cx.fill();}})();
 
-/* ===== Drawer logic ===== */
-const drawer=document.getElementById('drawer');
-const drawerBackdrop=document.getElementById('drawerBackdrop');
+/* ===== Drawer (right sidebar) & Tabs ===== */
 const menuBtn=document.getElementById('menuBtn');
-const drawerClose=document.getElementById('drawerClose');
+const drawer=document.getElementById('sideMenu');
+const mask=document.getElementById('drawerMask');
+const sideClose=document.getElementById('sideCloseBtn');
 
-function openDrawer(){ drawer.classList.add('open'); drawerBackdrop.classList.add('open'); menuBtn.setAttribute('aria-expanded','true'); }
-function closeDrawer(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); }
+function openDrawer(){ drawer.classList.add('open'); mask.classList.add('open'); menuBtn.setAttribute('aria-expanded','true'); drawer.setAttribute('aria-hidden','false'); }
+function closeDrawer(){ drawer.classList.remove('open'); mask.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); drawer.setAttribute('aria-hidden','true'); }
 
-menuBtn.addEventListener('click', (e)=>{e.preventDefault();drawer.classList.contains('open')?closeDrawer():openDrawer();});
-drawerClose.addEventListener('click', closeDrawer);
-drawerBackdrop.addEventListener('click', closeDrawer);
+menuBtn.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation(); drawer.classList.contains('open')?closeDrawer():openDrawer();});
+sideClose.addEventListener('click', closeDrawer);
+mask.addEventListener('click', closeDrawer);
 document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
 
-document.getElementById('openMenuCta').onclick=(e)=>{e.preventDefault();openDrawer();};
-document.getElementById('openMenuLearn').onclick=(e)=>{e.preventDefault();openDrawer();};
+// open from intro CTAs
+document.getElementById('openMenuCta').onclick=(e)=>{e.stopPropagation();openDrawer();};
+document.getElementById('openMenuLearn').onclick=(e)=>{e.stopPropagation();openDrawer();};
 
-/* ===== Gradient transition & Tabs ===== */
+// tab switching with gradient xfade
 const xfade=document.getElementById('xfade');
 const tabs={intro:document.getElementById('tab-intro'),app:document.getElementById('tab-app'),contact:document.getElementById('tab-contact')};
 function showTab(name){
@@ -483,7 +475,9 @@ function showTab(name){
     setTimeout(()=>xfade.classList.remove('show'),260);
   },160);
 }
-document.querySelectorAll('#drawer .drawer-link').forEach(it=>it.addEventListener('click',()=>showTab(it.dataset.tab)));
+document.querySelectorAll('#sideMenu .side-link').forEach(btn=>{
+  btn.addEventListener('click',()=>showTab(btn.dataset.tab));
+});
 
 /* ===== Subtabs (Application) ===== */
 const appSubs={ step1:document.getElementById('app-step1'), step2:document.getElementById('app-step2'), step3:document.getElementById('app-step3') };
@@ -668,6 +662,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   Object.values(tabs).forEach(t=>t.classList.remove('active'));
   tabs.intro.classList.add('active');
   setLang('fr');
+  document.getElementById('year').textContent=new Date().getFullYear();
+  document.getElementById('year2').textContent=new Date().getFullYear();
 });
 
 /* ===== Step 1 logic ===== */
@@ -735,3 +731,469 @@ drop?.addEventListener('click',(e)=>{e.preventDefault();input.dispatchEvent(new 
 drop?.addEventListener('dragover',(e)=>{e.preventDefault();drop.classList.add('drag');});
 drop?.addEventListener('dragleave',()=>drop.classList.remove('drag'));
 drop?.addEventListener('drop',(e)=>{e.preventDefault();drop.classList.remove('drag');handleFiles(e.dataTransfer.files);});
+input?.addEventListener('change',(e)=>handleFiles(e.target.files));
+function handleFiles(files){
+  state.uploads=[...files];
+  filesList.innerHTML='';
+  state.uploads.forEach(f=>{
+    const it=document.createElement('div'); it.className='source-item';
+    it.innerHTML=`<input type="checkbox" checked style="width:auto"><span>${f.name} — ${(f.size/1024/1024).toFixed(2)} MB</span>`;
+    filesList.appendChild(it);
+  });
+}
+
+/* Literature (Europe PMC via AllOrigins) */
+const btnLitYes=document.getElementById('btnLitYes'), btnLitNo=document.getElementById('btnLitNo');
+const litModal=document.getElementById('litModal'), closeLitModal=document.getElementById('closeLitModal'), litResults=document.getElementById('litResults');
+btnLitYes.onclick=()=>{ openLitModalAndSearch(); };
+btnLitNo.onclick=()=>{};
+closeLitModal.onclick=()=>{ litModal.classList.remove('open'); };
+
+function domainQuery(){
+  const key = state.request.domain || 'downstream';
+  const bm = (state.request.biomolecule||'Adenovirus');
+  const q = {
+    downstream: `${bm} (chromatography OR TFF OR diafiltration OR polishing OR formulation OR filtration)`,
+    upstream: `${bm} (bioreactor OR perfusion OR seed train OR harvest OR lysis)`,
+    fill: `${bm} (aseptic filling OR container closure OR filter integrity OR visual inspection OR cold chain)`,
+    analytics: `${bm} (identity OR potency OR impurities OR aggregation OR qPCR OR stability)`,
+    qa: `${bm} (GxP OR deviation OR CAPA OR document control OR supplier qualification OR batch record)`,
+    cmc: `${bm} (control strategy OR specifications OR PPQ OR comparability OR process characterization)`
+  };
+  return q[key] || `${bm} purification`;
+}
+async function openLitModalAndSearch(){
+  litModal.classList.add('open');
+  litResults.innerHTML=`<div class="muted">${t('searching')}</div>`;
+  const q = domainQuery();
+  const url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+encodeURIComponent(q)+'&pageSize=12&format=json&sort_date:y')}`;
+  try{
+    const r=await fetch(url); const raw=await r.json(); const j=JSON.parse(raw.contents);
+    const res=(j.resultList?.result)||[];
+    state.literature.results = res.map(x=>({
+      pmid:x.pmid||'', pmcid:x.pmcid||'', title:x.title||'', journal:x.journalTitle||x.source||'', year:x.pubYear||'',
+      authors:(x.authorString||'').split(', ').slice(0,6), oa:(x.isOpenAccess==="Y"||x.openAccess=="Y"||x.openAccess)
+    }));
+    renderLitResults();
+  }catch(e){ litResults.innerHTML=`<div class="muted">${t('epmcError')}</div>`; }
+}
+function esc(s){return (s||'').replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
+function renderLitResults(){
+  litResults.innerHTML='';
+  state.literature.results.forEach((a,idx)=>{
+    const link = a.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/` : (a.pmcid?`https://europepmc.org/article/PMC/${a.pmcid}`:'#');
+    const el=document.createElement('div'); el.className='pub-card';
+    el.innerHTML=`
+      <label style="display:flex;gap:10px;align-items:flex-start">
+        <input type="checkbox" data-i="${idx}" style="width:auto;margin-top:4px">
+        <div>
+          <div><strong>${esc(a.title)}</strong> ${a.oa?'<span class="tag">Open Access</span>':''}</div>
+          <div class="muted">${esc(a.journal)} · ${esc(a.year||'—')}</div>
+          <div class="muted">${esc(a.authors.join(', '))}</div>
+          <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
+            <a class="tag" href="${link}" target="_blank" rel="noopener">${t('open')}</a>
+          </div>
+        </div>
+      </label>`;
+    el.querySelector('input').addEventListener('change',e=>{
+      const i=+e.target.dataset.i;
+      state.literature.results[i].selected = e.target.checked;
+    });
+    litResults.appendChild(el);
+  });
+}
+
+document.getElementById('runLitAnalysis').onclick = async ()=>{
+  const chosen = state.literature.results.filter(x=>x.selected);
+  if(!chosen.length){ alert(t('selectAtLeastOne')); return; }
+
+  const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // optionnel
+  const HF_MODEL = "facebook/bart-large-cnn";
+  async function summarize(text){
+    if(!HF_TOKEN.startsWith('hf_')) return (text||'').slice(0,1200);
+    try{
+      const r=await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{
+        method:'POST',headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},
+        body:JSON.stringify({inputs:text})
+      });
+      const j=await r.json();
+      return Array.isArray(j)&&j[0]?.summary_text ? j[0].summary_text : (text||'').slice(0,1200);
+    }catch(_){return (text||'').slice(0,1200);}
+  }
+
+  const out=[];
+  for(const a of chosen){
+    let abs='';
+    try{
+      if(a.pmid){
+        abs = await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/MED/${a.pmid}/abstractText?format=plain`).then(r=>r.text());
+      }else if(a.pmcid){
+        abs = await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/PMC/${a.pmcid}/abstractText?format=plain`).then(r=>r.text());
+      }
+    }catch(_){}
+    const s = await summarize(abs);
+    out.push({meta:a, abstract:abs||'', summary:s});
+  }
+
+  state.literature.selected = out;
+  litModal.classList.remove('open');
+  buildWorkspace();
+  showAppSub('step3');
+};
+
+document.getElementById('toWorkspace').onclick = ()=>{ buildWorkspace(); showAppSub('step3'); };
+
+/* ===== Targeted analysis engine ===== */
+const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa)\b/gi;
+function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
+function windowsFromText(text, win=800, overlap=200){
+  const markers=[...text.matchAll(/\[\[PAGE:(\d+)\]\]/g)].map(m=>({idx:m.index,num:+m[1]}));
+  const clean=text.replace(/\[\[PAGE:\d+\]\]/g,'');
+  const out=[]; let i=0; const step = Math.max(64, win-overlap);
+  while(i<clean.length){
+    const slice=clean.slice(i, i+win);
+    const head = clean.slice(Math.max(0,i-200), i+80).toLowerCase();
+    let section='';
+    if(/materials?|méthodes?|methods?/.test(head)) section='methods';
+    else if(/results?/.test(head)) section='results';
+    else if(/discussion/.test(head)) section='discussion';
+    else if(/introduction/.test(head)) section='introduction';
+    else if(/formulation|chromatograph|filtration|tff|diafiltration/.test(head)) section='process';
+
+    const prev = markers.filter(m=>m.idx<=i).pop();
+    out.push({start:i, end:i+win, text:sanitize(slice), section:section||'body', page:prev?prev.num:undefined});
+    i += step;
+  }
+  return out;
+}
+function highlight(html, patterns){
+  if(!patterns.length) return html;
+  const rx = new RegExp('('+patterns.join('|')+')','gi');
+  return html.replace(rx, m=>`<mark>${m}</mark>`);
+}
+function closeCooccur(txt, rx1, rx2, max=50){
+  const arr=[]; let m;
+  while((m=rx1.exec(txt))){ arr.push(m.index); if(rx1.lastIndex===m.index) rx1.lastIndex++; }
+  let near=false; let n;
+  while((n=rx2.exec(txt))){
+    const pos=n.index; near = arr.some(i=>Math.abs(i-pos)<=max); if(near) break;
+    if(rx2.lastIndex===n.index) rx2.lastIndex++;
+  }
+  rx1.lastIndex=0; rx2.lastIndex=0;
+  return near;
+}
+function scoreWindow(win, cfg){
+  const txt = win.text;
+  for(const r of cfg.must){ if(!r.test(txt)) return 0; }
+  let s=1.0;
+  for(const g of cfg.should){ const [pattern, w]=g; if(pattern.test(txt)) s+=w; }
+  if(cfg.must.length>=2 && closeCooccur(txt, new RegExp(cfg.must[0], 'i'), new RegExp(cfg.must[1], 'i'), 60)) s+=0.3;
+  for(const [sectRx,boost] of cfg.sectionBoost||[]){ if(sectRx.test(win.section)) s*=boost; }
+  for(const ex of cfg.exclude||[]){ if(ex.test(txt)) s-=0.6; }
+  return Math.max(0, s);
+}
+function buildPatternList(sdId){
+  const cfg = TA[sdId]; if(!cfg) return {cfg, mark:[]};
+  const marks=[];
+  cfg.must.forEach(r=>marks.push(r.source));
+  (cfg.should||[]).forEach(([r])=>marks.push(r.source));
+  return {cfg, mark:marks};
+}
+async function extractTextFromFile(f){
+  const buf=await f.arrayBuffer(); const ext=f.name.toLowerCase().split('.').pop();
+  if(ext==='pdf'){
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise; let out='';
+    for(let i=1;i<=pdf.numPages;i++){
+      const page=await pdf.getPage(i); const c=await page.getTextContent();
+      out += ` [[PAGE:${i}]] ` + c.items.map(it=>it.str).join(' ') + '\n';
+    }
+    return out.replace(/\s+/g,' ').trim();
+  }else if(ext==='docx'){
+    const res=await window.mammoth.extractRawText({arrayBuffer:buf});
+    return (res.value||'').replace(/\s+/g,' ').trim();
+  }else if(ext==='txt'){
+    return new TextDecoder().decode(new Uint8Array(buf)).replace(/\s+/g,' ').trim();
+  }
+  return '';
+}
+const TA=(()=>{ // taxonomy config
+  const ADV = /adenovirus|adeno[-\s]?virus|ad5|ad26|adenoviral/i;
+  const SECBOOST = [[/(materials?|methods?|méthodes?)/i, 1.5],[/(results?|discussion)/i, 1.2]];
+  function cfg(must2, shouldGroups, exclude=[]){ return { must:[ADV, must2], should:shouldGroups, exclude, sectionBoost:SECBOOST }; }
+  return {
+    clarification: cfg(/clarifi|centrifug|depth\s?filter|floccul|turbid|harvest/i, [[/depth\s?filter|clari|centrifug/i, 1.2],[/floccul|polydadmac|turbidity/i, 1.0]], [/AAV|adeno[-\s]?associated|lentivirus|retrovirus/i]),
+    tff_df: cfg(/diafiltrat|ultra?filtrat|tff|membrane/i, [[/tff|ultra?filtrat/i, 1.5],[/diafiltrat|buffer exchange/i, 1.2],[/membrane|cassette|NMWL|cut[\s-]?off/i, 1.0]]),
+    capture_chrom: cfg(/chromatograph|column|resin|ligand/i, [[/affinity|AVB|heparin|monolith|membrane adsorber/i, 2.0],[/anion exchange|AEX|quaternary amine|QA/i, 1.5],[/cation exchange|CEX|carboxymethyl/i, 1.2]]),
+    polishing: cfg(/polish|ion\s?exchange|SEC|size exclusion|flow[-\s]?through/i, [[/AEX|CEX|multimodal|hydrophobic/i, 1.4],[/aggregate|host cell protein|DNA residual/i, 1.1]]),
+    formulation: cfg(/formulat|excipient|stability|buffer|surfactant|trehalose|sucrose/i, [[/pH|osmol|surfactant|polysorbate/i, 1.2],[/cryoprotect|stabilit/i, 1.1]]),
+    final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?μ?m/i, [[/bioburden|sterility/i, 1.2]]),
+    cell_bank_seed: cfg(/cell\sbank|seed\s?train|master\s?cell\sbank/i, [[/seed\s?train/i,1.2]]),
+    production_bioreactor: cfg(/bioreactor|bioréacteur|perfusion|fed[-\s]?batch|batch/i, [[/perfusion|ATF|TFF\s?loop/i,1.4]]),
+    infection_strategy: cfg(/infection|MOI|multiplicity/i, [[/MOI|infection strategy/i,1.4]]),
+    harvest_lysis: cfg(/harvest|lysi(s|e)|detergent|benzonase|nuclease/i, [[/harvest|clarification/i,1.1]]),
+    ipc: cfg(/in[-\s]?process|IPC|process control|en[-\s]?cours\sde\sprocédé/i, [[/specification|criteria/i,1.0]]),
+    handoff_ds: cfg(/handoff|tech\s?transfer|transfer|intermediate/i, [[/hold\s?time|storage/i,1.0]]),
+    hold_bulk: cfg(/hold\s?bulk|freeze\/?thaw|storage/i, [[/freeze|thaw|stability/i,1.2]]),
+    aseptic_fill: cfg(/aseptic|filling|vials?|syringes?|cartridges?/i, [[/grade\s?A|B|C|isolator/i,1.1]]),
+    ccc: cfg(/container|closure|compatib|extractable|leachable/i, [[/compatibility|E&L/i,1.2]]),
+    fit: cfg(/filter\s?integrity|bubble\s?point|diffusion/i, [[/integrity|sterile/i,1.2]]),
+    vi_aql: cfg(/visual|inspection|AQL/i, [[/defects?|cosmetic/i,1.0]]),
+    cold_chain: cfg(/cold\s?chain|refrigerated|frozen|label/i, [[/shipping|logistics/i,1.0]]),
+    identity: cfg(/identity|PCR|sequenc/i, [[/qPCR|sequencing/i,1.2]]),
+    potency: cfg(/potency|infectiv|titer|titre/i, [[/TCID50|plaque assay|FFU/i,1.4]]),
+    impurities: cfg(/impurit|HCP|host\s?cell\s?protein|residual\s?DNA/i, [[/BCA|PicoGreen|dd?PCR/i,1.2]]),
+    size_agg: cfg(/size|aggregation|DLS|TEM|SEC/i, [[/hydrodynamic|aggregate/i,1.1]]),
+    qPCR: cfg(/qPCR|ddPCR|quantitative\s?PCR/i, [[/primers?|amplicon/i,1.1]]),
+    stability_indic: cfg(/stability[-\s]?indicat|degradation|stress/i, [[/ICH|accelerated/i,1.2]]),
+    change_control: cfg(/change\s?control/i, [[/impact assessment|risk/i,1.1]]),
+    deviation_capa: cfg(/deviation|CAPA/i, [[/root cause|investigation/i,1.1]]),
+    training_qual: cfg(/training|qualification|competenc/i, [[/program|matrix/i,1.0]]),
+    gxp_docs: cfg(/GxP|GMP|documentation|SOP|record/i, [[/document control|revision/i,1.1]]),
+    suppliers: cfg(/supplier|vendor|qualification|material/i, [[/audit|certificate/i,1.0]]),
+    bmr: cfg(/batch\s?record|BMR|review/i, [[/deviation|reconciliation/i,1.0]]),
+    reg_strategy: cfg(/regulator|CTA|IND|BLA|dossier/i, [[/strategy|pathway/i,1.0]]),
+    control_strategy: cfg(/control\s?strategy|CPP|CQA|design\s?space/i, [[/risk assessment|QbD/i,1.2]]),
+    specs_release: cfg(/specifications?|release|acceptance/i, [[/limits?|criteria/i,1.1]]),
+    comparability: cfg(/comparab|process\s?change/i, [[/equivalence|pre|post/i,1.0]]),
+    ppq: cfg(/PPQ|process\s?validation|conformance/i, [[/protocol|report|runs?/i,1.1]]),
+    proc_char: cfg(/process\s?characteri[sz]ation|DoE|design of experiments/i, [[/parameters?|responses?/i,1.1]])
+  };
+})();
+
+async function targetedAnalyze(){
+  state.analysis.targeted = {};
+  const sdIds = state.request.details||[];
+  if(!sdIds.length) return;
+
+  const docTexts=[];
+  for(const f of state.uploads){ const t = await extractTextFromFile(f); docTexts.push({name:f.name, text:t}); }
+
+  for(const sdId of sdIds){
+    const {cfg, mark} = buildPatternList(sdId);
+    if(!cfg){ continue; }
+    const results = { labelFR:'', labelEN:'', docs:[], papers:[], summary:'' };
+    for(const arr of Object.values(SUBDOMAINS)){ const m=arr.find(z=>z.id===sdId); if(m){ results.labelFR=m.fr; results.labelEN=m.en; break; } }
+
+    for(const d of docTexts){
+      if(!d.text) continue;
+      const wins = windowsFromText(d.text, 850, 250);
+      const scored = wins.map(w=>({ ...w, score: scoreWindow(w, cfg) }))
+                         .filter(x=>x.score>0)
+                         .sort((a,b)=>b.score-a.score)
+                         .slice(0,8);
+      if(!scored.length) continue;
+      const avg = scored.slice(0,5).reduce((a,c)=>a+c.score,0)/Math.min(5,scored.length);
+      results.docs.push({
+        name:d.name, score:+avg.toFixed(2),
+        snippets: scored.map(s=>({
+          score:+s.score.toFixed(2),
+          section:s.section, page:s.page,
+          html: highlight(s.text, mark)
+        }))
+      });
+    }
+    results.docs.sort((a,b)=>b.score-a.score);
+
+    for(const p of (state.literature.selected||[])){
+      const abs = (p.abstract||'').replace(/\s+/g,' ');
+      if(!abs) continue;
+      const wins = windowsFromText(abs, 700, 200);
+      const scored = wins.map(w=>({ ...w, score: scoreWindow(w, cfg) }))
+                         .filter(x=>x.score>0);
+      scored.sort((a,b)=>b.score-a.score);
+      const top = scored.slice(0,5);
+      if(!top.length) continue;
+      const avg = top.slice(0,3).reduce((a,c)=>a+c.score,0)/Math.min(3,top.length);
+      const link = p.meta.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${p.meta.pmid}/` : (p.meta.pmcid?`https://europepmc.org/article/PMC/${p.meta.pmcid}`:'#');
+      results.papers.push({
+        title:p.meta.title, year:p.meta.year, journal:p.meta.journal, score:+avg.toFixed(2), link,
+        snippets: top.map(s=>({ score:+s.score.toFixed(2), html:highlight(s.text, mark) }))
+      });
+    }
+    results.papers.sort((a,b)=>b.score-a.score);
+
+    const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const HF_MODEL = "facebook/bart-large-cnn";
+    const baseText = [
+      ...results.docs.flatMap(d=>d.snippets.slice(0,3).map(s=>s.html.replace(/<[^>]+>/g,' '))),
+      ...results.papers.flatMap(p=>p.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' ')))
+    ].join(' ');
+    async function summarize(t){
+      if(!HF_TOKEN.startsWith('hf_')) return (t||'').split(/[\.\!\?]\s/).filter(x=>x.length>40).slice(0,12).join('. ') + '.';
+      try{
+        const r=await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{
+          method:'POST',headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},
+          body:JSON.stringify({inputs:(t||'').slice(0,7000)})
+        });
+        const j=await r.json();
+        return Array.isArray(j)&&j[0]?.summary_text ? j[0].summary_text : (t||'').slice(0,1400);
+      }catch(_){return (t||'').slice(0,1400);}
+    }
+    results.summary = sanitize(await summarize(baseText));
+
+    state.analysis.targeted[sdId] = results;
+  }
+}
+
+/* ===== Render workspace ===== */
+function renderTargeted(){
+  const cont=document.getElementById('sdResults'); cont.innerHTML='';
+  const chips=[...document.querySelectorAll('#sdChips .chip')];
+  const activeIds = chips.filter(c=>c.classList.contains('active')).map(c=>c.dataset.id);
+  if(!activeIds.length){ cont.innerHTML=`<div class="muted">${t('noActiveSD')}</div>`; return; }
+
+  activeIds.forEach(id=>{
+    const pack=state.analysis.targeted[id]; if(!pack) return;
+    const title = (lang()==='fr'?pack.labelFR:pack.labelEN) || id;
+    const sec=document.createElement('section'); sec.className='panel';
+    sec.innerHTML = `<h3>${esc(title)}</h3>`;
+
+    if(pack.docs.length){
+      const docsWrap=document.createElement('div');
+      docsWrap.innerHTML=`<div class="result-meta"><strong>${t('docsInternal')}</strong></div>`;
+      pack.docs.forEach(d=>{
+        const card=document.createElement('div'); card.className='result-card';
+        card.innerHTML=`
+          <div><strong>${esc(d.name)}</strong></div>
+          <div class="bar"><span style="width:${Math.min(100, d.score*12)}%"></span></div>
+          ${d.snippets.map(s=>`
+            <div class="snip">
+              <div class="meta">score ${s.score}${s.page?` · page ${s.page}`:''}${s.section?` · ${s.section}`:''}</div>
+              <div>${s.html}</div>
+            </div>
+          `).join('')}
+        `;
+        docsWrap.appendChild(card);
+      });
+      sec.appendChild(docsWrap);
+    }
+
+    if(pack.papers.length){
+      const papWrap=document.createElement('div');
+      papWrap.style.marginTop='10px';
+      papWrap.innerHTML=`<div class="result-meta"><strong>${t('literature')}</strong></div>`;
+      pack.papers.forEach(p=>{
+        const card=document.createElement('div'); card.className='result-card';
+        card.innerHTML=`
+          <div><strong>${esc(p.title)}</strong></div>
+          <div class="result-meta">${esc(p.journal||'')} · ${esc(p.year||'')}</div>
+          <div class="bar"><span style="width:${Math.min(100, p.score*12)}%"></span></div>
+          ${p.snippets.map(s=>`
+            <div class="snip">
+              <div class="meta">score ${s.score}</div>
+              <div>${s.html}</div>
+            </div>
+          `).join('')}
+          <div><a class="tag" href="${p.link}" target="_blank" rel="noopener">${t('open')}</a></div>
+        `;
+        papWrap.appendChild(card);
+      });
+      sec.appendChild(papWrap);
+    }
+
+    const sum=document.createElement('div'); sum.style.marginTop='10px';
+    sum.innerHTML=`
+      <div class="result-meta"><strong>${t('targetedSummary')}</strong></div>
+      <pre class="code">${esc(pack.summary||'(empty)')}</pre>
+    `;
+    sec.appendChild(sum);
+
+    cont.appendChild(sec);
+  });
+}
+function buildWorkspace(){
+  const docList=document.getElementById('docList'); docList.innerHTML='';
+  state.uploads.forEach(f=>{
+    const it=document.createElement('div'); it.className='source-item';
+    it.innerHTML=`<input type="checkbox" checked style="width:auto"><span>${esc(f.name||'Document')}</span>`;
+    docList.appendChild(it);
+  });
+
+  const artList=document.getElementById('artList'); artList.innerHTML='';
+  (state.literature.selected||[]).forEach((a,i)=>{
+    const it=document.createElement('div'); it.className='source-item';
+    it.innerHTML=`<input type="checkbox" checked data-i="${i}" style="width:auto"><span>${esc(a.meta.title||'Article')}</span>`;
+    artList.appendChild(it);
+  });
+
+  const chips = document.getElementById('sdChips'); chips.innerHTML='';
+  const ids = state.request.details||[];
+  const L = (id)=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return (lang()==='fr'?f.fr:f.en); } return id; };
+  ids.forEach(id=>{
+    const chip=document.createElement('button'); chip.className='chip active'; chip.dataset.id=id;
+    chip.textContent = L(id);
+    chip.onclick=()=>{ chip.classList.toggle('active'); renderTargeted(); };
+    chips.appendChild(chip);
+  });
+
+  const ov=document.getElementById('overview');
+  const d=state.request;
+  ov.innerHTML = `
+    <div class="pub-card">
+      <div><strong>${t('ctx')}</strong></div>
+      <div class="muted">${t('biomolecule')}: ${esc(d.biomolecule||'-')} · ${t('domain')}: ${esc(L_dom(d.domain)||'-')}</div>
+    </div>
+  `;
+
+  targetedAnalyze().then(renderTargeted);
+}
+
+/* ===== Export PDF ===== */
+document.getElementById('exportPdf').onclick = async ()=>{
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({unit:'pt',format:'a4'});
+  const M=56, W=pdf.internal.pageSize.getWidth(), H=pdf.internal.pageSize.getHeight();
+  pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F');
+
+  try{ const r=await fetch('./assets/montes-biopharma-logo.jpg'); const b=await r.blob(); const data=await blobToDataURL(b); pdf.addImage(data,'JPEG',M,M-8,160,40,'','FAST'); }catch(e){}
+  setText(pdf,'#3A49FF',18,'bold'); pdf.text(t('pdfTitle'), M+180, M+14);
+  pdf.setDrawColor(58,73,255); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
+  let y=M+74;
+
+  y = putHeading(pdf, t('pdfOverview'), y, 13, '#3A49FF', M,W,H);
+  const d=state.request; const domainLabel = L_dom(d.domain||'downstream');
+  y=putParagraph(pdf,`${t('biomolecule')}: ${d.biomolecule||'-'} · ${t('domain')}: ${domainLabel||'-'}`,y,M,W,H,11);
+
+  const activeIds = (state.request.details||[]);
+  for(const id of activeIds){
+    const pack=state.analysis.targeted[id]; if(!pack) continue;
+    const title=(lang()==='fr'?pack.labelFR:pack.labelEN)||id;
+    y = putHeading(pdf, title, y, 13, '#3A49FF', M,W,H);
+    y = putParagraph(pdf, pack.summary||'(no summary)', y, M,W,H,11);
+    y = putParagraph(pdf, t('pdfEvidences')+':', y, M,W,H,11);
+    for(const d of pack.docs.slice(0,3)){
+      y = putParagraph(pdf, `• ${d.name} [score ${d.score}]`, y, M,W,H,11);
+      for(const s of d.snippets.slice(0,2)){ y = putParagraph(pdf, `   - ${s.page?('p.'+s.page+' '):''}${s.section?(`[${s.section}] `:'')}${s.html.replace(/<[^>]+>/g,' ')}`, y, M,W,H,10); }
+    }
+    for(const p of pack.papers.slice(0,3)){
+      y = putParagraph(pdf, `• ${p.title} (${p.journal||''} ${p.year||''}) [score ${p.score}]`, y, M,W,H,11);
+      for(const s of p.snippets.slice(0,1)){ y = putParagraph(pdf, `   - ${s.html.replace(/<[^>]+>/g,' ')}`, y, M,W,H,10); }
+    }
+  }
+
+  pdf.save((lang()==='fr'?'protocole-documentaire-analyse-ciblee.pdf':'documentary-protocol-targeted.pdf'));
+};
+function setText(pdf,hex,size,weight){const [r,g,b]=hexToRGB(hex); pdf.setTextColor(r,g,b); pdf.setFont('helvetica', weight==='bold'?'bold':'normal'); pdf.setFontSize(size);}
+function putHeading(pdf,text,y,size,color,M,W,H){ if(y + size + 18 > H - M){ pdf.addPage(); y=M; } const [r,g,b]=hexToRGB(color); pdf.setTextColor(r,g,b); pdf.setFont('helvetica','bold'); pdf.setFontSize(size); pdf.text(text,M,y); pdf.setDrawColor(210,210,210); pdf.setLineWidth(.6); pdf.line(M,y+6,W-M,y+6); return y+18;}
+function putParagraph(pdf,text,y,M,W,H,size=11){ pdf.setTextColor(0,0,0); pdf.setFont('helvetica','normal'); pdf.setFontSize(size); const chunks=pdf.splitTextToSize(text,W-2*M); for(const ln of chunks){ if(y>H-M){ pdf.addPage(); y=M; } pdf.text(ln,M,y); y+=14; } return y+4;}
+function hexToRGB(hex){const h=hex.replace('#','');const n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];}
+function blobToDataURL(blob){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(blob);});}
+document.getElementById('year').textContent=new Date().getFullYear();
+
+/* ===== Contact mailto ===== */
+function updateMailto(){
+  const name = document.getElementById('c_name').value || '';
+  const org  = document.getElementById('c_org').value || '';
+  const email= document.getElementById('c_email').value || '';
+  const msg  = document.getElementById('c_msg').value || '';
+  const subject = encodeURIComponent( lang()==='fr' ? 'Contact — Projet bioprocédé' : 'Contact — Bioprocess project' );
+  const body = encodeURIComponent(
+    `${lang()==='fr'?'Nom':'Name'}: ${name}\n${lang()==='fr'?'Société':'Company'}: ${org}\nEmail: ${email}\n\n${msg}`
+  );
+  document.getElementById('c_mailto').href = `mailto:info@montes-biopharma.com?subject=${subject}&body=${body}`;
+}
+['c_name','c_org','c_email','c_msg'].forEach(id=>document.getElementById(id).addEventListener('input', updateMailto));
+updateMailto();
+</script>
+</body>
+</html>
