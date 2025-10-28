@@ -6,7 +6,7 @@
 <title>Montes BioPharma — Assistant Littérature</title>
 <meta name="color-scheme" content="light"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-<!-- pdf.js & mammoth for local text extraction -->
+<!-- pdf.js & mammoth (extraction locale) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" crossorigin="anonymous"></script>
@@ -23,14 +23,14 @@ a{color:var(--primary);text-decoration:none}a:hover{text-decoration:underline}
 img{display:block;max-width:100%}
 .hide{display:none}
 
-/* ===== Tabs ===== */
+/* Tabs */
 .tab{display:none}
 .tab.active{display:block}
 
-/* ===== Particles ===== */
+/* Particules */
 #particlesCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;mix-blend-mode:multiply;opacity:.85}
 
-/* ===== Header ===== */
+/* Header */
 header{position:sticky;top:0;z-index:40;backdrop-filter:saturate(180%) blur(10px);background:rgba(255,255,255,.7);border-bottom:1px solid var(--border)}
 .nav{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
 .logo{height:40px;width:auto}
@@ -41,13 +41,13 @@ header{position:sticky;top:0;z-index:40;backdrop-filter:saturate(180%) blur(10px
 #menuBtn .bars::before,#menuBtn .bars::after,#menuBtn .bar{content:"";position:absolute;left:0;right:0;height:2px;background:#3A49FF;border-radius:2px}
 #menuBtn .bar{top:5px}#menuBtn .bars::before{top:0}#menuBtn .bars::after{bottom:0}
 
-/* ===== RIGHT DRAWER MENU ===== */
+/* Drawer latéral droit */
 #drawerMask{position:fixed;inset:0;background:rgba(5,8,20,.38);backdrop-filter:blur(2px);z-index:80;opacity:0;pointer-events:none;transition:opacity .25s ease}
 #drawerMask.open{opacity:1;pointer-events:auto}
 #sideMenu{
   position:fixed;top:0;right:0;height:100%;width:min(86vw,360px);
   transform:translateX(100%);transition:transform .28s ease;
-  background:linear-gradient(180deg,#264a9b,#0D2A5A); /* bleu */
+  background:linear-gradient(180deg,#264a9b,#0D2A5A);
   color:#fff;z-index:90;display:flex;flex-direction:column
 }
 #sideMenu.open{transform:translateX(0)}
@@ -64,11 +64,11 @@ header{position:sticky;top:0;z-index:40;backdrop-filter:saturate(180%) blur(10px
 .side-link:hover{background:rgba(255,255,255,.09)}
 .side-note{color:rgba(255,255,255,.75);font-size:12px;margin-top:8px}
 
-/* Gradient page transition */
+/* Transition de page */
 #xfade{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0;background:radial-gradient(1200px 800px at 50% 50%, rgba(58,73,255,.18), rgba(0,0,0,0));transition:opacity .45s ease}
 #xfade.show{opacity:1}
 
-/* ===== Intro (hero + tiles) ===== */
+/* Intro (hero + tiles) */
 .hero{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:56px 20px 18px}
 .kicker{color:var(--accent);font-weight:800;letter-spacing:.28em;font-size:13px;text-transform:uppercase}
 h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04;color:var(--primary);text-transform:uppercase;font-weight:800}
@@ -82,7 +82,7 @@ h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04
 .btn.secondary{background:#fff;color:var(--primary);border:2px solid var(--primary)}
 .btn.flat{background:#fff;color:#111;border-color:#E0E5FF}
 
-/* Tiles */
+/* Tuiles */
 .services{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:14px 20px 8px}
 .tiles{display:grid;gap:16px}
 @media(min-width:880px){.tiles{grid-template-columns:repeat(4,1fr)}}
@@ -92,7 +92,7 @@ h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04
 .tile h3{margin:10px 0 6px;color:#0F1226}
 .tile p{margin:0;color:var(--muted);font-size:14px}
 
-/* ===== Sections / Cards ===== */
+/* Sections / Cards */
 .section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:22px 20px 10px}
 .cards{display:grid;gap:18px}
 @media(min-width:880px){.cards{grid-template-columns:1fr 1fr}}
@@ -117,7 +117,7 @@ input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4p
 .bar{height:6px;border-radius:6px;background:#EEF1FF;overflow:hidden}
 .bar > span{display:block;height:100%;background:#3A49FF}
 
-/* Results list */
+/* Résultats */
 .result-card{border:1px solid var(--border);border-radius:16px;background:#fff;padding:12px;box-shadow:0 6px 16px rgba(15,18,38,.04);display:grid;gap:10px}
 .result-meta{color:var(--muted);font-size:13px}
 .snip{font-size:14px;line-height:1.4;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:10px}
@@ -125,7 +125,7 @@ input:focus,select:focus,textarea:focus{border-color:#C9D0FF;box-shadow:0 0 0 4p
 .snip mark{padding:0 2px;border-radius:4px;background:#FFF59D}
 pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:12px}
 
-/* Basic cards & tags */
+/* cartes & tags */
 .pub-card{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff;display:grid;gap:6px}
 .tag{font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:999px;background:#fff;color:var(--ink)}
 
@@ -134,7 +134,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 .drop.drag{border-color:var(--primary)}
 .file-list{display:grid;gap:10px;margin-top:10px}
 
-/* Subtabs (Application) */
+/* Sous-onglets Application */
 .app-sub{display:none}
 .app-sub.active{display:block}
 
@@ -149,7 +149,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 .panel{border:1px solid var(--border);border-radius:16px;background:#fff;padding:16px}
 .panel h3{margin:0 0 8px;color:#3A49FF}
 
-/* Modal for literature results */
+/* Modale littérature */
 .modal{position:fixed;inset:0;background:rgba(5,8,20,.38);display:none;align-items:center;justify-content:center;z-index:70}
 .modal.open{display:flex}
 .modal-card{width:min(980px,92vw);max-height:86vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 18px 44px rgba(15,18,38,.22);padding:18px}
@@ -160,7 +160,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 <canvas id="particlesCanvas"></canvas>
 <div id="xfade"></div>
 
-<!-- Drawer mask + Side menu -->
+<!-- Drawer -->
 <div id="drawerMask" aria-hidden="true"></div>
 <aside id="sideMenu" aria-hidden="true" aria-label="Main menu">
   <div class="side-head">
@@ -184,19 +184,17 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
     <div class="brand" data-i="brand">Montes BioPharma</div>
 
     <div class="lang">
-      <!-- bouton hamburger -->
       <button id="menuBtn" class="icon-btn" aria-haspopup="true" aria-expanded="false" aria-controls="sideMenu" title="Menu">
         <span class="bars" aria-hidden="true"><span class="bar"></span></span>
         <span class="sr-only" style="position:absolute;left:-9999px" data-i="menu">Menu</span>
       </button>
-      <!-- langues -->
       <button id="btnFR" class="icon-btn active">FR</button>
       <button id="btnEN" class="icon-btn">EN</button>
     </div>
   </div>
 </header>
 
-<!-- ===== TAB 1: INTRO ===== -->
+<!-- TAB INTRO -->
 <section id="tab-intro" class="tab active" aria-labelledby="navIntro">
   <section class="hero">
     <div class="kicker" data-i="kicker">ASSISTANT LITTÉRATURE</div>
@@ -236,10 +234,10 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
   </section>
 </section>
 
-<!-- ===== TAB 2: APPLICATION ===== -->
+<!-- TAB APPLICATION -->
 <section id="tab-app" class="tab" aria-labelledby="navApp">
   <div class="section">
-    <!-- SUBTAB 1: DEMANDE -->
+    <!-- STEP 1 -->
     <section id="app-step1" class="app-sub active">
       <div class="cards">
         <section class="block open">
@@ -251,7 +249,6 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
           </header>
           <div class="inner">
             <div class="grid">
-              <!-- Q1 -->
               <div>
                 <label data-i="q1">Quelle biomolécule voulez-vous produire ?</label>
                 <select id="bioSelect">
@@ -259,12 +256,10 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
                   <option value="Adenovirus">Adénovirus</option>
                 </select>
               </div>
-              <!-- Q2 -->
               <div id="domainWrap" class="hide">
                 <label data-i="q2">Quel est le domaine du pharmaceutique que vous souhaitez explorer ?</label>
                 <select id="domainSelect"></select>
               </div>
-              <!-- Q3 -->
               <div id="detailWrap" class="hide">
                 <label><strong id="detailTitle" data-i="detailTitleGeneric">Spécifiez votre besoin</strong></label>
                 <div id="detailChoices" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))"></div>
@@ -283,7 +278,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
       </div>
     </section>
 
-    <!-- SUBTAB 2: DOCUMENTS & LITTERATURE -->
+    <!-- STEP 2 -->
     <section id="app-step2" class="app-sub">
       <div class="cards">
         <section class="block open">
@@ -330,7 +325,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
         </section>
       </div>
 
-      <!-- Modal Europe PMC -->
+      <!-- Modale littérature -->
       <div id="litModal" class="modal" aria-hidden="true">
         <div class="modal-card">
           <header>
@@ -345,7 +340,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
       </div>
     </section>
 
-    <!-- SUBTAB 3: ANALYSE -->
+    <!-- STEP 3 -->
     <section id="app-step3" class="app-sub">
       <div class="cards">
         <section class="block open">
@@ -387,7 +382,7 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
   </div>
 </section>
 
-<!-- ===== TAB 3: CONTACT ===== -->
+<!-- TAB CONTACT -->
 <section id="tab-contact" class="tab" aria-labelledby="navContact">
   <section class="section">
     <div class="cards">
@@ -431,8 +426,9 @@ pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);
 
 <!-- jsPDF -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
+
 <script>
-/* ===== Particles (visible) ===== */
+/* Particules renforcées (visibles) */
 const cv=document.getElementById('particlesCanvas'),cx=cv.getContext('2d');let W,H,PTS=[];
 function size(){W=cv.width=innerWidth;H=cv.height=innerHeight} size(); addEventListener('resize',size);
 function R(a,b){return a+Math.random()*(b-a)}
@@ -444,25 +440,20 @@ if(p.x<-6)p.x=W+6;if(p.x>W+6)p.x=-6;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
 const mix=Math.abs(Math.sin(p.t*.5));const r=Math.round(20+38*mix), g=Math.round(170+70*(1-mix)), b=Math.round(255-30*(1-mix));
 cx.beginPath();cx.arc(p.x,p.y,p.r,0,6.283);cx.fillStyle=`rgba(${r},${g},${b},${a})`;cx.fill();}})();
 
-/* ===== Drawer (right sidebar) & Tabs ===== */
+/* Drawer & tabs */
 const menuBtn=document.getElementById('menuBtn');
 const drawer=document.getElementById('sideMenu');
 const mask=document.getElementById('drawerMask');
 const sideClose=document.getElementById('sideCloseBtn');
-
 function openDrawer(){ drawer.classList.add('open'); mask.classList.add('open'); menuBtn.setAttribute('aria-expanded','true'); drawer.setAttribute('aria-hidden','false'); }
 function closeDrawer(){ drawer.classList.remove('open'); mask.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false'); drawer.setAttribute('aria-hidden','true'); }
-
 menuBtn.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation(); drawer.classList.contains('open')?closeDrawer():openDrawer();});
 sideClose.addEventListener('click', closeDrawer);
 mask.addEventListener('click', closeDrawer);
 document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
-
-// open from intro CTAs
 document.getElementById('openMenuCta').onclick=(e)=>{e.stopPropagation();openDrawer();};
 document.getElementById('openMenuLearn').onclick=(e)=>{e.stopPropagation();openDrawer();};
 
-// tab switching with gradient xfade
 const xfade=document.getElementById('xfade');
 const tabs={intro:document.getElementById('tab-intro'),app:document.getElementById('tab-app'),contact:document.getElementById('tab-contact')};
 function showTab(name){
@@ -479,7 +470,7 @@ document.querySelectorAll('#sideMenu .side-link').forEach(btn=>{
   btn.addEventListener('click',()=>showTab(btn.dataset.tab));
 });
 
-/* ===== Subtabs (Application) ===== */
+/* Sous-onglets Application */
 const appSubs={ step1:document.getElementById('app-step1'), step2:document.getElementById('app-step2'), step3:document.getElementById('app-step3') };
 function showAppSub(key){
   xfade.classList.add('show');
@@ -491,7 +482,7 @@ function showAppSub(key){
   },160);
 }
 
-/* ===== i18n ===== */
+/* i18n */
 const I={
   fr:{brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
       kicker:"ASSISTANT LITTÉRATURE",heroTitle:"No learning curve,<br/>no complications",heroSub:"Recherche d’articles (Europe PMC), upload de documents internes, analyse IA et création de protocoles documentaires (adénovirus).",
@@ -518,7 +509,7 @@ const I={
       dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytique", dom_qa:"Assurance Qualité", dom_cmc:"CMC",
       sdtitle_downstream:"Spécifiez les sous-domaines Downstream", sdtitle_upstream:"Spécifiez les sous-domaines Upstream", sdtitle_fill:"Spécifiez les sous-domaines Fill & Finish",
       sdtitle_analytics:"Spécifiez les sous-domaines Analytiques", sdtitle_qa:"Spécifiez les sous-domaines Assurance Qualité", sdtitle_cmc:"Spécifiez les sous-domaines CMC",
-      biomolecule:"Biomolécule", domain:"Domaine"
+      biomolecule:"Biomolécule", domain:"Domaine", oaTag:"Accès libre", scoreLabel:"score", pageShort:"p."
   },
   en:{brand:"Montes BioPharma",menu:"Menu",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
       kicker:"LITERATURE ASSISTANT",heroTitle:"No learning curve,<br/>no complications",heroSub:"Article search (Europe PMC), internal document upload, AI analysis and documentary protocol creation (adenovirus).",
@@ -545,7 +536,7 @@ const I={
       dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytical", dom_qa:"Quality Assurance", dom_cmc:"CMC",
       sdtitle_downstream:"Specify Downstream subdomains", sdtitle_upstream:"Specify Upstream subdomains", sdtitle_fill:"Specify Fill & Finish subdomains",
       sdtitle_analytics:"Specify Analytical subdomains", sdtitle_qa:"Specify Quality Assurance subdomains", sdtitle_cmc:"Specify CMC subdomains",
-      biomolecule:"Biomolecule", domain:"Domain"
+      biomolecule:"Biomolecule", domain:"Domain", oaTag:"Open Access", scoreLabel:"score", pageShort:"p."
   }
 };
 function lang(){return document.documentElement.dataset.lang||'fr';}
@@ -567,7 +558,7 @@ function setLang(newLang){
   updateMailto();
 }
 
-/* ===== Domains & Subdomains ===== */
+/* Domaines & sous-domaines */
 const SUBDOMAINS = {
   downstream: [
     {id:"clarification", fr:"Clarification", en:"Clarification"},
@@ -624,7 +615,7 @@ function L_dom(key){
   return k ? t(k) : (key||'-');
 }
 
-/* ===== DOM refs & State ===== */
+/* Réfs DOM & État */
 const bioSelect=document.getElementById('bioSelect');
 const domainWrap=document.getElementById('domainWrap');
 const domainSelect=document.getElementById('domainSelect');
@@ -637,7 +628,7 @@ const goToDocs=document.getElementById('goToDocs');
 
 const state={ request:{ biomolecule:null, domain:null, details:[] }, uploads:[], literature:{results:[],selected:[]}, analysis:{targeted:{}} };
 
-/* ===== Language initialization ===== */
+/* Initialisation */
 function renderDomainOptions(selectedKey){
   const options = [
     {key:'', label: t('selectPlaceholder')},
@@ -666,7 +657,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('year2').textContent=new Date().getFullYear();
 });
 
-/* ===== Step 1 logic ===== */
+/* Step 1 */
 bioSelect.addEventListener('change',()=>{
   state.request.biomolecule = bioSelect.value || null;
   domainWrap.classList.remove('hide');
@@ -721,7 +712,7 @@ function buildDetailChoices(domainKey){
 }
 goToDocs.addEventListener('click',()=>{ showAppSub('step2'); });
 
-/* ===== Step 2: Documents & Literature ===== */
+/* Step 2 — uploader */
 const btnDocYes=document.getElementById('btnDocYes'), btnDocNo=document.getElementById('btnDocNo');
 const uploaderWrap=document.getElementById('uploaderWrap'); const drop=document.getElementById('drop'); const input=document.getElementById('fileInput'); const filesList=document.getElementById('filesList');
 btnDocYes.onclick=()=>{uploaderWrap.classList.remove('hide');};
@@ -742,7 +733,7 @@ function handleFiles(files){
   });
 }
 
-/* Literature (Europe PMC via AllOrigins) */
+/* Littérature Europe PMC (via AllOrigins) */
 const btnLitYes=document.getElementById('btnLitYes'), btnLitNo=document.getElementById('btnLitNo');
 const litModal=document.getElementById('litModal'), closeLitModal=document.getElementById('closeLitModal'), litResults=document.getElementById('litResults');
 btnLitYes.onclick=()=>{ openLitModalAndSearch(); };
@@ -787,7 +778,7 @@ function renderLitResults(){
       <label style="display:flex;gap:10px;align-items:flex-start">
         <input type="checkbox" data-i="${idx}" style="width:auto;margin-top:4px">
         <div>
-          <div><strong>${esc(a.title)}</strong> ${a.oa?'<span class="tag">Open Access</span>':''}</div>
+          <div><strong>${esc(a.title)}</strong> ${a.oa?'<span class="tag">'+t('oaTag')+'</span>':''}</div>
           <div class="muted">${esc(a.journal)} · ${esc(a.year||'—')}</div>
           <div class="muted">${esc(a.authors.join(', '))}</div>
           <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
@@ -843,7 +834,7 @@ document.getElementById('runLitAnalysis').onclick = async ()=>{
 
 document.getElementById('toWorkspace').onclick = ()=>{ buildWorkspace(); showAppSub('step3'); };
 
-/* ===== Targeted analysis engine ===== */
+/* Moteur d'analyse ciblée */
 const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa)\b/gi;
 function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
 function windowsFromText(text, win=800, overlap=200){
@@ -902,7 +893,9 @@ function buildPatternList(sdId){
 async function extractTextFromFile(f){
   const buf=await f.arrayBuffer(); const ext=f.name.toLowerCase().split('.').pop();
   if(ext==='pdf'){
-    const pdf=await pdfjsLib.getDocument({data:buf}).promise; let out='';
+    const pdfLib = window['pdfjsLib'];
+    if(!pdfLib) return '';
+    const pdf=await pdfLib.getDocument({data:buf}).promise; let out='';
     for(let i=1;i<=pdf.numPages;i++){
       const page=await pdf.getPage(i); const c=await page.getTextContent();
       out += ` [[PAGE:${i}]] ` + c.items.map(it=>it.str).join(' ') + '\n';
@@ -960,6 +953,12 @@ const TA=(()=>{ // taxonomy config
   };
 })();
 
+function buildPatternListForID(sdId){
+  const cfg = TA[sdId]; if(!cfg) return {cfg, mark:[]};
+  const marks=[]; cfg.must.forEach(r=>marks.push(r.source)); (cfg.should||[]).forEach(([r])=>marks.push(r.source));
+  return {cfg, mark:marks};
+}
+
 async function targetedAnalyze(){
   state.analysis.targeted = {};
   const sdIds = state.request.details||[];
@@ -969,7 +968,7 @@ async function targetedAnalyze(){
   for(const f of state.uploads){ const t = await extractTextFromFile(f); docTexts.push({name:f.name, text:t}); }
 
   for(const sdId of sdIds){
-    const {cfg, mark} = buildPatternList(sdId);
+    const {cfg, mark} = buildPatternListForID(sdId);
     if(!cfg){ continue; }
     const results = { labelFR:'', labelEN:'', docs:[], papers:[], summary:'' };
     for(const arr of Object.values(SUBDOMAINS)){ const m=arr.find(z=>z.id===sdId); if(m){ results.labelFR=m.fr; results.labelEN=m.en; break; } }
@@ -1010,7 +1009,7 @@ async function targetedAnalyze(){
         snippets: top.map(s=>({ score:+s.score.toFixed(2), html:highlight(s.text, mark) }))
       });
     }
-    results.papers.sort((a,b)=>b.score-a.score);
+    results.papers.sort((a,b)=>b.score-a-score);
 
     const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     const HF_MODEL = "facebook/bart-large-cnn";
@@ -1035,7 +1034,7 @@ async function targetedAnalyze(){
   }
 }
 
-/* ===== Render workspace ===== */
+/* Rendu workspace */
 function renderTargeted(){
   const cont=document.getElementById('sdResults'); cont.innerHTML='';
   const chips=[...document.querySelectorAll('#sdChips .chip')];
@@ -1058,7 +1057,7 @@ function renderTargeted(){
           <div class="bar"><span style="width:${Math.min(100, d.score*12)}%"></span></div>
           ${d.snippets.map(s=>`
             <div class="snip">
-              <div class="meta">score ${s.score}${s.page?` · page ${s.page}`:''}${s.section?` · ${s.section}`:''}</div>
+              <div class="meta">${t('scoreLabel')} ${s.score}${s.page?` · ${t('pageShort')} ${s.page}`:''}${s.section?` · ${s.section}`:''}</div>
               <div>${s.html}</div>
             </div>
           `).join('')}
@@ -1080,7 +1079,7 @@ function renderTargeted(){
           <div class="bar"><span style="width:${Math.min(100, p.score*12)}%"></span></div>
           ${p.snippets.map(s=>`
             <div class="snip">
-              <div class="meta">score ${s.score}</div>
+              <div class="meta">${t('scoreLabel')} ${s.score}</div>
               <div>${s.html}</div>
             </div>
           `).join('')}
@@ -1138,7 +1137,7 @@ function buildWorkspace(){
   targetedAnalyze().then(renderTargeted);
 }
 
-/* ===== Export PDF ===== */
+/* Export PDF */
 document.getElementById('exportPdf').onclick = async ()=>{
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({unit:'pt',format:'a4'});
@@ -1162,11 +1161,11 @@ document.getElementById('exportPdf').onclick = async ()=>{
     y = putParagraph(pdf, pack.summary||'(no summary)', y, M,W,H,11);
     y = putParagraph(pdf, t('pdfEvidences')+':', y, M,W,H,11);
     for(const d of pack.docs.slice(0,3)){
-      y = putParagraph(pdf, `• ${d.name} [score ${d.score}]`, y, M,W,H,11);
-      for(const s of d.snippets.slice(0,2)){ y = putParagraph(pdf, `   - ${s.page?('p.'+s.page+' '):''}${s.section?(`[${s.section}] `:'')}${s.html.replace(/<[^>]+>/g,' ')}`, y, M,W,H,10); }
+      y = putParagraph(pdf, `• ${d.name} [${t('scoreLabel')} ${d.score}]`, y, M,W,H,11);
+      for(const s of d.snippets.slice(0,2)){ y = putParagraph(pdf, `   - ${s.page?(`${t('pageShort')}${s.page} `):''}${s.section?(`[${s.section}] `:'')}${s.html.replace(/<[^>]+>/g,' ')}`, y, M,W,H,10); }
     }
     for(const p of pack.papers.slice(0,3)){
-      y = putParagraph(pdf, `• ${p.title} (${p.journal||''} ${p.year||''}) [score ${p.score}]`, y, M,W,H,11);
+      y = putParagraph(pdf, `• ${p.title} (${p.journal||''} ${p.year||''}) [${t('scoreLabel')} ${p.score}]`, y, M,W,H,11);
       for(const s of p.snippets.slice(0,1)){ y = putParagraph(pdf, `   - ${s.html.replace(/<[^>]+>/g,' ')}`, y, M,W,H,10); }
     }
   }
@@ -1178,9 +1177,8 @@ function putHeading(pdf,text,y,size,color,M,W,H){ if(y + size + 18 > H - M){ pdf
 function putParagraph(pdf,text,y,M,W,H,size=11){ pdf.setTextColor(0,0,0); pdf.setFont('helvetica','normal'); pdf.setFontSize(size); const chunks=pdf.splitTextToSize(text,W-2*M); for(const ln of chunks){ if(y>H-M){ pdf.addPage(); y=M; } pdf.text(ln,M,y); y+=14; } return y+4;}
 function hexToRGB(hex){const h=hex.replace('#','');const n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];}
 function blobToDataURL(blob){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(blob);});}
-document.getElementById('year').textContent=new Date().getFullYear();
 
-/* ===== Contact mailto ===== */
+/* Contact mailto */
 function updateMailto(){
   const name = document.getElementById('c_name').value || '';
   const org  = document.getElementById('c_org').value || '';
@@ -1194,6 +1192,10 @@ function updateMailto(){
 }
 ['c_name','c_org','c_email','c_msg'].forEach(id=>document.getElementById(id).addEventListener('input', updateMailto));
 updateMailto();
+
+/* Init années */
+document.getElementById('year').textContent=new Date().getFullYear();
+document.getElementById('year2').textContent=new Date().getFullYear();
 </script>
 </body>
 </html>
