@@ -8,8 +8,12 @@
 <meta name="color-scheme" content="light"/>
 <style>
 :root{
-  --bg:#F6F7FB; --panel:#FFFFFF; --ink:#0F1226; --muted:#6C7392;
-  --blueDeep:#0D2A5A; --primary:#3A49FF; --accent:#00FF6A; --border:#E6E9F4;
+  --bg:#F6F7FB; --panel:#FFFFFF;
+  --ink:#0D2A5A;               /* bleu clinique/foncé (police & barre latérale) */
+  --muted:#6C7392;
+  --primary:#3A49FF;
+  --accent:#00FF6A;            /* vert fluo pour libellés/menu */
+  --border:#E6E9F4;
   --radius:18px; --shadow:0 10px 30px rgba(15,18,38,.06);
 }
 *{box-sizing:border-box} html,body{height:100%}
@@ -17,7 +21,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:Outfit,system-ui
 a{color:var(--primary);text-decoration:none} a:hover{text-decoration:underline}
 img{display:block;max-width:100%}
 
-/* ===== Header ===== */
+/* Header */
 header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--border)}
 .nav{max-width:1200px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
 .logo{height:40px;width:auto}
@@ -26,34 +30,39 @@ header{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid 
 .lang .btn{appearance:none;border:1px solid var(--border);background:#fff;color:var(--ink);padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:600}
 .lang .btn.active{border-color:var(--primary);}
 
-/* ===== Hamburger (label for checkbox) ===== */
+/* Hamburger (checkbox-driven) */
 #navToggle{display:none}
 .hamburger{appearance:none;display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);background:#fff;padding:8px 12px;border-radius:12px;cursor:pointer}
 .hamburger .bars{position:relative;width:18px;height:12px}
-.hamburger .bars::before,.hamburger .bars::after,.hamburger .bar{content:"";position:absolute;left:0;right:0;height:2px;background:var(--primary);border-radius:2px}
+.hamburger .bars::before,.hamburger .bars::after,.hamburger .bar{content:"";position:absolute;left:0;right:0;height:2px;background:var(--ink);border-radius:2px}
 .hamburger .bars::before{top:0}.hamburger .bar{top:5px}.hamburger .bars::after{bottom:0}
 
-/* ===== Drawer (CSS-only) ===== */
+/* Drawer (latérale bleue) */
 .drawer-overlay{position:fixed;inset:0;background:rgba(5,8,20,.38);backdrop-filter:blur(1px);z-index:80;opacity:0;pointer-events:none;transition:opacity .25s ease}
-.drawer{position:fixed;top:0;right:0;height:100%;width:min(86vw,360px);transform:translateX(100%);transition:transform .28s ease;background:linear-gradient(180deg,#2a59b6,#0D2A5A);color:#fff;z-index:90;display:flex;flex-direction:column}
+.drawer{
+  position:fixed;top:0;right:0;height:100%;width:min(86vw,360px);
+  transform:translateX(100%);transition:transform .28s ease;
+  background:var(--ink);color:#fff;z-index:90;display:flex;flex-direction:column
+}
 #navToggle:checked ~ .drawer-overlay{opacity:1;pointer-events:auto}
 #navToggle:checked ~ .drawer{transform:translateX(0)}
 .drawer header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.18)}
 .drawer .title{font-weight:800;letter-spacing:.04em}
 .drawer .close{appearance:none;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
 .drawer .body{padding:14px 18px;display:grid;gap:12px}
+/* Liens: fond blanc, police vert fluo */
 .drawer .link{
   display:flex;align-items:center;gap:10px;padding:14px 12px;border-radius:12px;
-  border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);text-transform:uppercase;
-  font-weight:800;letter-spacing:.06em;color:var(--accent); /* vert fluo */
+  border:1px solid #fff;background:#fff;text-transform:uppercase;
+  font-weight:800;letter-spacing:.06em;color:var(--accent);
 }
-.drawer .link:hover{background:rgba(255,255,255,.12)}
+.drawer .link:hover{filter:brightness(.95)}
 
-/* ===== Sections (routing hash) ===== */
+/* Vues */
 .view{display:none}
 .view.active{display:block}
 
-/* ===== Intro / tiles ===== */
+/* Intro */
 .hero{max-width:1200px;margin:0 auto;padding:44px 20px 8px}
 .kicker{color:var(--accent);font-weight:800;letter-spacing:.28em;font-size:13px;text-transform:uppercase}
 h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04;color:var(--primary);text-transform:uppercase;font-weight:800}
@@ -70,7 +79,7 @@ h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04
 .tile h3{margin:10px 0 6px;color:#0F1226}
 .tile p{margin:0;color:var(--muted);font-size:14px}
 
-/* ===== Basic blocks for App/Contact ===== */
+/* Blocks */
 .block{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .block header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#fff,#FBFCFF)}
 .block header .overline{color:var(--accent);font-weight:800;letter-spacing:.18em;font-size:11px}
@@ -78,15 +87,61 @@ h1.hero-title{margin:10px 0 10px;font-size:clamp(36px,6vw,64px);line-height:1.04
 .block .inner{padding:18px 20px}
 .muted{color:var(--muted)}
 hr.sep{border:none;border-top:1px solid var(--border);margin:14px 0}
+
+/* App */
+#app .app-sub{display:none}
+#app .app-sub.active{display:block}
+#app .hide{display:none!important}
+#app .workspace{display:grid;gap:16px}
+@media(min-width:1100px){#app .workspace{grid-template-columns:320px 1fr}}
+#app .sidebar{border:1px solid var(--border);border-radius:16px;background:#fff;padding:12px;height:100%}
+#app .sidebar h4{margin:6px 0 10px;color:#3A49FF}
+#app .source-item{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px}
+#app .source-item input{width:auto}
+#app .mainpanel{display:grid;gap:12px}
+#app .panel{border:1px solid var(--border);border-radius:16px;background:#fff;padding:16px}
+#app .panel h3{margin:0 0 8px;color:#3A49FF}
+#app .result-card{border:1px solid var(--border);border-radius:16px;background:#fff;padding:12px;box-shadow:0 6px 16px rgba(15,18,38,.04);display:grid;gap:10px}
+#app .result-meta{color:var(--muted);font-size:13px}
+#app .snip{font-size:14px;line-height:1.4;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:10px}
+#app .snip .meta{color:var(--muted);font-size:12px;margin-bottom:4px}
+#app .snip mark{padding:0 2px;border-radius:4px;background:#FFF59D}
+#app pre.code{white-space:pre-wrap;background:#FBFCFF;border:1px solid var(--border);border-radius:12px;padding:12px}
+#app .drop{display:grid;place-items:center;text-align:center;gap:8px;padding:22px;border:2px dashed var(--border);border-radius:12px;background:#fff}
+#app .drop.drag{border-color:var(--primary)}
+#app .file-list{display:grid;gap:10px;margin-top:10px}
+#app .chips{display:flex;gap:8px;flex-wrap:wrap}
+#app .chip{padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:#fff;cursor:pointer}
+#app .chip.active{border-color:#3A49FF;box-shadow:0 2px 10px rgba(58,73,255,.16)}
+#app .bar{height:6px;border-radius:6px;background:#EEF1FF;overflow:hidden}
+#app .bar > span{display:block;height:100%;background:#3A49FF}
+#app table.evidence{width:100%;border-collapse:separate;border-spacing:0 8px}
+#app table.evidence th,#app table.evidence td{background:#fff;border:1px solid var(--border);padding:10px;vertical-align:top}
+#app table.evidence th{color:#3A49FF;text-transform:uppercase;font-size:12px;letter-spacing:.06em}
+#app .nowrap{white-space:nowrap}
+
+/* Protocole (texte noir) */
+#protocolOutput{white-space:pre-wrap;background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;color:#000}
+
+/* Toggle switch */
+.switch{display:inline-flex;align-items:center;gap:10px}
+.switch input{appearance:none;width:46px;height:26px;border-radius:999px;background:#E7EBF7;position:relative;outline:none;cursor:pointer;border:1px solid var(--border)}
+.switch input::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.12);transition:transform .2s ease}
+.switch input:checked{background:#CFE9FF;border-color:#A4D2FF}
+.switch input:checked::after{transform:translateX(20px)}
+.badge-op{display:inline-block;padding:6px 10px;border:1px dashed var(--primary);border-radius:12px;background:#fff;color:var(--primary);font-weight:700}
+
+/* Watermark hint (preview only) */
+.watermark-hint{color:#9AA3C7;font-size:12px;margin-left:8px}
 </style>
 </head>
 <body>
 
-<!-- ===== CSS-only toggle ===== -->
+<!-- Toggle CSS-only -->
 <input type="checkbox" id="navToggle" aria-hidden="true"/>
-
-<!-- ===== Drawer overlay & panel (both are labels for navToggle, so CSS-only works) ===== -->
 <label class="drawer-overlay" for="navToggle" aria-hidden="true"></label>
+
+<!-- Drawer latérale bleue -->
 <aside class="drawer" role="dialog" aria-modal="true" aria-label="Main menu">
   <header>
     <div class="title" data-i="menu">Menu</div>
@@ -100,7 +155,7 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:14px 0}
   </div>
 </aside>
 
-<!-- ===== Header ===== -->
+<!-- Header -->
 <header>
   <div class="nav">
     <picture>
@@ -110,7 +165,6 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:14px 0}
     <div class="brand" data-i="brand">Montes BioPharma</div>
 
     <div class="lang">
-      <!-- Hamburger is a label for the checkbox => opens the drawer with CSS -->
       <label class="hamburger" for="navToggle" title="Menu">
         <span class="bars" aria-hidden="true"><span class="bar"></span></span>
         <span data-i="menu">Menu</span>
@@ -121,11 +175,9 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:14px 0}
   </div>
 </header>
 
-<!-- ===== Views (hash routing) ===== -->
 <main>
-
   <!-- INTRO -->
-  <section id="intro" class="view active" aria-labelledby="navIntro">
+  <section id="intro" class="view active">
     <section class="hero">
       <div class="kicker" data-i="kicker">ASSISTANT LITTÉRATURE</div>
       <h1 class="hero-title" data-i="heroTitle">No learning curve,<br/>no complications</h1>
@@ -163,7 +215,7 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:14px 0}
   </section>
 
   <!-- APPLICATION -->
-  <section id="app" class="view" aria-labelledby="navApp">
+  <section id="app" class="view">
     <section class="section">
       <div class="block">
         <header>
@@ -171,18 +223,200 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:14px 0}
             <div class="overline" data-i="overlineApp">ANALYSE DE LA DEMANDE</div>
             <h2 data-i="appTitle">Votre besoin</h2>
           </div>
+          <div class="controls">
+            <button class="btn ghost" id="resetApp" data-ai="reset">Réinitialiser</button>
+          </div>
         </header>
         <div class="inner">
-          <p class="muted" data-i="appLead">Choisissez votre biomolécule, votre domaine pharmaceutique et vos sous-domaines d’intérêt. (Contenu fonctionnel à brancher ici.)</p>
-          <hr class="sep">
-          <p class="muted">—</p>
+          <!-- STEP 1 -->
+          <div id="app-step1" class="app-sub active">
+            <p class="muted" data-ai="appLead">Choisissez votre biomolécule, votre domaine pharmaceutique et vos sous-domaines d’intérêt.</p>
+            <div class="grid" style="margin-top:8px">
+              <div>
+                <label data-ai="q1">Quelle biomolécule voulez-vous produire ?</label>
+                <select id="bioSelect">
+                  <option value="" selected disabled data-ai="selectPlaceholder">— Sélectionner —</option>
+                  <option value="Adenovirus">Adénovirus</option>
+                </select>
+              </div>
+              <div id="domainWrap" class="hide">
+                <label data-ai="q2">Quel est le domaine du pharmaceutique que vous souhaitez explorer ?</label>
+                <select id="domainSelect"></select>
+              </div>
+              <div id="detailWrap" class="hide">
+                <label><strong id="detailTitle" data-ai="detailTitleGeneric">Spécifiez votre besoin</strong></label>
+                <div id="detailChoices" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))"></div>
+              </div>
+              <div id="confirmWrap" class="hide">
+                <div class="panel" style="border:1px dashed var(--border)">
+                  <p id="confirmText" class="muted"></p>
+                </div>
+                <div class="controls">
+                  <button class="btn primary" id="goToDocs" data-ai="goNext">Passer à la suite</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div id="app-step2" class="app-sub">
+            <div class="grid">
+              <div>
+                <label data-ai="qDocs">Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?</label>
+                <div class="controls">
+                  <button class="btn secondary" id="btnDocYes" data-ai="yes">Oui</button>
+                  <button class="btn secondary" id="btnDocNo" data-ai="no">Non</button>
+                </div>
+              </div>
+              <div id="uploaderWrap" class="hide">
+                <div id="drop" class="drop" style="margin-top:6px">
+                  <div>
+                    <strong data-ai="dropTitle">Déposez vos fichiers ici</strong>
+                    <div class="muted" data-ai="dropHint">ou cliquez pour sélectionner</div>
+                    <small data-ai="dropTypes">Acceptés : PDF, DOCX, TXT</small>
+                  </div>
+                  <input id="fileInput" type="file" multiple accept=".pdf,.docx,.txt" style="display:none">
+                </div>
+                <div class="file-list" id="filesList"></div>
+              </div>
+
+              <div style="margin-top:10px">
+                <label data-ai="qLit">Souhaitez-vous une recherche dans la littérature selon votre domaine ?</label>
+                <div class="controls">
+                  <button class="btn secondary" id="btnLitYes" data-ai="yes">Oui</button>
+                  <button class="btn secondary" id="btnLitNo" data-ai="no">Non</button>
+                </div>
+              </div>
+
+              <div class="controls" style="margin-top:8px">
+                <button class="btn primary" id="toWorkspace" data-ai="goAnalysis">Aller à l’analyse</button>
+              </div>
+            </div>
+
+            <!-- Modale littérature -->
+            <div id="litModal" class="modal hide" aria-hidden="true" style="position:fixed;inset:0;background:rgba(5,8,20,.38);display:flex;align-items:center;justify-content:center;z-index:70">
+              <div class="modal-card" style="width:min(980px,92vw);max-height:86vh;overflow:auto;background:#fff;border-radius:18px;box-shadow:0 18px 44px rgba(15,18,38,.22);padding:18px">
+                <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                  <h3 style="margin:0" data-ai="litResultsTitle">Résultats littérature</h3>
+                  <button class="btn ghost" id="closeLitModal" data-ai="close">Fermer</button>
+                </header>
+                <div id="litResults"></div>
+                <div class="controls" style="margin-top:10px">
+                  <button class="btn primary" id="runLitAnalysis" data-ai="runContentAnalysis">Lancer l’analyse du contenu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div id="app-step3" class="app-sub">
+            <div class="workspace">
+              <aside class="sidebar">
+                <h4 data-ai="internalSources">Sources internes</h4>
+                <div id="docList"></div>
+                <h4 style="margin-top:12px" data-ai="selectedArticles">Articles sélectionnés</h4>
+                <div id="artList"></div>
+                <hr class="sep">
+                <h4 data-ai="activeSubdomains">Sous-domaines actifs</h4>
+                <div id="sdChips" class="chips"></div>
+              </aside>
+
+              <div class="mainpanel">
+                <div class="panel">
+                  <h3 data-ai="overview">Vue d’ensemble</h3>
+                  <div id="overview"></div>
+                </div>
+
+                <div id="sdResults"></div>
+
+                <div class="panel">
+                  <h3 data-ai="evidenceTitle">Table d’évidences</h3>
+                  <div class="controls" style="margin-bottom:8px">
+                    <button class="btn ghost" id="exportCSV" data-ai="exportCsv">Exporter CSV</button>
+                    <button class="btn ghost" id="recompute" data-ai="recompute">Recalculer</button>
+                    <button class="btn primary" id="toProtocol" data-ai="toProtocol">Créer le protocole</button>
+                  </div>
+                  <div style="overflow:auto">
+                    <table class="evidence" id="evidenceTable">
+                      <thead>
+                        <tr>
+                          <th data-ai="thSubdomain">Sous-domaine</th>
+                          <th data-ai="thSource">Source</th>
+                          <th data-ai="thType">Type</th>
+                          <th class="nowrap" data-ai="thScore">Score</th>
+                          <th data-ai="thSnippet">Extrait</th>
+                          <th class="nowrap" data-ai="thMeta">Page/Section</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4 : Protocole -->
+          <div id="app-step4" class="app-sub">
+            <div class="panel">
+              <h3>
+                <span data-ai="protoTitle">Protocole documentaire</span>
+                <span id="modeBadge" class="badge-op" style="margin-left:8px"></span>
+                <span id="wmHint" class="watermark-hint"></span>
+              </h3>
+
+              <!-- Toggle Doc / Opérationnel -->
+              <div class="controls" style="margin:6px 0 12px">
+                <label class="switch">
+                  <span>Documentaire</span>
+                  <input type="checkbox" id="opToggle" aria-label="Opérationnel (interne)"/>
+                  <span>Opérationnel (interne)</span>
+                </label>
+              </div>
+
+              <!-- Garde-fous & métadonnées (opérationnel) -->
+              <div id="opMeta" class="hide" style="border:1px dashed var(--primary);border-radius:12px;padding:12px;background:#fff">
+                <div class="muted" data-ai="opNotice">
+                  Mode interne protégé : fusion de sections à partir de SOP/MBR autorisés, sans paramètres chiffrés. Export marqué “DRAFT – FOR QA REVIEW”.
+                </div>
+                <div class="grid" style="margin-top:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+                  <div><label data-ai="ccn">Change control #</label><input id="ccId" placeholder="CC-2025-001"></div>
+                  <div><label data-ai="roleName">Rôle / Nom</label><input id="roleName" placeholder="Process Owner – J. Doe"></div>
+                  <div><label data-ai="qaName">Reviewer QA</label><input id="qaName" placeholder="A. Smith"></div>
+                  <div><label data-ai="date">Date</label><input id="ccDate" type="date"></div>
+                </div>
+              </div>
+
+              <!-- SOP Library -->
+              <div id="sopLibWrap" class="hide" style="margin-top:12px">
+                <div class="panel" style="padding:12px">
+                  <h4 style="margin:0 0 8px" data-ai="sopLibTitle">Bibliothèque SOP autorisées</h4>
+                  <div class="muted" data-ai="sopLibHint">Chargez un JSON pour compléter/remplacer la bibliothèque. Sélectionnez les SOP à fusionner.</div>
+                  <div class="controls" style="margin:8px 0">
+                    <input type="file" id="sopJsonInput" accept="application/json" style="display:none">
+                    <button class="btn ghost" id="btnLoadSopJson" data-ai="loadSop">Charger JSON</button>
+                  </div>
+                  <div id="sopSelectArea"></div>
+                </div>
+              </div>
+
+              <div class="controls" style="margin:12px 0">
+                <button class="btn primary" id="generateProtocol" data-ai="generateProto">Générer / régénérer</button>
+                <button class="btn ghost" id="exportProtoPdf" data-ai="exportProtoPdf">Exporter en PDF</button>
+              </div>
+
+              <div id="protocolOutput"></div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
   </section>
 
   <!-- CONTACT -->
-  <section id="contact" class="view" aria-labelledby="navContact">
+  <section id="contact" class="view">
     <section class="section">
       <div class="block">
         <header>
@@ -199,7 +433,6 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:14px 0}
       </div>
     </section>
   </section>
-
 </main>
 
 <footer style="background:#fff;border-top:1px solid var(--border);margin-top:36px">
@@ -212,31 +445,15 @@ hr.sep{border:none;border-top:1px solid var(--border);margin:14px 0}
 </footer>
 
 <script>
-/* ===== Minimal router (hash) + auto-close drawer ===== */
-const views = {
-  intro: document.getElementById('intro'),
-  app: document.getElementById('app'),
-  contact: document.getElementById('contact')
-};
+/* Router + Drawer auto-close */
+const views = { intro:document.getElementById('intro'), app:document.getElementById('app'), contact:document.getElementById('contact') };
 const navToggle = document.getElementById('navToggle');
-function show(id){
-  Object.values(views).forEach(v=>v.classList.remove('active'));
-  (views[id] || views.intro).classList.add('active');
-}
-function route(){
-  const id = (location.hash||'#intro').replace('#','');
-  show(id);
-  // auto-close drawer after navigation
-  if(navToggle.checked) navToggle.checked = false;
-}
-window.addEventListener('hashchange', route);
-window.addEventListener('DOMContentLoaded', route);
-// Also close when clicking any link inside drawer (works even without hash change)
-document.querySelectorAll('.menu-link').forEach(a=>{
-  a.addEventListener('click', ()=>{ if(navToggle.checked) navToggle.checked=false; });
-});
+function show(id){ Object.values(views).forEach(v=>v.classList.remove('active')); (views[id]||views.intro).classList.add('active'); }
+function route(){ const id=(location.hash||'#intro').replace('#',''); show(id); if(navToggle.checked) navToggle.checked=false; }
+addEventListener('hashchange', route); addEventListener('DOMContentLoaded', route);
+document.querySelectorAll('.menu-link').forEach(a=>a.addEventListener('click',()=>{ if(navToggle.checked) navToggle.checked=false; }));
 
-/* ===== i18n (FR/EN) ===== */
+/* i18n global */
 const I={
   fr:{brand:"Montes BioPharma",menu:"Menu",close:"Fermer",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
       kicker:"ASSISTANT LITTÉRATURE",heroTitle:"No learning curve,<br/>no complications",
@@ -247,7 +464,6 @@ const I={
       t3Title:"Synthèse des contenus",t3Text:"Résumé automatique (Hugging Face) des abstracts / texte intégral.",
       t4Title:"Export documentaire",t4Text:"Protocole documentaire structuré (sans paramètres expérimentaux).",
       overlineApp:"ANALYSE DE LA DEMANDE",appTitle:"Votre besoin",
-      appLead:"Choisissez votre biomolécule, votre domaine pharmaceutique et vos sous-domaines d’intérêt. (Contenu fonctionnel à brancher ici.)",
       overlineContact:"PRISE DE CONTACT",contactTitle:"Discutons de votre projet",
       contactIntro:"Nos scientifiques experts peuvent vous aider à accélérer la mise au point de vos procédés (vecteurs adénoviraux, purification, analytique, documentation).",
       footerNote:"Europe PMC / PubMed — Hugging Face (optionnel). Aucune instruction expérimentale."
@@ -261,7 +477,6 @@ const I={
       t3Title:"Content synthesis",t3Text:"Automatic summaries (Hugging Face) of abstracts / full text.",
       t4Title:"PDF export",t4Text:"Structured documentary protocol (no experimental parameters).",
       overlineApp:"REQUEST ANALYSIS",appTitle:"Your need",
-      appLead:"Choose your biomolecule, your pharmaceutical domain and your subdomains of interest. (Functional content to wire here.)",
       overlineContact:"GET IN TOUCH",contactTitle:"Let's discuss your project",
       contactIntro:"Our expert scientists can help accelerate your process development (adenoviral vectors, purification, analytics, documentation).",
       footerNote:"Europe PMC / PubMed — Hugging Face (optional). No experimental instructions."
@@ -281,10 +496,734 @@ const btnFR=document.getElementById('btnFR'), btnEN=document.getElementById('btn
 btnFR.addEventListener('click',()=>{ setLang('fr'); btnFR.classList.add('active'); btnEN.classList.remove('active'); });
 btnEN.addEventListener('click',()=>{ setLang('en'); btnEN.classList.add('active'); btnFR.classList.remove('active'); });
 
-/* ===== Init years / lang ===== */
 document.getElementById('year').textContent = new Date().getFullYear();
 document.getElementById('year2').textContent = new Date().getFullYear();
 setLang('fr');
+</script>
+
+<!-- APPLICATION MODULE + MODE OPÉRATIONNEL -->
+<script>
+(function(){
+  /* ===== i18n local Application ===== */
+  const APP_I = {
+    fr: {
+      reset:"Réinitialiser", appLead:"Choisissez votre biomolécule, votre domaine pharmaceutique et vos sous-domaines d’intérêt.",
+      q1:"Quelle biomolécule voulez-vous produire ?", selectPlaceholder:"— Sélectionner —",
+      q2:"Quel est le domaine du pharmaceutique que vous souhaitez explorer ?",
+      detailTitleGeneric:"Spécifiez votre besoin", goNext:"Passer à la suite",
+      qDocs:"Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?", yes:"Oui", no:"Non",
+      dropTitle:"Déposez vos fichiers ici", dropHint:"ou cliquez pour sélectionner", dropTypes:"Acceptés : PDF, DOCX, TXT",
+      qLit:"Souhaitez-vous une recherche dans la littérature selon votre domaine ?", goAnalysis:"Aller à l’analyse",
+      litResultsTitle:"Résultats littérature", close:"Fermer", runContentAnalysis:"Lancer l’analyse du contenu",
+      internalSources:"Sources internes", selectedArticles:"Articles sélectionnés", activeSubdomains:"Sous-domaines actifs",
+      overview:"Vue d’ensemble", exportCsv:"Exporter CSV", recompute:"Recalculer", toProtocol:"Créer le protocole",
+      thSubdomain:"Sous-domaine", thSource:"Source", thType:"Type", thScore:"Score", thSnippet:"Extrait", thMeta:"Page/Section",
+      protoTitle:"Protocole documentaire", protoNote:"Sortie IA de type documentaire inspirée de la littérature et des documents internes. Aucune instruction expérimentale ni paramètre opératoire.",
+      generateProto:"Générer / régénérer", exportProtoPdf:"Exporter en PDF",
+      searching:"Recherche…", epmcError:"Erreur Europe PMC", open:"Ouvrir", selectAtLeastOne:"Sélectionnez au moins un article.",
+      ctx:"Contexte", noActiveSD:"Aucun sous-domaine actif.", docsInternal:"Documents internes", literature:"Littérature (Europe PMC / PubMed)", targetedSummary:"Résumé ciblé (~1 page)",
+      pdfTitle:"Protocole documentaire — Analyse ciblée", pdfOverview:"Vue d’ensemble", pdfEvidences:"Évidences",
+      biomolecule:"Biomolécule", domain:"Domaine", oaTag:"Accès libre", scoreLabel:"score", pageShort:"p.",
+      dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytique", dom_qa:"Assurance Qualité", dom_cmc:"CMC",
+      sdtitle_downstream:"Spécifiez les sous-domaines Downstream", sdtitle_upstream:"Spécifiez les sous-domaines Upstream", sdtitle_fill:"Spécifiez les sous-domaines Fill & Finish",
+      sdtitle_analytics:"Spécifiez les sous-domaines Analytiques", sdtitle_qa:"Spécifiez les sous-domaines Assurance Qualité", sdtitle_cmc:"Spécifiez les sous-domaines CMC",
+      /* Opérationnel */
+      opNotice:"Mode interne protégé : fusion de sections à partir de SOP/MBR autorisés, sans paramètres chiffrés. Export marqué “DRAFT – FOR QA REVIEW”.",
+      ccn:"Change control #", roleName:"Rôle / Nom", qaName:"Reviewer QA", date:"Date",
+      sopLibTitle:"Bibliothèque SOP autorisées", sopLibHint:"Chargez un JSON pour compléter/remplacer la bibliothèque. Sélectionnez les SOP à fusionner.",
+      loadSop:"Charger JSON",
+      modeDoc:"Documentaire", modeOp:"Opérationnel (interne)", wmDoc:"(sortie documentaire – pas d’instructions)", wmOp:"(DRAFT – FOR QA REVIEW)"
+    },
+    en: {
+      reset:"Reset", appLead:"Choose your biomolecule, your pharmaceutical domain and your subdomains of interest.",
+      q1:"Which biomolecule do you want to produce?", selectPlaceholder:"— Select —",
+      q2:"Which pharmaceutical domain do you want to explore?",
+      detailTitleGeneric:"Specify your need", goNext:"Continue",
+      qDocs:"Do you have internal documents I can use to design the method?", yes:"Yes", no:"No",
+      dropTitle:"Drop your files here", dropHint:"or click to select", dropTypes:"Accepted: PDF, DOCX, TXT",
+      qLit:"Would you like a literature search based on your domain?", goAnalysis:"Go to analysis",
+      litResultsTitle:"Literature results", close:"Close", runContentAnalysis:"Run content analysis",
+      internalSources:"Internal sources", selectedArticles:"Selected articles", activeSubdomains:"Active subdomains",
+      overview:"Overview", exportCsv:"Export CSV", recompute:"Recompute", toProtocol:"Create protocol",
+      thSubdomain:"Subdomain", thSource:"Source", thType:"Type", thScore:"Score", thSnippet:"Snippet", thMeta:"Page/Section",
+      protoTitle:"Documentary protocol", protoNote:"AI-generated documentary-style output informed by literature and internal docs. No experimental instructions or operating parameters.",
+      generateProto:"Generate / regenerate", exportProtoPdf:"Export PDF",
+      searching:"Searching…", epmcError:"Europe PMC error", open:"Open", selectAtLeastOne:"Select at least one article.",
+      ctx:"Context", noActiveSD:"No active subdomains.", docsInternal:"Internal documents", literature:"Literature (Europe PMC / PubMed)", targetedSummary:"Targeted summary (~1 page)",
+      pdfTitle:"Documentary protocol — Targeted analysis", pdfOverview:"Overview", pdfEvidences:"Evidences",
+      biomolecule:"Biomolecule", domain:"Domain", oaTag:"Open Access", scoreLabel:"score", pageShort:"p.",
+      dom_downstream:"Downstream", dom_upstream:"Upstream", dom_fill:"Fill & Finish", dom_analytics:"Analytical", dom_qa:"Quality Assurance", dom_cmc:"CMC",
+      /* Operational */
+      opNotice:"Protected internal mode: merge sections from authorized SOP/MBR only, no numeric parameters. Export is marked “DRAFT – FOR QA REVIEW”.",
+      ccn:"Change control #", roleName:"Role / Name", qaName:"QA Reviewer", date:"Date",
+      sopLibTitle:"Authorized SOP Library", sopLibHint:"Load a JSON to extend/replace the library. Select SOPs to merge.",
+      loadSop:"Load JSON",
+      modeDoc:"Documentary", modeOp:"Operational (internal)", wmDoc:"(documentary output – no instructions)", wmOp:"(DRAFT – FOR QA REVIEW)"
+    }
+  };
+
+  const LROOT = document.documentElement;
+  function appLang(){ return LROOT.dataset.lang || 'fr'; }
+  function at(key){ const L = APP_I[appLang()]||APP_I.fr; return (L && L[key]) || (APP_I.fr[key]||key); }
+  function appTranslate(){
+    document.querySelectorAll('#app [data-ai]').forEach(el=>{
+      const v = at(el.dataset.ai);
+      if(/<br\s*\/?>/.test(v)) el.innerHTML = v; else el.textContent = v;
+    });
+    // update evidence headers
+    const heads=['thSubdomain','thSource','thType','thScore','thSnippet','thMeta'];
+    heads.forEach((k,i)=>{ const th=document.querySelector(`#evidenceTable thead th:nth-child(${i+1})`); if(th) th.textContent=at(k); });
+    // Protocol header labels
+    document.getElementById('modeBadge').textContent = document.getElementById('opToggle').checked ? at('modeOp') : at('modeDoc');
+    document.getElementById('wmHint').textContent   = document.getElementById('opToggle').checked ? at('wmOp')  : at('wmDoc');
+  }
+  new MutationObserver(()=>appTranslate()).observe(LROOT,{attributes:true,attributeFilter:['data-lang']});
+  addEventListener('DOMContentLoaded', appTranslate);
+
+  /* ===== Refs & state ===== */
+  const appEl = document.getElementById('app');
+  const step1 = appEl.querySelector('#app-step1');
+  const step2 = appEl.querySelector('#app-step2');
+  const step3 = appEl.querySelector('#app-step3');
+  const step4 = appEl.querySelector('#app-step4');
+
+  const bioSelect    = appEl.querySelector('#bioSelect');
+  const domainWrap   = appEl.querySelector('#domainWrap');
+  const domainSelect = appEl.querySelector('#domainSelect');
+  const detailWrap   = appEl.querySelector('#detailWrap');
+  const detailTitle  = appEl.querySelector('#detailTitle');
+  const detailChoices= appEl.querySelector('#detailChoices');
+  const confirmWrap  = appEl.querySelector('#confirmWrap');
+  const confirmText  = appEl.querySelector('#confirmText');
+  const goToDocs     = appEl.querySelector('#goToDocs');
+  const resetAppBtn  = appEl.querySelector('#resetApp');
+
+  const btnDocYes = appEl.querySelector('#btnDocYes');
+  const btnDocNo  = appEl.querySelector('#btnDocNo');
+  const uploaderWrap = appEl.querySelector('#uploaderWrap');
+  const drop = appEl.querySelector('#drop');
+  const input = appEl.querySelector('#fileInput');
+  const filesList = appEl.querySelector('#filesList');
+
+  const btnLitYes = appEl.querySelector('#btnLitYes');
+  const btnLitNo  = appEl.querySelector('#btnLitNo');
+  const litModal  = appEl.querySelector('#litModal');
+  const closeLitModal = appEl.querySelector('#closeLitModal');
+  const litResults= appEl.querySelector('#litResults');
+  const runLitAnalysis = appEl.querySelector('#runLitAnalysis');
+  const toWorkspace = appEl.querySelector('#toWorkspace');
+
+  const docList   = appEl.querySelector('#docList');
+  const artList   = appEl.querySelector('#artList');
+  const sdChips   = appEl.querySelector('#sdChips');
+  const overview  = appEl.querySelector('#overview');
+  const sdResults = appEl.querySelector('#sdResults');
+  const evidenceTable = appEl.querySelector('#evidenceTable tbody');
+  const exportCSVBtn  = appEl.querySelector('#exportCSV');
+  const recomputeBtn  = appEl.querySelector('#recompute');
+  const toProtocolBtn = appEl.querySelector('#toProtocol');
+
+  const protocolOutput   = appEl.querySelector('#protocolOutput');
+  const generateProtocol = appEl.querySelector('#generateProtocol');
+  const exportProtoPdf   = appEl.querySelector('#exportProtoPdf');
+
+  const opToggle   = document.getElementById('opToggle');
+  const opMeta     = document.getElementById('opMeta');
+  const sopLibWrap = document.getElementById('sopLibWrap');
+  const modeBadge  = document.getElementById('modeBadge');
+  const wmHint     = document.getElementById('wmHint');
+  const sopJsonInput = document.getElementById('sopJsonInput');
+  const btnLoadSopJson= document.getElementById('btnLoadSopJson');
+  const sopSelectArea = document.getElementById('sopSelectArea');
+  const ccId   = document.getElementById('ccId');
+  const roleNm = document.getElementById('roleName');
+  const qaName = document.getElementById('qaName');
+  const ccDate = document.getElementById('ccDate');
+
+  const LS_KEY='mbp_app_state_v3';
+  let state = { request:{ biomolecule:null, domain:null, details:[] }, uploads:[], literature:{results:[], selected:[]}, analysis:{targeted:{}}, protocol:'', op:{enabled:false, ccId:'', role:'', qa:'', date:'', sops:[]}, lang: appLang() };
+
+  function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(_){} }
+  function loadState(){ try{ const s=JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(s){ state=Object.assign(state,s); } }catch(_){} }
+  function showSub(id){ [step1,step2,step3,step4].forEach(s=>s.classList.remove('active')); (id==='2'?step2:id==='3'?step3:id==='4'?step4:step1).classList.add('active'); scrollTo({top:0,behavior:'auto'}); saveState(); }
+
+  /* ===== Domaine & Sous-domaines ===== */
+  const SUBDOMAINS = {
+    downstream: [
+      {id:"clarification", fr:"Clarification", en:"Clarification"},
+      {id:"tff_df", fr:"Concentration et Diafiltration", en:"Concentration and Diafiltration"},
+      {id:"capture_chrom", fr:"Capture par chromatographie", en:"Capture by chromatography"},
+      {id:"polishing", fr:"Polishing", en:"Polishing"},
+      {id:"formulation", fr:"Formulation", en:"Formulation"},
+      {id:"final_filtration", fr:"Filtration finale", en:"Final Filtration"}
+    ],
+    upstream: [
+      {id:"cell_bank_seed", fr:"Banque cellulaire & Seed train", en:"Cell bank & seed train"},
+      {id:"production_bioreactor", fr:"Bioréacteur de production (batch/fed-batch/perfusion)", en:"Production bioreactor (batch/fed-batch/perfusion)"},
+      {id:"infection_strategy", fr:"Stratégie d’infection/MOI (si applicable)", en:"Infection/MOI strategy (if applicable)"},
+      {id:"harvest_lysis", fr:"Récolte / Lyse", en:"Harvest / Lysis"},
+      {id:"ipc", fr:"Contrôles en cours de procédé (IPC)", en:"In-process controls (IPC)"},
+      {id:"handoff_ds", fr:"Handoff vers Downstream", en:"Handoff to Downstream"}
+    ],
+    fill: [
+      {id:"hold_bulk", fr:"Hold bulk & cycles freeze/thaw", en:"Hold bulk & freeze/thaw cycles"},
+      {id:"aseptic_fill", fr:"Remplissage aseptique (flacons, seringues, cartouches)", en:"Aseptic filling (vials, syringes, cartridges)"},
+      {id:"ccc", fr:"Système contenant/fermeture & compatibilité", en:"Container/closure & compatibility"},
+      {id:"fit", fr:"Tests d’intégrité filtres", en:"Filter integrity tests"},
+      {id:"vi_aql", fr:"Inspection visuelle / AQL", en:"Visual inspection / AQL"},
+      {id:"cold_chain", fr:"Chaîne du froid & étiquetage", en:"Cold chain & labeling"}
+    ],
+    analytics: [
+      {id:"identity", fr:"Identité (p. ex. PCR/séquençage)", en:"Identity (e.g., PCR/sequencing)"},
+      {id:"potency", fr:"Puissance (infectivité, titres)", en:"Potency (infectivity, titers)"},
+      {id:"impurities", fr:"Impuretés (HCP, ADN résiduel, etc.)", en:"Impurities (HCP, residual DNA, etc.)"},
+      {id:"size_agg", fr:"Taille/agrégation (p. ex. DLS/TEM)", en:"Size/aggregation (e.g., DLS/TEM)"},
+      {id:"qPCR", fr:"Dosage (qPCR/ddPCR)", en:"Assay (qPCR/ddPCR)"},
+      {id:"stability_indic", fr:"Méthodes indicatrices de stabilité", en:"Stability-indicating methods"}
+    ],
+    qa: [
+      {id:"change_control", fr:"Change control", en:"Change control"},
+      {id:"deviation_capa", fr:"Déviations & CAPA", en:"Deviations & CAPA"},
+      {id:"training_qual", fr:"Qualification & formation", en:"Qualification & training"},
+      {id:"gxp_docs", fr:"Gestion documentaire GxP", en:"GxP document control"},
+      {id:"suppliers", fr:"Qualification fournisseurs & matières", en:"Supplier & material qualification"},
+      {id:"bmr", fr:"Revue des dossiers de lot", en:"Batch record review"}
+    ],
+    cmc: [
+      {id:"reg_strategy", fr:"Stratégie réglementaire", en:"Regulatory strategy"},
+      {id:"control_strategy", fr:"Control strategy", en:"Control strategy"},
+      {id:"specs_release", fr:"Spécifications & libération", en:"Specifications & release"},
+      {id:"comparability", fr:"Comparabilité (changements procédé)", en:"Comparability (process changes)"},
+      {id:"ppq", fr:"Validation / PPQ", en:"Validation / PPQ"},
+      {id:"proc_char", fr:"Caractérisation procédé", en:"Process characterization"}
+    ]
+  };
+
+  function L_dom(key){
+    const map = {downstream:'dom_downstream', upstream:'dom_upstream', fill:'dom_fill', analytics:'dom_analytics', qa:'dom_qa', cmc:'dom_cmc'};
+    const k = map[key]; const root = APP_I[appLang()];
+    return k ? (root[k] || APP_I.fr[k]) : (key||'-');
+  }
+
+  function renderDomainOptions(selectedKey){
+    const options = [
+      {key:'', label: at('selectPlaceholder')},
+      {key:'upstream', label: at('dom_upstream')},
+      {key:'downstream', label: at('dom_downstream')},
+      {key:'fill', label: at('dom_fill')},
+      {key:'analytics', label: at('dom_analytics')},
+      {key:'qa', label: at('dom_qa')},
+      {key:'cmc', label: at('dom_cmc')}
+    ];
+    domainSelect.innerHTML='';
+    options.forEach((o,i)=>{
+      const opt=document.createElement('option');
+      opt.value=o.key;
+      opt.textContent = i===0 ? `— ${o.label} —` : o.label;
+      if(selectedKey && o.key===selectedKey) opt.selected=true;
+      if(i===0) opt.disabled=true;
+      domainSelect.appendChild(opt);
+    });
+  }
+  renderDomainOptions();
+
+  bioSelect.addEventListener('change',()=>{ state.request.biomolecule=bioSelect.value||null; domainWrap.classList.remove('hide'); detailWrap.classList.add('hide'); confirmWrap.classList.add('hide'); saveState(); });
+  domainSelect.addEventListener('change',()=>{ const key=domainSelect.value||null; state.request.domain=key; buildDetailChoices(key); detailWrap.classList.remove('hide'); confirmWrap.classList.add('hide'); saveState(); });
+
+  function buildDetailChoices(domainKey){
+    const items = SUBDOMAINS[domainKey] || [];
+    const titleKey = 'sdtitle_' + domainKey;
+    detailTitle.textContent = APP_I[appLang()][titleKey] || at('detailTitleGeneric');
+    detailChoices.innerHTML = ""; confirmWrap.classList.add('hide');
+
+    const selectedIDs = new Set(state.request.details||[]);
+    items.forEach(item=>{
+      const lbl = (appLang()==='fr'?item.fr:item.en);
+      const row = document.createElement('label'); row.className='source-item';
+      row.innerHTML = `<input type="checkbox" data-id="${item.id}" style="width:auto"><span>${lbl}</span>`;
+      const cb=row.querySelector('input'); cb.checked=selectedIDs.has(item.id);
+      cb.addEventListener('change',()=>{
+        const ids=[...detailChoices.querySelectorAll('input:checked')].map(i=>i.dataset.id);
+        state.request.details = ids;
+        const visible = ids.map(id=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return (appLang()==='fr'?f.fr:f.en);} return id; });
+        const txtFR=`Parfait. Vous avez choisi : ${at('biomolecule').toLowerCase()} = ${state.request.biomolecule}; ${at('domain').toLowerCase()} = ${L_dom(state.request.domain)}; sous-domaines = ${visible.join(', ')}. Je garde ces choix en mémoire et nous allons passer à la seconde partie du processus.`;
+        const txtEN=`Great. You selected: ${at('biomolecule')} = ${state.request.biomolecule}; ${at('domain')} = ${L_dom(state.request.domain)}; subdomains = ${visible.join(', ')}. I'll keep these choices in memory and we'll move to the second part of the process.`;
+        confirmWrap.classList.toggle('hide', ids.length===0);
+        confirmText.textContent=(appLang()==='fr')?txtFR:txtEN;
+        saveState();
+      });
+      detailChoices.appendChild(row);
+    });
+    if((state.request.details||[]).length){ const first=detailChoices.querySelector('input'); if(first) first.dispatchEvent(new Event('change')); }
+  }
+
+  document.getElementById('goToDocs').addEventListener('click',()=>showSub('2'));
+
+  /* ===== Upload & Littérature ===== */
+  btnDocYes.onclick=()=>{uploaderWrap.classList.remove('hide');};
+  btnDocNo.onclick =()=>{uploaderWrap.classList.add('hide'); state.uploads=[]; filesList.innerHTML=''; saveState();};
+  drop?.addEventListener('click',(e)=>{e.preventDefault();input.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));});
+  drop?.addEventListener('dragover',(e)=>{e.preventDefault();drop.classList.add('drag');});
+  drop?.addEventListener('dragleave',()=>drop.classList.remove('drag'));
+  drop?.addEventListener('drop',(e)=>{e.preventDefault();drop.classList.remove('drag');handleFiles(e.dataTransfer.files);});
+  input?.addEventListener('change',(e)=>handleFiles(e.target.files));
+  function handleFiles(files){
+    state.uploads=[...files];
+    filesList.innerHTML='';
+    state.uploads.forEach(f=>{
+      const it=document.createElement('div'); it.className='source-item';
+      it.innerHTML=`<input type="checkbox" checked style="width:auto"><span>${f.name} — ${(f.size/1024/1024).toFixed(2)} MB</span>`;
+      filesList.appendChild(it);
+    });
+    saveState();
+  }
+
+  btnLitYes.onclick=()=>openLitModalAndSearch();
+  btnLitNo.onclick =()=>{};
+  closeLitModal.onclick=()=>{ litModal.classList.add('hide'); };
+
+  function domainQuery(){
+    const key=state.request.domain||'downstream';
+    const bm=(state.request.biomolecule||'Adenovirus');
+    const q={
+      downstream:`${bm} (chromatography OR TFF OR diafiltration OR polishing OR formulation OR filtration)`,
+      upstream:`${bm} (bioreactor OR perfusion OR seed train OR harvest OR lysis)`,
+      fill:`${bm} (aseptic filling OR container closure OR filter integrity OR visual inspection OR cold chain)`,
+      analytics:`${bm} (identity OR potency OR impurities OR aggregation OR qPCR OR stability)`,
+      qa:`${bm} (GxP OR deviation OR CAPA OR document control OR supplier qualification OR batch record)`,
+      cmc:`${bm} (control strategy OR specifications OR PPQ OR comparability OR process characterization)`
+    };
+    return q[key] || `${bm} purification`;
+  }
+
+  async function openLitModalAndSearch(){
+    litModal.classList.remove('hide');
+    litResults.innerHTML = `<div class="muted" data-ai="searching">${at('searching')}</div>`;
+    const q=domainQuery();
+    const url=`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+encodeURIComponent(q)+'&pageSize=12&format=json&sort_date:y')}`;
+    try{
+      const r=await fetch(url); const raw=await r.json(); const j=JSON.parse(raw.contents);
+      const res=(j.resultList?.result)||[];
+      state.literature.results = res.map(x=>({
+        pmid:x.pmid||'', pmcid:x.pmcid||'', title:x.title||'', journal:x.journalTitle||x.source||'', year:x.pubYear||'',
+        authors:(x.authorString||'').split(', ').slice(0,6), oa:(x.isOpenAccess==="Y"||x.openAccess=="Y"||x.openAccess)
+      }));
+      renderLitResults();
+    }catch(e){ litResults.innerHTML=`<div class="muted">${at('epmcError')}</div>`; }
+  }
+
+  function renderLitResults(){
+    litResults.innerHTML='';
+    state.literature.results.forEach((a,idx)=>{
+      const link = a.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${a.pmid}/` : (a.pmcid?`https://europepmc.org/article/PMC/${a.pmcid}`:'#');
+      const el=document.createElement('div'); el.className='result-card';
+      el.innerHTML=`
+        <label style="display:flex;gap:10px;align-items:flex-start">
+          <input type="checkbox" data-i="${idx}" style="width:auto;margin-top:4px">
+          <div>
+            <div><strong>${esc(a.title)}</strong> ${a.oa?'<span class="tag">'+at('oaTag')+'</span>':''}</div>
+            <div class="muted">${esc(a.journal)} · ${esc(a.year||'—')}</div>
+            <div class="muted">${esc(a.authors.join(', '))}</div>
+            <div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap">
+              <a class="tag" href="${link}" target="_blank" rel="noopener">${at('open')}</a>
+            </div>
+          </div>
+        </label>`;
+      el.querySelector('input').addEventListener('change',e=>{
+        const i=+e.target.dataset.i;
+        state.literature.results[i].selected = e.target.checked;
+      });
+      litResults.appendChild(el);
+    });
+  }
+
+  runLitAnalysis.onclick = async ()=>{
+    const chosen = state.literature.results.filter(x=>x.selected);
+    if(!chosen.length){ alert(at('selectAtLeastOne')); return; }
+    const HF_TOKEN = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    const HF_MODEL = "facebook/bart-large-cnn";
+    async function summarize(text){
+      if(!HF_TOKEN.startsWith('hf_')) return (text||'').slice(0,1200);
+      try{
+        const r=await fetch(`https://api-inference.huggingface.co/models/${HF_MODEL}`,{method:'POST',headers:{Authorization:`Bearer ${HF_TOKEN}`,'Content-Type':'application/json'},body:JSON.stringify({inputs:text})});
+        const j=await r.json();
+        return Array.isArray(j)&&j[0]?.summary_text ? j[0].summary_text : (text||'').slice(0,1200);
+      }catch(_){return (text||'').slice(0,1200);}
+    }
+    const out=[];
+    for(const a of chosen){
+      let abs=''; try{
+        if(a.pmid){ abs=await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/MED/${a.pmid}/abstractText?format=plain`).then(r=>r.text()); }
+        else if(a.pmcid){ abs=await fetch(`https://www.ebi.ac.uk/europepmc/webservices/rest/PMC/${a.pmcid}/abstractText?format=plain`).then(r=>r.text()); }
+      }catch(_){}
+      const s = await summarize(abs);
+      out.push({meta:a, abstract:abs||'', summary:s});
+    }
+    state.literature.selected=out; saveState(); litModal.classList.add('hide');
+  };
+
+  toWorkspace.addEventListener('click', ()=>{ buildWorkspace(); showSub('3'); });
+
+  /* ===== Analyse ciblée ===== */
+  const REDACT=/\b\d+(?:[\.,]\d+)?\s?(?:mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa|CFU|pfu|TCID50|FFU)\b/gi;
+  function sanitize(txt){return (txt||"").replace(REDACT,"[…]");}
+  function esc(s){return (s||'').replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));}
+  const SECBOOST = [[/(materials?|methods?|méthodes?)/i, 1.5],[/(results?|discussion)/i, 1.2]];
+  function windowsFromText(text, win=800, overlap=200){
+    const clean=(text||'').replace(/\s+/g,' ');
+    const out=[]; let i=0; const step = Math.max(64, win-overlap);
+    while(i<clean.length){ const slice=clean.slice(i, i+win); out.push({start:i,end:i+win,text:sanitize(slice),section:'body'}); i+=step; }
+    return out;
+  }
+  function closeCooccur(txt, rx1, rx2, max=60){
+    const a=[]; let m; while((m=rx1.exec(txt))){a.push(m.index); if(rx1.lastIndex===m.index) rx1.lastIndex++; }
+    let near=false, n; while((n=rx2.exec(txt))){ near = a.some(i=>Math.abs(i-n.index)<=max); if(near) break; if(rx2.lastIndex===n.index) rx2.lastIndex++; }
+    rx1.lastIndex=0; rx2.lastIndex=0; return near;
+  }
+  function scoreWindow(win, cfg){
+    const txt=win.text;
+    for(const r of cfg.must){ if(!r.test(txt)) return 0; }
+    let s=1.0;
+    for(const g of cfg.should){ const [pattern,w]=g; if(pattern.test(txt)) s+=w; }
+    if(cfg.must.length>=2 && closeCooccur(txt, new RegExp(cfg.must[0],'i'), new RegExp(cfg.must[1],'i'), 60)) s+=0.3;
+    for(const [sectRx,boost] of SECBOOST){ if(sectRx.test(win.section)) s*=boost; }
+    for(const ex of (cfg.exclude||[])){ if(ex.test(txt)) s-=0.6; }
+    return Math.max(0,s);
+  }
+  function highlight(html, patterns){ if(!patterns.length) return html; const rx=new RegExp('('+patterns.join('|')+')','gi'); return html.replace(rx,m=>`<mark>${m}</mark>`); }
+
+  const ADV=/adenovirus|adeno[-\s]?virus|ad5|ad26|adenoviral/i;
+  function cfg(must2, should, exclude=[]){ return { must:[ADV, must2], should, exclude }; }
+  const TA = {
+    clarification: cfg(/clarifi|centrifug|depth\s?filter|floccul|turbid|harvest/i, [[/depth\s?filter|clari|centrifug/i,1.2],[/floccul|polydadmac|turbidity/i,1.0]], [/AAV|adeno[-\s]?associated|lentivirus|retrovirus/i]),
+    tff_df: cfg(/diafiltrat|ultra?filtrat|tff|membrane/i, [[/tff|ultra?filtrat/i,1.5],[/diafiltrat|buffer exchange/i,1.2],[/membrane|cassette|NMWL|cut[\s-]?off/i,1.0]]),
+    capture_chrom: cfg(/chromatograph|column|resin|ligand/i, [[/affinity|heparin|monolith|membrane adsorber/i,2.0],[/anion exchange|AEX|quaternary amine|QA/i,1.5],[/cation exchange|CEX|carboxymethyl/i,1.2]]),
+    polishing: cfg(/polish|ion\s?exchange|SEC|size exclusion|flow[-\s]?through/i, [[/AEX|CEX|multimodal|hydrophobic/i,1.4],[/aggregate|host cell protein|DNA residual/i,1.1]]),
+    formulation: cfg(/formulat|excipient|stability|buffer|surfactant|trehalose|sucrose/i, [[/pH|osmol|surfactant|polysorbate/i,1.2],[/cryoprotect|stabilit/i,1.1]]),
+    final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?μ?m/i, [[/bioburden|sterility/i,1.2]])
+  };
+
+  function buildWorkspace(){
+    docList.innerHTML=''; state.uploads.forEach(f=>{ const it=document.createElement('div'); it.className='source-item'; it.innerHTML=`<input type="checkbox" checked style="width:auto"><span>${esc(f.name||'Document')}</span>`; docList.appendChild(it); });
+    artList.innerHTML=''; (state.literature.selected||[]).forEach((a,i)=>{ const it=document.createElement('div'); it.className='source-item'; it.innerHTML=`<input type="checkbox" checked data-i="${i}" style="width:auto"><span>${esc(a.meta.title||'Article')}</span>`; artList.appendChild(it); });
+    sdChips.innerHTML=''; const ids=state.request.details||[]; const labelOf=(id)=>{ for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return (appLang()==='fr'?f.fr:f.en);} return id; };
+    ids.forEach(id=>{ const chip=document.createElement('button'); chip.className='chip active'; chip.dataset.id=id; chip.textContent=labelOf(id); chip.onclick=()=>{chip.classList.toggle('active'); renderTargeted();}; sdChips.appendChild(chip); });
+    overview.innerHTML = `<div class="result-card"><div><strong>${at('ctx')}</strong></div><div class="muted">${at('biomolecule')}: ${esc(state.request.biomolecule||'-')} · ${at('domain')}: ${esc(L_dom(state.request.domain)||'-')}</div></div>`;
+    targetedAnalyze().then(()=>{ renderTargeted(); buildEvidenceTable(); saveState(); });
+  }
+
+  function renderTargeted(){
+    sdResults.innerHTML=''; const chips=[...sdChips.querySelectorAll('.chip')]; const activeIds=chips.filter(c=>c.classList.contains('active')).map(c=>c.dataset.id);
+    if(!activeIds.length){ sdResults.innerHTML=`<div class="muted">${at('noActiveSD')}</div>`; return; }
+    activeIds.forEach(id=>{
+      const pack=state.analysis.targeted[id]; if(!pack) return;
+      const title=(appLang()==='fr'?pack.labelFR:pack.labelEN)||id;
+      const sec=document.createElement('section'); sec.className='panel'; sec.innerHTML=`<h3>${esc(title)}</h3>`;
+      if(pack.docs.length){
+        const wrap=document.createElement('div'); wrap.innerHTML=`<div class="result-meta"><strong>${at('docsInternal')}</strong></div>`;
+        pack.docs.forEach(d=>{
+          const card=document.createElement('div'); card.className='result-card';
+          card.innerHTML=`<div><strong>${esc(d.name)}</strong></div><div class="bar"><span style="width:${Math.min(100,d.score*12)}%"></span></div>${d.snippets.map(s=>`<div class="snip"><div class="meta">${at('scoreLabel')} ${s.score}${s.page?` · ${at('pageShort')} ${s.page}`:''}${s.section?` · ${s.section}`:''}</div><div>${s.html}</div></div>`).join('')}`;
+          wrap.appendChild(card);
+        }); sec.appendChild(wrap);
+      }
+      if(pack.papers.length){
+        const wrap=document.createElement('div'); wrap.style.marginTop='10px'; wrap.innerHTML=`<div class="result-meta"><strong>${at('literature')}</strong></div>`;
+        pack.papers.forEach(p=>{
+          const card=document.createElement('div'); card.className='result-card';
+          card.innerHTML=`<div><strong>${esc(p.title)}</strong></div><div class="result-meta">${esc(p.journal||'')} · ${esc(p.year||'')}</div><div class="bar"><span style="width:${Math.min(100,p.score*12)}%"></span></div>${p.snippets.map(s=>`<div class="snip"><div class="meta">${at('scoreLabel')} ${s.score}</div><div>${s.html}</div></div>`).join('')}<div><a class="tag" href="${p.link}" target="_blank" rel="noopener">${at('open')}</a></div>`;
+          wrap.appendChild(card);
+        }); sec.appendChild(wrap);
+      }
+      const sum=document.createElement('div'); sum.style.marginTop='10px'; sum.innerHTML=`<div class="result-meta"><strong>${at('targetedSummary')}</strong></div><pre class="code">${esc((pack.summary||'(empty)').trim())}</pre>`; sec.appendChild(sum);
+      sdResults.appendChild(sec);
+    });
+  }
+
+  function buildEvidenceTable(){
+    evidenceTable.innerHTML=''; const rows=[];
+    for(const [sdId,pack] of Object.entries(state.analysis.targeted||{})){
+      const sdLabel=(appLang()==='fr'?pack.labelFR:pack.labelEN)||sdId;
+      for(const d of (pack.docs||[])){ for(const s of (d.snippets||[])){ rows.push({sd:sdLabel,source:d.name,type:'Doc',score:s.score,snippet:s.html.replace(/<[^>]+>/g,' ').trim(),meta:[s.page?`p.${s.page}`:'', s.section?`[${s.section}]`:'' ].filter(Boolean).join(' ')}); } }
+      for(const p of (pack.papers||[])){ for(const s of (p.snippets||[])){ rows.push({sd:sdLabel,source:p.title,type:'Pub',score:s.score,snippet:s.html.replace(/<[^>]+>/g,' ').trim(),meta:`${p.journal||''} ${p.year||''}`.trim()}); } }
+    }
+    rows.sort((a,b)=>b.score-a.score);
+    for(const r of rows.slice(0,400)){
+      const tr=document.createElement('tr'); tr.innerHTML=`<td>${esc(r.sd)}</td><td>${esc(r.source)}</td><td class="nowrap">${esc(r.type)}</td><td class="nowrap">${r.score}</td><td>${esc(r.snippet)}</td><td class="nowrap">${esc(r.meta)}</td>`;
+      evidenceTable.appendChild(tr);
+    }
+  }
+
+  /* ===== Extraction locale fichiers ===== */
+  async function ensurePdfEngines(){
+    if(!window.pdfjsLib){
+      await new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'; s.crossOrigin='anonymous'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+      await new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; s.crossOrigin='anonymous'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+    }
+    if(!window.mammoth){
+      await new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js'; s.crossOrigin='anonymous'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+    }
+  }
+  async function extractTextFromFile(f){
+    await ensurePdfEngines();
+    const buf=await f.arrayBuffer(); const ext=f.name.toLowerCase().split('.').pop();
+    if(ext==='pdf'){ const pdf=await pdfjsLib.getDocument({data:buf}).promise; let out=''; for(let i=1;i<=pdf.numPages;i++){ const page=await pdf.getPage(i); const c=await page.getTextContent(); out += ` [[PAGE:${i}]] ` + c.items.map(it=>it.str).join(' ') + '\n'; } return out.replace(/\s+/g,' ').trim(); }
+    if(ext==='docx'){ const res=await window.mammoth.extractRawText({arrayBuffer:buf}); return (res.value||'').replace(/\s+/g,' ').trim(); }
+    if(ext==='txt'){ return new TextDecoder().decode(new Uint8Array(buf)).replace(/\s+/g,' ').trim(); }
+    return '';
+  }
+
+  async function targetedAnalyze(){
+    state.analysis.targeted = {};
+    const sdIds = state.request.details||[]; if(!sdIds.length) return;
+    const docTexts=[]; for(const f of state.uploads){ const t=await extractTextFromFile(f); docTexts.push({name:f.name, text:t}); }
+    const wins=(text,win=800,overlap=200)=>windowsFromText(text,win,overlap);
+    const patternsOf=(id)=>TA[id]||null;
+
+    for(const sdId of sdIds){
+      const patterns=patternsOf(sdId); const results={ labelFR:'', labelEN:'', docs:[], papers:[], summary:'' };
+      for(const arr of Object.values(SUBDOMAINS)){ const m=arr.find(z=>z.id===sdId); if(m){ results.labelFR=m.fr; results.labelEN=m.en; break; } }
+      if(patterns){
+        for(const d of docTexts){ if(!d.text) continue; const top=wins(d.text,850,250).map(w=>({...w,score:scoreWindow(w,patterns)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,8);
+          if(top.length){ const avg=top.slice(0,5).reduce((a,c)=>a+c.score,0)/Math.min(5,top.length); results.docs.push({name:d.name,score:+avg.toFixed(2),snippets:top.map(s=>({score:+s.score.toFixed(2),section:s.section,html:highlight(s.text, patterns.must.concat((patterns.should||[]).map(x=>x[0])).map(r=>r.source))}))}); } }
+        for(const p of (state.literature.selected||[])){ const abs=(p.abstract||'').replace(/\s+/g,' '); if(!abs) continue;
+          const top=wins(abs,700,200).map(w=>({...w,score:scoreWindow(w,patterns)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,5);
+          if(top.length){ const avg=top.slice(0,3).reduce((a,c)=>a+c.score,0)/Math.min(3,top.length); const link=p.meta.pmid?`https://pubmed.ncbi.nlm.nih.gov/${p.meta.pmid}/`:(p.meta.pmcid?`https://europepmc.org/article/PMC/${p.meta.pmcid}`:'#'); results.papers.push({title:p.meta.title,year:p.meta.year,journal:p.meta.journal,score:+avg.toFixed(2),link, snippets:top.map(s=>({score:+s.score.toFixed(2),html:highlight(s.text, patterns.must.concat((patterns.should||[]).map(x=>x[0])).map(r=>r.source))}))}); } }
+      }
+      const baseText=[...results.docs.flatMap(d=>d.snippets.slice(0,3).map(s=>s.html.replace(/<[^>]+>/g,' '))), ...results.papers.flatMap(p=>p.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' ')))].join(' ');
+      const sentences=sanitize(baseText).split(/[\.\!\?]\s/).filter(x=>x.length>60).slice(0,12).join('. ')+'.';
+      results.summary=sentences;
+      state.analysis.targeted[sdId]=results;
+    }
+  }
+
+  /* ===== CSV ===== */
+  exportCSVBtn.addEventListener('click', ()=>{
+    const rows=[["Subdomain","Source","Type","Score","Snippet","Meta"]];
+    for(const [sdId, pack] of Object.entries(state.analysis.targeted||{})){
+      const sdLabel = (appLang()==='fr'?pack.labelFR:pack.labelEN)||sdId;
+      for(const d of (pack.docs||[])){ for(const s of (d.snippets||[])){ rows.push([sdLabel,d.name,"Doc",s.score,s.html.replace(/<[^>]+>/g,' ').trim(), [s.page?`p.${s.page}`:'', s.section?`[${s.section}]`:'' ].filter(Boolean).join(' ')]); } }
+      for(const p of (pack.papers||[])){ for(const s of (p.snippets||[])){ rows.push([sdLabel,p.title,"Pub",s.score,s.html.replace(/<[^>]+>/g,' ').trim(), `${p.journal||''} ${p.year||''}`.trim()]); } }
+    }
+    const csv=rows.map(r=>r.map(x=>('"'+(''+x).replace(/"/g,'""')+'"')).join(',')).join('\r\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='evidences.csv'; a.click(); URL.revokeObjectURL(a.href);
+  });
+  recomputeBtn.addEventListener('click', async ()=>{ await targetedAnalyze(); renderTargeted(); buildEvidenceTable(); saveState(); });
+
+  /* ===== MODE OPÉRATIONNEL (interne) ===== */
+
+  // SOP LIB par défaut (exemple minimal, à remplacer via upload JSON)
+  let SOP_LIB = {
+    "SOP-DS-CAPTURE-001-v3": {
+      "title_fr":"Capture par chromatographie — QA Resin",
+      "title_en":"Chromatographic capture — QA Resin",
+      "domain":"downstream",
+      "subdomains":["capture_chrom"],
+      "steps":["Equilibration","Load","Wash","Elution","Strip"],
+      "allowed_params":{"columns":["QA-Resin-01","Heparin-02"],"buffers":["Buffer_A","Buffer_B","Buffer_C"],"units_blocked":true}
+    },
+    "SOP-DS-TFF-002-v2": {
+      "title_fr":"TFF — Concentration & Diafiltration",
+      "title_en":"TFF — Concentration & Diafiltration",
+      "domain":"downstream",
+      "subdomains":["tff_df"],
+      "steps":["Concentration","Diafiltration"],
+      "allowed_params":{"membranes":["TFF-300kDa","TFF-500kDa"],"cycles_range":[1,10],"units_blocked":true}
+    }
+  };
+
+  btnLoadSopJson.addEventListener('click', ()=>sopJsonInput.click());
+  sopJsonInput.addEventListener('change', async (e)=>{
+    const file=e.target.files[0]; if(!file) return;
+    try{ const text=await file.text(); const j=JSON.parse(text); if(Object.keys(j||{}).length){ SOP_LIB=j; buildSopSelect(); } }catch(_){}
+  });
+
+  function buildSopSelect(){
+    sopSelectArea.innerHTML='';
+    const chosenDomain = state.request.domain||'downstream';
+    const chosenSds = new Set(state.request.details||[]);
+    const list = Object.entries(SOP_LIB).filter(([id,s])=>{
+      const okDom = !s.domain || s.domain===chosenDomain;
+      const okSd  = !Array.isArray(s.subdomains) || s.subdomains.some(x=>chosenSds.has(x));
+      return okDom && okSd;
+    });
+    if(!list.length){ sopSelectArea.innerHTML=`<div class="muted">No SOPs available for current domain/subdomains.</div>`; return; }
+
+    list.forEach(([id,s])=>{
+      const row=document.createElement('label'); row.className='source-item';
+      const title=(appLang()==='fr'?s.title_fr:s.title_en) || id;
+      row.innerHTML=`<input type="checkbox" data-sop="${id}" style="width:auto"><span><strong>${esc(title)}</strong> — <code>${id}</code></span>`;
+      const cb=row.querySelector('input'); cb.checked = state.op.sops.includes(id);
+      cb.addEventListener('change',()=>{ const picks=[...sopSelectArea.querySelectorAll('input:checked')].map(x=>x.dataset.sop); state.op.sops=picks; saveState(); });
+      sopSelectArea.appendChild(row);
+    });
+  }
+
+  opToggle.addEventListener('change', ()=>{
+    state.op.enabled = opToggle.checked;
+    modeBadge.textContent = opToggle.checked ? at('modeOp') : at('modeDoc');
+    wmHint.textContent    = opToggle.checked ? at('wmOp')   : at('wmDoc');
+    opMeta.classList.toggle('hide', !opToggle.checked);
+    sopLibWrap.classList.toggle('hide', !opToggle.checked);
+    saveState();
+  });
+
+  /* ===== Protocole — Génération ===== */
+
+  function protoHeaderLine(){ return `# ${at('protoTitle')}\n`; }
+  function protoMeta(){
+    const d=state.request; const dom=L_dom(d.domain||'');
+    return `${at('biomolecule')}: ${d.biomolecule||'-'}\n${at('domain')}: ${dom||'-'}\n\n`;
+  }
+
+  function documentaryProtocol(){
+    const langFR=appLang()==='fr';
+    const lines=[];
+    lines.push(protoHeaderLine());
+    lines.push(protoMeta());
+    lines.push(langFR?`> **Avertissement** — Document **non-opérationnel**. Synthèse documentaire basée sur la littérature et les documents internes fournis. **Aucun paramètre expérimental**.`:`> **Notice** — **Non-operational** document. Documentary synthesis based on literature and provided internal documents. **No experimental parameters**.`);
+    lines.push('\n## '+(langFR?'Objet & Portée':'Purpose & Scope'));
+    lines.push(langFR?'Décrire, à un niveau documentaire, l’architecture de la méthode relative aux sous-domaines sélectionnés.':'Describe, at a documentary level, the method architecture across selected subdomains.');
+    lines.push('\n## '+(langFR?'Références & Sources':'References & Sources'));
+    const refItems=[];
+    for(const [sdId,pack] of Object.entries(state.analysis.targeted||{})){
+      refItems.push(`- ${(langFR?pack.labelFR:pack.labelEN)||sdId}`);
+      pack.papers.slice(0,6).forEach(p=>refItems.push(`  - ${p.title} (${p.journal||''} ${p.year||''})`));
+      pack.docs.slice(0,4).forEach(d=>refItems.push(`  - [Doc] ${d.name}`));
+    }
+    lines.push(refItems.join('\n')|| (langFR?'(Aucune)':'(None)'));
+    for(const [sdId,pack] of Object.entries(state.analysis.targeted||{})){
+      lines.push('\n## '+((langFR?pack.labelFR:pack.labelEN)||sdId));
+      const keySnips=[...pack.docs.flatMap(d=>d.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' '))), ...pack.papers.flatMap(p=>p.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' ')))].slice(0,6);
+      lines.push((langFR?'**Synthèse documentaire :** ':'**Documentary synthesis:** ')+sanitize((pack.summary||'').replace(/\s+/g,' ').trim()));
+      if(keySnips.length){ lines.push(langFR?'**Points d’attention issus des sources :**':'**Key points from sources:**'); keySnips.forEach(k=>lines.push('- '+sanitize(k))); }
+    }
+    lines.push('\n## '+(langFR?'Enregistrements & Traçabilité':'Records & Traceability'));
+    lines.push(langFR?'Matrices d’évidence, rapports de synthèse, versions contrôlées.':'Evidence matrices, summary reports, controlled versions.');
+    return lines.join('\n');
+  }
+
+  function operationalProtocol(){
+    const langFR=appLang()==='fr';
+    const lines=[];
+    lines.push(`# ${langFR?'MBR draft — Protocole (opérationnel interne)':'MBR draft — Protocol (operational internal)'}\n`);
+    lines.push(protoMeta());
+    lines.push(langFR?`> **DRAFT — FOR QA REVIEW** — Fusion de sections à partir de **SOP autorisées**. **Aucune valeur chiffrée** n’est générée par l’outil. Toutes les exécutions doivent se référer aux SOP contrôlées.`:`> **DRAFT — FOR QA REVIEW** — Sections merged from **authorized SOPs**. **No numeric values** are generated by this tool. All execution must refer to controlled SOPs.`);
+    lines.push('\n### '+(langFR?'Métadonnées d’approbation':'Approval metadata'));
+    lines.push(`- ${at('ccn')}: ${state.op.ccId||'-'}`);
+    lines.push(`- ${at('roleName')}: ${state.op.role||'-'}`);
+    lines.push(`- ${at('qaName')}: ${state.op.qa||'-'}`);
+    lines.push(`- ${at('date')}: ${state.op.date||'-'}`);
+
+    const picks = state.op.sops||[];
+    if(!picks.length){ lines.push('\n'+(langFR?'*(Aucune SOP sélectionnée — veuillez en cocher dans la bibliothèque)*':'*(No SOP selected — please choose from the library)*')); return lines.join('\n'); }
+
+    lines.push('\n## '+(langFR?'SOP fusionnées':'Merged SOPs'));
+    picks.forEach(id=>{
+      const s=SOP_LIB[id]; if(!s) return;
+      const title=(appLang()==='fr'?s.title_fr:s.title_en) || id;
+      lines.push(`\n### ${title} — (${id})`);
+      lines.push(langFR?'**Étapes couvertes :**':'**Covered steps:**'); (s.steps||[]).forEach(st=>lines.push('- '+st));
+      lines.push(langFR?'**Paramètres autorisés (étiquettes) :**':'**Authorized parameters (labels):**');
+      const ap=s.allowed_params||{};
+      Object.keys(ap).filter(k=>k!=='units_blocked').forEach(k=>{
+        const vs=Array.isArray(ap[k])?ap[k].join(', '):JSON.stringify(ap[k]);
+        lines.push(`- ${k}: ${vs}`);
+      });
+      lines.push(langFR?'**Notes de composition :** cette section reprend la structure SOP sans divulguer de valeurs opératoires.':'**Composition notes:** this section reflects SOP structure without exposing operating values.');
+    });
+
+    // Rattacher aux sous-domaines sélectionnés (résumés ciblés)
+    lines.push('\n## '+(langFR?'Synthèse par sous-domaine':'Subdomain synthesis'));
+    for(const [sdId,pack] of Object.entries(state.analysis.targeted||{})){
+      const title=(langFR?pack.labelFR:pack.labelEN)||sdId;
+      lines.push('\n### '+title);
+      lines.push((langFR?'**Résumé (documentaire) :** ':'**Summary (documentary):** ')+sanitize((pack.summary||'').replace(/\s+/g,' ').trim()));
+      lines.push(langFR?'**Entrées / Sorties documentaires :**':'**Documentary Inputs / Outputs:**');
+      lines.push('- '+(langFR?'Entrées (matrices, échantillons, registres)':'Inputs (matrices, samples, records)'));
+      lines.push('- '+(langFR?'Sorties (enregistrements, rapports)':'Outputs (records, reports)'));
+    }
+
+    lines.push('\n## '+(langFR?'Traçabilité & pièces jointes':'Traceability & attachments'));
+    lines.push(langFR?'Matrice d’évidence, références SOP (ID/Version), logs de fusion.':'Evidence matrix, SOP references (ID/Version), merge logs.');
+    return lines.join('\n');
+  }
+
+  function generateNow(){
+    // Récup métadonnées op
+    state.op.ccId = ccId.value.trim();
+    state.op.role = roleNm.value.trim();
+    state.op.qa   = qaName.value.trim();
+    state.op.date = ccDate.value;
+    state.protocol = opToggle.checked ? operationalProtocol() : documentaryProtocol();
+    protocolOutput.textContent = state.protocol;
+    saveState();
+  }
+
+  generateProtocol.addEventListener('click', generateNow);
+  toProtocolBtn.addEventListener('click', ()=>{ generateNow(); showSub('4'); });
+
+  /* ===== Export PDF (avec filigrane si op) ===== */
+  exportProtoPdf.addEventListener('click', async ()=>{
+    if(!window.jspdf){
+      await new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js'; s.crossOrigin='anonymous'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+    }
+    const { jsPDF } = window.jspdf;
+    const pdf=new jsPDF({unit:'pt',format:'a4'}); const M=56, W=pdf.internal.pageSize.getWidth(), H=pdf.internal.pageSize.getHeight();
+    pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F');
+
+    try{ const r=await fetch('./assets/montes-biopharma-logo.jpg'); const b=await r.blob(); const data=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=rej;fr.readAsDataURL(b);}); pdf.addImage(data,'JPEG',M,M-8,160,40,'','FAST'); }catch(e){}
+    // Titre
+    const title = opToggle.checked ? (appLang()==='fr'?'MBR draft — Protocole (opérationnel interne)':'MBR draft — Protocol (operational internal)') : (appLang()==='fr'?'Protocole documentaire':'Documentary protocol');
+    pdf.setTextColor(13,42,90); pdf.setFont('helvetica','bold'); pdf.setFontSize(18); pdf.text(title, M+180, M+14);
+    pdf.setDrawColor(13,42,90); pdf.setLineWidth(2); pdf.line(M, M+50, W-M, M+50);
+
+    // Filigrane DRAFT si op
+    if(opToggle.checked){
+      pdf.saveGraphicsState();
+      pdf.setTextColor(220,220,220);
+      pdf.setFontSize(72); pdf.setFont('helvetica','bold');
+      pdf.text('DRAFT – FOR QA REVIEW', W/2, H/2, {angle: -30, align:'center'});
+      pdf.restoreGraphicsState();
+    }
+
+    let y=M+74; const content=(state.protocol||'').split('\n');
+    const putHeading=(text,size)=>{ if(y + size + 18 > H - M){ pdf.addPage(); y=M; } pdf.setTextColor(13,42,90); pdf.setFont('helvetica','bold'); pdf.setFontSize(size); pdf.text(text,M,y); pdf.setDrawColor(210,210,210); pdf.setLineWidth(.6); pdf.line(M,y+6,W-M,y+6); y+=18; };
+    const putParagraph=(text,size=11)=>{ pdf.setTextColor(0,0,0); pdf.setFont('helvetica','normal'); pdf.setFontSize(size); const chunks=pdf.splitTextToSize(text,W-2*M); for(const ln of chunks){ if(y>H-M){ pdf.addPage(); y=M; } pdf.text(ln,M,y); y+=14; } y+=4; };
+
+    for(const raw of content){
+      const line=raw.trim(); if(!line){ y+=6; continue; }
+      if(line.startsWith('# ')){ putHeading(line.replace(/^#\s+/,'').trim(),16); }
+      else if(line.startsWith('## ')){ putHeading(line.replace(/^##\s+/,'').trim(),13); }
+      else if(line.startsWith('### ')){ putHeading(line.replace(/^###\s+/,'').trim(),12); }
+      else { putParagraph(line,11); }
+    }
+    pdf.save(opToggle.checked ? 'mbr-draft.pdf' : 'documentary-protocol.pdf');
+  });
+
+  /* ===== Reset & init ===== */
+  resetAppBtn.addEventListener('click', ()=>{ localStorage.removeItem(LS_KEY); location.reload(); });
+
+  function mount(){
+    loadState();
+    if(state.request.biomolecule){ bioSelect.value=state.request.biomolecule; domainWrap.classList.remove('hide'); }
+    renderDomainOptions(state.request.domain);
+    if(state.request.domain){ detailWrap.classList.remove('hide'); buildDetailChoices(state.request.domain); }
+    if((state.request.details||[]).length){ confirmWrap.classList.remove('hide'); }
+    // mode op
+    opToggle.checked = !!state.op.enabled;
+    opMeta.classList.toggle('hide', !opToggle.checked);
+    sopLibWrap.classList.toggle('hide', !opToggle.checked);
+    modeBadge.textContent = opToggle.checked ? at('modeOp') : at('modeDoc');
+    wmHint.textContent    = opToggle.checked ? at('wmOp')  : at('wmDoc');
+    // op meta
+    ccId.value=state.op.ccId||''; roleNm.value=state.op.role||''; qaName.value=state.op.qa||''; ccDate.value=state.op.date||'';
+    buildSopSelect();
+    if(state.protocol){ protocolOutput.textContent=state.protocol; }
+    appTranslate();
+  }
+  addEventListener('DOMContentLoaded', mount);
+})();
 </script>
 </body>
 </html>
