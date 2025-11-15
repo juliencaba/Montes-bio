@@ -289,6 +289,7 @@ footer .inner{max-width:1200px;margin:0 auto;padding:20px;color:var(--muted);dis
           <!-- STEP 2 : Sources (Docs internes + PubMed) -->
           <div id="step2" class="app-step">
             <div class="grid grid-2">
+              <!-- Bloc documents internes -->
               <div>
                 <p class="muted" data-ai="qDocs">Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?</p>
                 <div class="cta">
@@ -308,14 +309,22 @@ footer .inner{max-width:1200px;margin:0 auto;padding:20px;color:var(--muted);dis
                 </div>
               </div>
 
+              <!-- Bloc PubMed / Europe PMC -->
               <div>
-                <p class="muted" data-ai="onlineIntro">Inclure une recherche **PubMed / Europe PMC** ciblée selon vos choix (adenovirus + sous-domaines). Les abstracts seront analysés localement et fusionnés avec vos documents.</p>
+                <p class="muted" data-ai="onlineIntro">Inclure une recherche PubMed / Europe PMC ciblée selon vos choix (adenovirus + sous-domaines). Sélectionnez les articles pertinents avant l’analyse.</p>
                 <label style="display:flex;gap:10px;align-items:center;margin:8px 0">
                   <input type="checkbox" id="usePubMed" style="width:auto">
                   <span data-ai="usePubMed">Inclure PubMed / Europe PMC</span>
                 </label>
-                <div id="pmcQueryPreview" class="muted" style="font-size:12px"></div>
-                <div class="cta" style="margin-top:10px">
+                <div id="pmcQueryPreview" class="muted" style="font-size:12px;margin-bottom:8px"></div>
+                <div class="cta" style="gap:8px">
+                  <button class="btn ghost" id="btnRunPmc" data-ai="btnRunPmc">Lancer la recherche</button>
+                  <button class="btn ghost" id="btnAddPmc" data-ai="btnAddPmc" disabled>Ajouter à l’analyse</button>
+                </div>
+                <div id="pmcResults" class="file-list" style="max-height:320px;overflow:auto;margin-top:10px"></div>
+                <div id="pmcSelectedInfo" class="muted" style="font-size:12px;margin-top:6px"></div>
+
+                <div class="cta" style="margin-top:12px">
                   <button class="btn primary" id="runAnalysis" data-ai="runAnalysis">Lancer l’analyse</button>
                   <button class="btn ghost" id="backStep1" data-ai="back">Retour</button>
                 </div>
@@ -357,7 +366,7 @@ footer .inner{max-width:1200px;margin:0 auto;padding:20px;color:var(--muted);dis
           <div id="step4" class="app-step">
             <div class="panel">
               <h3 data-ai="protoTitle">Protocole documentaire</h3>
-              <p class="muted" data-ai="protoNote">Document de synthèse basé sur vos documents internes, la littérature PubMed/Europe PMC et les sous-domaines sélectionnés. Aucun paramètre expérimental n’est garanti exploitable tel quel en laboratoire.</p>
+              <p class="muted" data-ai="protoNote">Document de synthèse basé sur vos documents internes, la littérature PubMed/Europe PMC sélectionnée et les sous-domaines choisis. Aucun paramètre expérimental n’est garanti exploitable tel quel en laboratoire.</p>
               <div class="cta" style="margin:10px 0">
                 <button class="btn primary" id="regenerateProtocol" data-ai="generateProto">Régénérer</button>
                 <button class="btn ghost" id="exportProtoPdf" data-ai="exportProtoPdf">Exporter en PDF</button>
@@ -401,7 +410,7 @@ footer .inner{max-width:1200px;margin:0 auto;padding:20px;color:var(--muted);dis
 </footer>
 
 <script>
-/* ===== Routing simple (Intro / App / Contact) ===== */
+/* ===== Routing (Intro / App / Contact) ===== */
 const views = { intro:document.getElementById('intro'), app:document.getElementById('app'), contact:document.getElementById('contact') };
 const navToggle = document.getElementById('navToggle');
 function showView(id){ Object.values(views).forEach(v=>v.classList.remove('active')); (views[id]||views.intro).classList.add('active'); if(navToggle.checked) navToggle.checked=false; }
@@ -409,7 +418,7 @@ function route(){ const id=(location.hash||'#intro').replace('#',''); showView(i
 window.addEventListener('hashchange', route);
 document.querySelectorAll('.menu-link').forEach(a=>a.addEventListener('click',()=>{ if(navToggle.checked) navToggle.checked=false; }));
 
-/* ===== i18n global ===== */
+/* ===== i18n ===== */
 const I = {
   fr:{brand:"Montes BioPharma",menu:"Menu",close:"Fermer",navIntro:"Introduction",navApp:"Application",navContact:"Contact",
       kicker:"ASSISTANT LITTÉRATURE",heroTitle:"No learning curve,<br/>no complications",
@@ -447,21 +456,23 @@ const APP_I = {
       goNext:"Passer à la suite",
       qDocs:"Avez-vous des documents internes sur lesquels je peux me baser pour concevoir la méthode ?",yes:"Oui",no:"Non",
       dropTitle:"Déposez vos fichiers ici",dropHint:"ou cliquez pour sélectionner",dropTypes:"Acceptés : PDF, DOCX, TXT",
-      onlineIntro:"Inclure une recherche **PubMed / Europe PMC** ciblée selon vos choix (adenovirus + sous-domaines). Les abstracts seront analysés localement et fusionnés avec vos documents.",
+      onlineIntro:"Inclure une recherche PubMed / Europe PMC ciblée selon vos choix (adenovirus + sous-domaines). Sélectionnez les articles pertinents avant l’analyse.",
       usePubMed:"Inclure PubMed / Europe PMC",
       runAnalysis:"Lancer l’analyse",back:"Retour",
       internalSources:"Documents internes",activeSubdomains:"Sous-domaines actifs",overview:"Vue d’ensemble",
       toProtocolTitle:"Protocole documentaire",protoHint:"Sur base des sections identifiées (internes + PubMed), l’outil produit un protocole de type documentaire (R&D, non-opérationnel).",
       toProtocol:"Créer le protocole",protoTitle:"Protocole documentaire",
-      protoNote:"Document de synthèse basé sur vos documents internes, la littérature PubMed/Europe PMC et les sous-domaines sélectionnés. Aucun paramètre expérimental n’est garanti exploitable tel quel en laboratoire.",
+      protoNote:"Document de synthèse basé sur vos documents internes, la littérature PubMed/Europe PMC sélectionnée et les sous-domaines choisis. Aucun paramètre expérimental n’est garanti exploitable tel quel en laboratoire.",
       generateProto:"Régénérer",exportProtoPdf:"Exporter en PDF",
-      searching:"Analyse en cours…",needDocs:"Veuillez charger au moins un document.",
+      searching:"Analyse en cours…",needDocs:"Veuillez charger au moins un document ou sélectionner des articles PubMed.",
       needSubdomains:"Veuillez sélectionner au moins un sous-domaine dans l’étape 1.",
       ctx:"Contexte",biomolecule:"Biomolécule",domain:"Domaine",docsInternal:"Documents internes",noActiveSD:"Aucun sous-domaine actif.",
       score:"score",summaryTitle:"Résumé ciblé (~1 page)",
       literature:"Littérature (PubMed / Europe PMC)",
       internal:"Documents internes",
-      pdfTitle:"Protocole documentaire — Analyse ciblée",pdfOverview:"Vue d’ensemble",pdfSections:"Sections par sous-domaine"},
+      pdfTitle:"Protocole documentaire — Analyse ciblée",pdfOverview:"Vue d’ensemble",pdfSections:"Sections par sous-domaine",
+      btnRunPmc:"Lancer la recherche",btnAddPmc:"Ajouter à l’analyse",
+      pmcNoRes:"Aucun résultat",pmcSel:"sélectionné(s)"},
   en:{reset:"Reset",appLead:"Choose your biomolecule, your pharmaceutical domain and relevant subdomains.",
       q1:"Which biomolecule do you want to produce?",selectPlaceholder:"— Select —",
       q2:"Which pharmaceutical domain do you want to explore?",detailTitleGeneric:"Specify your need",
@@ -472,21 +483,23 @@ const APP_I = {
       goNext:"Continue",
       qDocs:"Do you have internal documents I can use to design the method?",yes:"Yes",no:"No",
       dropTitle:"Drop your files here",dropHint:"or click to select",dropTypes:"Accepted: PDF, DOCX, TXT",
-      onlineIntro:"Include a **PubMed / Europe PMC** search targeted to your choices (adenovirus + subdomains). Abstracts will be analyzed locally and merged with your documents.",
+      onlineIntro:"Include a PubMed / Europe PMC search targeted to your choices (adenovirus + subdomains). Select articles before analysis.",
       usePubMed:"Include PubMed / Europe PMC",
       runAnalysis:"Run analysis",back:"Back",
       internalSources:"Internal documents",activeSubdomains:"Active subdomains",overview:"Overview",
-      toProtocolTitle:"Documentary protocol",protoHint:"Using the identified sections (internal + PubMed), the tool produces a documentary-style protocol (R&D, non-operational).",
+      toProtocolTitle:"Documentary protocol",protoHint:"Using identified sections (internal + PubMed), the tool produces a documentary-style protocol (R&D, non-operational).",
       toProtocol:"Create protocol",protoTitle:"Documentary protocol",
-      protoNote:"Summary document based on your internal documents, PubMed/Europe PMC literature and selected subdomains. No experimental parameter is guaranteed usable as such in the lab.",
+      protoNote:"Summary document based on your internal documents, selected PubMed/Europe PMC literature and chosen subdomains. No experimental parameter is guaranteed usable as such in the lab.",
       generateProto:"Regenerate",exportProtoPdf:"Export PDF",
-      searching:"Analyzing…",needDocs:"Please upload at least one document.",
+      searching:"Analyzing…",needDocs:"Please upload at least one document or select PubMed articles.",
       needSubdomains:"Please select at least one subdomain in step 1.",
       ctx:"Context",biomolecule:"Biomolecule",domain:"Domain",docsInternal:"Internal documents",noActiveSD:"No active subdomains.",
       score:"score",summaryTitle:"Targeted summary (~1 page)",
       literature:"Literature (PubMed / Europe PMC)",
       internal:"Internal documents",
-      pdfTitle:"Documentary protocol — Targeted analysis",pdfOverview:"Overview",pdfSections:"Sections by subdomain"}
+      pdfTitle:"Documentary protocol — Targeted analysis",pdfOverview:"Overview",pdfSections:"Sections by subdomain",
+      btnRunPmc:"Run search",btnAddPmc:"Add to analysis",
+      pmcNoRes:"No result",pmcSel:"selected"}
 };
 
 function currentLang(){ return document.documentElement.dataset.lang || 'fr'; }
@@ -497,6 +510,8 @@ function applyTranslations(){
   document.querySelectorAll('[data-ai]').forEach(el=>{const v=ta(el.dataset.ai); if(/<br\s*\/?>/.test(v)) el.innerHTML=v; else el.textContent=v;});
 }
 function setLang(lang){ document.documentElement.setAttribute('lang',lang); document.documentElement.dataset.lang=lang; applyTranslations(); }
+
+/* Lang buttons */
 const btnFR=document.getElementById('btnFR'), btnEN=document.getElementById('btnEN');
 btnFR.addEventListener('click',()=>{btnFR.classList.add('active');btnEN.classList.remove('active');setLang('fr');});
 btnEN.addEventListener('click',()=>{btnEN.classList.add('active');btnFR.classList.remove('active');setLang('en');});
@@ -544,7 +559,7 @@ const SUBDOMAINS = {
   analytics:[
     {id:"identity", fr:"Identité", en:"Identity"},
     {id:"potency", fr:"Puissance", en:"Potency"},
-    {id:"impurities", fr:"Impuretés", en:"Impurities"},
+    {id:"impurities", fr:"Impurities", en:"Impurities"},
     {id:"size_agg", fr:"Taille / agrégation", en:"Size / aggregation"},
     {id:"qPCR", fr:"Dosage (qPCR/ddPCR)", en:"Assay (qPCR/ddPCR)"},
     {id:"stability_indic", fr:"Méthodes indicatrices de stabilité", en:"Stability-indicating methods"}
@@ -569,26 +584,28 @@ const SUBDOMAINS = {
 
 const state = {
   request:{ biomolecule:null, domain:null, subdomains:[] },
-  uploads:[],     // {file, name, text}
-  analysis:{},    // par sous-domaine: {docs:[], lit:[], summary:''}
+  uploads:[],           // {file, name, text}
+  analysis:{},          // par sous-domaine: {docs:[], lit:[], summary:''}
   protocol:"",
-  literatureRaw:[] // résultats EPMC bruts
+  literatureRaw:[],     // résultats bruts Europe PMC
+  literatureChosen:[]   // articles cochés pour analyse
 };
 
 function renderDomainOptions(){
   domainSelect.innerHTML='';
-  const placeholder = document.createElement('option');
-  placeholder.disabled=true; placeholder.selected=true; placeholder.textContent = ta('selectPlaceholder'); placeholder.value="";
+  const placeholder=document.createElement('option');
+  placeholder.disabled=true; placeholder.selected=true; placeholder.textContent=ta('selectPlaceholder'); placeholder.value="";
   domainSelect.appendChild(placeholder);
-  const opts = [
+  [
     {key:'upstream', label:ta('dom_upstream')},
     {key:'downstream', label:ta('dom_downstream')},
     {key:'fill', label:ta('dom_fill')},
     {key:'analytics', label:ta('dom_analytics')},
     {key:'qa', label:ta('dom_qa')},
     {key:'cmc', label:ta('dom_cmc')}
-  ];
-  opts.forEach(o=>{const opt=document.createElement('option'); opt.value=o.key; opt.textContent=o.label; domainSelect.appendChild(opt);});
+  ].forEach(o=>{
+    const opt=document.createElement('option'); opt.value=o.key; opt.textContent=o.label; domainSelect.appendChild(opt);
+  });
 }
 function labelDomain(key){
   const map={upstream:'dom_upstream',downstream:'dom_downstream',fill:'dom_fill',analytics:'dom_analytics',qa:'dom_qa',cmc:'dom_cmc'};
@@ -603,14 +620,14 @@ function buildSubdomains(domainKey){
   const list=SUBDOMAINS[domainKey]||[]; subdomainChoices.innerHTML=''; state.request.subdomains=[]; subdomainWrap.classList.remove('hide'); confirmWrap.classList.add('hide');
   subdomainTitle.textContent = ta('sdtitle_'+domainKey) || ta('detailTitleGeneric');
   list.forEach(item=>{
-    const lbl = currentLang()==='fr'?item.fr:item.en;
+    const lbl=currentLang()==='fr'?item.fr:item.en;
     const row=document.createElement('label'); row.className='source-item';
     row.innerHTML=`<input type="checkbox" data-id="${item.id}" style="width:auto"><span>${lbl}</span>`;
     const cb=row.querySelector('input');
     cb.addEventListener('change',()=>{
       const ids=[...subdomainChoices.querySelectorAll('input:checked')].map(x=>x.dataset.id); state.request.subdomains=ids; updateEpmcQueryPreview();
       if(ids.length){
-        const names = ids.map(id=>{for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id);if(f)return currentLang()==='fr'?f.fr:f.en;}return id;});
+        const names=ids.map(id=>{for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id);if(f)return currentLang()==='fr'?f.fr:f.en;}return id;});
         const fr=`Parfait. Vous avez choisi : biomolécule = ${state.request.biomolecule}; domaine = ${labelDomain(state.request.domain)}; sous-domaines = ${names.join(', ')}. Ces choix seront utilisés pour cibler les documents.`;
         const en=`Great. You selected: biomolecule = ${state.request.biomolecule}; domain = ${labelDomain(state.request.domain)}; subdomains = ${names.join(', ')}. These choices will be used to target the documents.`;
         confirmText.textContent=currentLang()==='fr'?fr:en; confirmWrap.classList.remove('hide');
@@ -623,7 +640,7 @@ function buildSubdomains(domainKey){
 /* ===== Steps ===== */
 const step1=document.getElementById('step1'), step2=document.getElementById('step2'), step3=document.getElementById('step3'), step4=document.getElementById('step4');
 function setStep(n){ [step1,step2,step3,step4].forEach(s=>s.classList.remove('active')); (n===1?step1:n===2?step2:n===3?step3:step4).classList.add('active'); window.scrollTo({top:0,behavior:'auto'}); }
-const goStep2Btn=document.getElementById('goStep2'); goStep2Btn.addEventListener('click',()=>{ if(!state.request.biomolecule||!state.request.domain||!state.request.subdomains.length){alert(ta('needSubdomains'));return;} setStep(2); });
+document.getElementById('goStep2').addEventListener('click',()=>{ if(!state.request.biomolecule||!state.request.domain||!state.request.subdomains.length){alert(ta('needSubdomains'));return;} setStep(2); });
 
 /* ===== Upload ===== */
 const btnDocYes=document.getElementById('btnDocYes'), btnDocNo=document.getElementById('btnDocNo'), uploaderWrap=document.getElementById('uploaderWrap');
@@ -674,52 +691,46 @@ const PATTERNS={
   capture_chrom: cfg(/chromatograph|column|resin|ligand/i, [[/anion\s?exchange|AEX|heparin/i,1.1]], []),
   polishing: cfg(/polish|ion\s?exchange|multimodal|SEC|size\s?exclusion/i, [[/aggregate|HCP|DNA/i,1.0]], []),
   final_filtration: cfg(/final\s?filtrat|steril(e|ity)\s?filter|0[.,]2\s?µ?m/i, [[/bioburden|sterility/i,1.0]], []),
-  // Upstream & autres (résumé)
   production_bioreactor: cfg(/bioreactor|reactor|perfusion|culture\s?vessel/i, [], []),
   infection_strategy: cfg(/infection|infect|MOI|multiplicity of infection/i, [], [])
 };
-
-/* Mesure distance (en mots) entre termes virus et termes domaine */
 function tokenDistance(text, groupA, groupB){
   const words=text.split(/\s+/); const idxsA=[], idxsB=[];
   words.forEach((w,i)=>{const W=w.toLowerCase(); if(groupA.some(rx=>rx.test(W))) idxsA.push(i); if(groupB.some(rx=>rx.test(W))) idxsB.push(i);});
   let best=Infinity; idxsA.forEach(a=>idxsB.forEach(b=>{const d=Math.abs(a-b); if(d<best) best=d;}));
   return isFinite(best)?best:9999;
 }
-
 function windowsFromText(text, win=900, overlap=250){
-  const clean=(text||'').replace(/\s+/g,' ');
-  const out=[]; let i=0; const step=Math.max(64,win-overlap);
+  const clean=(text||'').replace(/\s+/g,' '); const out=[]; let i=0; const step=Math.max(64,win-overlap);
   while(i<clean.length){ const slice=clean.slice(i,i+win); out.push({start:i,end:i+win,text:sanitizeText(slice)}); i+=step; }
   return out;
 }
-
-function highlight(html, patterns){
-  if(!patterns.length) return html;
-  const rx=new RegExp('('+patterns.join('|')+')','gi'); return html.replace(rx, m=>`<mark>${m}</mark>`);
-}
-
+function windowsFromAbstract(abs){ return windowsFromText(abs||'', 700, 200); }
+function highlight(html, patterns){ if(!patterns.length) return html; const rx=new RegExp('('+patterns.join('|')+')','gi'); return html.replace(rx, m=>`<mark>${m}</mark>`); }
 function scoreWindow(win, profile){
   const txt=win.text;
-  // must for domain
   if(!profile.must.some(rx=>rx.test(txt))) return 0;
-  // must for product context: at least one ADV term near domain terms
   const dist = tokenDistance(txt, ADV_TERMS, profile.must);
-  if(dist>40) return 0.1; // trop loin → faible
+  if(dist>40) return 0.1;
   let s = dist<=12 ? 1.6 : dist<=24 ? 1.2 : 0.8;
-  // should bonuses
   for(const [rx,w] of (profile.should||[])){ if(rx.test(txt)) s+=w; }
-  // negatives
   for(const ex of (profile.neg||[])){ if(ex.test(txt)) s-=1.2; }
   return Math.max(0, +s.toFixed(2));
+}
+function buildHighlightSet(profile){
+  const arr=[]; (profile.must||[]).forEach(rx=>arr.push(rx.source)); (profile.should||[]).forEach(([rx])=>arr.push(rx.source)); ADV_TERMS.forEach(rx=>arr.push(rx.source));
+  return arr.filter(Boolean);
 }
 
 /* ===== PubMed / Europe PMC ===== */
 const usePubMed = document.getElementById('usePubMed');
 const pmcQueryPreview = document.getElementById('pmcQueryPreview');
+const pmcResults = document.getElementById('pmcResults');
+const btnRunPmc = document.getElementById('btnRunPmc');
+const btnAddPmc = document.getElementById('btnAddPmc');
+const pmcSelectedInfo = document.getElementById('pmcSelectedInfo');
 
 function epmcQueryFromSelection(){
-  const terms=['adenovirus'];
   const dom=state.request.domain, sds=state.request.subdomains||[];
   const map={
     formulation:['formulation','"drug product"','stability','"freeze-thaw"','excipient','buffer'],
@@ -734,7 +745,8 @@ function epmcQueryFromSelection(){
   const bag=new Set();
   sds.forEach(id=>(map[id]||[]).forEach(x=>bag.add(x)));
   const add=[...bag];
-  const query = ['adenovirus', ...(add.length?['AND', '('+add.join(' OR ')+')']:[])].join(' ');
+  // Requête robuste : on force adenovirus et on regroupe les modificateurs
+  const query = add.length ? `adenovirus AND (${add.join(' OR ')})` : `adenovirus`;
   return query;
 }
 function updateEpmcQueryPreview(){
@@ -744,14 +756,23 @@ function updateEpmcQueryPreview(){
   pmcQueryPreview.innerHTML = (lang==='fr'?'Requête Europe PMC: ':'Europe PMC query: ') + `<code>${q}</code>`;
 }
 
-usePubMed.addEventListener('change', updateEpmcQueryPreview);
+usePubMed.addEventListener('change',()=>{
+  updateEpmcQueryPreview();
+  if(!usePubMed.checked){
+    pmcResults.innerHTML=''; pmcSelectedInfo.textContent=''; btnAddPmc.disabled=true; state.literatureRaw=[]; state.literatureChosen=[];
+  }
+});
 
-/* Récup Europe PMC (supports CORS) */
-async function fetchEpmc(query, pageSize=12){
+/* Appel API Europe PMC (JSON + CORS) */
+async function fetchEpmc(query, pageSize=20){
+  if(!query || !query.trim()) return [];
   const url=`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent(query)}&pageSize=${pageSize}&format=json&sort_date:y`;
-  const r=await fetch(url); const j=await r.json();
+  const r=await fetch(url);
+  if(!r.ok) throw new Error('EPMC HTTP '+r.status);
+  const j=await r.json();
   const res=(j.resultList&&j.resultList.result)||[];
   return res.map(x=>({
+    id:(x.pmid||x.pmcid||x.id||''),
     title:x.title||'',
     source:x.journalTitle||x.source||'',
     year:x.pubYear||'',
@@ -764,25 +785,76 @@ async function fetchEpmc(query, pageSize=12){
   }));
 }
 
-/* ===== Analyse orchestrée (docs internes + PubMed) ===== */
+/* Rendu liste Europe PMC avec sélection */
+function renderPmcList(list){
+  pmcResults.innerHTML='';
+  state.literatureChosen=[];
+  if(!list.length){ pmcResults.innerHTML=`<div class="file-item">${ta('pmcNoRes')}</div>`; btnAddPmc.disabled=true; pmcSelectedInfo.textContent=''; return; }
+  list.forEach((a,idx)=>{
+    const card=document.createElement('div'); card.className='file-item';
+    const abs=(a.abstract||'').slice(0,300);
+    card.innerHTML=`
+      <label style="display:flex;gap:10px;align-items:flex-start">
+        <input type="checkbox" data-k="${idx}" style="width:auto;margin-top:3px">
+        <div>
+          <div><strong>${a.title||'—'}</strong> ${a.isOA?'<span style="border:1px solid var(--border);border-radius:999px;padding:2px 6px;margin-left:6px">OA</span>':''}</div>
+          <div class="muted" style="font-size:12px">${a.source||''} · ${a.year||''}</div>
+          <div class="muted" style="font-size:12px;margin-top:4px">${abs?abs+'…':''}</div>
+          <div style="margin-top:6px"><a class="muted" href="${a.link||'#'}" target="_blank" rel="noopener">Lien</a></div>
+        </div>
+      </label>
+    `;
+    const cb=card.querySelector('input');
+    cb.addEventListener('change',()=>{
+      const selected=[...pmcResults.querySelectorAll('input:checked')].map(x=>+x.dataset.k);
+      state.literatureChosen = selected.map(i=>state.literatureRaw[i]).filter(Boolean);
+      pmcSelectedInfo.textContent = `${state.literatureChosen.length} ${ta('pmcSel')}`;
+      btnAddPmc.disabled = state.literatureChosen.length===0;
+    });
+    pmcResults.appendChild(card);
+  });
+  pmcSelectedInfo.textContent = `0 ${ta('pmcSel')}`;
+  btnAddPmc.disabled=true;
+}
+
+/* Boutons PubMed */
+btnRunPmc.addEventListener('click', async ()=>{
+  if(!usePubMed.checked){ usePubMed.checked=true; updateEpmcQueryPreview(); }
+  const q=epmcQueryFromSelection();
+  updateEpmcQueryPreview();
+  btnRunPmc.disabled=true; btnRunPmc.textContent = ta('searching');
+  try{
+    state.literatureRaw = await fetchEpmc(q, 20);
+    renderPmcList(state.literatureRaw);
+  }catch(e){
+    console.warn('EPMC error', e);
+    pmcResults.innerHTML=`<div class="file-item">Europe PMC error</div>`;
+  }
+  btnRunPmc.disabled=false; btnRunPmc.textContent = ta('btnRunPmc');
+});
+
+btnAddPmc.addEventListener('click', ()=>{
+  // rien d’autre à faire : state.literatureChosen est déjà rempli par les cases cochées
+  // simple feedback visuel :
+  pmcSelectedInfo.textContent = `${state.literatureChosen.length} ${ta('pmcSel')}`;
+});
+
+/* ===== Analyse orchestrée (docs internes + articles cochés) ===== */
 const runAnalysisBtn=document.getElementById('runAnalysis'), backStep1=document.getElementById('backStep1');
 runAnalysisBtn.addEventListener('click', async ()=>{
   if(!state.request.subdomains.length){ alert(ta('needSubdomains')); return; }
-  if(!state.uploads.length && !usePubMed.checked){ alert(ta('needDocs')); return; }
+  // Exiger soit documents, soit articles cochés :
+  if(!state.uploads.length && !(state.literatureChosen && state.literatureChosen.length)){
+    alert(ta('needDocs')); return;
+  }
+
   runAnalysisBtn.disabled=true; runAnalysisBtn.textContent=ta('searching');
 
   // 1) Extraction texte interne
   for(const doc of state.uploads){ await extractTextFromFile(doc); }
 
-  // 2) Optionnel : Europe PMC
-  state.literatureRaw=[];
-  if(usePubMed.checked){
-    const q=epmcQueryFromSelection(); updateEpmcQueryPreview();
-    try{ state.literatureRaw = await fetchEpmc(q, 12); }catch(e){ console.warn('EPMC failed',e); state.literatureRaw=[]; }
-  }
-
-  // 3) Analyse combinée
-  await targetedAnalyze(); // alimente state.analysis (docs + literature)
+  // 2) Analyse combinée (docs + littérature choisie)
+  await targetedAnalyze(); // remplit state.analysis
   buildWorkspace();
 
   runAnalysisBtn.disabled=false; runAnalysisBtn.textContent=ta('runAnalysis');
@@ -790,82 +862,65 @@ runAnalysisBtn.addEventListener('click', async ()=>{
 });
 backStep1.addEventListener('click',()=>setStep(1));
 
-/* Analyse ciblée alimentée par PATTERNS + distance + négatifs */
-function windowsFromAbstract(abs){ return windowsFromText(abs||'', 700, 200); }
+function scoreAndSelectWindows(text, profile){
+  const wins=windowsFromText(text, 900, 250);
+  const scored=wins.map(w=>({text:w.text,score:profile?scoreWindow(w,profile):0}))
+                   .filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6);
+  return scored;
+}
 
 async function targetedAnalyze(){
   state.analysis={};
   const ids=state.request.subdomains||[];
   const docs=state.uploads;
+  const articles=state.literatureChosen||[];
 
   for(const sdId of ids){
     const profile=PATTERNS[sdId]; const pack={labelFR:'',labelEN:'',docs:[],lit:[],summary:''};
-    // labels
     for(const arr of Object.values(SUBDOMAINS)){ const f=arr.find(z=>z.id===sdId); if(f){pack.labelFR=f.fr; pack.labelEN=f.en; break;} }
 
     // A) Docs internes
     for(const d of docs){
       if(!d.text) continue;
-      const wins=windowsFromText(d.text, 900, 250);
-      const scored=wins.map(w=>({text:w.text,score:profile?scoreWindow(w,profile):0}))
-                       .filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6);
-      if(scored.length){
-        const docScore=scored.slice(0,3).reduce((a,c)=>a+c.score,0)/Math.min(3,scored.length);
+      const best=scoreAndSelectWindows(d.text, profile);
+      if(best.length){
+        const docScore=best.slice(0,3).reduce((a,c)=>a+c.score,0)/Math.min(3,best.length);
         pack.docs.push({
           name:d.name, score:+docScore.toFixed(2),
-          snippets: scored.map(s=>({
-            score:+s.score.toFixed(2),
-            html: highlight(s.text, buildHighlightSet(profile))
-          }))
+          snippets: best.map(s=>({score:+s.score.toFixed(2), html:highlight(s.text, buildHighlightSet(profile))}))
         });
       }
     }
 
-    // B) Littérature (Europe PMC abstracts)
-    if(state.literatureRaw.length && profile){
-      const relevant=[];
-      for(const art of state.literatureRaw){
-        const wins=windowsFromAbstract(art.abstract||'');
-        const best=wins.map(w=>({text:w.text,score:scoreWindow(w,profile)}))
-                       .filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3);
-        if(best.length){
-          relevant.push({
-            title:art.title, meta:`${art.source||''} · ${art.year||''}`, link:art.link||'#',
-            score:+(best.reduce((a,c)=>a+c.score,0)/best.length).toFixed(2),
-            snippets: best.map(s=>({
-              score:+s.score.toFixed(2),
-              html: highlight(s.text, buildHighlightSet(profile))
-            }))
-          });
-        }
+    // B) Littérature (abstracts des articles cochés)
+    for(const art of articles){
+      const wins=windowsFromAbstract(art.abstract||'');
+      const best=wins.map(w=>({text:w.text,score:profile?scoreWindow(w,profile):0}))
+                     .filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3);
+      if(best.length){
+        const scoreAvg=best.reduce((a,c)=>a+c.score,0)/best.length;
+        pack.lit.push({
+          title:art.title, meta:`${art.source||''} · ${art.year||''}`, link:art.link||'#',
+          score:+scoreAvg.toFixed(2),
+          snippets: best.map(s=>({score:+s.score.toFixed(2), html:highlight(s.text, buildHighlightSet(profile))}))
+        });
       }
-      // top par article
-      relevant.sort((a,b)=>b.score-a.score);
-      pack.lit = relevant.slice(0,6);
     }
+    pack.lit.sort((a,b)=>b.score-a.score).slice(0,6);
 
-    // C) Résumé ciblé simple (fusion internes + lit)
-    const allText = [
+    // C) Résumé ciblé fusionné
+    const allText=[
       ...pack.docs.flatMap(d=>d.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' '))),
       ...pack.lit.flatMap(d=>d.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' ')))
     ].join(' ');
-    const sentences = sanitizeText(allText).split(/[\.\!\?]\s+/).filter(x=>x.length>40).slice(0,10);
-    pack.summary = sentences.join('. ') + (sentences.length?'.':'');
+    const sentences=sanitizeText(allText).split(/[\.\!\?]\s+/).filter(x=>x.length>40).slice(0,10);
+    pack.summary = sentences.join('. ')+(sentences.length?'.':'');
     state.analysis[sdId]=pack;
   }
 }
 
-function buildHighlightSet(profile){
-  const arr = [];
-  (profile.must||[]).forEach(rx=>arr.push(rx.source));
-  (profile.should||[]).forEach(([rx])=>arr.push(rx.source));
-  ADV_TERMS.forEach(rx=>arr.push(rx.source));
-  return arr.filter(Boolean);
-}
-
-/* ===== Workspace rendering ===== */
-const docList=document.getElementById('docList'), sdChips=document.getElementById('sdChips'), overview=document.getElementById('overview'), sdResults=document.getElementById('sdResults'), goStep4=document.getElementById('goStep4');
-
+/* ===== Workspace ===== */
+const docList=document.getElementById('docList'), sdChips=document.getElementById('sdChips'), overview=document.getElementById('overview'), sdResults=document.getElementById('sdResults');
 function buildWorkspace(){
   // documents
   docList.innerHTML='';
@@ -882,7 +937,7 @@ function buildWorkspace(){
     sdChips.appendChild(chip);
   });
 
-  overview.innerHTML = `
+  overview.innerHTML=`
     <div class="result-card">
       <div><strong>${ta('ctx')}</strong></div>
       <div class="result-meta">${ta('biomolecule')}: ${state.request.biomolecule||'-'} · ${ta('domain')}: ${labelDomain(state.request.domain||'')}</div>
@@ -901,7 +956,7 @@ function renderSdResults(){
     const title=currentLang()==='fr'?(pack.labelFR||id):(pack.labelEN||id);
     const sec=document.createElement('section'); sec.className='panel'; sec.innerHTML=`<h3>${title}</h3>`;
 
-    // Bloc documents internes
+    // Internes
     const cardInt=document.createElement('div'); cardInt.className='result-card';
     cardInt.innerHTML = `<div><strong>${ta('internal')}</strong></div>` + ((pack.docs||[]).length? '' : `<div class="muted">—</div>`);
     (pack.docs||[]).forEach(d=>{
@@ -911,7 +966,7 @@ function renderSdResults(){
     });
     sec.appendChild(cardInt);
 
-    // Bloc littérature PubMed
+    // Littérature
     const cardLit=document.createElement('div'); cardLit.className='result-card';
     cardLit.innerHTML = `<div><strong>${ta('literature')}</strong></div>` + ((pack.lit||[]).length? '' : `<div class="muted">—</div>`);
     (pack.lit||[]).forEach(d=>{
@@ -932,7 +987,7 @@ function renderSdResults(){
 }
 
 /* ===== Protocole ===== */
-const protocolOutput=document.getElementById('protocolOutput'); const regenerateProtocol=document.getElementById('regenerateProtocol'); const exportProtoPdf=document.getElementById('exportProtoPdf');
+const protocolOutput=document.getElementById('protocolOutput');
 function buildProtocolText(){
   const Lfr=currentLang()==='fr'; const lines=[];
   lines.push('# '+ta('protoTitle')); lines.push('');
@@ -953,12 +1008,12 @@ function buildProtocolText(){
   }
   return lines.join('\n');
 }
-function refreshProtocol(){ state.protocol=buildProtocolText(); protocolOutput.textContent=state.protocol; }
-regenerateProtocol.addEventListener('click', refreshProtocol);
+function refreshProtocol(){ const txt=buildProtocolText(); protocolOutput.textContent=txt; state.protocol=txt; }
+document.getElementById('regenerateProtocol').addEventListener('click', refreshProtocol);
 document.getElementById('goStep4').addEventListener('click',()=>{ refreshProtocol(); setStep(4); });
 
 /* ===== Export PDF ===== */
-exportProtoPdf.addEventListener('click',()=>{
+document.getElementById('exportProtoPdf').addEventListener('click',()=>{
   const { jsPDF } = window.jspdf; const pdf=new jsPDF({unit:'pt',format:'a4'});
   const M=56, W=pdf.internal.pageSize.getWidth(), H=pdf.internal.pageSize.getHeight();
   pdf.setFillColor(255,255,255); pdf.rect(0,0,W,H,'F');
@@ -981,12 +1036,18 @@ exportProtoPdf.addEventListener('click',()=>{
 
 /* ===== Reset & Init ===== */
 document.getElementById('resetApp').addEventListener('click',()=>{
-  state.request={biomolecule:null,domain:null,subdomains:[]}; state.uploads=[]; state.analysis={}; state.protocol=''; state.literatureRaw=[];
+  state.request={biomolecule:null,domain:null,subdomains:[]};
+  state.uploads=[]; state.analysis={}; state.protocol='';
+  state.literatureRaw=[]; state.literatureChosen=[];
   bioSelect.value=""; domainWrap.classList.add('hide'); subdomainWrap.classList.add('hide'); confirmWrap.classList.add('hide');
   filesList.innerHTML=''; document.getElementById('docList').innerHTML=''; document.getElementById('sdChips').innerHTML=''; overview.innerHTML=''; document.getElementById('sdResults').innerHTML=''; document.getElementById('protocolOutput').textContent='';
-  setStep(1); pmcQueryPreview.textContent='';
+  pmcResults.innerHTML=''; pmcSelectedInfo.textContent=''; pmcQueryPreview.textContent='';
+  setStep(1);
 });
-window.addEventListener('DOMContentLoaded',()=>{ setLang('fr'); renderDomainOptions(); route(); });
+
+window.addEventListener('DOMContentLoaded',()=>{
+  setLang('fr'); renderDomainOptions(); route();
+});
 </script>
 </body>
 </html>
