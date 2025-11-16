@@ -351,6 +351,11 @@ footer .inner{max-width:1200px;margin:0 auto;padding:20px;color:var(--muted);dis
 
                 <div id="sdResults"></div>
 
+                <!-- NOUVEAU : panneaux Matériels & consommables -->
+                <div id="materialsPanel" class="panel">
+                  <!-- rempli dynamiquement -->
+                </div>
+
                 <div class="panel">
                   <h3 data-ai="toProtocolTitle">Protocole documentaire</h3>
                   <p class="muted" data-ai="protoHint">Sur base des sections identifiées (internes + PubMed), l’outil produit un protocole de type documentaire (R&D, non-opérationnel).</p>
@@ -472,7 +477,13 @@ const APP_I = {
       internal:"Documents internes",
       pdfTitle:"Protocole documentaire — Analyse ciblée",pdfOverview:"Vue d’ensemble",pdfSections:"Sections par sous-domaine",
       btnRunPmc:"Lancer la recherche",btnAddPmc:"Ajouter à l’analyse",
-      pmcNoRes:"Aucun résultat",pmcSel:"sélectionné(s)"},
+      pmcNoRes:"Aucun résultat",pmcSel:"sélectionné(s)",
+      /* Matériels */
+      materialsTitle:"Matériels & consommables",
+      materialsIntro:"Liens de recherche externes pour identifier des supports, résines, filtres, tampons et consommables potentiels en lien avec les sous-domaines sélectionnés (Thermo Fisher, Cytiva, Merck/Sigma, etc.).",
+      materialsNone:"Aucun sous-domaine actif. Sélectionnez au moins un sous-domaine pour afficher des recherches de matériels.",
+      materialsNote:"Les liens ci-dessous ouvrent des recherches générales (Google/site fournisseur). Ils ne constituent pas une recommandation produit ni une validation réglementaire.",
+      materialsOpen:"Ouvrir la recherche catalogue"},
   en:{reset:"Reset",appLead:"Choose your biomolecule, your pharmaceutical domain and relevant subdomains.",
       q1:"Which biomolecule do you want to produce?",selectPlaceholder:"— Select —",
       q2:"Which pharmaceutical domain do you want to explore?",detailTitleGeneric:"Specify your need",
@@ -499,7 +510,13 @@ const APP_I = {
       internal:"Internal documents",
       pdfTitle:"Documentary protocol — Targeted analysis",pdfOverview:"Overview",pdfSections:"Sections by subdomain",
       btnRunPmc:"Run search",btnAddPmc:"Add to analysis",
-      pmcNoRes:"No result",pmcSel:"selected"}
+      pmcNoRes:"No result",pmcSel:"selected",
+      /* Materials */
+      materialsTitle:"Materials & consumables",
+      materialsIntro:"External search links to identify supports, resins, filters, buffers and consumables related to the selected subdomains (Thermo Fisher, Cytiva, Merck/Sigma, etc.).",
+      materialsNone:"No active subdomains. Select at least one subdomain to display material searches.",
+      materialsNote:"The links below open general searches (Google/vendor site). They do not constitute product recommendations nor regulatory validation.",
+      materialsOpen:"Open catalogue search"}
 };
 
 function currentLang(){ return document.documentElement.dataset.lang || 'fr'; }
@@ -513,8 +530,8 @@ function setLang(lang){ document.documentElement.setAttribute('lang',lang); docu
 
 /* Lang buttons */
 const btnFR=document.getElementById('btnFR'), btnEN=document.getElementById('btnEN');
-btnFR.addEventListener('click',()=>{btnFR.classList.add('active');btnEN.classList.remove('active');setLang('fr');});
-btnEN.addEventListener('click',()=>{btnEN.classList.add('active');btnFR.classList.remove('active');setLang('en');});
+btnFR.addEventListener('click',()=>{btnFR.classList.add('active');btnEN.classList.remove('active');setLang('fr');renderDomainOptions();buildWorkspace();});
+btnEN.addEventListener('click',()=>{btnEN.classList.add('active');btnFR.classList.remove('active');setLang('en');renderDomainOptions();buildWorkspace();});
 
 /* Year */
 document.getElementById('year').textContent=new Date().getFullYear();
@@ -582,6 +599,60 @@ const SUBDOMAINS = {
   ]
 };
 
+/* ===== Matériels & consommables (mapping) ===== */
+const MATERIAL_QUERIES = {
+  clarification:{
+    links:[
+      {vendor:"Thermo Fisher", q:"adenovirus harvest clarification depth filter site:thermofisher.com"},
+      {vendor:"Cytiva", q:"adenovirus harvest clarification depth filtration site:cytivalifesciences.com"},
+      {vendor:"Merck/Sigma", q:"adenovirus harvest clarification depth filter site:sigmaaldrich.com"}
+    ]
+  },
+  tff_df:{
+    links:[
+      {vendor:"Thermo Fisher", q:"adenovirus tangential flow filtration TFF cassette site:thermofisher.com"},
+      {vendor:"Cytiva", q:"adenovirus ultrafiltration diafiltration TFF site:cytivalifesciences.com"},
+      {vendor:"Sartorius", q:"adenovirus TFF hollow fiber cassette site:sartorius.com"}
+    ]
+  },
+  capture_chrom:{
+    links:[
+      {vendor:"Thermo Fisher", q:"adenovirus anion exchange chromatography resin site:thermofisher.com"},
+      {vendor:"Cytiva", q:"adenovirus chromatography resin viral vector site:cytivalifesciences.com"},
+      {vendor:"Merck/Sigma", q:"adenovirus viral vector chromatography resin site:sigmaaldrich.com"}
+    ]
+  },
+  polishing:{
+    links:[
+      {vendor:"Cytiva", q:"adenovirus polishing chromatography SEC site:cytivalifesciences.com"},
+      {vendor:"Thermo Fisher", q:"adenovirus polishing ion exchange chromatography site:thermofisher.com"}
+    ]
+  },
+  formulation:{
+    links:[
+      {vendor:"Thermo Fisher", q:"adenovirus formulation buffer stabilizing excipients site:thermofisher.com"},
+      {vendor:"Merck/Sigma", q:"adenovirus formulation buffer trehalose polysorbate site:sigmaaldrich.com"}
+    ]
+  },
+  final_filtration:{
+    links:[
+      {vendor:"Merck Millipore", q:"adenovirus sterile filtration 0.2 micron filter site:merckmillipore.com"},
+      {vendor:"Sartorius", q:"adenovirus sterile filtration filter capsule site:sartorius.com"}
+    ]
+  },
+  production_bioreactor:{
+    links:[
+      {vendor:"Thermo Fisher", q:"adenovirus production single use bioreactor site:thermofisher.com"},
+      {vendor:"Cytiva", q:"adenovirus production bioreactor waver rocking site:cytivalifesciences.com"}
+    ]
+  },
+  infection_strategy:{
+    links:[
+      {vendor:"Thermo Fisher", q:"adenovirus infection MOI optimization tools site:thermofisher.com"}
+    ]
+  }
+};
+
 const state = {
   request:{ biomolecule:null, domain:null, subdomains:[] },
   uploads:[],           // {file, name, text}
@@ -591,7 +662,12 @@ const state = {
   literatureChosen:[]   // articles cochés pour analyse
 };
 
+const REDACT=/\b\d+(?:[\.,]\d+)?\s?(mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa|CFU|pfu|TCID50)\b/gi;
+function sanitizeText(txt){return (txt||"").replace(REDACT,"[…]");}
+
+/* ===== Domain options ===== */
 function renderDomainOptions(){
+  const currentDomain=state.request.domain;
   domainSelect.innerHTML='';
   const placeholder=document.createElement('option');
   placeholder.disabled=true; placeholder.selected=true; placeholder.textContent=ta('selectPlaceholder'); placeholder.value="";
@@ -606,11 +682,14 @@ function renderDomainOptions(){
   ].forEach(o=>{
     const opt=document.createElement('option'); opt.value=o.key; opt.textContent=o.label; domainSelect.appendChild(opt);
   });
+  if(currentDomain){ domainSelect.value=currentDomain; }
 }
 function labelDomain(key){
   const map={upstream:'dom_upstream',downstream:'dom_downstream',fill:'dom_fill',analytics:'dom_analytics',qa:'dom_qa',cmc:'dom_cmc'};
   const tkey=map[key]; return tkey?ta(tkey):key;
 }
+
+/* ===== Questionnaire events ===== */
 bioSelect.addEventListener('change',()=>{ state.request.biomolecule=bioSelect.value||null; domainWrap.classList.remove('hide'); });
 
 domainSelect.addEventListener('change',()=>{
@@ -660,8 +739,6 @@ function handleFiles(files){
 }
 
 /* ===== Extraction texte locale ===== */
-const REDACT=/\b\d+(?:[\.,]\d+)?\s?(mL|ml|L|µL|uL|°C|C|rpm|g|xg|min|h|hours?|days?|M|mM|µM|uM|%|nm|mm|cm|kDa|CFU|pfu|TCID50)\b/gi;
-function sanitizeText(txt){return (txt||"").replace(REDACT,"[…]");}
 async function extractTextFromFile(entry){
   if(entry.text){return entry.text;}
   const f=entry.file; const buf=await f.arrayBuffer(); const ext=f.name.toLowerCase().split('.').pop(); let out='';
@@ -678,7 +755,7 @@ async function extractTextFromFile(entry){
   entry.text=out.replace(/\s+/g,' ').trim(); return entry.text;
 }
 
-/* ===== Profils & scoring avancé ===== */
+/* ===== Profils & scoring ===== */
 const ADV_TERMS=[/adenovirus|adeno[-\s]?virus|Ad5|Ad26|viral\s(vector|particle|dose|load|titer)|virion/i];
 function cfg(must2,should=[],neg=[]){return {must:[must2],should,neg};}
 const PATTERNS={
@@ -731,7 +808,7 @@ const btnAddPmc = document.getElementById('btnAddPmc');
 const pmcSelectedInfo = document.getElementById('pmcSelectedInfo');
 
 function epmcQueryFromSelection(){
-  const dom=state.request.domain, sds=state.request.subdomains||[];
+  const sds=state.request.subdomains||[];
   const map={
     formulation:['formulation','"drug product"','stability','"freeze-thaw"','excipient','buffer'],
     clarification:['clarification','"depth filter"','centrifugation'],
@@ -745,7 +822,6 @@ function epmcQueryFromSelection(){
   const bag=new Set();
   sds.forEach(id=>(map[id]||[]).forEach(x=>bag.add(x)));
   const add=[...bag];
-  // Requête robuste : on force adenovirus et on regroupe les modificateurs
   const query = add.length ? `adenovirus AND (${add.join(' OR ')})` : `adenovirus`;
   return query;
 }
@@ -755,7 +831,6 @@ function updateEpmcQueryPreview(){
   const lang=currentLang();
   pmcQueryPreview.innerHTML = (lang==='fr'?'Requête Europe PMC: ':'Europe PMC query: ') + `<code>${q}</code>`;
 }
-
 usePubMed.addEventListener('change',()=>{
   updateEpmcQueryPreview();
   if(!usePubMed.checked){
@@ -763,7 +838,7 @@ usePubMed.addEventListener('change',()=>{
   }
 });
 
-/* Appel API Europe PMC (JSON + CORS) */
+/* Appel API Europe PMC */
 async function fetchEpmc(query, pageSize=20){
   if(!query || !query.trim()) return [];
   const url=`https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=${encodeURIComponent(query)}&pageSize=${pageSize}&format=json&sort_date:y`;
@@ -784,8 +859,6 @@ async function fetchEpmc(query, pageSize=20){
     link: x.pmid ? `https://pubmed.ncbi.nlm.nih.gov/${x.pmid}/` : (x.pmcid ? `https://europepmc.org/article/PMC/${x.pmcid}` : (x.doi ? `https://doi.org/${x.doi}` : ''))
   }));
 }
-
-/* Rendu liste Europe PMC avec sélection */
 function renderPmcList(list){
   pmcResults.innerHTML='';
   state.literatureChosen=[];
@@ -832,31 +905,21 @@ btnRunPmc.addEventListener('click', async ()=>{
   }
   btnRunPmc.disabled=false; btnRunPmc.textContent = ta('btnRunPmc');
 });
-
 btnAddPmc.addEventListener('click', ()=>{
-  // rien d’autre à faire : state.literatureChosen est déjà rempli par les cases cochées
-  // simple feedback visuel :
   pmcSelectedInfo.textContent = `${state.literatureChosen.length} ${ta('pmcSel')}`;
 });
 
-/* ===== Analyse orchestrée (docs internes + articles cochés) ===== */
+/* ===== Analyse orchestrée ===== */
 const runAnalysisBtn=document.getElementById('runAnalysis'), backStep1=document.getElementById('backStep1');
 runAnalysisBtn.addEventListener('click', async ()=>{
   if(!state.request.subdomains.length){ alert(ta('needSubdomains')); return; }
-  // Exiger soit documents, soit articles cochés :
   if(!state.uploads.length && !(state.literatureChosen && state.literatureChosen.length)){
     alert(ta('needDocs')); return;
   }
-
   runAnalysisBtn.disabled=true; runAnalysisBtn.textContent=ta('searching');
-
-  // 1) Extraction texte interne
   for(const doc of state.uploads){ await extractTextFromFile(doc); }
-
-  // 2) Analyse combinée (docs + littérature choisie)
-  await targetedAnalyze(); // remplit state.analysis
+  await targetedAnalyze();
   buildWorkspace();
-
   runAnalysisBtn.disabled=false; runAnalysisBtn.textContent=ta('runAnalysis');
   setStep(3);
 });
@@ -868,7 +931,6 @@ function scoreAndSelectWindows(text, profile){
                    .filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6);
   return scored;
 }
-
 async function targetedAnalyze(){
   state.analysis={};
   const ids=state.request.subdomains||[];
@@ -879,7 +941,6 @@ async function targetedAnalyze(){
     const profile=PATTERNS[sdId]; const pack={labelFR:'',labelEN:'',docs:[],lit:[],summary:''};
     for(const arr of Object.values(SUBDOMAINS)){ const f=arr.find(z=>z.id===sdId); if(f){pack.labelFR=f.fr; pack.labelEN=f.en; break;} }
 
-    // A) Docs internes
     for(const d of docs){
       if(!d.text) continue;
       const best=scoreAndSelectWindows(d.text, profile);
@@ -892,7 +953,6 @@ async function targetedAnalyze(){
       }
     }
 
-    // B) Littérature (abstracts des articles cochés)
     for(const art of articles){
       const wins=windowsFromAbstract(art.abstract||'');
       const best=wins.map(w=>({text:w.text,score:profile?scoreWindow(w,profile):0}))
@@ -908,7 +968,6 @@ async function targetedAnalyze(){
     }
     pack.lit.sort((a,b)=>b.score-a.score).slice(0,6);
 
-    // C) Résumé ciblé fusionné
     const allText=[
       ...pack.docs.flatMap(d=>d.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' '))),
       ...pack.lit.flatMap(d=>d.snippets.slice(0,2).map(s=>s.html.replace(/<[^>]+>/g,' ')))
@@ -921,19 +980,19 @@ async function targetedAnalyze(){
 
 /* ===== Workspace ===== */
 const docList=document.getElementById('docList'), sdChips=document.getElementById('sdChips'), overview=document.getElementById('overview'), sdResults=document.getElementById('sdResults');
+const materialsPanel=document.getElementById('materialsPanel');
+
 function buildWorkspace(){
-  // documents
   docList.innerHTML='';
   state.uploads.forEach(d=>{ const row=document.createElement('div'); row.className='source-item'; row.innerHTML=`<input type="checkbox" checked style="width:auto"><span>${d.name}</span>`; docList.appendChild(row); });
 
-  // chips
   sdChips.innerHTML='';
   const ids=state.request.subdomains||[];
   ids.forEach(id=>{
     const chip=document.createElement('button'); chip.className='chip active'; chip.dataset.id=id;
     const label=(()=>{for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return currentLang()==='fr'?f.fr:f.en;} return id;})();
     chip.textContent=label;
-    chip.addEventListener('click',()=>{chip.classList.toggle('active'); renderSdResults();});
+    chip.addEventListener('click',()=>{chip.classList.toggle('active'); renderSdResults(); renderMaterialsPanel();});
     sdChips.appendChild(chip);
   });
 
@@ -945,6 +1004,7 @@ function buildWorkspace(){
     </div>
   `;
   renderSdResults();
+  renderMaterialsPanel();
 }
 
 function renderSdResults(){
@@ -956,7 +1016,6 @@ function renderSdResults(){
     const title=currentLang()==='fr'?(pack.labelFR||id):(pack.labelEN||id);
     const sec=document.createElement('section'); sec.className='panel'; sec.innerHTML=`<h3>${title}</h3>`;
 
-    // Internes
     const cardInt=document.createElement('div'); cardInt.className='result-card';
     cardInt.innerHTML = `<div><strong>${ta('internal')}</strong></div>` + ((pack.docs||[]).length? '' : `<div class="muted">—</div>`);
     (pack.docs||[]).forEach(d=>{
@@ -966,7 +1025,6 @@ function renderSdResults(){
     });
     sec.appendChild(cardInt);
 
-    // Littérature
     const cardLit=document.createElement('div'); cardLit.className='result-card';
     cardLit.innerHTML = `<div><strong>${ta('literature')}</strong></div>` + ((pack.lit||[]).length? '' : `<div class="muted">—</div>`);
     (pack.lit||[]).forEach(d=>{
@@ -977,13 +1035,42 @@ function renderSdResults(){
     });
     sec.appendChild(cardLit);
 
-    // Résumé
     const sum=document.createElement('div'); sum.className='result-card';
     sum.innerHTML=`<div><strong>${ta('summaryTitle')}</strong></div><div class="snip"><div>${pack.summary||'(empty)'}</div></div>`;
     sec.appendChild(sum);
 
     sdResults.appendChild(sec);
   });
+}
+
+/* ===== Matériels & consommables : rendu ===== */
+function renderMaterialsPanel(){
+  const activeIds=[...sdChips.querySelectorAll('.chip.active')].map(c=>c.dataset.id);
+  let html = `<h3>${ta('materialsTitle')}</h3><p class="muted">${ta('materialsIntro')}</p>`;
+  if(!activeIds.length){
+    html += `<p class="muted" style="margin-top:8px">${ta('materialsNone')}</p>`;
+    materialsPanel.innerHTML = html;
+    return;
+  }
+  const sections=[];
+  activeIds.forEach(id=>{
+    const defs=MATERIAL_QUERIES[id];
+    if(!defs || !defs.links || !defs.links.length) return;
+    const label=(()=>{for(const arr of Object.values(SUBDOMAINS)){const f=arr.find(z=>z.id===id); if(f) return currentLang()==='fr'?f.fr:f.en;} return id;})();
+    let block=`<div class="result-card"><div><strong>${label}</strong></div><ul style="margin:8px 0 0;padding-left:18px;font-size:13px">`;
+    defs.links.forEach(link=>{
+      const url=`https://www.google.com/search?q=${encodeURIComponent(link.q)}`;
+      block += `<li style="margin:4px 0"><a href="${url}" target="_blank" rel="noopener">${link.vendor} — ${ta('materialsOpen')}</a></li>`;
+    });
+    block += `</ul></div>`;
+    sections.push(block);
+  });
+  if(!sections.length){
+    html += `<p class="muted" style="margin-top:8px">${ta('materialsNone')}</p>`;
+  }else{
+    html += sections.join('') + `<p class="muted" style="margin-top:10px;font-size:11px">${ta('materialsNote')}</p>`;
+  }
+  materialsPanel.innerHTML = html;
 }
 
 /* ===== Protocole ===== */
